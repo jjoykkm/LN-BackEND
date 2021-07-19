@@ -1,0 +1,31 @@
+package model_databases
+
+import (
+	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
+	"time"
+)
+
+//-------------------------------------------------------------------------------//
+//							Table sub_district
+//-------------------------------------------------------------------------------//
+//model sub_district
+type SubDistrict struct {
+	SubDistrictId      uuid.UUID	 `gorm:"sub_district_id" json:"sub_district_id,omitempty"`
+	SubDistrictEN      string		 `gorm:"sub_district_en" json:"sub_district_en,omitempty"`
+	SubDistrictTH      string		 `gorm:"sub_district_th" json:"sub_district_th,omitempty"`
+	CreateDate		   time.Time	 `gorm:"create_date" json:"create_date,omitempty"`
+	ChangeDate	       time.Time	 `gorm:"change_date" json:"change_date,omitempty"`
+	StatusId		   uuid.UUID	 `gorm:"status_id" json:"status_id,omitempty"`
+}
+// New instance sub_district
+func (u *SubDistrict) New() *SubDistrict {
+	return &SubDistrict{
+		SubDistrictId:		u.SubDistrictId ,
+		SubDistrictEN:		u.SubDistrictEN ,
+		SubDistrictTH:		u.SubDistrictTH ,
+		CreateDate:			u.CreateDate ,
+		ChangeDate:			u.ChangeDate ,
+		StatusId:			u.StatusId ,
+	}
+}
+
