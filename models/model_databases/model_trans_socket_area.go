@@ -10,11 +10,11 @@ import (
 //-------------------------------------------------------------------------------//
 //model trans_socket_area
 type TransSocketArea struct {
-	FarmAreaId      uuid.UUID	 `gorm:"farm_area_id" json:"farm_area_id,omitempty"`
-	SocketId     	string	 	 `gorm:"socket_id" json:"socket_id,omitempty"`
-	CreateDate		time.Time	 `gorm:"create_date" json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 `gorm:"change_date" json:"change_date,omitempty"`
-	StatusId		uuid.UUID	 `gorm:"status_id" json:"status_id,omitempty"`
+	FarmAreaId      uuid.UUID	 `mapstructure:"farm_area_id" json:"farm_area_id,omitempty"`
+	SocketId     	string	 	 `mapstructure:"socket_id" json:"socket_id,omitempty"`
+	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
+	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
+	StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
 }
 // New instance trans_socket_area
 func (u *TransSocketArea) New() *TransSocketArea {

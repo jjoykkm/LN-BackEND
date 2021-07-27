@@ -10,12 +10,12 @@ import (
 //-------------------------------------------------------------------------------//
 //model trans_fertilizer_Ratio
 type TransFertRatio struct {
-	PlantId          	uuid.UUID	 `gorm:"fertilizer_id" json:"fertilizer_id,omitempty"`
-	FormulaPlantId		uuid.UUID	 `gorm:"formula_plant_id" json:"formula_plant_id,omitempty"`
-	StatusId		 	uuid.UUID	 `gorm:"status_id" json:"status_id,omitempty"`
-	Ratio		     	float64		 `gorm:"Ratio" json:"Ratio,omitempty"`
-	CreateDate		 	time.Time	 `gorm:"create_date" json:"create_date,omitempty"`
-	ChangeDate	     	time.Time	 `gorm:"change_date" json:"change_date,omitempty"`
+	PlantId          	uuid.UUID	 `mapstructure:"fertilizer_id" json:"fertilizer_id,omitempty"`
+	FormulaPlantId		uuid.UUID	 `mapstructure:"formula_plant_id" json:"formula_plant_id,omitempty"`
+	StatusId		 	uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
+	Ratio		     	float64		 `mapstructure:"Ratio" json:"Ratio,omitempty"`
+	CreateDate		 	time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
+	ChangeDate	     	time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
 }
 // New instance trans_fertilizer_Ratio
 func (u *TransFertRatio) New() *TransFertRatio {

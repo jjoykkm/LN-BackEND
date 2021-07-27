@@ -1,34 +1,41 @@
 package main
 
 import (
-	"LN-BackEND/models/model_databases"
+	"LN-BackEND/config"
+	"database/sql"
 	"fmt"
+	"log"
+	//"time"
+
+	_ "github.com/lib/pq"
+	//"gorm.io/driver/postgres"
+	//"gorm.io/gorm"
 	//"time"
 )
 type test struct {
-	jjoy         string
-	eiei         string
+	jjoy         string	`mapstructure:"jjoy" json:"jjoy,omitempty"`
+	eiei         string	`mapstructure:"eiei" json:"eiei,omitempty"`
 }
 
 func main() {
+	db, err := sql.Open(config.DriverName, config.Connection)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
 
+	err = db.Ping()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("Successfully connected to DB!\n")
 
+	////GetPlantCategoryList (db *sql.DB, status string, language string) []model_services.ForPlantCatList
+	//plantCategoryList := controllers.GetPlantCategoryList(db, config.StatusActive, config.LanguageEN)
+	//fmt.Println(plantCategoryList)
 
-	//db, err := gorm.Open(postgres.New(postgres.Config{
-	//	DSN: "host=103.212.181.187 user=ln02t password=ln-0110-2 dbname=smartlife port=5432 sslmode=disable TimeZone=Asia/Bangkok",
-	//	PreferSimpleProtocol: false, // disables implicit prepared statement usage
-	//}), &gorm.Config{})
-	//if err != nil {
-	//	panic(err.Error())
-	//}
-	//fmt.Println(db)
-	//user := test{jjoy: "Jinzhu", eiei: "18"}
-	//db.Select("jjoy", "eiei").Create(&user)
-
-	var jj model_databases.Country
-	jj.CountryEN = "jjjj"
-	fmt.Println(jj.CountryEN)
-
-
-
+	////GetPlantCategoryItem (db *sql.DB, status string, plantTypeId string, language string, offset string) ([]model_services.ForPlantCat, int)
+	//plantCategoryItem, nextOffset := controllers.GetPlantCategoryItem(db, config.StatusActive, "",  config.LanguageEN, 0)
+	//fmt.Println(plantCategoryItem)
+	//fmt.Println(nextOffset)
 }

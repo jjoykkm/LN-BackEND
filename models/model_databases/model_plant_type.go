@@ -10,12 +10,12 @@ import (
 //-------------------------------------------------------------------------------//
 //model plant_type
 type PlantType struct {
-	PlantTypeId      uuid.UUID	 `gorm:"plant_type_id" json:"plant_type_id,omitempty"`
-	PlantTypeEN      string		 `gorm:"plant_type_en" json:"plant_type_en,omitempty"`
-	PlantTypeTH      string		 `gorm:"plant_type_th" json:"plant_type_th,omitempty"`
-	CreateDate		 time.Time	 `gorm:"create_date" json:"create_date,omitempty"`
-	ChangeDate	     time.Time	 `gorm:"change_date" json:"change_date,omitempty"`
-	StatusId		 uuid.UUID	 `gorm:"status_id" json:"status_id,omitempty"`
+	PlantTypeId      uuid.UUID	 `mapstructure:"plant_type_id" json:"plant_type_id,omitempty"`
+	PlantTypeEN      string		 `mapstructure:"plant_type_en" json:"plant_type_en,omitempty"`
+	PlantTypeTH      string		 `mapstructure:"plant_type_th" json:"plant_type_th,omitempty"`
+	CreateDate		 time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
+	ChangeDate	     time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
+	StatusId		 uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
 }
 // New instance plant_type
 func (u *PlantType) New() *PlantType {

@@ -10,11 +10,11 @@ import (
 //-------------------------------------------------------------------------------//
 //model platform
 type Platform struct {
-	PlatformId      uuid.UUID	 `gorm:"platform_id" json:"platform_id,omitempty"`
-	PlatformName    string		 `gorm:"platform_name" json:"platform_name,omitempty"`
-	CreateDate		time.Time	 `gorm:"create_date" json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 `gorm:"change_date" json:"change_date,omitempty"`
-	StatusId		uuid.UUID	 `gorm:"status_id" json:"status_id,omitempty"`
+	PlatformId      uuid.UUID	 `mapstructure:"platform_id" json:"platform_id,omitempty"`
+	PlatformName    string		 `mapstructure:"platform_name" json:"platform_name,omitempty"`
+	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
+	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
+	StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
 }
 // New instance platform
 func (u *Platform) New() *Platform {

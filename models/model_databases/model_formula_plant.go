@@ -10,20 +10,22 @@ import (
 //-------------------------------------------------------------------------------//
 //model formula_plant
 type FormulaPlant struct {
-	FormulaPlantId 	 uuid.UUID	 `gorm:"formula_plant_id" json:"formula_plant_id,omitempty"`
-	FormulaName		 string		 `gorm:"formula_name" json:"formula_name,omitempty"`
-	FormulaDesc		 string		 `gorm:"formula_desc" json:"formula_desc,omitempty"`
-	PeopleUsed 		 int		 `gorm:"people_used" json:"people_used,omitempty"`
-	Recommend1 		 int		 `gorm:"recommend1" json:"recommend1,omitempty"`
-	Recommend2		 int		 `gorm:"recommend2" json:"recommend2,omitempty"`
-	Recommend3		 int		 `gorm:"recommend3" json:"recommend3,omitempty"`
-	Recommend4		 int		 `gorm:"recommend4" json:"recommend4,omitempty"`
-	Recommend5		 int		 `gorm:"recommend5" json:"recommend5,omitempty"`
-	CreateDate		 time.Time	 `gorm:"create_date" json:"create_date,omitempty"`
-	ChangeDate		 time.Time	 `gorm:"change_date" json:"change_date,omitempty"`
-	PlantId		 	 uuid.UUID	 `gorm:"plant_id" json:"plant_id,omitempty"`
-	StatusId		 uuid.UUID	 `gorm:"status_id" json:"status_id,omitempty"`
-	ProvinceId		 uuid.UUID	 `gorm:"province_id" json:"province_id,omitempty"`
+	FormulaPlantId 	 uuid.UUID	 `mapstructure:"formula_plant_id" json:"formula_plant_id,omitempty"`
+	FormulaName		 string		 `mapstructure:"formula_name" json:"formula_name,omitempty"`
+	FormulaDesc		 string		 `mapstructure:"formula_desc" json:"formula_desc,omitempty"`
+	PeopleUsed 		 int		 `mapstructure:"people_used" json:"people_used,omitempty"`
+	Recommend1 		 int		 `mapstructure:"recommend1" json:"recommend1,omitempty"`
+	Recommend2		 int		 `mapstructure:"recommend2" json:"recommend2,omitempty"`
+	Recommend3		 int		 `mapstructure:"recommend3" json:"recommend3,omitempty"`
+	Recommend4		 int		 `mapstructure:"recommend4" json:"recommend4,omitempty"`
+	Recommend5		 int		 `mapstructure:"recommend5" json:"recommend5,omitempty"`
+	CreateDate		 time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
+	ChangeDate		 time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
+	PlantId		 	 uuid.UUID	 `mapstructure:"plant_id" json:"plant_id,omitempty"`
+	StatusId		 uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
+	ProvinceId		 uuid.UUID	 `mapstructure:"province_id" json:"province_id,omitempty"`
+	CountryId		 uuid.UUID	 `mapstructure:"country_id" json:"country_id,omitempty"`
+	IsPublic		 bool	 	 `mapstructure:"is_public" json:"is_public,omitempty"`
 }
 // New instance formula_plant
 func (u *FormulaPlant) New() *FormulaPlant {
@@ -42,6 +44,8 @@ func (u *FormulaPlant) New() *FormulaPlant {
 		PlantId:			u.PlantId ,
 		StatusId:			u.StatusId ,
 		ProvinceId:			u.ProvinceId ,
+		CountryId:			u.CountryId ,
+		IsPublic:			u.IsPublic ,
 	}
 }
 

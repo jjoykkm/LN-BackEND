@@ -10,12 +10,12 @@ import (
 //-------------------------------------------------------------------------------//
 //model role
 type Role struct {
-	RoleId      	uuid.UUID	 `gorm:"role_id" json:"role_id,omitempty"`
-	RoleName      	string		 `gorm:"role_name" json:"role_name,omitempty"`
-	RoleDesc      	string		 `gorm:"role_desc" json:"role_desc,omitempty"`
-	CreateDate		time.Time	 `gorm:"create_date" json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 `gorm:"change_date" json:"change_date,omitempty"`
-	StatusId		uuid.UUID	 `gorm:"status_id" json:"status_id,omitempty"`
+	RoleId      	uuid.UUID	 `mapstructure:"role_id" json:"role_id,omitempty"`
+	RoleName      	string		 `mapstructure:"role_name" json:"role_name,omitempty"`
+	RoleDesc      	string		 `mapstructure:"role_desc" json:"role_desc,omitempty"`
+	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
+	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
+	StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
 }
 // New instance role
 func (u *Role) New() *Role {

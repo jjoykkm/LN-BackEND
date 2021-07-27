@@ -10,11 +10,11 @@ import (
 //-------------------------------------------------------------------------------//
 //model sensor_type
 type SensorType struct {
-	SensorTypeId      	uuid.UUID	 `gorm:"sensor_type_id" json:"sensor_type_id,omitempty"`
-	SensorTypeName      string	 	 `gorm:"sensor_type_name" json:"sensor_type_name,omitempty"`
-	CreateDate			time.Time	 `gorm:"create_date" json:"create_date,omitempty"`
-	ChangeDate	    	time.Time	 `gorm:"change_date" json:"change_date,omitempty"`
-	StatusId			uuid.UUID	 `gorm:"status_id" json:"status_id,omitempty"`
+	SensorTypeId      	uuid.UUID	 `mapstructure:"sensor_type_id" json:"sensor_type_id,omitempty"`
+	SensorTypeName      string	 	 `mapstructure:"sensor_type_name" json:"sensor_type_name,omitempty"`
+	CreateDate			time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
+	ChangeDate	    	time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
+	StatusId			uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
 }
 // New instance sensor_type
 func (u *SensorType) New() *SensorType {

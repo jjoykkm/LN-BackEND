@@ -10,12 +10,12 @@ import (
 //-------------------------------------------------------------------------------//
 //model farm
 type Farm struct {
-	FarmId      	uuid.UUID	 `gorm:"farm_id" json:"farm_id,omitempty"`
-	FarmName    	string		 `gorm:"farm_name" json:"farm_name,omitempty"`
-	FarmDesc    	string		 `gorm:"farm_desc" json:"farm_desc,omitempty"`
-	CreateDate		time.Time	 `gorm:"create_date" json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 `gorm:"change_date" json:"change_date,omitempty"`
-	StatusId		uuid.UUID	 `gorm:"status_id" json:"status_id,omitempty"`
+	FarmId      	uuid.UUID	 `mapstructure:"farm_id" json:"farm_id,omitempty"`
+	FarmName    	string		 `mapstructure:"farm_name" json:"farm_name,omitempty"`
+	FarmDesc    	string		 `mapstructure:"farm_desc" json:"farm_desc,omitempty"`
+	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
+	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
+	StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
 }
 // New instance farm
 func (u *Farm) New() *Farm {

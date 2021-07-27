@@ -10,11 +10,11 @@ import (
 //-------------------------------------------------------------------------------//
 //model session_action
 type SessionAction struct {
-	SessionActionId     uuid.UUID	 `gorm:"session_action_id" json:"session_action_id,omitempty"`
-	SessionAction     	string	 	 `gorm:"session_action" json:"session_action,omitempty"`
-	CreateDate			time.Time	 `gorm:"create_date" json:"create_date,omitempty"`
-	ChangeDate	    	time.Time	 `gorm:"change_date" json:"change_date,omitempty"`
-	StatusId			uuid.UUID	 `gorm:"status_id" json:"status_id,omitempty"`
+	SessionActionId     uuid.UUID	 `mapstructure:"session_action_id" json:"session_action_id,omitempty"`
+	SessionAction     	string	 	 `mapstructure:"session_action" json:"session_action,omitempty"`
+	CreateDate			time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
+	ChangeDate	    	time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
+	StatusId			uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
 }
 // New instance session_action
 func (u *SessionAction) New() *SessionAction {

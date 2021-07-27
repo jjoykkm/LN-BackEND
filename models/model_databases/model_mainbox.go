@@ -10,15 +10,15 @@ import (
 //-------------------------------------------------------------------------------//
 //model mainbox
 type Mainbox struct {
-	MainboxId      	uuid.UUID	 `gorm:"mainbox_id" json:"mainbox_id,omitempty"`
-	MainboxName     string		 `gorm:"mainbox_name" json:"mainbox_name,omitempty"`
-	MainboxModel    string		 `gorm:"mainbox_model" json:"mainbox_model,omitempty"`
-	MainboxLots     string		 `gorm:"mainbox_lots" json:"mainbox_lots,omitempty"`
-	StartWarranty	time.Time	 `gorm:"start_warranty" json:"start_warranty,omitempty"`
-	EndWarranty		time.Time	 `gorm:"end_warranty" json:"end_warranty,omitempty"`
-	CreateDate		time.Time	 `gorm:"create_date" json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 `gorm:"change_date" json:"change_date,omitempty"`
-	StatusId		uuid.UUID	 `gorm:"status_id" json:"status_id,omitempty"`
+	MainboxId      	uuid.UUID	 `mapstructure:"mainbox_id" json:"mainbox_id,omitempty"`
+	MainboxName     string		 `mapstructure:"mainbox_name" json:"mainbox_name,omitempty"`
+	MainboxModel    string		 `mapstructure:"mainbox_model" json:"mainbox_model,omitempty"`
+	MainboxLots     string		 `mapstructure:"mainbox_lots" json:"mainbox_lots,omitempty"`
+	StartWarranty	time.Time	 `mapstructure:"start_warranty" json:"start_warranty,omitempty"`
+	EndWarranty		time.Time	 `mapstructure:"end_warranty" json:"end_warranty,omitempty"`
+	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
+	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
+	StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
 }
 // New instance mainbox
 func (u *Mainbox) New() *Mainbox {

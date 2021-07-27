@@ -10,12 +10,12 @@ import (
 //-------------------------------------------------------------------------------//
 //model country
 type Country struct {
-	CountryId       uuid.UUID	 `gorm:"country_id" json:"country_id,omitempty"`
-	CountryEN       string		 `gorm:"country_en" json:"country_en,omitempty"`
-	CountryTH       string		 `gorm:"country_th" json:"country_th,omitempty"`
-	CreateDate		time.Time	 `gorm:"create_date" json:"create_date,omitempty"`
-	ChangeDate	   	time.Time	 `gorm:"change_date" json:"change_date,omitempty"`
-	StatusId		uuid.UUID	 `gorm:"status_id" json:"status_id,omitempty"`
+	CountryId       uuid.UUID	 `mapstructure:"country_id" json:"country_id,omitempty"`
+	CountryEN       string		 `mapstructure:"country_en" json:"country_en,omitempty"`
+	CountryTH       string		 `mapstructure:"country_th" json:"country_th,omitempty"`
+	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
+	ChangeDate	   	time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
+	StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
 }
 // New instance country
 func (u *Country) New() *Country {

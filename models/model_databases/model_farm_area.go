@@ -10,13 +10,13 @@ import (
 //-------------------------------------------------------------------------------//
 //model farm_area
 type FarmArea struct {
-	FarmAreaId      	uuid.UUID	 `gorm:"farm_area_id" json:"farm_area_id,omitempty"`
-	FarmAreaName    	string		 `gorm:"farm_area_name" json:"farm_area_name,omitempty"`
-	CreateDate			time.Time	 `gorm:"create_date" json:"create_date,omitempty"`
-	ChangeDate	    	time.Time	 `gorm:"change_date" json:"change_date,omitempty"`
-	FarmId				uuid.UUID	 `gorm:"farm_id" json:"farm_id,omitempty"`
-	FormulaPlantId		uuid.UUID	 `gorm:"formula_plant_id" json:"formula_plant_id,omitempty"`
-	StatusId			uuid.UUID	 `gorm:"status_id" json:"status_id,omitempty"`
+	FarmAreaId      	uuid.UUID	 `mapstructure:"farm_area_id" json:"farm_area_id,omitempty"`
+	FarmAreaName    	string		 `mapstructure:"farm_area_name" json:"farm_area_name,omitempty"`
+	CreateDate			time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
+	ChangeDate	    	time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
+	FarmId				uuid.UUID	 `mapstructure:"farm_id" json:"farm_id,omitempty"`
+	FormulaPlantId		uuid.UUID	 `mapstructure:"formula_plant_id" json:"formula_plant_id,omitempty"`
+	StatusId			uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
 }
 // New instance farm_area
 func (u *FarmArea) New() *FarmArea {
