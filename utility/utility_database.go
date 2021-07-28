@@ -38,3 +38,15 @@ func SelectData(db *sql.DB, selectList string, tableName string, condition strin
 	}
 	return rows
 }
+
+func SelectDataManual(db *sql.DB, sql string) *sql.Rows {
+	if sql == "" {
+		return nil
+	}
+	fmt.Println(sql)
+	rows, err := db.Query(sql)
+	if err != nil {
+		panic(err)
+	}
+	return rows
+}

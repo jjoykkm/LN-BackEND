@@ -66,6 +66,7 @@ type ForPlantItem struct {
 	IsPublic		 bool	 	 `mapstructure:"is_public" json:"is_public,omitempty"`
 	IsPlanted		 bool	 	 `mapstructure:"is_planted" json:"is_planted,omitempty"`
 	IsFavorite		 bool	 	 `mapstructure:"is_favorite" json:"is_favorite,omitempty"`
+	Uid				 bool	 	 `mapstructure:"uid" json:"uid,omitempty"`
 }
 
 // New instance
@@ -86,6 +87,7 @@ func (u *ForPlantItem) New() *ForPlantItem {
 		IsPublic:			u.IsPublic ,
 		IsPlanted:			u.IsPlanted ,
 		IsFavorite:			u.IsFavorite ,
+		Uid:				u.Uid ,
 	}
 }
 
