@@ -1,8 +1,10 @@
 package utility
 
 import (
+	"LN-BackEND/models/model_databases"
 	"database/sql"
 	"fmt"
+	"reflect"
 )
 
 func SelectData(db *sql.DB, selectList string, tableName string, condition string, joinTable string, joinKey string, orderBy string, offset int, limit int) *sql.Rows {
@@ -49,4 +51,23 @@ func SelectDataManual(db *sql.DB, sql string) *sql.Rows {
 		panic(err)
 	}
 	return rows
+}
+
+func SelectSingleData(db *sql.DB, selectList string, tableName string, condition string, joinTable string, joinKey string, param interface{}) {
+
+	sql :=  fmt.Sprintf("SELECT %s FROM %s", selectList, tableName)
+	if joinTable != "" && joinKey != "" {
+		sqlJoin := fmt.Sprintf(" INNER JOIN %s ON %s", joinTable, joinKey)
+		sql = sql + sqlJoin
+	}
+	if condition != "" {
+		sqlOrder := fmt.Sprintf(" WHERE %s", condition)
+		sql = sql + sqlOrder
+	}
+	fmt.Println(sql)
+	fmt.Println(reflect.TypeOf(param))
+	var name model_databases.Country
+	//db.QueryRow(sql).Scan(&param)
+	db.QueryRow(sql).Scan(&name)
+	fmt.Println(name)
 }

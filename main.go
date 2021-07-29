@@ -35,6 +35,11 @@ func main() {
 	}
 	fmt.Printf("Successfully connected to DB!\n")
 
+	////GetCountryName(db *sql.DB, status string, countryId string, language string) string
+	//countryName := controllers.GetCountryName(db, config.STATUS_ACTIVE,"067ea4ff-25ef-47b4-b566-fc2ee28aa07e", config.LANGUAGE_EN)
+	//fmt.Println(countryName)
+
+
 	//router := gin.Default()
 	//router.POST("/find", jjoy)
 	//router.POST("/test", test)

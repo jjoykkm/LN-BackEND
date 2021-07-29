@@ -130,11 +130,19 @@ func GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlant) (float32, 
 	return rateScore, ratePeople
 }
 
-func GetCountryName(countryId string) string {
+func GetCountryName(db *sql.DB, status string, countryId string, language string) string {
+	var country *model_databases.Country
 	var countryName string
 
-	//countryName =
+	condition := fmt.Sprintf(" status_id = '%s' AND country_id = '%s' ", status, countryId)
+	utility.SelectSingleData(db, "*", config.DB_COUNTRY, condition, "", "", country)
 
+	switch language {
+	case config.LANGUAGE_EN:
+		countryName = country.CountryEN
+	case config.LANGUAGE_TH:
+		countryName = country.CountryTH
+	}
 	return countryName
 }
 
