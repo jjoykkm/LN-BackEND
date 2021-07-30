@@ -136,7 +136,6 @@ func GetCountryName(db *sql.DB, countryId string, language string) string {
 	var countryName string
 
 	condition := fmt.Sprintf("SELECT * FROM %s WHERE status_id = $1 AND country_id = $2", config.DB_COUNTRY)
-	fmt.Println(condition)
 	err := db.QueryRow(condition, config.STATUS_ACTIVE, countryId).Scan(
 		&countryModel.CountryId ,
 		&countryModel.CountryEN ,
@@ -162,7 +161,6 @@ func GetProvinceName(db *sql.DB, provinceId string, language string) string {
 	var provinceName string
 
 	condition := fmt.Sprintf("SELECT * FROM %s WHERE status_id = $1 AND province_id = $2", config.DB_PROVINCE)
-	fmt.Println(condition)
 	err := db.QueryRow(condition, config.STATUS_ACTIVE, provinceId).Scan(
 		&provinceModel.ProvinceId ,
 		&provinceModel.ProvinceEN ,
@@ -184,6 +182,31 @@ func GetProvinceName(db *sql.DB, provinceId string, language string) string {
 	return provinceName
 }
 
+func GetPlantTypeName(db *sql.DB, plantTypeId string, language string) string {
+	var plantTypeModel model_databases.PlantType
+	var plantTypeName string
+
+	condition := fmt.Sprintf("SELECT * FROM %s WHERE status_id = $1 AND plant_type_id = $2", config.DB_PLANT_TYPE)
+	err := db.QueryRow(condition, config.STATUS_ACTIVE, plantTypeId).Scan(
+		&plantTypeModel.PlantTypeId ,
+		&plantTypeModel.PlantTypeEN ,
+		&plantTypeModel.PlantTypeTH ,
+		&plantTypeModel.CreateDate ,
+		&plantTypeModel.ChangeDate ,
+		&plantTypeModel.StatusId  ,
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	switch language {
+	case config.LANGUAGE_EN:
+		plantTypeName = plantTypeModel.PlantTypeEN
+	case config.LANGUAGE_TH:
+		plantTypeName = plantTypeModel.PlantTypeTH
+	}
+	return plantTypeName
+}
+
 func GetPlantOverviewFavorite(db *sql.DB, status string, uid string, language string, offset int) ([]model_services.ForPlantItem, int) {
 	var plantType model_databases.PlantType
 	var formulaPlant model_databases.FormulaPlant
@@ -194,6 +217,7 @@ func GetPlantOverviewFavorite(db *sql.DB, status string, uid string, language st
 	var found bool
 	var countryMap map[string]string
 	var provinceMap map[string]string
+	var plantTypeMap map[string]string
 
 	if uid == "" {
 		return nil, offset
@@ -203,28 +227,28 @@ func GetPlantOverviewFavorite(db *sql.DB, status string, uid string, language st
 	sqlIn := "('" + strings.Join(formulaPlantList, "','") + "')"
 	condition := fmt.Sprintf("%s.formula_plant_id IN %s", config.DB_FORMULA_PLANT, sqlIn)
 	joinKey := fmt.Sprintf(" %s.plant_id = %s.plant_id", config.DB_FORMULA_PLANT, config.DB_PLANT)
-	rows := utility.SelectData(db, "*", config.DB_FORMULA_PLANT, condition, config.DB_PLANT, joinKey, "", offset, 100, config.STATUS_ACTIVE)
+	rows := utility.SelectData(db, "*", config.DB_FORMULA_PLANT, condition, config.DB_PLANT, joinKey, "", offset, 100, status)
 
 	defer rows.Close()
 	for rows.Next() {
 		rows.Scan(
-			&formulaPlant.FormulaPlantId,
-			&formulaPlant.FormulaName,
-			&formulaPlant.FormulaDesc,
-			&formulaPlant.PeopleUsed,
-			&formulaPlant.Recommend1,
-			&formulaPlant.Recommend2,
-			&formulaPlant.Recommend3,
-			&formulaPlant.Recommend4,
-			&formulaPlant.Recommend5,
-			&formulaPlant.CreateDate,
-			&formulaPlant.ChangeDate,
-			&formulaPlant.PlantId,
-			&formulaPlant.StatusId,
-			&formulaPlant.ProvinceId,
-			&formulaPlant.CountryId,
-			&formulaPlant.IsPublic,
-			&formulaPlant.Uid,
+			&formulaPlant.FormulaPlantId ,
+			&formulaPlant.FormulaName ,
+			&formulaPlant.FormulaDesc ,
+			&formulaPlant.PeopleUsed ,
+			&formulaPlant.Recommend1 ,
+			&formulaPlant.Recommend2 ,
+			&formulaPlant.Recommend3 ,
+			&formulaPlant.Recommend4 ,
+			&formulaPlant.Recommend5 ,
+			&formulaPlant.CreateDate ,
+			&formulaPlant.ChangeDate ,
+			&formulaPlant.PlantId ,
+			&formulaPlant.StatusId ,
+			&formulaPlant.ProvinceId ,
+			&formulaPlant.CountryId ,
+			&formulaPlant.IsPublic ,
+			&formulaPlant.Uid ,
 			&plant.PlantId ,
 			&plant.PlantNameEN ,
 			&plant.PlantNameTH ,
@@ -235,16 +259,9 @@ func GetPlantOverviewFavorite(db *sql.DB, status string, uid string, language st
 			&plant.StatusId ,
 			&plant.PlantTypeId ,
 			&plant.TotalItem ,
-			//&plantType.PlantTypeId,
-			//&plantType.PlantTypeEN,
-			//&plantType.PlantTypeTH,
-			//&plantType.CreateDate,
-			//&plantType.ChangeDate,
-			//&plantType.StatusId ,
 		)
 		mapstructure.Decode(plant, &plantOverview)
 		mapstructure.Decode(formulaPlant, &plantOverview)
-		fmt.Println(formulaPlant.Uid)
 		plantOverview.RateScore, plantOverview.RatePeople = GetRateScoreAndPeople(formulaPlant)
 		switch language {
 		case config.LANGUAGE_EN:
@@ -257,18 +274,27 @@ func GetPlantOverviewFavorite(db *sql.DB, status string, uid string, language st
 		//Get Country name
 		plantOverview.CountryName, found = countryMap[plantOverview.CountryId.UUID.String()]
 		if !found {
+			plantOverview.CountryName = GetCountryName(db, plantOverview.CountryId.UUID.String(), language)
 			countryMap = make(map[string]string)
-			countryMap[plantOverview.CountryId.UUID.String()] = GetCountryName(db, plantOverview.CountryId.UUID.String(), language)
+			countryMap[plantOverview.CountryId.UUID.String()] = plantOverview.CountryName
 		}
 
 		//Get Country name
 		plantOverview.ProvinceName, found = provinceMap[plantOverview.ProvinceId.UUID.String()]
 		if !found {
+			plantOverview.ProvinceName = GetProvinceName(db, plantOverview.ProvinceId.UUID.String(), language)
 			provinceMap = make(map[string]string)
-			provinceMap[plantOverview.ProvinceId.UUID.String()] = GetProvinceName(db, plantOverview.ProvinceId.UUID.String(), language)
+			provinceMap[plantOverview.ProvinceId.UUID.String()] = plantOverview.ProvinceName
 		}
 
-		fmt.Printf("%+v\n", plantOverview)
+		//Get Plant Type name
+		plantOverview.PlantTypeName, found = plantTypeMap[plantOverview.PlantTypeId.UUID.String()]
+		if !found {
+			plantOverview.PlantTypeName = GetPlantTypeName(db, plantOverview.PlantTypeId.UUID.String(), language)
+			plantTypeMap = make(map[string]string)
+			plantTypeMap[plantOverview.PlantTypeId.UUID.String()] = plantOverview.PlantTypeName
+		}
+
 		plantOverviewArray = append(plantOverviewArray, plantOverview)
 	}
 	currentOffset = offset + len(plantOverviewArray)
