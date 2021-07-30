@@ -5,17 +5,11 @@ import (
 	"LN-BackEND/controllers"
 	"database/sql"
 	"fmt"
-	//"github.com/gin-gonic/gin"
-	//"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
 	"log"
 	"reflect"
-
-	//"time"
-	//"github.com/gin-gonic/gin/binding"
 	_ "github.com/lib/pq"
-	//"gorm.io/driver/postgres"
-	//"gorm.io/gorm"
-	//"time"
+
 )
 
 var dbs *sql.DB
@@ -34,6 +28,17 @@ func main() {
 		panic(err)
 	}
 	fmt.Printf("Successfully connected to DB!\n")
+
+
+
+	http := gin.Default()
+	http.GET("/test", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "test",
+		})
+	})
+	http.Run("0.0.0.0:80")
+
 
 	////GetCountryName(db *sql.DB, countryId string, language string) string
 	//countryName := controllers.GetCountryName(db, "067ea4ff-25ef-47b4-b566-fc2ee28aa07e", config.LANGUAGE_EN)
