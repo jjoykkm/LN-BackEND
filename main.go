@@ -7,20 +7,18 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
-	"reflect"
 	_ "github.com/lib/pq"
 
 )
-
-var dbs *sql.DB
 
 func main() {
 	db, err := sql.Open(config.DRIVER_NAME, config.CONNECTION)
 	if err != nil {
 		log.Fatal(err)
 	}
-	dbs = db
-	fmt.Println(reflect.TypeOf(db))
+
+	formulaPlant := controllers.Ln{db}
+
 	defer db.Close()
 
 	err = db.Ping()
@@ -37,7 +35,33 @@ func main() {
 			"message": "test",
 		})
 	})
-	http.Run("0.0.0.0:80")
+
+	http.POST("/plantCategoryList", func(c *gin.Context) {
+		plantCategoryList := formulaPlant.GetPlantCategoryLister(config.STATUS_ACTIVE, config.LANGUAGE_EN)
+		c.JSON(200, gin.H{
+			"item": plantCategoryList,
+		})
+	})
+
+	http.POST("/plantCategoryItem", func(c *gin.Context) {
+		plantCategoryItem, nextOffset := formulaPlant.GetPlantCategoryItemer(config.STATUS_ACTIVE, "",  config.LANGUAGE_EN, 0)
+		c.JSON(200, gin.H{
+			"item": plantCategoryItem,
+			"offset": nextOffset,
+		})
+	})
+
+
+	http.POST("/plantOverviewFavorite", func(c *gin.Context) {
+		plantOverviewFavorite, nextOffset := formulaPlant.GetPlantOverviewFavoriteer(config.STATUS_ACTIVE, "6f08ea87-47dd-4511-be6c-3f2f6603de6c", config.LANGUAGE_EN, 0)
+		c.JSON(200, gin.H{
+			"item": plantOverviewFavorite,
+			"offset": nextOffset,
+		})
+	})
+
+	http.Run(config.SERVER_HOST)
+
 
 
 	////GetCountryName(db *sql.DB, countryId string, language string) string
@@ -46,7 +70,6 @@ func main() {
 
 
 	//router := gin.Default()
-	//router.POST("/find", jjoy)
 	//router.POST("/test", test)
 	//router.Run(config.SERVER_HOST)
 
@@ -64,8 +87,8 @@ func main() {
 	//fmt.Println(favoritePlant)
 
 	////GetPlantOverviewFavorite(db *sql.DB, status string, uid string, language string, offset int) ([]model_services.ForPlantItem, int)
-	plantOverviewFavorite, _ := controllers.GetPlantOverviewFavorite(db, config.STATUS_ACTIVE, "6f08ea87-47dd-4511-be6c-3f2f6603de6c", config.LANGUAGE_EN, 0)
-	fmt.Println(plantOverviewFavorite)
+	//plantOverviewFavorite, _ := controllers.GetPlantOverviewFavorite(db, config.STATUS_ACTIVE, "6f08ea87-47dd-4511-be6c-3f2f6603de6c", config.LANGUAGE_EN, 0)
+	//fmt.Println(plantOverviewFavorite)
 }
 
 //func jjoy(c *gin.Context)  {

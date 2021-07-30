@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func SelectData(db *sql.DB, selectList string, tableName string, condition string, joinTable string, joinKey string, orderBy string, offset int, limit int, status string) *sql.Rows {
+func SelectData(db *sql.DB, selectList, tableName, condition, joinTable, joinKey, orderBy, status string, offset int, limit int) *sql.Rows {
 	if selectList == "" && tableName == "" {
 		return nil
 	}

@@ -6,7 +6,8 @@ package config
 const STATUS_ACTIVE = "07de88ec-4f91-4235-9975-8b2ef1e6149e"
 const CONNECTION = "postgres://ln02t:ln-0110-2@103.212.181.187/smartlife?sslmode=disable"
 const DRIVER_NAME = "postgres"
-const SERVER_HOST = "103.212.181.187:9000"
+//const SERVER_HOST = "103.212.181.187:9000"
+const SERVER_HOST = "0.0.0.0:80"
 
 /*-------------------------------------------------------------------------------------------*/
 //                                 LANGUAGE

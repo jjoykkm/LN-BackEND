@@ -4,23 +4,49 @@ import (
 	"LN-BackEND/config"
 	"LN-BackEND/models/model_databases"
 	"LN-BackEND/models/model_services"
-	"LN-BackEND/utility"
 	"database/sql"
 	"fmt"
 	"github.com/mitchellh/mapstructure"
 	"log"
 	"strings"
 )
+/*-------------------------------------------------------------------------------------------*/
+//                                 STRUCTURE
+/*-------------------------------------------------------------------------------------------*/
+type Ln struct {
+	Db			*sql.DB
+}
 
-func GetPlantCategoryList(db *sql.DB, status string, language string) []model_services.ForPlantCatList {
+/*-------------------------------------------------------------------------------------------*/
+//                                 INTERFACE
+/*-------------------------------------------------------------------------------------------*/
+type IntFormulaPlant interface {
+	GetPlantCategoryLister(status, language string) []model_services.ForPlantCatList
+	GetPlantCategoryItemer(status, plantTypeId, language string, offset int) ([]model_services.ForPlantCat, int)
+	GetFavoriteFormulaPlanter(status, uid string) ([]model_databases.FavoritePlant, []string)
+	GetMyFormulaPlanter(status, uid string) ([]model_databases.FavoritePlant, []string)
+	GetRateScoreAndPeopleer(formulaPlant model_databases.FormulaPlant) (float32, int)
+	GetCountryNameer(countryId, language string) string
+	GetProvinceNameer(provinceId, language string) string
+	GetPlantTypeNameer(plantTypeId, language string) string
+	GetPlantOverviewFavoriteer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int)
+	GetMyPlantOverview(status, uid, language string, offset int) ([]model_services.ForPlantItem, int)
+}
+
+func (ln Ln) GetPlantCategoryLister(status, language string) []model_services.ForPlantCatList {
 	var plantType model_databases.PlantType
 	var catList model_services.ForPlantCatList
 	var catListArray []model_services.ForPlantCatList
 
-	rows := utility.SelectData(db, "*", config.DB_PLANT_TYPE, "", "", "", "plant_type_en ASC", 0, 0, status)
+	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' ORDER BY plant_type_en ASC", config.DB_PLANT_TYPE, status)
+	rows, err := ln.Db.Query(sql)
+	if err != nil {
+		panic(err)
+	}
 	defer rows.Close()
 	for rows.Next(){
-		rows.Scan(&plantType.PlantTypeId ,
+		rows.Scan(
+			&plantType.PlantTypeId ,
 			&plantType.PlantTypeEN ,
 			&plantType.PlantTypeTH ,
 			&plantType.CreateDate ,
@@ -39,19 +65,20 @@ func GetPlantCategoryList(db *sql.DB, status string, language string) []model_se
 	return catListArray
 }
 
-func GetPlantCategoryItem(db *sql.DB, status string, plantTypeId string, language string, offset int) ([]model_services.ForPlantCat, int) {
+func (ln Ln) GetPlantCategoryItemer(status, plantTypeId, language string, offset int) ([]model_services.ForPlantCat, int) {
 	var plantType model_databases.PlantType
 	var plant model_databases.Plant
 	var plantCat model_services.ForPlantCat
 	var plantCatArray []model_services.ForPlantCat
 	var currentOffset int
-	var condition string
 
-	if plantTypeId != "" {
-		condition = fmt.Sprintf(" AND plant_type_id = '%s'", plantTypeId)
+	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.plant_type_id = %s.plant_type_id WHERE %s.status_id = '%s' OFFSET %d LIMIT 100",
+		config.DB_PLANT, config.DB_PLANT_TYPE, config.DB_PLANT, config.DB_PLANT_TYPE, config.DB_PLANT, status, offset)
+	fmt.Println(sql)
+	rows, err := ln.Db.Query(sql)
+	if err != nil {
+		panic(err)
 	}
-	joinKey := fmt.Sprintf(" %s.plant_type_id = %s.plant_type_id", config.DB_PLANT, config.DB_PLANT_TYPE)
-	rows := utility.SelectData(db, "*", config.DB_PLANT, condition, config.DB_PLANT_TYPE, joinKey, "", offset, 100, status)
 	defer rows.Close()
 	for rows.Next(){
 		rows.Scan(
@@ -77,12 +104,12 @@ func GetPlantCategoryItem(db *sql.DB, status string, plantTypeId string, languag
 		switch language {
 		case config.LANGUAGE_EN:
 			plantCat.PlantTypeName = plantType.PlantTypeEN
-			plantCat.PlantTypeName = plant.PlantNameEN
-			plantCat.PlantTypeName = plant.PlantDescEN
+			plantCat.PlantName = plant.PlantNameEN
+			plantCat.PlantDesc = plant.PlantDescEN
 		case config.LANGUAGE_TH:
 			plantCat.PlantTypeName = plantType.PlantTypeTH
-			plantCat.PlantTypeName = plant.PlantNameTH
-			plantCat.PlantTypeName = plant.PlantDescTH
+			plantCat.PlantName = plant.PlantNameTH
+			plantCat.PlantDesc = plant.PlantDescTH
 		}
 		plantCatArray = append(plantCatArray, plantCat)
 	}
@@ -90,7 +117,7 @@ func GetPlantCategoryItem(db *sql.DB, status string, plantTypeId string, languag
 	return plantCatArray, currentOffset
 }
 
-func GetFavoriteFormulaPlant(db *sql.DB, status string, uid string) ([]model_databases.FavoritePlant, []string) {
+func (ln Ln) GetFavoriteFormulaPlanter(status, uid string) ([]model_databases.FavoritePlant, []string) {
 	var favPlant model_databases.FavoritePlant
 	var favPlantArray []model_databases.FavoritePlant
 	var formulaPlantList []string
@@ -98,8 +125,14 @@ func GetFavoriteFormulaPlant(db *sql.DB, status string, uid string) ([]model_dat
 	if uid == "" {
 		return nil, nil
 	}
-	condition := fmt.Sprintf("uid = '%s' ", uid)
-	rows := utility.SelectData(db, "*", config.DB_FAVORITE_PLANT, condition, "", "", "change_date ASC", 0, 0, status)
+
+	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND uid = '%s' ORDER BY change_date ASC",
+		config.DB_FAVORITE_PLANT, status, uid)
+	fmt.Println(sql)
+	rows, err := ln.Db.Query(sql)
+	if err != nil {
+		panic(err)
+	}
 	defer rows.Close()
 	for rows.Next(){
 		rows.Scan(
@@ -115,7 +148,38 @@ func GetFavoriteFormulaPlant(db *sql.DB, status string, uid string) ([]model_dat
 	return favPlantArray, formulaPlantList
 }
 
-func GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlant) (float32, int) {
+func (ln Ln) GetMyFormulaPlanter(status, uid string) ([]model_databases.FavoritePlant, []string) {
+	var favPlant model_databases.FavoritePlant
+	var favPlantArray []model_databases.FavoritePlant
+	var formulaPlantList []string
+
+	if uid == "" {
+		return nil, nil
+	}
+
+	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND uid = '%s' ORDER BY change_date ASC",
+		config.DB_FAVORITE_PLANT, status, uid)
+	fmt.Println(sql)
+	rows, err := ln.Db.Query(sql)
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+	for rows.Next(){
+		rows.Scan(
+			&favPlant.Uid ,
+			&favPlant.FormulaPlantId ,
+			&favPlant.CreateDate ,
+			&favPlant.ChangeDate ,
+			&favPlant.StatusId ,
+		)
+		favPlantArray = append(favPlantArray, favPlant)
+		formulaPlantList = append(formulaPlantList, favPlant.FormulaPlantId.UUID.String())
+	}
+	return favPlantArray, formulaPlantList
+}
+
+func (ln Ln) GetRateScoreAndPeopleer(formulaPlant model_databases.FormulaPlant) (float32, int) {
 	var rateScore float32
 	var ratePeople int
 
@@ -131,12 +195,12 @@ func GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlant) (float32, 
 	return rateScore, ratePeople
 }
 
-func GetCountryName(db *sql.DB, countryId string, language string) string {
+func (ln Ln) GetCountryNameer(countryId, language string) string {
 	var countryModel model_databases.Country
 	var countryName string
 
 	condition := fmt.Sprintf("SELECT * FROM %s WHERE status_id = $1 AND country_id = $2", config.DB_COUNTRY)
-	err := db.QueryRow(condition, config.STATUS_ACTIVE, countryId).Scan(
+	err := ln.Db.QueryRow(condition, config.STATUS_ACTIVE, countryId).Scan(
 		&countryModel.CountryId ,
 		&countryModel.CountryEN ,
 		&countryModel.CountryTH ,
@@ -156,12 +220,12 @@ func GetCountryName(db *sql.DB, countryId string, language string) string {
 	return countryName
 }
 
-func GetProvinceName(db *sql.DB, provinceId string, language string) string {
+func (ln Ln) GetProvinceNameer(provinceId, language string) string {
 	var provinceModel model_databases.Province
 	var provinceName string
 
 	condition := fmt.Sprintf("SELECT * FROM %s WHERE status_id = $1 AND province_id = $2", config.DB_PROVINCE)
-	err := db.QueryRow(condition, config.STATUS_ACTIVE, provinceId).Scan(
+	err := ln.Db.QueryRow(condition, config.STATUS_ACTIVE, provinceId).Scan(
 		&provinceModel.ProvinceId ,
 		&provinceModel.ProvinceEN ,
 		&provinceModel.ProvinceTH ,
@@ -182,12 +246,12 @@ func GetProvinceName(db *sql.DB, provinceId string, language string) string {
 	return provinceName
 }
 
-func GetPlantTypeName(db *sql.DB, plantTypeId string, language string) string {
+func (ln Ln) GetPlantTypeNameer(plantTypeId, language string) string {
 	var plantTypeModel model_databases.PlantType
 	var plantTypeName string
 
 	condition := fmt.Sprintf("SELECT * FROM %s WHERE status_id = $1 AND plant_type_id = $2", config.DB_PLANT_TYPE)
-	err := db.QueryRow(condition, config.STATUS_ACTIVE, plantTypeId).Scan(
+	err := ln.Db.QueryRow(condition, config.STATUS_ACTIVE, plantTypeId).Scan(
 		&plantTypeModel.PlantTypeId ,
 		&plantTypeModel.PlantTypeEN ,
 		&plantTypeModel.PlantTypeTH ,
@@ -207,7 +271,7 @@ func GetPlantTypeName(db *sql.DB, plantTypeId string, language string) string {
 	return plantTypeName
 }
 
-func GetPlantOverviewFavorite(db *sql.DB, status string, uid string, language string, offset int) ([]model_services.ForPlantItem, int) {
+func (ln Ln) GetPlantOverviewFavoriteer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int) {
 	var plantType model_databases.PlantType
 	var formulaPlant model_databases.FormulaPlant
 	var plantOverview model_services.ForPlantItem
@@ -223,12 +287,19 @@ func GetPlantOverviewFavorite(db *sql.DB, status string, uid string, language st
 		return nil, offset
 	}
 
-	_, formulaPlantList := GetFavoriteFormulaPlant(db, config.STATUS_ACTIVE, uid)
-	sqlIn := "('" + strings.Join(formulaPlantList, "','") + "')"
-	condition := fmt.Sprintf("%s.formula_plant_id IN %s", config.DB_FORMULA_PLANT, sqlIn)
-	joinKey := fmt.Sprintf(" %s.plant_id = %s.plant_id", config.DB_FORMULA_PLANT, config.DB_PLANT)
-	rows := utility.SelectData(db, "*", config.DB_FORMULA_PLANT, condition, config.DB_PLANT, joinKey, "", offset, 100, status)
+	countryMap = make(map[string]string)
+	provinceMap = make(map[string]string)
+	plantTypeMap = make(map[string]string)
 
+	_, formulaPlantList := IntFormulaPlant.GetFavoriteFormulaPlanter(ln, config.STATUS_ACTIVE, uid)
+	sqlIn := "('" + strings.Join(formulaPlantList, "','") + "')"
+	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.plant_id = %s.plant_id WHERE %s.status_id = '%s' AND %s.formula_plant_id IN %s OFFSET %d LIMIT 100",
+		config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, status, config.DB_FORMULA_PLANT, sqlIn, offset)
+	fmt.Println(sql)
+	rows, err := ln.Db.Query(sql)
+	if err != nil {
+		panic(err)
+	}
 	defer rows.Close()
 	for rows.Next() {
 		rows.Scan(
@@ -262,7 +333,7 @@ func GetPlantOverviewFavorite(db *sql.DB, status string, uid string, language st
 		)
 		mapstructure.Decode(plant, &plantOverview)
 		mapstructure.Decode(formulaPlant, &plantOverview)
-		plantOverview.RateScore, plantOverview.RatePeople = GetRateScoreAndPeople(formulaPlant)
+		plantOverview.RateScore, plantOverview.RatePeople = IntFormulaPlant.GetRateScoreAndPeopleer(ln, formulaPlant)
 		switch language {
 		case config.LANGUAGE_EN:
 			plantOverview.PlantTypeName = plantType.PlantTypeEN
@@ -274,24 +345,120 @@ func GetPlantOverviewFavorite(db *sql.DB, status string, uid string, language st
 		//Get Country name
 		plantOverview.CountryName, found = countryMap[plantOverview.CountryId.UUID.String()]
 		if !found {
-			plantOverview.CountryName = GetCountryName(db, plantOverview.CountryId.UUID.String(), language)
-			countryMap = make(map[string]string)
+			plantOverview.CountryName = IntFormulaPlant.GetCountryNameer(ln, plantOverview.CountryId.UUID.String(), language)
 			countryMap[plantOverview.CountryId.UUID.String()] = plantOverview.CountryName
 		}
 
 		//Get Country name
 		plantOverview.ProvinceName, found = provinceMap[plantOverview.ProvinceId.UUID.String()]
 		if !found {
-			plantOverview.ProvinceName = GetProvinceName(db, plantOverview.ProvinceId.UUID.String(), language)
-			provinceMap = make(map[string]string)
+			plantOverview.ProvinceName = IntFormulaPlant.GetProvinceNameer(ln, plantOverview.ProvinceId.UUID.String(), language)
 			provinceMap[plantOverview.ProvinceId.UUID.String()] = plantOverview.ProvinceName
 		}
 
 		//Get Plant Type name
 		plantOverview.PlantTypeName, found = plantTypeMap[plantOverview.PlantTypeId.UUID.String()]
 		if !found {
-			plantOverview.PlantTypeName = GetPlantTypeName(db, plantOverview.PlantTypeId.UUID.String(), language)
-			plantTypeMap = make(map[string]string)
+			plantOverview.PlantTypeName = IntFormulaPlant.GetPlantTypeNameer(ln, plantOverview.PlantTypeId.UUID.String(), language)
+			plantTypeMap[plantOverview.PlantTypeId.UUID.String()] = plantOverview.PlantTypeName
+		}
+
+		plantOverviewArray = append(plantOverviewArray, plantOverview)
+	}
+	currentOffset = offset + len(plantOverviewArray)
+	return plantOverviewArray, currentOffset
+}
+
+func (ln Ln) GetMyPlantOverview(status, uid, language string, offset int) ([]model_services.ForPlantItem, int) {
+	var plantType model_databases.PlantType
+	var formulaPlant model_databases.FormulaPlant
+	var plantOverview model_services.ForPlantItem
+	var plant model_databases.Plant
+	var plantOverviewArray []model_services.ForPlantItem
+	var currentOffset int
+	var found bool
+	var countryMap map[string]string
+	var provinceMap map[string]string
+	var plantTypeMap map[string]string
+
+	if uid == "" {
+		return nil, offset
+	}
+
+	countryMap = make(map[string]string)
+	provinceMap = make(map[string]string)
+	plantTypeMap = make(map[string]string)
+
+	_, formulaPlantList := IntFormulaPlant.GetFavoriteFormulaPlanter(ln, config.STATUS_ACTIVE, uid)
+	_, myFormulaPlantList := IntFormulaPlant.GetMyFormulaPlanter(ln, config.STATUS_ACTIVE, uid)
+	sqlIn := "('" + strings.Join(formulaPlantList, "','") + "')"
+	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.plant_id = %s.plant_id WHERE %s.status_id = '%s' AND %s.formula_plant_id IN %s OFFSET %d LIMIT 100",
+		config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, status, config.DB_FORMULA_PLANT, sqlIn, offset)
+	fmt.Println(sql)
+	rows, err := ln.Db.Query(sql)
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+	for rows.Next() {
+		rows.Scan(
+			&formulaPlant.FormulaPlantId ,
+			&formulaPlant.FormulaName ,
+			&formulaPlant.FormulaDesc ,
+			&formulaPlant.PeopleUsed ,
+			&formulaPlant.Recommend1 ,
+			&formulaPlant.Recommend2 ,
+			&formulaPlant.Recommend3 ,
+			&formulaPlant.Recommend4 ,
+			&formulaPlant.Recommend5 ,
+			&formulaPlant.CreateDate ,
+			&formulaPlant.ChangeDate ,
+			&formulaPlant.PlantId ,
+			&formulaPlant.StatusId ,
+			&formulaPlant.ProvinceId ,
+			&formulaPlant.CountryId ,
+			&formulaPlant.IsPublic ,
+			&formulaPlant.Uid ,
+			&plant.PlantId ,
+			&plant.PlantNameEN ,
+			&plant.PlantNameTH ,
+			&plant.PlantDescEN ,
+			&plant.PlantDescTH ,
+			&plant.CreateDate ,
+			&plant.ChangeDate ,
+			&plant.StatusId ,
+			&plant.PlantTypeId ,
+			&plant.TotalItem ,
+		)
+		mapstructure.Decode(plant, &plantOverview)
+		mapstructure.Decode(formulaPlant, &plantOverview)
+		plantOverview.RateScore, plantOverview.RatePeople = IntFormulaPlant.GetRateScoreAndPeopleer(ln, formulaPlant)
+		switch language {
+		case config.LANGUAGE_EN:
+			plantOverview.PlantTypeName = plantType.PlantTypeEN
+		case config.LANGUAGE_TH:
+			plantOverview.PlantTypeName = plantType.PlantTypeTH
+		}
+		plantOverview.IsFavorite = true
+
+		//Get Country name
+		plantOverview.CountryName, found = countryMap[plantOverview.CountryId.UUID.String()]
+		if !found {
+			plantOverview.CountryName = IntFormulaPlant.GetCountryNameer(ln, plantOverview.CountryId.UUID.String(), language)
+			countryMap[plantOverview.CountryId.UUID.String()] = plantOverview.CountryName
+		}
+
+		//Get Country name
+		plantOverview.ProvinceName, found = provinceMap[plantOverview.ProvinceId.UUID.String()]
+		if !found {
+			plantOverview.ProvinceName = IntFormulaPlant.GetProvinceNameer(ln, plantOverview.ProvinceId.UUID.String(), language)
+			provinceMap[plantOverview.ProvinceId.UUID.String()] = plantOverview.ProvinceName
+		}
+
+		//Get Plant Type name
+		plantOverview.PlantTypeName, found = plantTypeMap[plantOverview.PlantTypeId.UUID.String()]
+		if !found {
+			plantOverview.PlantTypeName = IntFormulaPlant.GetPlantTypeNameer(ln, plantOverview.PlantTypeId.UUID.String(), language)
 			plantTypeMap[plantOverview.PlantTypeId.UUID.String()] = plantOverview.PlantTypeName
 		}
 
