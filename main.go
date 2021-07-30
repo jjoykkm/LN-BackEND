@@ -35,8 +35,8 @@ func main() {
 	}
 	fmt.Printf("Successfully connected to DB!\n")
 
-	////GetCountryName(db *sql.DB, status string, countryId string, language string) string
-	//countryName := controllers.GetCountryName(db, config.STATUS_ACTIVE,"067ea4ff-25ef-47b4-b566-fc2ee28aa07e", config.LANGUAGE_EN)
+	////GetCountryName(db *sql.DB, countryId string, language string) string
+	//countryName := controllers.GetCountryName(db, "067ea4ff-25ef-47b4-b566-fc2ee28aa07e", config.LANGUAGE_EN)
 	//fmt.Println(countryName)
 
 
@@ -59,7 +59,7 @@ func main() {
 	//fmt.Println(favoritePlant)
 
 	////GetPlantOverviewFavorite(db *sql.DB, status string, uid string, language string, offset int) ([]model_services.ForPlantItem, int)
-	jj,_ := controllers.GetPlantOverviewFavorite(db, config.STATUS_ACTIVE, "6f08ea87-47dd-4511-be6c-3f2f6603de6c", config.LANGUAGE_EN, 0)
+	_,jj := controllers.GetPlantOverviewFavorite(db, config.STATUS_ACTIVE, "6f08ea87-47dd-4511-be6c-3f2f6603de6c", config.LANGUAGE_EN, 0)
 	fmt.Println(jj)
 }
 

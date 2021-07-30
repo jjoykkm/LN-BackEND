@@ -16,6 +16,7 @@ type Province struct {
 	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
 	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
 	StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
+	CountryId       uuid.UUID	 `mapstructure:"country_id" json:"country_id,omitempty"`
 }
 // New instance province
 func (u *Province) New() *Province {
@@ -26,6 +27,7 @@ func (u *Province) New() *Province {
 		CreateDate:		u.CreateDate ,
 		ChangeDate:		u.ChangeDate ,
 		StatusId:		u.StatusId ,
+		CountryId:		u.CountryId ,
 	}
 }
 

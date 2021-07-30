@@ -8,6 +8,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/mitchellh/mapstructure"
+	"log"
 	"strings"
 )
 
@@ -15,8 +16,8 @@ func GetPlantCategoryList(db *sql.DB, status string, language string) []model_se
 	var plantType model_databases.PlantType
 	var catList model_services.ForPlantCatList
 	var catListArray []model_services.ForPlantCatList
-	condition := fmt.Sprintf(" status_id = '%s'", status)
-	rows := utility.SelectData(db, "*", config.DB_PLANT_TYPE, condition, "", "", "plant_type_en ASC", 0, 0 )
+
+	rows := utility.SelectData(db, "*", config.DB_PLANT_TYPE, "", "", "", "plant_type_en ASC", 0, 0, status)
 	defer rows.Close()
 	for rows.Next(){
 		rows.Scan(&plantType.PlantTypeId ,
@@ -44,13 +45,13 @@ func GetPlantCategoryItem(db *sql.DB, status string, plantTypeId string, languag
 	var plantCat model_services.ForPlantCat
 	var plantCatArray []model_services.ForPlantCat
 	var currentOffset int
-	condition := fmt.Sprintf(" %s.status_id = '%s'", config.DB_PLANT, status)
+	var condition string
+
 	if plantTypeId != "" {
-		condPlantType := fmt.Sprintf(" AND plant_type_id = '%s'", plantTypeId)
-		condition = condition + condPlantType
+		condition = fmt.Sprintf(" AND plant_type_id = '%s'", plantTypeId)
 	}
 	joinKey := fmt.Sprintf(" %s.plant_type_id = %s.plant_type_id", config.DB_PLANT, config.DB_PLANT_TYPE)
-	rows := utility.SelectData(db, "*", config.DB_PLANT, condition, config.DB_PLANT_TYPE, joinKey, "", offset, 100 )
+	rows := utility.SelectData(db, "*", config.DB_PLANT, condition, config.DB_PLANT_TYPE, joinKey, "", offset, 100, status)
 	defer rows.Close()
 	for rows.Next(){
 		rows.Scan(
@@ -89,7 +90,7 @@ func GetPlantCategoryItem(db *sql.DB, status string, plantTypeId string, languag
 	return plantCatArray, currentOffset
 }
 
-func GetFavoriteFormulaPlant(db *sql.DB, status string, uid string, language string) ([]model_databases.FavoritePlant, []string) {
+func GetFavoriteFormulaPlant(db *sql.DB, status string, uid string) ([]model_databases.FavoritePlant, []string) {
 	var favPlant model_databases.FavoritePlant
 	var favPlantArray []model_databases.FavoritePlant
 	var formulaPlantList []string
@@ -97,8 +98,8 @@ func GetFavoriteFormulaPlant(db *sql.DB, status string, uid string, language str
 	if uid == "" {
 		return nil, nil
 	}
-	condition := fmt.Sprintf(" status_id = '%s' AND uid = '%s' ", status, uid)
-	rows := utility.SelectData(db, "*", config.DB_FAVORITE_PLANT, condition, "", "", "change_date ASC", 0, 0 )
+	condition := fmt.Sprintf("uid = '%s' ", uid)
+	rows := utility.SelectData(db, "*", config.DB_FAVORITE_PLANT, condition, "", "", "change_date ASC", 0, 0, status)
 	defer rows.Close()
 	for rows.Next(){
 		rows.Scan(
@@ -130,20 +131,57 @@ func GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlant) (float32, 
 	return rateScore, ratePeople
 }
 
-func GetCountryName(db *sql.DB, status string, countryId string, language string) string {
-	var country *model_databases.Country
+func GetCountryName(db *sql.DB, countryId string, language string) string {
+	var countryModel model_databases.Country
 	var countryName string
 
-	condition := fmt.Sprintf(" status_id = '%s' AND country_id = '%s' ", status, countryId)
-	utility.SelectSingleData(db, "*", config.DB_COUNTRY, condition, "", "", country)
-
+	condition := fmt.Sprintf("SELECT * FROM %s WHERE status_id = $1 AND country_id = $2", config.DB_COUNTRY)
+	fmt.Println(condition)
+	err := db.QueryRow(condition, config.STATUS_ACTIVE, countryId).Scan(
+		&countryModel.CountryId ,
+		&countryModel.CountryEN ,
+		&countryModel.CountryTH ,
+		&countryModel.CreateDate ,
+		&countryModel.ChangeDate ,
+		&countryModel.StatusId ,
+		)
+	if err != nil {
+		log.Fatal(err)
+	}
 	switch language {
 	case config.LANGUAGE_EN:
-		countryName = country.CountryEN
+		countryName = countryModel.CountryEN
 	case config.LANGUAGE_TH:
-		countryName = country.CountryTH
+		countryName = countryModel.CountryTH
 	}
 	return countryName
+}
+
+func GetProvinceName(db *sql.DB, provinceId string, language string) string {
+	var provinceModel model_databases.Province
+	var provinceName string
+
+	condition := fmt.Sprintf("SELECT * FROM %s WHERE status_id = $1 AND province_id = $2", config.DB_PROVINCE)
+	fmt.Println(condition)
+	err := db.QueryRow(condition, config.STATUS_ACTIVE, provinceId).Scan(
+		&provinceModel.ProvinceId ,
+		&provinceModel.ProvinceEN ,
+		&provinceModel.ProvinceTH ,
+		&provinceModel.CreateDate ,
+		&provinceModel.ChangeDate ,
+		&provinceModel.StatusId ,
+		&provinceModel.CountryId ,
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	switch language {
+	case config.LANGUAGE_EN:
+		provinceName = provinceModel.ProvinceEN
+	case config.LANGUAGE_TH:
+		provinceName = provinceModel.ProvinceTH
+	}
+	return provinceName
 }
 
 func GetPlantOverviewFavorite(db *sql.DB, status string, uid string, language string, offset int) ([]model_services.ForPlantItem, int) {
@@ -153,16 +191,19 @@ func GetPlantOverviewFavorite(db *sql.DB, status string, uid string, language st
 	var plant model_databases.Plant
 	var plantOverviewArray []model_services.ForPlantItem
 	var currentOffset int
+	var found bool
+	var countryMap map[string]string
+	var provinceMap map[string]string
 
 	if uid == "" {
 		return nil, offset
 	}
 
-	_, formulaPlantList := GetFavoriteFormulaPlant(db, config.STATUS_ACTIVE, uid, config.LANGUAGE_EN)
+	_, formulaPlantList := GetFavoriteFormulaPlant(db, config.STATUS_ACTIVE, uid)
 	sqlIn := "('" + strings.Join(formulaPlantList, "','") + "')"
-	condition := fmt.Sprintf(" %s.status_id = '%s' AND %s.formula_plant_id IN %s", config.DB_FORMULA_PLANT, status, config.DB_FORMULA_PLANT, sqlIn)
+	condition := fmt.Sprintf("%s.formula_plant_id IN %s", config.DB_FORMULA_PLANT, sqlIn)
 	joinKey := fmt.Sprintf(" %s.plant_id = %s.plant_id", config.DB_FORMULA_PLANT, config.DB_PLANT)
-	rows := utility.SelectData(db, "*", config.DB_FORMULA_PLANT, condition, config.DB_PLANT, joinKey, "", offset, 100 )
+	rows := utility.SelectData(db, "*", config.DB_FORMULA_PLANT, condition, config.DB_PLANT, joinKey, "", offset, 100, config.STATUS_ACTIVE)
 
 	defer rows.Close()
 	for rows.Next() {
@@ -212,6 +253,21 @@ func GetPlantOverviewFavorite(db *sql.DB, status string, uid string, language st
 			plantOverview.PlantTypeName = plantType.PlantTypeTH
 		}
 		plantOverview.IsFavorite = true
+
+		//Get Country name
+		plantOverview.CountryName, found = countryMap[plantOverview.CountryId.UUID.String()]
+		if !found {
+			countryMap = make(map[string]string)
+			countryMap[plantOverview.CountryId.UUID.String()] = GetCountryName(db, plantOverview.CountryId.UUID.String(), language)
+		}
+
+		//Get Country name
+		plantOverview.ProvinceName, found = provinceMap[plantOverview.ProvinceId.UUID.String()]
+		if !found {
+			provinceMap = make(map[string]string)
+			provinceMap[plantOverview.ProvinceId.UUID.String()] = GetProvinceName(db, plantOverview.ProvinceId.UUID.String(), language)
+		}
+
 		fmt.Printf("%+v\n", plantOverview)
 		plantOverviewArray = append(plantOverviewArray, plantOverview)
 	}

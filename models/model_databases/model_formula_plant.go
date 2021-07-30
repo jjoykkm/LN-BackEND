@@ -26,7 +26,7 @@ type FormulaPlant struct {
 	ProvinceId		 uuid.UUID	 `mapstructure:"province_id" json:"province_id,omitempty"`
 	CountryId		 uuid.UUID	 `mapstructure:"country_id" json:"country_id,omitempty"`
 	IsPublic		 bool	 	 `mapstructure:"is_public" json:"is_public,omitempty"`
-	Uid				 bool	 	 `mapstructure:"uid" json:"uid,omitempty"`
+	Uid				 uuid.UUID	 `mapstructure:"uid" json:"uid,omitempty"`
 }
 // New instance formula_plant
 func (u *FormulaPlant) New() *FormulaPlant {

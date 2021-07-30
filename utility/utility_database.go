@@ -7,18 +7,23 @@ import (
 	"reflect"
 )
 
-func SelectData(db *sql.DB, selectList string, tableName string, condition string, joinTable string, joinKey string, orderBy string, offset int, limit int) *sql.Rows {
+func SelectData(db *sql.DB, selectList string, tableName string, condition string, joinTable string, joinKey string, orderBy string, offset int, limit int, status string) *sql.Rows {
 	if selectList == "" && tableName == "" {
 		return nil
 	}
 
 	sql :=  fmt.Sprintf("SELECT %s FROM %s", selectList, tableName)
 	if joinTable != "" && joinKey != "" {
-		sqlJoin := fmt.Sprintf(" INNER JOIN %s ON %s", joinTable, joinKey)
+		sqlJoin := fmt.Sprintf(" INNER JOIN %s ON %s WHERE %s.status_id = '%s' ", joinTable, joinKey, tableName, status)
 		sql = sql + sqlJoin
 	}
+	if joinTable == "" && joinKey == "" {
+		sqlStatus := fmt.Sprintf(" WHERE status_id = '%s' ", status)
+		sql = sql + sqlStatus
+	}
+
 	if condition != "" {
-		sqlOrder := fmt.Sprintf(" WHERE %s", condition)
+		sqlOrder := fmt.Sprintf(" AND %s", condition)
 		sql = sql + sqlOrder
 	}
 	if orderBy != "" {
