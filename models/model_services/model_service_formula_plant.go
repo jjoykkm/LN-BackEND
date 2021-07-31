@@ -8,8 +8,8 @@ import (
 //-------------------------------------------------------------------------------//
 //Model
 type ForPlantCatList struct {
-	PlantTypeId     uuid.UUID	 `mapstructure:"plant_type_id" json:"plant_type_id,omitempty"`
-	PlantTypeName   string		 `mapstructure:"plant_type_name" json:"plant_type_name,omitempty"`
+	PlantTypeId     uuid.UUID	 `mapstructure:"plant_type_id" json:"plant_type_id"`
+	PlantTypeName   string		 `mapstructure:"plant_type_name" json:"plant_type_name"`
 }
 
 // New instance
@@ -25,12 +25,12 @@ func (u *ForPlantCatList) New() *ForPlantCatList {
 //-------------------------------------------------------------------------------//
 //Model
 type ForPlantCat struct {
-	PlantTypeId     uuid.UUID	 `mapstructure:"plant_type_id" json:"plant_type_id,omitempty"`
-	PlantTypeName   string		 `mapstructure:"plant_type_name" json:"plant_type_name,omitempty"`
-	PlantId     	uuid.UUID	 `mapstructure:"plant_id" json:"plant_id,omitempty"`
-	PlantName       string		 `mapstructure:"plant_name" json:"plant_name,omitempty"`
-	PlantDesc       string		 `mapstructure:"plant_desc" json:"plant_desc,omitempty"`
-	TotalItem       string		 `mapstructure:"total_item" json:"total_item,omitempty"`
+	PlantTypeId     uuid.UUID	 `mapstructure:"plant_type_id" json:"plant_type_id"`
+	PlantTypeName   string		 `mapstructure:"plant_type_name" json:"plant_type_name"`
+	PlantId     	uuid.UUID	 `mapstructure:"plant_id" json:"plant_id"`
+	PlantName       string		 `mapstructure:"plant_name" json:"plant_name"`
+	PlantDesc       string		 `mapstructure:"plant_desc" json:"plant_desc"`
+	TotalItem       int		 	 `mapstructure:"total_item" json:"total_item"`
 }
 
 // New instance
@@ -51,22 +51,23 @@ func (u *ForPlantCat) New() *ForPlantCat {
 //-------------------------------------------------------------------------------//
 //Model
 type ForPlantItem struct {
-	PlantTypeId      uuid.UUID	 `mapstructure:"plant_type_id" json:"plant_type_id,omitempty"`
-	PlantTypeName    string		 `mapstructure:"plant_type_name" json:"plant_type_name,omitempty"`
-	FormulaPlantId 	 uuid.UUID	 `mapstructure:"formula_plant_id" json:"formula_plant_id,omitempty"`
-	FormulaName		 string		 `mapstructure:"formula_name" json:"formula_name,omitempty"`
-	FormulaDesc		 string		 `mapstructure:"formula_desc" json:"formula_desc,omitempty"`
-	PeopleUsed 		 int		 `mapstructure:"people_used" json:"people_used,omitempty"`
-	RateScore 		 float32	 `mapstructure:"rate_score" json:"rate_score,omitempty"`
-	RatePeople 		 int		 `mapstructure:"rate_people" json:"rate_people,omitempty"`
-	CountryId		 uuid.UUID	 `mapstructure:"country_id" json:"country_id,omitempty"`
-	CountryName      string		 `mapstructure:"country_name" json:"country_name,omitempty"`
-	ProvinceId		 uuid.UUID	 `mapstructure:"province_id" json:"province_id,omitempty"`
-	ProvinceName     string		 `mapstructure:"province_name" json:"province_name,omitempty"`
-	IsPublic		 bool	 	 `mapstructure:"is_public" json:"is_public,omitempty"`
-	IsPlanted		 bool	 	 `mapstructure:"is_planted" json:"is_planted,omitempty"`
-	IsFavorite		 bool	 	 `mapstructure:"is_favorite" json:"is_favorite,omitempty"`
-	Uid				 uuid.UUID 	 `mapstructure:"uid" json:"uid,omitempty"`
+	PlantTypeId      uuid.UUID	 `mapstructure:"plant_type_id" json:"plant_type_id"`
+	PlantTypeName    string		 `mapstructure:"plant_type_name" json:"plant_type_name"`
+	FormulaPlantId 	 uuid.UUID	 `mapstructure:"formula_plant_id" json:"formula_plant_id"`
+	FormulaName		 string		 `mapstructure:"formula_name" json:"formula_name"`
+	FormulaDesc		 string		 `mapstructure:"formula_desc" json:"formula_desc"`
+	PeopleUsed 		 int		 `mapstructure:"people_used" json:"people_used"`
+	RateScore 		 float32	 `mapstructure:"rate_score" json:"rate_score"`
+	RatePeople 		 int		 `mapstructure:"rate_people" json:"rate_people"`
+	CountryId		 uuid.UUID	 `mapstructure:"country_id" json:"country_id"`
+	CountryName      string		 `mapstructure:"country_name" json:"country_name"`
+	ProvinceId		 uuid.UUID	 `mapstructure:"province_id" json:"province_id"`
+	ProvinceName     string		 `mapstructure:"province_name" json:"province_name"`
+	IsPublic		 bool	 	 `mapstructure:"is_public" json:"is_public"`
+	IsPlanted		 bool	 	 `mapstructure:"is_planted" json:"is_planted"`
+	IsFavorite		 bool	 	 `mapstructure:"is_favorite" json:"is_favorite"`
+	Uid				 uuid.UUID 	 `mapstructure:"uid" json:"uid"`
+	Username     	 string	 	 `mapstructure:"username" json:"username"`
 }
 
 // New instance
@@ -88,6 +89,7 @@ func (u *ForPlantItem) New() *ForPlantItem {
 		IsPlanted:			u.IsPlanted ,
 		IsFavorite:			u.IsFavorite ,
 		Uid:				u.Uid ,
+		Username:			u.Username ,
 	}
 }
 
@@ -96,11 +98,11 @@ func (u *ForPlantItem) New() *ForPlantItem {
 //-------------------------------------------------------------------------------//
 //Model
 type ForPlantCatItem struct {
-	PlantId     	uuid.UUID	 		`mapstructure:"plant_id" json:"plant_id,omitempty"`
-	PlantName       string		 		`mapstructure:"plant_name" json:"plant_name,omitempty"`
-	PlantDesc       string		 		`mapstructure:"plant_desc" json:"plant_desc,omitempty"`
-	TotalItem       string		 		`mapstructure:"total_item" json:"total_item,omitempty"`
-	PlantCatItem	[]ForPlantItem		`mapstructure:"plant_cat_item" json:"plant_cat_item,omitempty"`
+	PlantId     	uuid.UUID	 		`mapstructure:"plant_id" json:"plant_id"`
+	PlantName       string		 		`mapstructure:"plant_name" json:"plant_name"`
+	PlantDesc       string		 		`mapstructure:"plant_desc" json:"plant_desc"`
+	TotalItem       string		 		`mapstructure:"total_item" json:"total_item"`
+	PlantCatItem	[]ForPlantItem		`mapstructure:"plant_cat_item" json:"plant_cat_item"`
 }
 
 // New instance
@@ -120,14 +122,14 @@ func (u *ForPlantCatItem) New() *ForPlantCatItem {
 //-------------------------------------------------------------------------------//
 //Model
 type ForPlantFert struct {
-	FertilizerId     uuid.UUID	 `mapstructure:"fertilizer_id" json:"fertilizer_id,omitempty"`
-	FertilizerName   string		 `mapstructure:"fertilizer_name" json:"fertilizer_name,omitempty"`
-	Nitrogen       	 float64	 `mapstructure:"nitrogen" json:"nitrogen,omitempty"`
-	Phosphorus    	 float64	 `mapstructure:"phosphorus" json:"phosphorus,omitempty"`
-	Potassium      	 float64	 `mapstructure:"potassium" json:"potassium,omitempty"`
-	Ratio	      	 float64	 `mapstructure:"ratio" json:"ratio,omitempty"`
-	FertCatId      	 uuid.UUID	 `mapstructure:"fertilizer_cat_id" json:"fertilizer_cat_id,omitempty"`
-	FertCatName    	 string		 `mapstructure:"fertilizer_cat_name" json:"fertilizer_cat_name,omitempty"`
+	FertilizerId     uuid.UUID	 `mapstructure:"fertilizer_id" json:"fertilizer_id"`
+	FertilizerName   string		 `mapstructure:"fertilizer_name" json:"fertilizer_name"`
+	Nitrogen       	 float64	 `mapstructure:"nitrogen" json:"nitrogen"`
+	Phosphorus    	 float64	 `mapstructure:"phosphorus" json:"phosphorus"`
+	Potassium      	 float64	 `mapstructure:"potassium" json:"potassium"`
+	Ratio	      	 float64	 `mapstructure:"ratio" json:"ratio"`
+	FertCatId      	 uuid.UUID	 `mapstructure:"fertilizer_cat_id" json:"fertilizer_cat_id"`
+	FertCatName    	 string		 `mapstructure:"fertilizer_cat_name" json:"fertilizer_cat_name"`
 }
 // New instance
 func (u *ForPlantFert) New() *ForPlantFert {
@@ -148,9 +150,9 @@ func (u *ForPlantFert) New() *ForPlantFert {
 //-------------------------------------------------------------------------------//
 //Model
 type ForPlantSensor struct {
-	SensorTypeId      	uuid.UUID	 `mapstructure:"sensor_type_id" json:"sensor_type_id,omitempty"`
-	SensorTypeName      string	 	 `mapstructure:"sensor_type_name" json:"sensor_type_name,omitempty"`
-	ValueRec      		float64		 `mapstructure:"value_rec" json:"value_rec,omitempty"`
+	SensorTypeId      	uuid.UUID	 `mapstructure:"sensor_type_id" json:"sensor_type_id"`
+	SensorTypeName      string	 	 `mapstructure:"sensor_type_name" json:"sensor_type_name"`
+	ValueRec      		float64		 `mapstructure:"value_rec" json:"value_rec"`
 }
 // New instance
 func (u *ForPlantSensor) New() *ForPlantSensor {
@@ -167,11 +169,11 @@ func (u *ForPlantSensor) New() *ForPlantSensor {
 
 //Model
 type ForPlantFormula struct {
-	FormulaPlantId 	 uuid.UUID	 			`mapstructure:"formula_plant_id" json:"formula_plant_id,omitempty"`
-	FormulaName		 string		 			`mapstructure:"formula_name" json:"formula_name,omitempty"`
-	FormulaDesc		 string		 			`mapstructure:"formula_desc" json:"formula_desc,omitempty"`
-	SensorList	 	 []ForPlantSensor		`mapstructure:"sensor_list" json:"sensor_list,omitempty"`
-	FertList		 []ForPlantFert			`mapstructure:"fert_list" json:"fert_list,omitempty"`
+	FormulaPlantId 	 uuid.UUID	 			`mapstructure:"formula_plant_id" json:"formula_plant_id"`
+	FormulaName		 string		 			`mapstructure:"formula_name" json:"formula_name"`
+	FormulaDesc		 string		 			`mapstructure:"formula_desc" json:"formula_desc"`
+	SensorList	 	 []ForPlantSensor		`mapstructure:"sensor_list" json:"sensor_list"`
+	FertList		 []ForPlantFert			`mapstructure:"fert_list" json:"fert_list"`
 }
 
 // New instance
