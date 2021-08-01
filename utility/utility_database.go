@@ -3,7 +3,22 @@ package utility
 import (
 	"database/sql"
 	"fmt"
+	"log"
 )
+
+
+func GetCountTable(db *sql.DB,status, tableName, field, condition string) int {
+	var count int
+
+	sql := fmt.Sprintf("SELECT COUNT(%s) FROM %s WHERE status_id = $1 AND %s ", field, tableName, condition)
+	err := db.QueryRow(sql, status).Scan(
+		&count ,
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return count
+}
 
 func SelectData(db *sql.DB, selectList, tableName, condition, joinTable, joinKey, orderBy, status string, offset int, limit int) *sql.Rows {
 	if selectList == "" && tableName == "" {

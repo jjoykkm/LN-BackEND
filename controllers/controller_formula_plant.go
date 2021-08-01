@@ -4,6 +4,7 @@ import (
 	"LN-BackEND/config"
 	"LN-BackEND/models/model_databases"
 	"LN-BackEND/models/model_services"
+	"LN-BackEND/utility"
 	"database/sql"
 	"fmt"
 	"github.com/mitchellh/mapstructure"
@@ -30,7 +31,6 @@ type IntFormulaPlant interface {
 	GetPlantTypeNameer(plantTypeId, language string) (model_databases.PlantType, string)
 	GetFertCatNameer(fertCatId, language string) (model_databases.FertilizerCat, string)
 	GetUserNameer(uid string) (model_databases.Users, string)
-	GetCountTableer(status, tableName, field, condition string) int
 	GetPlantOverviewFavoriteer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int)
 	GetMyPlantOverviewer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int)
 	GetPlantOverviewByPlanter(status, uid, plantId, language string, offset int) ([]model_services.ForPlantItem, int, int)
@@ -126,7 +126,7 @@ func (ln Ln) GetPlantCategoryItemer(status, plantTypeId, language string, offset
 			plantCat.PlantDesc = plant.PlantDescTH
 		}
 		cond := fmt.Sprintf("plant_id = '%s'", plantCat.PlantId.UUID.String())
-		plantCat.TotalItem = IntFormulaPlant.GetCountTableer(ln, config.STATUS_ACTIVE, config.DB_FORMULA_PLANT, "formula_plant_id", cond)
+		plantCat.TotalItem = utility.GetCountTable(ln.Db, config.STATUS_ACTIVE, config.DB_FORMULA_PLANT, "formula_plant_id", cond)
 		plantCatArray = append(plantCatArray, plantCat)
 	}
 	total = len(plantCatArray)
@@ -318,19 +318,6 @@ func (ln Ln) GetUserNameer(uid string) (model_databases.Users, string) {
 	}
 	userName = userModel.Username
 	return userModel, userName
-}
-
-func (ln Ln) GetCountTableer(status, tableName, field, condition string) int {
-	var count int
-
-	sql := fmt.Sprintf("SELECT COUNT(%s) FROM %s WHERE status_id = $1 AND %s ", field, tableName, condition)
-	err := ln.Db.QueryRow(sql, status).Scan(
-		&count ,
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return count
 }
 
 func (ln Ln) GetPlantOverviewFavoriteer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int) {
