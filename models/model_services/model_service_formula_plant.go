@@ -172,6 +172,8 @@ type ForPlantFormula struct {
 	FormulaPlantId 	 uuid.UUID	 			`mapstructure:"formula_plant_id" json:"formula_plant_id"`
 	FormulaName		 string		 			`mapstructure:"formula_name" json:"formula_name"`
 	FormulaDesc		 string		 			`mapstructure:"formula_desc" json:"formula_desc"`
+	Uid			 	 uuid.UUID	 			`mapstructure:"uid" json:"uid"`
+	Username		 string		 			`mapstructure:"username" json:"username"`
 	SensorList	 	 []ForPlantSensor		`mapstructure:"sensor_list" json:"sensor_list"`
 	FertList		 []ForPlantFert			`mapstructure:"fert_list" json:"fert_list"`
 }
@@ -182,6 +184,8 @@ func (u *ForPlantFormula) New() *ForPlantFormula {
 		FormulaPlantId:		u.FormulaPlantId ,
 		FormulaName:		u.FormulaName ,
 		FormulaDesc:		u.FormulaDesc ,
+		Uid:				u.Uid ,
+		Username:			u.Username ,
 		SensorList:   		u.SensorList ,
 		FertList:    		u.FertList ,
 	}

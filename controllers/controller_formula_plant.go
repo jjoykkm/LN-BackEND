@@ -786,17 +786,20 @@ func (ln Ln) GetFormulaPlantDetailer(status, formulaPlantId, language string) mo
 		return formula
 	}
 
-	condition := fmt.Sprintf("SELECT formula_plant_id, formula_name, formula_desc FROM %s WHERE status_id = $1 AND formula_plant_id = $2", config.DB_FORMULA_PLANT)
+	condition := fmt.Sprintf("SELECT formula_plant_id, formula_name, formula_desc, uid FROM %s WHERE status_id = $1 AND formula_plant_id = $2", config.DB_FORMULA_PLANT)
 	fmt.Println(condition)
 	err := ln.Db.QueryRow(condition, status, formulaPlantId).Scan(
 		&formula.FormulaPlantId ,
 		&formula.FormulaName ,
 		&formula.FormulaDesc ,
+		&formula.Uid ,
 	)
 	if err != nil {
 		panic(err)
 		return formula
 	}
+
+	_, formula.Username = IntFormulaPlant.GetUserNameer(ln, formula.Uid.UUID.String())
 	formula.SensorList, _ = IntFormulaPlant.GetSensorValueRecRelate(ln, config.STATUS_ACTIVE, formula.FormulaPlantId.UUID.String(), language)
 	formula.FertList, _ = IntFormulaPlant.GetFertilizerRatioRelate(ln, config.STATUS_ACTIVE, formula.FormulaPlantId.UUID.String(), language)
 	return formula
