@@ -25,14 +25,18 @@ type IntFormulaPlant interface {
 	GetPlantCategoryItemer(status, plantTypeId, language string, offset int) ([]model_services.ForPlantCat, int, int)
 	GetFavoriteFormulaPlanter(status, uid string) ([]model_databases.FavoritePlant, []string, map[string]bool)
 	GetRateScoreAndPeopleer(formulaPlant model_databases.FormulaPlant) (float32, int)
-	GetCountryNameer(countryId, language string) string
-	GetProvinceNameer(provinceId, language string) string
-	GetPlantTypeNameer(plantTypeId, language string) string
-	GetUserNameer(uid string) string
+	GetCountryNameer(countryId, language string) (model_databases.Country, string)
+	GetProvinceNameer(provinceId, language string) (model_databases.Province, string)
+	GetPlantTypeNameer(plantTypeId, language string) (model_databases.PlantType, string)
+	GetFertCatNameer(fertCatId, language string) (model_databases.FertilizerCat, string)
+	GetUserNameer(uid string) (model_databases.Users, string)
 	GetCountTableer(status, tableName, field, condition string) int
 	GetPlantOverviewFavoriteer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int)
 	GetMyPlantOverviewer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int)
 	GetPlantOverviewByPlanter(status, uid, plantId, language string, offset int) ([]model_services.ForPlantItem, int, int)
+	GetFertilizerRatioRelate(status, formulaPlantId, language string) ([]model_services.ForPlantFert, int)
+	GetSensorValueRecRelate(status, formulaPlantId, language string) ([]model_services.ForPlantSensor, int)
+	GetFormulaPlantDetailer(status, formulaPlantId, language string) model_services.ForPlantFormula
 }
 
 func (ln Ln) GetPlantCategoryLister(status, language string) ([]model_services.ForPlantCatList, int) {
@@ -180,7 +184,7 @@ func (ln Ln) GetRateScoreAndPeopleer(formulaPlant model_databases.FormulaPlant) 
 	return rateScore, ratePeople
 }
 
-func (ln Ln) GetCountryNameer(countryId, language string) string {
+func (ln Ln) GetCountryNameer(countryId, language string) (model_databases.Country, string) {
 	var countryModel model_databases.Country
 	var countryName string
 
@@ -195,6 +199,7 @@ func (ln Ln) GetCountryNameer(countryId, language string) string {
 		)
 	if err != nil {
 		log.Fatal(err)
+		return countryModel, ""
 	}
 	switch language {
 	case config.LANGUAGE_EN:
@@ -202,10 +207,10 @@ func (ln Ln) GetCountryNameer(countryId, language string) string {
 	case config.LANGUAGE_TH:
 		countryName = countryModel.CountryTH
 	}
-	return countryName
+	return countryModel, countryName
 }
 
-func (ln Ln) GetProvinceNameer(provinceId, language string) string {
+func (ln Ln) GetProvinceNameer(provinceId, language string) (model_databases.Province, string) {
 	var provinceModel model_databases.Province
 	var provinceName string
 
@@ -221,6 +226,7 @@ func (ln Ln) GetProvinceNameer(provinceId, language string) string {
 	)
 	if err != nil {
 		log.Fatal(err)
+		return provinceModel, ""
 	}
 	switch language {
 	case config.LANGUAGE_EN:
@@ -228,10 +234,10 @@ func (ln Ln) GetProvinceNameer(provinceId, language string) string {
 	case config.LANGUAGE_TH:
 		provinceName = provinceModel.ProvinceTH
 	}
-	return provinceName
+	return provinceModel, provinceName
 }
 
-func (ln Ln) GetPlantTypeNameer(plantTypeId, language string) string {
+func (ln Ln) GetPlantTypeNameer(plantTypeId, language string) (model_databases.PlantType, string) {
 	var plantTypeModel model_databases.PlantType
 	var plantTypeName string
 
@@ -246,6 +252,7 @@ func (ln Ln) GetPlantTypeNameer(plantTypeId, language string) string {
 	)
 	if err != nil {
 		log.Fatal(err)
+		return plantTypeModel, ""
 	}
 	switch language {
 	case config.LANGUAGE_EN:
@@ -253,24 +260,64 @@ func (ln Ln) GetPlantTypeNameer(plantTypeId, language string) string {
 	case config.LANGUAGE_TH:
 		plantTypeName = plantTypeModel.PlantTypeTH
 	}
-	return plantTypeName
+	return plantTypeModel, plantTypeName
 }
 
-func (ln Ln) GetUserNameer(uid string) string {
+func (ln Ln) GetFertCatNameer(fertCatId, language string) (model_databases.FertilizerCat, string) {
+	var fertCatModel model_databases.FertilizerCat
+	var fertCatName string
+
+	condition := fmt.Sprintf("SELECT * FROM %s WHERE status_id = $1 AND fertilizer_cat_id = $2", config.DB_FERTILIZER_CAT)
+	err := ln.Db.QueryRow(condition, config.STATUS_ACTIVE, fertCatId).Scan(
+		&fertCatModel.FertCatId ,
+		&fertCatModel.FertCatEN ,
+		&fertCatModel.FertCatTH ,
+		&fertCatModel.CreateDate ,
+		&fertCatModel.ChangeDate ,
+		&fertCatModel.StatusId ,
+)
+	if err != nil {
+		log.Fatal(err)
+		return fertCatModel, ""
+	}
+	switch language {
+	case config.LANGUAGE_EN:
+		fertCatName = fertCatModel.FertCatEN
+	case config.LANGUAGE_TH:
+		fertCatName = fertCatModel.FertCatTH
+	}
+	return fertCatModel, fertCatName
+}
+
+func (ln Ln) GetUserNameer(uid string) (model_databases.Users, string) {
+	var userModel model_databases.Users
 	var userName string
-	fmt.Println(uid)
 
 	condition := fmt.Sprintf("SELECT username FROM %s WHERE status_id = $1 AND uid = $2", config.DB_USERS)
 	fmt.Println(condition)
 	err := ln.Db.QueryRow(condition, config.STATUS_ACTIVE, uid).Scan(
-		&userName ,
+		&userModel.Uid ,
+		&userModel.Username ,
+		&userModel.Password ,
+		&userModel.FullName ,
+		&userModel.SurName ,
+		&userModel.NickName ,
+		&userModel.Gender ,
+		&userModel.BirthDate ,
+		&userModel.MobilePhone ,
+		&userModel.Telephone ,
+		&userModel.Mail ,
+		&userModel.Image ,
+		&userModel.CreateDate ,
+		&userModel.ChangeDate ,
+		&userModel.StatusId ,
+		&userModel.UserNo ,
 	)
 	if err != nil {
-		return ""
+		return userModel, ""
 	}
-	fmt.Println("userName")
-	fmt.Println(userName)
-	return userName
+	userName = userModel.Username
+	return userModel, userName
 }
 
 func (ln Ln) GetCountTableer(status, tableName, field, condition string) int {
@@ -363,28 +410,28 @@ func (ln Ln) GetPlantOverviewFavoriteer(status, uid, language string, offset int
 		//Get Country name
 		plantOverview.CountryName, found = countryMap[plantOverview.CountryId.UUID.String()]
 		if !found {
-			plantOverview.CountryName = IntFormulaPlant.GetCountryNameer(ln, plantOverview.CountryId.UUID.String(), language)
+			_, plantOverview.CountryName = IntFormulaPlant.GetCountryNameer(ln, plantOverview.CountryId.UUID.String(), language)
 			countryMap[plantOverview.CountryId.UUID.String()] = plantOverview.CountryName
 		}
 
 		//Get Country name
 		plantOverview.ProvinceName, found = provinceMap[plantOverview.ProvinceId.UUID.String()]
 		if !found {
-			plantOverview.ProvinceName = IntFormulaPlant.GetProvinceNameer(ln, plantOverview.ProvinceId.UUID.String(), language)
+			_, plantOverview.ProvinceName = IntFormulaPlant.GetProvinceNameer(ln, plantOverview.ProvinceId.UUID.String(), language)
 			provinceMap[plantOverview.ProvinceId.UUID.String()] = plantOverview.ProvinceName
 		}
 
 		//Get Plant Type name
 		plantOverview.PlantTypeName, found = plantTypeMap[plantOverview.PlantTypeId.UUID.String()]
 		if !found {
-			plantOverview.PlantTypeName = IntFormulaPlant.GetPlantTypeNameer(ln, plantOverview.PlantTypeId.UUID.String(), language)
+			_, plantOverview.PlantTypeName = IntFormulaPlant.GetPlantTypeNameer(ln, plantOverview.PlantTypeId.UUID.String(), language)
 			plantTypeMap[plantOverview.PlantTypeId.UUID.String()] = plantOverview.PlantTypeName
 		}
 
 		//Get User name
 		plantOverview.Username, found = userMap[plantOverview.Uid.UUID.String()]
 		if !found {
-			plantOverview.Username = IntFormulaPlant.GetUserNameer(ln, plantOverview.Uid.UUID.String())
+			_, plantOverview.Username = IntFormulaPlant.GetUserNameer(ln, plantOverview.Uid.UUID.String())
 			plantTypeMap[plantOverview.Uid.UUID.String()] = plantOverview.Username
 		}
 
@@ -471,21 +518,21 @@ func (ln Ln) GetMyPlantOverviewer(status, uid, language string, offset int) ([]m
 		//Get Country name
 		plantOverview.CountryName, found = countryMap[plantOverview.CountryId.UUID.String()]
 		if !found {
-			plantOverview.CountryName = IntFormulaPlant.GetCountryNameer(ln, plantOverview.CountryId.UUID.String(), language)
+			_, plantOverview.CountryName = IntFormulaPlant.GetCountryNameer(ln, plantOverview.CountryId.UUID.String(), language)
 			countryMap[plantOverview.CountryId.UUID.String()] = plantOverview.CountryName
 		}
 
 		//Get Country name
 		plantOverview.ProvinceName, found = provinceMap[plantOverview.ProvinceId.UUID.String()]
 		if !found {
-			plantOverview.ProvinceName = IntFormulaPlant.GetProvinceNameer(ln, plantOverview.ProvinceId.UUID.String(), language)
+			_, plantOverview.ProvinceName = IntFormulaPlant.GetProvinceNameer(ln, plantOverview.ProvinceId.UUID.String(), language)
 			provinceMap[plantOverview.ProvinceId.UUID.String()] = plantOverview.ProvinceName
 		}
 
 		//Get Plant Type name
 		plantOverview.PlantTypeName, found = plantTypeMap[plantOverview.PlantTypeId.UUID.String()]
 		if !found {
-			plantOverview.PlantTypeName = IntFormulaPlant.GetPlantTypeNameer(ln, plantOverview.PlantTypeId.UUID.String(), language)
+			_, plantOverview.PlantTypeName = IntFormulaPlant.GetPlantTypeNameer(ln, plantOverview.PlantTypeId.UUID.String(), language)
 			plantTypeMap[plantOverview.PlantTypeId.UUID.String()] = plantOverview.PlantTypeName
 		}
 
@@ -498,7 +545,7 @@ func (ln Ln) GetMyPlantOverviewer(status, uid, language string, offset int) ([]m
 		//Get User name
 		plantOverview.Username, found = userMap[plantOverview.Uid.UUID.String()]
 		if !found {
-			plantOverview.Username = IntFormulaPlant.GetUserNameer(ln, plantOverview.Uid.UUID.String())
+			_, plantOverview.Username = IntFormulaPlant.GetUserNameer(ln, plantOverview.Uid.UUID.String())
 			plantTypeMap[plantOverview.Uid.UUID.String()] = plantOverview.Username
 		}
 
@@ -587,21 +634,21 @@ func (ln Ln) GetPlantOverviewByPlanter(status, uid, plantId, language string, of
 		//Get Country name
 		plantOverview.CountryName, found = countryMap[plantOverview.CountryId.UUID.String()]
 		if !found {
-			plantOverview.CountryName = IntFormulaPlant.GetCountryNameer(ln, plantOverview.CountryId.UUID.String(), language)
+			_, plantOverview.CountryName = IntFormulaPlant.GetCountryNameer(ln, plantOverview.CountryId.UUID.String(), language)
 			countryMap[plantOverview.CountryId.UUID.String()] = plantOverview.CountryName
 		}
 
 		//Get Country name
 		plantOverview.ProvinceName, found = provinceMap[plantOverview.ProvinceId.UUID.String()]
 		if !found {
-			plantOverview.ProvinceName = IntFormulaPlant.GetProvinceNameer(ln, plantOverview.ProvinceId.UUID.String(), language)
+			_, plantOverview.ProvinceName = IntFormulaPlant.GetProvinceNameer(ln, plantOverview.ProvinceId.UUID.String(), language)
 			provinceMap[plantOverview.ProvinceId.UUID.String()] = plantOverview.ProvinceName
 		}
 
 		//Get Plant Type name
 		plantOverview.PlantTypeName, found = plantTypeMap[plantOverview.PlantTypeId.UUID.String()]
 		if !found {
-			plantOverview.PlantTypeName = IntFormulaPlant.GetPlantTypeNameer(ln, plantOverview.PlantTypeId.UUID.String(), language)
+			_, plantOverview.PlantTypeName = IntFormulaPlant.GetPlantTypeNameer(ln, plantOverview.PlantTypeId.UUID.String(), language)
 			plantTypeMap[plantOverview.PlantTypeId.UUID.String()] = plantOverview.PlantTypeName
 		}
 
@@ -614,7 +661,7 @@ func (ln Ln) GetPlantOverviewByPlanter(status, uid, plantId, language string, of
 		//Get User name
 		plantOverview.Username, found = userMap[plantOverview.Uid.UUID.String()]
 		if !found {
-			plantOverview.Username = IntFormulaPlant.GetUserNameer(ln, plantOverview.Uid.UUID.String())
+			_, plantOverview.Username = IntFormulaPlant.GetUserNameer(ln, plantOverview.Uid.UUID.String())
 			plantTypeMap[plantOverview.Uid.UUID.String()] = plantOverview.Username
 		}
 
@@ -625,4 +672,145 @@ func (ln Ln) GetPlantOverviewByPlanter(status, uid, plantId, language string, of
 	currentOffset = offset + total
 
 	return plantOverviewArray, currentOffset, total
+}
+
+func (ln Ln) GetFertilizerRatioRelate(status, formulaPlantId, language string) ([]model_services.ForPlantFert, int) {
+	var fertRatioModel model_databases.TransFertRatio
+	var fertModel model_databases.Fertilizer
+	var plantFert model_services.ForPlantFert
+	var plantFertArray []model_services.ForPlantFert
+	var total int
+	var found bool
+	var fertCatMap map[string]string
+
+	if formulaPlantId == "" {
+		return nil, 0
+	}
+
+	fertCatMap = make(map[string]string)
+	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.fertilizer_id = %s.fertilizer_id WHERE %s.status_id = '%s' AND %s.formula_plant_id = '%s'",
+		config.DB_FERTILIZER, config.DB_TRANS_FERTILIZER_RATIO, config.DB_FERTILIZER, config.DB_TRANS_FERTILIZER_RATIO, config.DB_FERTILIZER, status, config.DB_TRANS_FERTILIZER_RATIO, formulaPlantId)
+
+	fmt.Println(sql)
+	rows, err := ln.Db.Query(sql)
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+	for rows.Next() {
+		rows.Scan(
+			&fertModel.FertilizerId ,
+			&fertModel.FertilizerEN ,
+			&fertModel.FertilizerTH ,
+			&fertModel.Nitrogen ,
+			&fertModel.Phosphorus ,
+			&fertModel.Potassium ,
+			&fertModel.CreateDate ,
+			&fertModel.ChangeDate ,
+			&fertModel.FertCatId ,
+			&fertModel.StatusId ,
+			&fertRatioModel.FertilizerId ,
+			&fertRatioModel.FormulaPlantId ,
+			&fertRatioModel.StatusId ,
+			&fertRatioModel.Ratio ,
+			&fertRatioModel.CreateDate ,
+			&fertRatioModel.ChangeDate ,
+		)
+		mapstructure.Decode(fertModel, &plantFert)
+		mapstructure.Decode(fertRatioModel, &plantFert)
+		switch language {
+		case config.LANGUAGE_EN:
+			plantFert.FertilizerName = fertModel.FertilizerEN
+		case config.LANGUAGE_TH:
+			plantFert.FertilizerName = fertModel.FertilizerTH
+		}
+
+		//Get Fertilizer category name
+		plantFert.FertCatName, found = fertCatMap[plantFert.FertCatId.UUID.String()]
+		if !found {
+			_, plantFert.FertCatName = IntFormulaPlant.GetFertCatNameer(ln, plantFert.FertCatId.UUID.String(), language)
+			fertCatMap[plantFert.FertCatId.UUID.String()] = plantFert.FertCatName
+		}
+
+		plantFertArray = append(plantFertArray, plantFert)
+	}
+
+	total = len(plantFertArray)
+
+	return plantFertArray, total
+}
+
+func (ln Ln) GetSensorValueRecRelate(status, formulaPlantId, language string) ([]model_services.ForPlantSensor, int) {
+	var sensorValueModel model_databases.TransSensorValueRec
+	var sensorTypeModel model_databases.SensorType
+	var plantSensor model_services.ForPlantSensor
+	var plantSensorArray []model_services.ForPlantSensor
+	var total int
+
+	if formulaPlantId == "" {
+		return nil, 0
+	}
+
+	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.sensor_type_id= %s.sensor_type_id WHERE %s.status_id = '%s' AND %s.formula_plant_id = '%s'",
+		config.DB_SENSOR_TYPE, config.DB_TRANS_SENSOR_VALUE_REC, config.DB_SENSOR_TYPE, config.DB_TRANS_SENSOR_VALUE_REC, config.DB_SENSOR_TYPE, status, config.DB_TRANS_SENSOR_VALUE_REC, formulaPlantId)
+
+	fmt.Println(sql)
+	rows, err := ln.Db.Query(sql)
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+	for rows.Next() {
+		rows.Scan(
+			&sensorTypeModel.SensorTypeId ,
+			&sensorTypeModel.SensorTypeNameEN ,
+			&sensorTypeModel.CreateDate ,
+			&sensorTypeModel.ChangeDate ,
+			&sensorTypeModel.StatusId ,
+			&sensorTypeModel.SensorTypeNameTH ,
+			&sensorValueModel.FormulaPlantId ,
+			&sensorValueModel.SensorTypeId ,
+			&sensorValueModel.StatusId ,
+			&sensorValueModel.ValueRec ,
+			&sensorValueModel.CreateDate ,
+			&sensorValueModel.ChangeDate ,
+		)
+		mapstructure.Decode(sensorTypeModel, &plantSensor)
+		mapstructure.Decode(sensorValueModel, &plantSensor)
+		switch language {
+		case config.LANGUAGE_EN:
+			plantSensor.SensorTypeName = sensorTypeModel.SensorTypeNameEN
+		case config.LANGUAGE_TH:
+			plantSensor.SensorTypeName = sensorTypeModel.SensorTypeNameTH
+		}
+
+		plantSensorArray = append(plantSensorArray, plantSensor)
+	}
+
+	total = len(plantSensorArray)
+
+	return plantSensorArray, total
+}
+
+func (ln Ln) GetFormulaPlantDetailer(status, formulaPlantId, language string) model_services.ForPlantFormula {
+	var formula model_services.ForPlantFormula
+
+	if formulaPlantId == ""{
+		return formula
+	}
+
+	condition := fmt.Sprintf("SELECT formula_plant_id, formula_name, formula_desc FROM %s WHERE status_id = $1 AND formula_plant_id = $2", config.DB_FORMULA_PLANT)
+	fmt.Println(condition)
+	err := ln.Db.QueryRow(condition, status, formulaPlantId).Scan(
+		&formula.FormulaPlantId ,
+		&formula.FormulaName ,
+		&formula.FormulaDesc ,
+	)
+	if err != nil {
+		panic(err)
+		return formula
+	}
+	formula.SensorList, _ = IntFormulaPlant.GetSensorValueRecRelate(ln, config.STATUS_ACTIVE, formula.FormulaPlantId.UUID.String(), language)
+	formula.FertList, _ = IntFormulaPlant.GetFertilizerRatioRelate(ln, config.STATUS_ACTIVE, formula.FormulaPlantId.UUID.String(), language)
+	return formula
 }

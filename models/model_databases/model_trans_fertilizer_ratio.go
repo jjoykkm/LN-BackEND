@@ -10,7 +10,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model trans_fertilizer_Ratio
 type TransFertRatio struct {
-	PlantId          	uuid.UUID	 `mapstructure:"fertilizer_id" json:"fertilizer_id,omitempty"`
+	FertilizerId       	uuid.UUID	 `mapstructure:"fertilizer_id" json:"fertilizer_id,omitempty"`
 	FormulaPlantId		uuid.UUID	 `mapstructure:"formula_plant_id" json:"formula_plant_id,omitempty"`
 	StatusId		 	uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
 	Ratio		     	float64		 `mapstructure:"Ratio" json:"Ratio,omitempty"`
@@ -20,7 +20,7 @@ type TransFertRatio struct {
 // New instance trans_fertilizer_Ratio
 func (u *TransFertRatio) New() *TransFertRatio {
 	return &TransFertRatio{
-		PlantId:			u.PlantId ,
+		FertilizerId:		u.FertilizerId ,
 		FormulaPlantId:		u.FormulaPlantId ,
 		StatusId:			u.StatusId ,
 		Ratio:				u.Ratio ,
