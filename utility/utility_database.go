@@ -3,20 +3,15 @@ package utility
 import (
 	"database/sql"
 	"fmt"
-	"log"
+	"gorm.io/gorm"
 )
 
 
-func GetCountTable(db *sql.DB,status, tableName, field, condition string) int {
+func GetCountTable(db *gorm.DB,status, tableName, field, condition string) int {
 	var count int
-
-	sql := fmt.Sprintf("SELECT COUNT(%s) FROM %s WHERE status_id = $1 AND %s ", field, tableName, condition)
-	err := db.QueryRow(sql, status).Scan(
-		&count ,
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
+	sql := fmt.Sprintf("SELECT COUNT(%s) FROM %s WHERE status_id = '%s' AND %s ", field, tableName, status, condition)
+	fmt.Println(sql)
+	db.Raw(sql).Scan(&count)
 	return count
 }
 

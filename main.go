@@ -5,33 +5,57 @@ import (
 	"LN-BackEND/controllers"
 	"LN-BackEND/models/model_other"
 	"LN-BackEND/utility"
-	"database/sql"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
-	"log"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 	"net/http"
 )
 
 type Ln struct {
-	Db			*sql.DB
+	Db			*gorm.DB
 	Ctrl 		controllers.Ln
 }
 
 var me Ln
 
+type Jj struct {
+	Jjoy string
+	Eiei string
+}
+
 func main() {
-	db, err := sql.Open(config.DRIVER_NAME, config.CONNECTION)
-	if err != nil {
-		log.Fatal(err)
-	}
+	//db, err := sqlx.Connect("postgres", "host=103.212.181.187 user=ln02t password=ln-0110-2 dbname=smartlife port=5432 sslmode=disable")
+	//if err != nil {
+	//	log.Fatalln(err)
+	//}
+	//fmt.Println(db)
 
-	defer db.Close()
-
-	err = db.Ping()
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		DSN: "host=103.212.181.187 user=ln02t password=ln-0110-2 dbname=smartlife port=5432 sslmode=disable TimeZone=Asia/Bangkok",
+		PreferSimpleProtocol: false, // disables implicit prepared statement usage
+	}), &gorm.Config{})
 	if err != nil {
-		panic(err)
+		panic(err.Error())
 	}
+	//fmt.Println(reflect.TypeOf(db))
+	//var oo []Jj
+	////db.Raw("SELECT jjoy, eiei FROM tests").Scan(&oo)
+	//db.Exec("SELECT jjoy, eiei FROM tests").Scan(&oo)
+	////db.Raw("SELECT * FROM tests WHERE jjoy = ?", "111").Scan(&oo)
+	//fmt.Printf("%+v/n",oo)
+	//db, err := sql.Open(config.DRIVER_NAME, config.CONNECTION)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//
+	//defer db.Close()
+	//
+	//err = db.Ping()
+	//if err != nil {
+	//	panic(err)
+	//}
 	fmt.Printf("Successfully connected to DB!\n")
 
 	controller:= controllers.Ln{db}
@@ -45,8 +69,12 @@ func main() {
 	//sensorValueRec, _ := controller.GetSensorValueRecRelate(config.STATUS_ACTIVE, "0c5c896d-dede-41de-ab78-1f1d41dd95cf", config.LANGUAGE_EN)
 	//fmt.Println(sensorValueRec)
 
-	//_, _, formulaPlantMap := controller.GetFavoriteFormulaPlanter(config.STATUS_ACTIVE, "9c21bd63-a1f0-490a-bb5b-1de7ab502a1d")
+	//_, _, formulaPlantMap := controller.GetFavoriteFormulaPlanter(config.STATUS_ACTIVE, "6f08ea87-47dd-4511-be6c-3f2f6603de6c")
 	//fmt.Println(formulaPlantMap)
+
+	//plantCategoryItem, _,_ := me.Ctrl.GetPlantCategoryItemer(config.STATUS_ACTIVE, "",  "EN", 0)
+	//fmt.Println(plantCategoryItem)
+	//
 	//
 	////http.GET("/test", func(c *gin.Context) {
 	////	c.JSON(200, gin.H{
@@ -55,7 +83,7 @@ func main() {
 	////})
 
 	http := gin.Default()
-	http.POST("/test", Test)
+	//http.POST("/test", Test)
 	http.POST("/plantCategoryList", GetPlantCategoryList)
 	http.POST("/plantCategoryItem", GetPlantCategoryItem)
 	http.POST("/plantOverviewFavorite", GetPlantOverviewFavorite)
@@ -169,7 +197,8 @@ func GetFormulaPlantDetail(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
 	//GetFormulaPlantDetailer(status, formulaPlantId, language string) model_services.ForPlantFormula
-	formulaPlant := me.Ctrl.GetFormulaPlantDetailer(config.STATUS_ACTIVE, bodyModel.FormulaPlantId, bodyModel.Language)
+	_, _, formulaPlant := me.Ctrl.GetSensorValueRecRelate(config.STATUS_ACTIVE, "243367fe-fc14-4074-8ff5-374220dadf8f", bodyModel.Language)
+	//formulaPlant := me.Ctrl.GetFormulaPlantDetailer(config.STATUS_ACTIVE, bodyModel.FormulaPlantId, bodyModel.Language)
 	c.JSON(200, gin.H{
 		"item": formulaPlant,
 	})
