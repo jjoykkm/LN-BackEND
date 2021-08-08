@@ -37,8 +37,8 @@ type IntFormulaPlant interface {
 	GetPlantOverviewFavoriteer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int)
 	GetMyPlantOverviewer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int)
 	GetPlantOverviewByPlanter(status, uid, plantId, language string, offset int) ([]model_services.ForPlantItem, int, int)
-	GetFertilizerRatioRelate(status, formulaPlantId, language string) ([]model_services.ForPlantFert, int)
-	GetSensorValueRecRelate(status, formulaPlantId, language string) ([]model_services.ForPlantSensor, int, []model_services.JoinSensorTypeAndTrans)
+	GetFertilizerRatioRelateer(status, formulaPlantId, language string) ([]model_services.ForPlantFert, int)
+	GetSensorValueRecRelateer(status, formulaPlantId, language string) ([]model_services.ForPlantSensor, int)
 	GetFormulaPlantDetailer(status, formulaPlantId, language string) model_services.ForPlantFormula
 }
 
@@ -227,9 +227,9 @@ func (ln Ln) GetFertCatNameer(fertCatId, language string) (model_databases.Ferti
 
 	switch language {
 	case config.LANGUAGE_EN:
-		fertCatName = fertCatModel.FertCatEN
+		fertCatName = fertCatModel.FertilizerCatEN
 	case config.LANGUAGE_TH:
-		fertCatName = fertCatModel.FertCatTH
+		fertCatName = fertCatModel.FertilizerCatTH
 	}
 	return fertCatModel, fertCatName
 }
@@ -482,7 +482,7 @@ func (ln Ln) GetPlantOverviewByPlanter(status, uid, plantId, language string, of
 	return plantOverviewArray, currentOffset, total
 }
 
-func (ln Ln) GetFertilizerRatioRelate(status, formulaPlantId, language string) ([]model_services.ForPlantFert, int) {
+func (ln Ln) GetFertilizerRatioRelateer(status, formulaPlantId, language string) ([]model_services.ForPlantFert, int) {
 	var joinArray []model_services.JoinFertilizerAndPlant
 	var plantFert model_services.ForPlantFert
 	var plantFertArray []model_services.ForPlantFert
@@ -502,7 +502,7 @@ func (ln Ln) GetFertilizerRatioRelate(status, formulaPlantId, language string) (
 	if err != nil {
 		log.Print(err)
 	}
-
+	fmt.Printf("%+v\n",joinArray)
 	for _, join := range joinArray {
 		mapstructure.Decode(join, &plantFert)
 		switch language {
@@ -527,14 +527,14 @@ func (ln Ln) GetFertilizerRatioRelate(status, formulaPlantId, language string) (
 	return plantFertArray, total
 }
 
-func (ln Ln) GetSensorValueRecRelate(status, formulaPlantId, language string) ([]model_services.ForPlantSensor, int, []model_services.JoinSensorTypeAndTrans) {
+func (ln Ln) GetSensorValueRecRelateer(status, formulaPlantId, language string) ([]model_services.ForPlantSensor, int) {
 	var joinArray []model_services.JoinSensorTypeAndTrans
 	var plantSensor model_services.ForPlantSensor
 	var plantSensorArray []model_services.ForPlantSensor
 	var total int
 
 	if formulaPlantId == "" {
-		return nil, 0, nil
+		return nil, 0
 	}
 
 	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.sensor_type_id= %s.sensor_type_id WHERE %s.status_id = '%s' AND %s.formula_plant_id = '%s'",
@@ -544,25 +544,19 @@ func (ln Ln) GetSensorValueRecRelate(status, formulaPlantId, language string) ([
 	if err != nil {
 		log.Print(err)
 	}
-	fmt.Println(err)
-	fmt.Println("1111111111111111")
-	fmt.Printf("%+v\n",joinArray)
-	fmt.Println("222222222222222")
-	//fmt.Printf("%+v\n",oo)
-	fmt.Println("333333333333")
 	for _, join := range joinArray {
 		mapstructure.Decode(join, &plantSensor)
-		//switch language {
-		//	case config.LANGUAGE_EN:
-		//		plantSensor.SensorTypeName = join.SensorTypeNameEN
-		//	case config.LANGUAGE_TH:
-		//		plantSensor.SensorTypeName = join.SensorTypeNameTH
-		//}
+		switch language {
+			case config.LANGUAGE_EN:
+				plantSensor.SensorTypeName = join.SensorTypeNameEN
+			case config.LANGUAGE_TH:
+				plantSensor.SensorTypeName = join.SensorTypeNameTH
+		}
 		plantSensorArray = append(plantSensorArray, plantSensor)
 	}
 	total = len(plantSensorArray)
 
-	return plantSensorArray, total, joinArray
+	return plantSensorArray, total
 }
 
 func (ln Ln) GetFormulaPlantDetailer(status, formulaPlantId, language string) model_services.ForPlantFormula {
@@ -581,14 +575,12 @@ func (ln Ln) GetFormulaPlantDetailer(status, formulaPlantId, language string) mo
 		log.Print(err)
 	}
 	mapstructure.Decode(formulaPlantModel, &formula)
-	//fmt.Printf("%+v\n",formula)
+
 	_, formula.Username = IntFormulaPlant.GetUserNameer(ln, formula.Uid.UUID.String())
-	fmt.Println("GetUserNameer")
-	//formula.SensorList, _ = IntFormulaPlant.GetSensorValueRecRelate(ln, config.STATUS_ACTIVE, formula.FormulaPlantId.UUID.String(), language)
-	fmt.Println("GetSensorValueRecRelate")
-	plantFertArray, _ := IntFormulaPlant.GetFertilizerRatioRelate(ln, config.STATUS_ACTIVE, formula.FormulaPlantId.UUID.String(), language)
-	//formula.FertList, _ = IntFormulaPlant.GetFertilizerRatioRelate(ln, config.STATUS_ACTIVE, formula.FormulaPlantId.UUID.String(), language)
-	//fmt.Println("GetFertilizerRatioRelate")
-	fmt.Printf("%+v\n",plantFertArray)
+
+	formula.SensorList, _ = IntFormulaPlant.GetSensorValueRecRelateer(ln, config.STATUS_ACTIVE, formula.FormulaPlantId.UUID.String(), language)
+
+	formula.FertList, _ = IntFormulaPlant.GetFertilizerRatioRelateer(ln, config.STATUS_ACTIVE, formula.FormulaPlantId.UUID.String(), language)
+
 	return formula
 }

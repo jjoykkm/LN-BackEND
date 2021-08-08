@@ -13,7 +13,7 @@ type TransFertRatio struct {
 	FertilizerId       	uuid.UUID	 `mapstructure:"fertilizer_id" json:"fertilizer_id,omitempty"`
 	FormulaPlantId		uuid.UUID	 `mapstructure:"formula_plant_id" json:"formula_plant_id,omitempty"`
 	StatusId		 	uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
-	Ratio		     	float64		 `mapstructure:"Ratio" json:"Ratio,omitempty"`
+	Ratio		     	float64		 `mapstructure:"ratio" json:"ratio,omitempty"`
 	CreateDate		 	time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
 	ChangeDate	     	time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
 }

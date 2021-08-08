@@ -10,7 +10,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model trans_sensor_value_rec
 type TransSensorValueRec struct {
-	FormulaPlantId 		uuid.UUID	 `mapstructure:"formula_plant_id" json:"formula_plant_id"`
+	FormulaPlantId 		uuid.UUID	 `gorm:"primaryKey" mapstructure:"formula_plant_id" json:"formula_plant_id"`
 	SensorTypeId   		uuid.UUID	 `mapstructure:"sensor_type_id" json:"sensor_type_id"`
 	StatusId	   		uuid.UUID	 `mapstructure:"status_id" json:"status_id"`
 	ValueRec      		float64		 `mapstructure:"value_rec" json:"value_rec"`

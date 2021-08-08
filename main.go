@@ -196,9 +196,10 @@ func GetPlantOverviewByPlant(c *gin.Context) {
 func GetFormulaPlantDetail(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
+
 	//GetFormulaPlantDetailer(status, formulaPlantId, language string) model_services.ForPlantFormula
-	_, _, formulaPlant := me.Ctrl.GetSensorValueRecRelate(config.STATUS_ACTIVE, "243367fe-fc14-4074-8ff5-374220dadf8f", bodyModel.Language)
-	//formulaPlant := me.Ctrl.GetFormulaPlantDetailer(config.STATUS_ACTIVE, bodyModel.FormulaPlantId, bodyModel.Language)
+	//_, _, formulaPlant := me.Ctrl.GetSensorValueRecRelate(config.STATUS_ACTIVE, "243367fe-fc14-4074-8ff5-374220dadf8f", bodyModel.Language)
+	formulaPlant := me.Ctrl.GetFormulaPlantDetailer(config.STATUS_ACTIVE, bodyModel.FormulaPlantId, bodyModel.Language)
 	c.JSON(200, gin.H{
 		"item": formulaPlant,
 	})

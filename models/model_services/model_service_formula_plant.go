@@ -1,7 +1,6 @@
 package model_services
 
 import (
-	"LN-BackEND/models/model_databases"
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"time"
 )
@@ -237,29 +236,29 @@ func (u *JoinPlantAndPlantType) New() *JoinPlantAndPlantType {
 
 //Model
 type JoinFormulaPlantAndPlant struct {
-	FormulaPlantId 	 uuid.UUID	 `mapstructure:"formula_plant_id" json:"formula_plant_id,omitempty"`
-	FormulaName		 string		 `mapstructure:"formula_name" json:"formula_name,omitempty"`
-	FormulaDesc		 string		 `mapstructure:"formula_desc" json:"formula_desc,omitempty"`
-	PeopleUsed 		 int		 `mapstructure:"people_used" json:"people_used,omitempty"`
-	Recommend1 		 int		 `mapstructure:"recommend1" json:"recommend1,omitempty"`
-	Recommend2		 int		 `mapstructure:"recommend2" json:"recommend2,omitempty"`
-	Recommend3		 int		 `mapstructure:"recommend3" json:"recommend3,omitempty"`
-	Recommend4		 int		 `mapstructure:"recommend4" json:"recommend4,omitempty"`
-	Recommend5		 int		 `mapstructure:"recommend5" json:"recommend5,omitempty"`
-	CreateDate		 time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
-	ChangeDate		 time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
-	StatusId		 uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
-	ProvinceId		 uuid.UUID	 `mapstructure:"province_id" json:"province_id,omitempty"`
-	CountryId		 uuid.UUID	 `mapstructure:"country_id" json:"country_id,omitempty"`
-	IsPublic		 bool	 	 `mapstructure:"is_public" json:"is_public,omitempty"`
-	Uid				 uuid.UUID	 `mapstructure:"uid" json:"uid,omitempty"`
-	PlantId          uuid.UUID	 `mapstructure:"plant_id" json:"plant_id,omitempty"`
-	PlantNameEN      string		 `mapstructure:"plant_name_en" json:"plant_name_en,omitempty"`
-	PlantNameTH      string		 `mapstructure:"plant_name_th" json:"plant_name_th,omitempty"`
-	PlantDescEN      string		 `mapstructure:"plant_desc_en" json:"plant_desc_en,omitempty"`
-	PlantDescTH      string		 `mapstructure:"plant_desc_th" json:"plant_desc_th,omitempty"`
-	PlantTypeId      uuid.UUID	 `mapstructure:"plant_type_id" json:"plant_type_id,omitempty"`
-	TotalItem      	 int		 `mapstructure:"total_item" json:"total_item,omitempty"`
+	FormulaPlantId 	 uuid.UUID	 `mapstructure:"formula_plant_id" json:"formula_plant_id"`
+	FormulaName		 string		 `mapstructure:"formula_name" json:"formula_name"`
+	FormulaDesc		 string		 `mapstructure:"formula_desc" json:"formula_desc"`
+	PeopleUsed 		 int		 `mapstructure:"people_used" json:"people_used"`
+	Recommend1 		 int		 `mapstructure:"recommend1" json:"recommend1"`
+	Recommend2		 int		 `mapstructure:"recommend2" json:"recommend2"`
+	Recommend3		 int		 `mapstructure:"recommend3" json:"recommend3"`
+	Recommend4		 int		 `mapstructure:"recommend4" json:"recommend4"`
+	Recommend5		 int		 `mapstructure:"recommend5" json:"recommend5"`
+	CreateDate		 time.Time	 `mapstructure:"create_date" json:"create_date"`
+	ChangeDate		 time.Time	 `mapstructure:"change_date" json:"change_date"`
+	StatusId		 uuid.UUID	 `mapstructure:"status_id" json:"status_id"`
+	ProvinceId		 uuid.UUID	 `mapstructure:"province_id" json:"province_id"`
+	CountryId		 uuid.UUID	 `mapstructure:"country_id" json:"country_id"`
+	IsPublic		 bool	 	 `mapstructure:"is_public" json:"is_public"`
+	Uid				 uuid.UUID	 `mapstructure:"uid" json:"uid"`
+	PlantId          uuid.UUID	 `mapstructure:"plant_id" json:"plant_id"`
+	PlantNameEN      string		 `mapstructure:"plant_name_en" json:"plant_name_en"`
+	PlantNameTH      string		 `mapstructure:"plant_name_th" json:"plant_name_th"`
+	PlantDescEN      string		 `mapstructure:"plant_desc_en" json:"plant_desc_en"`
+	PlantDescTH      string		 `mapstructure:"plant_desc_th" json:"plant_desc_th"`
+	PlantTypeId      uuid.UUID	 `mapstructure:"plant_type_id" json:"plant_type_id"`
+	TotalItem      	 int		 `mapstructure:"total_item" json:"total_item"`
 }
 
 // New instance
@@ -297,18 +296,18 @@ func (u *JoinFormulaPlantAndPlant) New() *JoinFormulaPlantAndPlant {
 
 //Model
 type JoinFertilizerAndPlant struct {
-	FertilizerId     uuid.UUID	 `mapstructure:"fertilizer_id" json:"fertilizer_id,omitempty"`
-	FertilizerEN     string		 `mapstructure:"fertilizer_en" json:"fertilizer_en,omitempty"`
-	FertilizerTH     string		 `mapstructure:"fertilizer_th" json:"fertilizer_th,omitempty"`
-	Nitrogen       	 float64	 `mapstructure:"nitrogen" json:"nitrogen,omitempty"`
-	Phosphorus    	 float64	 `mapstructure:"phosphorus" json:"phosphorus,omitempty"`
-	Potassium      	 float64	 `mapstructure:"potassium" json:"potassium,omitempty"`
-	CreateDate		 time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
-	ChangeDate	     time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
-	FertCatId		 uuid.UUID	 `mapstructure:"fertilizer_cat_id" json:"fertilizer_cat_id,omitempty"`
-	StatusId		 uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
-	FormulaPlantId	 uuid.UUID	 `mapstructure:"formula_plant_id" json:"formula_plant_id,omitempty"`
-	Ratio		     float64		 `mapstructure:"Ratio" json:"Ratio,omitempty"`
+	FertilizerId     uuid.UUID	 `mapstructure:"fertilizer_id" json:"fertilizer_id"`
+	FertilizerEN     string		 `mapstructure:"fertilizer_en" json:"fertilizer_en"`
+	FertilizerTH     string		 `mapstructure:"fertilizer_th" json:"fertilizer_th"`
+	Nitrogen       	 float64	 `mapstructure:"nitrogen" json:"nitrogen"`
+	Phosphorus    	 float64	 `mapstructure:"phosphorus" json:"phosphorus"`
+	Potassium      	 float64	 `mapstructure:"potassium" json:"potassium"`
+	CreateDate		 time.Time	 `mapstructure:"create_date" json:"create_date"`
+	ChangeDate	     time.Time	 `mapstructure:"change_date" json:"change_date"`
+	FertilizerCatId	 uuid.UUID	 `mapstructure:"fertilizer_cat_id" json:"fertilizer_cat_id"`
+	StatusId		 uuid.UUID	 `mapstructure:"status_id" json:"status_id"`
+	FormulaPlantId   uuid.UUID	 `mapstructure:"formula_plant_id" json:"formula_plant_id"`
+	Ratio		     float64	 `mapstructure:"ratio" json:"ratio"`
 }
 
 // New instance
@@ -322,7 +321,7 @@ func (u *JoinFertilizerAndPlant) New() *JoinFertilizerAndPlant {
 		Potassium:			u.Potassium ,
 		CreateDate:			u.CreateDate ,
 		ChangeDate:			u.ChangeDate ,
-		FertCatId:			u.FertCatId ,
+		FertilizerCatId:	u.FertilizerCatId ,
 		StatusId:			u.StatusId ,
 		FormulaPlantId:		u.FormulaPlantId ,
 		Ratio:				u.Ratio ,
@@ -333,38 +332,28 @@ func (u *JoinFertilizerAndPlant) New() *JoinFertilizerAndPlant {
 //-------------------------------------------------------------------------------//
 //			Join SensorType And TransSensorValueRec (View/Add/Edit)
 //-------------------------------------------------------------------------------//
-type Jjoy struct {
-	Sensor_type model_databases.SensorType
-}
-type Kkm struct {
-	Trans_sensor_value_rec model_databases.TransSensorValueRec
-}
 //Model
 type JoinSensorTypeAndTrans struct {
-	model_databases.SensorType			`gorm:"many2many:Sensor_type;ForeignKey:sensor_type_id,status_id;"`
-	model_databases.TransSensorValueRec	`gorm:"many2many:Trans_sensor_value_rec;ForeignKey:sensor_type_id,status_id;References:sensor_type_id"`
-	//SensorType 	model_databases.SensorType			`gorm:"many2many:sensor_type;ForeignKey:id;References:id"`
-	//Trans	   	model_databases.TransSensorValueRec	`gorm:"many2many:trans_sensor_value_rec;"`
-	//SensorTypeId      	uuid.UUID	 `mapstructure:"sensor_type_id" json:"sensor_type_id,omitempty"`
-	//SensorTypeNameEN    string	 	 `mapstructure:"sensor_type_name_en" json:"sensor_type_name_en,omitempty"`
-	//CreateDate			time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
-	//ChangeDate	    	time.Time	  `mapstructure:"change_date" json:"change_date,omitempty"`
-	//StatusId			uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
-	//SensorTypeNameTH    string	 	 `mapstructure:"sensor_type_name_th" json:"sensor_type_name_th,omitempty"`
-	//FormulaPlantId 		uuid.UUID	 `mapstructure:"formula_plant_id" json:"formula_plant_id,omitempty"`
-	//ValueRec      		float64		 `mapstructure:"value_rec" json:"value_rec,omitempty"`
+	SensorTypeId      	uuid.UUID	 `mapstructure:"sensor_type_id" json:"sensor_type_id"`
+	SensorTypeNameEN    string	 	 `mapstructure:"sensor_type_name_en" json:"sensor_type_name_en"`
+	CreateDate			time.Time	 `mapstructure:"create_date" json:"create_date"`
+	ChangeDate	    	time.Time	  `mapstructure:"change_date" json:"change_date"`
+	StatusId			uuid.UUID	 `mapstructure:"status_id" json:"status_id"`
+	SensorTypeNameTH    string	 	 `mapstructure:"sensor_type_name_th" json:"sensor_type_name_th"`
+	FormulaPlantId 		uuid.UUID	 `mapstructure:"formula_plant_id" json:"formula_plant_id"`
+	ValueRec      		float64		 `mapstructure:"value_rec" json:"value_rec"`
 }
 
 // New instance
-//func (u *JoinSensorTypeAndTrans) New() *JoinSensorTypeAndTrans {
-//	return &JoinSensorTypeAndTrans{
-//		SensorTypeId:		u.SensorTypeId ,
-//		SensorTypeNameEN:	u.SensorTypeNameEN ,
-//		CreateDate:			u.CreateDate ,
-//		ChangeDate:			u.ChangeDate ,
-//		StatusId:			u.StatusId ,
-//		SensorTypeNameTH:	u.SensorTypeNameTH ,
-//		FormulaPlantId:		u.FormulaPlantId ,
-//		ValueRec:			u.ValueRec ,
-//	}
-//}
+func (u *JoinSensorTypeAndTrans) New() *JoinSensorTypeAndTrans {
+	return &JoinSensorTypeAndTrans{
+		SensorTypeId:		u.SensorTypeId ,
+		SensorTypeNameEN:	u.SensorTypeNameEN ,
+		CreateDate:			u.CreateDate ,
+		ChangeDate:			u.ChangeDate ,
+		StatusId:			u.StatusId ,
+		SensorTypeNameTH:	u.SensorTypeNameTH ,
+		FormulaPlantId:		u.FormulaPlantId ,
+		ValueRec:			u.ValueRec ,
+	}
+}
