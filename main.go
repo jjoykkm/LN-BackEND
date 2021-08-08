@@ -81,6 +81,9 @@ func main() {
 	////		"message": "test",
 	////	})
 	////})
+	//GetFarmLister(status, uid string) ([]model_services.DashboardFarmList, int)
+	//farmList, _ := me.Ctrl.GetFarmLister(config.STATUS_ACTIVE, "17ac6921-ece0-43bc-9d88-7b9bfc59ffd3")
+	//fmt.Println(farmList)
 
 	http := gin.Default()
 	//http.POST("/test", Test)
@@ -90,6 +93,9 @@ func main() {
 	http.POST("/myPlantOverview", GetMyPlantOverview)
 	http.POST("/plantOverviewByPlant", GetPlantOverviewByPlant)
 	http.POST("/formulaPlantDetail", GetFormulaPlantDetail)
+
+	http.POST("/farmList", GetFarmList)
+	http.POST("/farmAreaList", GetFarmAreaList)
 	http.Run(config.SERVER_HOST)
 
 
@@ -204,3 +210,26 @@ func GetFormulaPlantDetail(c *gin.Context) {
 		"item": formulaPlant,
 	})
 }
+// ------------------- dashboard ------------------------------ //
+func GetFarmList(c *gin.Context) {
+	var bodyModel model_other.PostBody
+	bodyModel = utility.GetModelFromBody(c)
+	//GetFarmLister(status, uid string) ([]model_services.DashboardFarmList, int)
+	farmList, total := me.Ctrl.GetFarmLister(config.STATUS_ACTIVE, bodyModel.Uid)
+	c.JSON(200, gin.H{
+		"item": farmList,
+		"total": total,
+	})
+}
+
+func GetFarmAreaList(c *gin.Context) {
+	var bodyModel model_other.PostBody
+	bodyModel = utility.GetModelFromBody(c)
+	//GetFarmAreaLister(status, farmId string) ([]model_services.DashboardFarmList, int)
+	farmAreaList, total := me.Ctrl.GetFarmAreaLister(config.STATUS_ACTIVE, bodyModel.FarmId)
+	c.JSON(200, gin.H{
+		"item": farmAreaList,
+		"total": total,
+	})
+}
+

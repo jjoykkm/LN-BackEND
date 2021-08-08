@@ -7,19 +7,9 @@ import (
 	"LN-BackEND/utility"
 	"fmt"
 	"github.com/mitchellh/mapstructure"
-	"gorm.io/gorm"
 	"log"
 	"strings"
-
-	//"log"
-	//"strings"
 )
-/*-------------------------------------------------------------------------------------------*/
-//                                 STRUCTURE
-/*-------------------------------------------------------------------------------------------*/
-type Ln struct {
-	Db			*gorm.DB
-}
 
 /*-------------------------------------------------------------------------------------------*/
 //                                 INTERFACE
@@ -42,6 +32,9 @@ type IntFormulaPlant interface {
 	GetFormulaPlantDetailer(status, formulaPlantId, language string) model_services.ForPlantFormula
 }
 
+/*-------------------------------------------------------------------------------------------*/
+//                                   METHOD
+/*-------------------------------------------------------------------------------------------*/
 func (ln Ln) GetPlantCategoryLister(status, language string) ([]model_services.ForPlantCatList, int) {
 	var plantTypeArray []model_databases.PlantType
 	var catList model_services.ForPlantCatList
