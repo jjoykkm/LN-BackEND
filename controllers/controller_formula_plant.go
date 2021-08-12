@@ -495,7 +495,7 @@ func (ln Ln) GetFertilizerRatioRelateer(status, formulaPlantId, language string)
 	if err != nil {
 		log.Print(err)
 	}
-	fmt.Printf("%+v\n",joinArray)
+
 	for _, join := range joinArray {
 		mapstructure.Decode(join, &plantFert)
 		switch language {

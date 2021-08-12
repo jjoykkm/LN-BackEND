@@ -85,6 +85,12 @@ func main() {
 	//farmList, _ := me.Ctrl.GetFarmLister(config.STATUS_ACTIVE, "17ac6921-ece0-43bc-9d88-7b9bfc59ffd3")
 	//fmt.Println(farmList)
 
+	//GetSensorLister(status, language string, socketIdList []string) []model_services.SenSocList
+	//ss:=[]string{"ec2dcb62-e741-47da-9288-4a9ca4f797ed","2b71a9c7-1d59-44d5-80f0-e805ddd82d55"}
+	//senSocList,_ := me.Ctrl.GetSensorBySocketLister(config.STATUS_ACTIVE, config.LANGUAGE_EN, ss)
+	//fmt.Printf("%+v\n",senSocList)
+	//GetAllDetailSensor(status, farmId, language string) ([]model_services.SenSocMainList, int)
+
 	http := gin.Default()
 	//http.POST("/test", Test)
 	http.POST("/plantCategoryList", GetPlantCategoryList)
@@ -96,6 +102,7 @@ func main() {
 
 	http.POST("/farmList", GetFarmList)
 	http.POST("/farmAreaList", GetFarmAreaList)
+	http.POST("/farmAreaDetailSensor", GetFarmAreaDetailSensor)
 	http.Run(config.SERVER_HOST)
 
 
@@ -225,10 +232,21 @@ func GetFarmList(c *gin.Context) {
 func GetFarmAreaList(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
-	//GetFarmAreaLister(status, farmId string) ([]model_services.DashboardFarmList, int)
-	farmAreaList, total := me.Ctrl.GetFarmAreaLister(config.STATUS_ACTIVE, bodyModel.FarmId)
+	//GetFarmAreaLister(status, language, farmId string) ([]model_services.DashboardFarmList, int)
+	farmAreaList, total := me.Ctrl.GetFarmAreaLister(config.STATUS_ACTIVE, bodyModel.Language, bodyModel.FarmId)
 	c.JSON(200, gin.H{
 		"item": farmAreaList,
+		"total": total,
+	})
+}
+
+func GetFarmAreaDetailSensor(c *gin.Context) {
+	var bodyModel model_other.PostBody
+	bodyModel = utility.GetModelFromBody(c)
+	//GetFarmAreaDetailSensorer(status, farmId, language string) ([]model_services.SenSocMainList, int)
+	senSocMainList, total := me.Ctrl.GetFarmAreaDetailSensorer(config.STATUS_ACTIVE, bodyModel.FarmAreaId, bodyModel.Language)
+	c.JSON(200, gin.H{
+		"item": senSocMainList,
 		"total": total,
 	})
 }

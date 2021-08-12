@@ -11,6 +11,7 @@ type PostBody struct {
 	FormulaPlantId    string	`mapstructure:"formula_plant_id" json:"formula_plant_id"`
 	PlantTypeId    	  string	`mapstructure:"plant_type_id" json:"plant_type_id"`
 	FarmId	    	  string	`mapstructure:"farm_id" json:"farm_id"`
+	FarmAreaId	      string	`mapstructure:"farm_area_id" json:"farm_area_id"`
 	Language    	  string	`mapstructure:"language" json:"language"`
 	Offset    		  int		`mapstructure:"offset" json:"offset"`
 }
@@ -23,6 +24,7 @@ func (u *PostBody) New() *PostBody {
 		FormulaPlantId:   	u.FormulaPlantId ,
 		PlantTypeId:   		u.PlantTypeId ,
 		FarmId:   			u.FarmId ,
+		FarmAreaId:   		u.FarmAreaId ,
 		Language:   		u.Language ,
 		Offset:   			u.Offset ,
 	}
