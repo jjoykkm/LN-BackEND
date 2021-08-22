@@ -21,6 +21,7 @@ type IntDashboard interface {
 	GetSensorByIder(status string, socketIdList []string) ([]model_databases.Sensor, map[string]model_databases.Sensor)
 	GetMainboxByIder(status string, mainboxIdList []string) ([]model_databases.Mainbox, map[string]model_databases.Mainbox)
 	GetFarmAreaDetailSensorer(status, farmId, language string) ([]model_services.SenSocMainList, int)
+	GetStatusSensorer(sensorStatusId string) (model_databases.StatusSensor, string)
 }
 
 /*-------------------------------------------------------------------------------------------*/
@@ -155,9 +156,11 @@ func (ln Ln) GetFarmAreaDetailSensorer(status, farmAreaId, language string) ([]m
 	var senSocMainList []model_services.SenSocMainList
 	var found bool
 	var sensorTypeMap map[string]string
+	var statusSensorMap map[string]string
 	var total int
 
 	sensorTypeMap = make(map[string]string)
+	statusSensorMap = make(map[string]string)
 
 	socAreaAr , sensorIdList, mainboxIdList := IntDashboard.GetSocketLister(ln, status, farmAreaId)
 
@@ -166,21 +169,31 @@ func (ln Ln) GetFarmAreaDetailSensorer(status, farmAreaId, language string) ([]m
 
 	for _, wa := range socAreaAr {
 		mapstructure.Decode(wa, &senSocMain)
+		senSocMain.Sensor.SensorId = wa.SensorId
+		senSocMain.Mainbox.MainboxId = wa.MainboxId
+
+		//Get Status Sensor name
+		senSocMain.StatusSensorName, found = statusSensorMap[senSocMain.StatusSensorId.UUID.String()]
+		if !found {
+			_, senSocMain.StatusSensorName= IntDashboard.GetStatusSensorer(ln, senSocMain.StatusSensorId.UUID.String())
+			statusSensorMap[senSocMain.StatusSensorId.UUID.String()] = senSocMain.StatusSensorName
+		}
+
 		//Get Mainbox
-		mb, fmb := mainboxMap[senSocMain.MainboxId.UUID.String()]
+		mb, fmb := mainboxMap[senSocMain.Mainbox.MainboxId.UUID.String()]
 		if fmb {
-			mapstructure.Decode(mb, &senSocMain)
+			mapstructure.Decode(mb, &senSocMain.Mainbox)
 		}
 		//Get Sensor
-		ss, fss := sensorMap[senSocMain.SensorId.UUID.String()]
+		ss, fss := sensorMap[senSocMain.Sensor.SensorId.UUID.String()]
 		if fss {
-			mapstructure.Decode(ss, &senSocMain)
+			mapstructure.Decode(ss, &senSocMain.Sensor)
 		}
 		//Get Sensor Type name
-		senSocMain.SensorTypeName, found = sensorTypeMap[senSocMain.SensorTypeId.UUID.String()]
+		senSocMain.Sensor.SensorTypeName, found = sensorTypeMap[senSocMain.Sensor.SensorTypeId.UUID.String()]
 		if !found {
-			_, senSocMain.SensorTypeName = IntDashboard.GetSensorTypeNameer(ln, senSocMain.SensorTypeId.UUID.String(), language)
-			sensorTypeMap[senSocMain.SensorTypeId.UUID.String()] = senSocMain.SensorTypeName
+			_, senSocMain.Sensor.SensorTypeName = IntDashboard.GetSensorTypeNameer(ln, senSocMain.Sensor.SensorTypeId.UUID.String(), language)
+			sensorTypeMap[senSocMain.Sensor.SensorTypeId.UUID.String()] = senSocMain.Sensor.SensorTypeName
 		}
 
 		senSocMainList = append(senSocMainList, senSocMain)
@@ -188,4 +201,19 @@ func (ln Ln) GetFarmAreaDetailSensorer(status, farmAreaId, language string) ([]m
 	total = len(senSocMainList)
 
 	return senSocMainList, total
+}
+
+func (ln Ln) GetStatusSensorer(sensorStatusId string) (model_databases.StatusSensor, string) {
+	var model model_databases.StatusSensor
+	var status string
+
+	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND status_sensor_id = '%s'",
+		config.DB_STATUS_SENSOR, config.STATUS_ACTIVE, sensorStatusId)
+	fmt.Println(sql)
+	err := ln.Db.Raw(sql).Scan(&model).Error
+	if err != nil {
+		log.Print(err)
+	}
+	status = model.StatusName
+	return model, status
 }

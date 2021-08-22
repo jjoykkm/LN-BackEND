@@ -17,18 +17,20 @@ type Socket struct {
 	SocketName      string	 	 `mapstructure:"socket_name" json:"socket_name,omitempty"`
 	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
 	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
+	SocketNumber	int64		 `mapstructure:"socket_number" json:"socket_number,omitempty"`
 	StatusSensorId	uuid.UUID	 `mapstructure:"status_sensor_id" json:"status_sensor_id,omitempty"`
 }
 // New instance socket
 func (u *Socket) New() *Socket {
 	return &Socket{
-		SocketId:		u.SocketId ,
-		MainboxId:		u.MainboxId ,
-		SensorId:		u.SensorId ,
-		StatusId:		u.StatusId ,
-		SocketName:		u.SocketName ,
-		CreateDate:		u.CreateDate ,
-		ChangeDate:		u.ChangeDate ,
-		StatusSensorId:	u.StatusSensorId ,
+		SocketId:			u.SocketId ,
+		MainboxId:			u.MainboxId ,
+		SensorId:			u.SensorId ,
+		StatusId:			u.StatusId ,
+		SocketName:			u.SocketName ,
+		CreateDate:			u.CreateDate ,
+		ChangeDate:			u.ChangeDate ,
+		SocketNumber:		u.SocketNumber ,
+		StatusSensorId:		u.StatusSensorId ,
 	}
 }

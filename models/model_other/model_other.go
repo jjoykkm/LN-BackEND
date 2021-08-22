@@ -35,6 +35,8 @@ func (u *PostBody) New() *PostBody {
 //	"plant_id": "",
 //	"formula_plant_id": "",
 //	"plant_type_id": "",
+//	"farm_id": "",
+//	"farm_area_id": "",
 //	"language": "",
 //	"offset": 0
 //}

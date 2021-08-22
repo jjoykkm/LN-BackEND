@@ -33,7 +33,7 @@ func main() {
 	//fmt.Println(db)
 
 	db, err := gorm.Open(postgres.New(postgres.Config{
-		DSN: "host=103.212.181.187 user=ln02t password=ln-0110-2 dbname=smartlife port=5432 sslmode=disable TimeZone=Asia/Bangkok",
+		DSN: config.DSN,
 		PreferSimpleProtocol: false, // disables implicit prepared statement usage
 	}), &gorm.Config{})
 	if err != nil {
