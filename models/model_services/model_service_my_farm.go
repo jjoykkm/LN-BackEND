@@ -62,6 +62,7 @@ func (u *MyFarmSenSocDetail) New() *MyFarmSenSocDetail {
 		SensorTypeName:		u.SensorTypeName ,
 	}
 }
+
 //-------------------------------------------------------------------------------//
 //							Table Manage Mainbox
 //-------------------------------------------------------------------------------//
@@ -85,6 +86,25 @@ func (u *MyFarmManageMainbox) New() *MyFarmManageMainbox {
 		MainboxLots:		u.MainboxLots ,
 		StartWarranty:		u.StartWarranty ,
 		EndWarranty:		u.EndWarranty ,
+		SenSocDetail:		u.SenSocDetail ,
+	}
+}
+
+//-------------------------------------------------------------------------------//
+//							Table Manage FarmArea
+//-------------------------------------------------------------------------------//
+//Model
+type MyFarmManageFarmArea struct {
+	FarmAreaId      	uuid.UUID	 			`mapstructure:"farm_area_id" json:"farm_area_id,omitempty"`
+	FarmAreaName    	string		 			`mapstructure:"farm_area_name" json:"farm_area_name,omitempty"`
+	SenSocDetail		[]MyFarmSenSocDetail	`mapstructure:"sen_soc_detail" json:"sen_soc_detail"`
+}
+
+// New instance
+func (u *MyFarmManageFarmArea) New() *MyFarmManageFarmArea {
+	return &MyFarmManageFarmArea{
+		FarmAreaId:			u.FarmAreaId ,
+		FarmAreaName:		u.FarmAreaName ,
 		SenSocDetail:		u.SenSocDetail ,
 	}
 }

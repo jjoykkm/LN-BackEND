@@ -108,6 +108,7 @@ func main() {
 
 	http.POST("/overviewFarm", GetOverviewFarm)
 	http.POST("/manageMainbox", GetManageMainbox)
+	http.POST("/manageFarmArea", GetManageFarmArea)
 	http.Run(config.SERVER_HOST)
 
 
@@ -323,6 +324,21 @@ func GetManageMainbox(c *gin.Context) {
 	}else {
 		c.JSON(http.StatusOK, gin.H{
 			"item":  manageMainbox,
+			"total": total,
+		})
+	}
+}
+
+func GetManageFarmArea(c *gin.Context) {
+	var bodyModel model_other.PostBody
+	bodyModel = utility.GetModelFromBody(c)
+	// GetManageFarmAreaer(status, language, farmId string) ([]model_services.MyFarmManageFarmArea, int)
+	manageFarmArea, total := me.Ctrl.GetManageFarmAreaer(config.STATUS_ACTIVE, bodyModel.Language, bodyModel.FarmId)
+	if total == 0 {
+		c.JSON(http.StatusNoContent, gin.H{})
+	}else {
+		c.JSON(http.StatusOK, gin.H{
+			"item":  manageFarmArea,
 			"total": total,
 		})
 	}

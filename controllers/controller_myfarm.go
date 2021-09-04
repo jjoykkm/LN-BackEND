@@ -19,8 +19,10 @@ type IntMyFarm interface {
 	GetTransSocketAreaer(status, farmId string) ([]model_databases.TransSocketArea, []string, []string, []string, int)
 	GetSocketByIder(status string, socketIdList []string) ([]model_databases.Socket, map[string]model_databases.Socket)
 	GetSocketWithSensorer(status, language string, socketIdList []string) ([]model_services.MyFarmSenSocDetail, map[string]model_services.MyFarmSenSocDetail, int)
-	GetSocSenByMainBoxer(mainboxId string, tranSoc []model_databases.TransSocketArea, socSenMap map[string]model_services.MyFarmSenSocDetail) ([]model_services.MyFarmSenSocDetail, int)
+	GetSocSenByKeyer(mainboxId, farmAreaId string, tranSoc []model_databases.TransSocketArea, socSenMap map[string]model_services.MyFarmSenSocDetail) ([]model_services.MyFarmSenSocDetail, int)
 	GetManageMainboxer(status, language, farmId string) ([]model_services.MyFarmManageMainbox, int)
+	GetFarmAreaByIder(status string, farmAreaIdList []string) ([]model_databases.FarmArea, map[string]model_databases.FarmArea)
+	GetManageFarmAreaer(status, language, farmId string) ([]model_services.MyFarmManageFarmArea, int)
 }
 
 /*-------------------------------------------------------------------------------------------*/
@@ -139,6 +141,7 @@ func (ln Ln) GetSocketWithSensorer(status, language string, socketIdList []strin
 	var total int
 
 	sensorTypeMap := make(map[string]string)
+	statusSensorMap := make(map[string]string)
 	socSenMap := make(map[string]model_services.MyFarmSenSocDetail)
 
 	sqlIn := "('" + strings.Join(socketIdList, "','") + "')"
@@ -157,6 +160,13 @@ func (ln Ln) GetSocketWithSensorer(status, language string, socketIdList []strin
 			_, wa.SensorTypeName = IntCommon.GetSensorTypeNameer(ln, wa.SensorTypeId.UUID.String(), language)
 			sensorTypeMap[wa.SensorTypeId.UUID.String()] = wa.SensorTypeName
 		}
+
+		//Get Status Sensor name
+		wa.StatusSensorName, found = statusSensorMap[wa.StatusSensorId.UUID.String()]
+		if !found {
+			_, wa.StatusSensorName= IntDashboard.GetStatusSensorer(ln, wa.StatusSensorId.UUID.String())
+			statusSensorMap[wa.StatusSensorId.UUID.String()] = wa.StatusSensorName
+		}
 		joinArray[idx] = wa
 		socSenMap[wa.SocketId.UUID.String()] = wa
 	}
@@ -166,14 +176,21 @@ func (ln Ln) GetSocketWithSensorer(status, language string, socketIdList []strin
 	return joinArray, socSenMap, total
 }
 
-func (ln Ln) GetSocSenByMainBoxer(mainboxId string, tranSoc []model_databases.TransSocketArea, socSenMap map[string]model_services.MyFarmSenSocDetail) ([]model_services.MyFarmSenSocDetail, int){
+func (ln Ln) GetSocSenByKeyer(mainboxId, farmAreaId string, tranSoc []model_databases.TransSocketArea, socSenMap map[string]model_services.MyFarmSenSocDetail) ([]model_services.MyFarmSenSocDetail, int){
 	var list []model_services.MyFarmSenSocDetail
 	var total int
 
 	for _, wa := range tranSoc {
-		if wa.MainboxId.UUID.String() == mainboxId {
-			socSen, _ := socSenMap[wa.SocketId.UUID.String()]
-			list = append(list, socSen)
+		if mainboxId != "" {
+			if wa.MainboxId.UUID.String() == mainboxId {
+				socSen, _ := socSenMap[wa.SocketId.UUID.String()]
+				list = append(list, socSen)
+			}
+		}else if farmAreaId != "" {
+			if wa.FarmAreaId.UUID.String() == farmAreaId {
+				socSen, _ := socSenMap[wa.SocketId.UUID.String()]
+				list = append(list, socSen)
+			}
 		}
 	}
 	total = len(list)
@@ -199,12 +216,60 @@ func (ln Ln) GetManageMainboxer(status, language, farmId string) ([]model_servic
 	for _, m := range mainbox {
 		mapstructure.Decode(m, &manageMB)
 		// Get Socket and Sensor by mainbox
-		manageMB.SenSocDetail, _ = IntMyFarm.GetSocSenByMainBoxer(ln, m.MainboxId.UUID.String(), tranSoc, socSenMap)
+		manageMB.SenSocDetail, _ = IntMyFarm.GetSocSenByKeyer(ln, m.MainboxId.UUID.String(), "", tranSoc, socSenMap)
 		manageMBList = append(manageMBList, manageMB)
 	}
 
 	total = len(manageMBList)
 
 	return manageMBList, total
+}
+
+func (ln Ln) GetFarmAreaByIder(status string, farmAreaIdList []string) ([]model_databases.FarmArea, map[string]model_databases.FarmArea) {
+	var farmAreaAr []model_databases.FarmArea
+	var farmAreaMap map[string]model_databases.FarmArea
+
+	farmAreaMap = make(map[string]model_databases.FarmArea)
+
+	sqlIn := "('" + strings.Join(farmAreaIdList, "','") + "')"
+	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND farm_area_id IN %s",
+		config.DB_FARM_AREA, status, sqlIn)
+	fmt.Println(sql)
+	err := ln.Db.Raw(sql).Scan(&farmAreaAr).Error
+	if err != nil {
+		log.Print(err)
+	}
+
+	for _, wa := range farmAreaAr {
+		farmAreaMap[wa.FarmAreaId.UUID.String()] = wa
+	}
+	return farmAreaAr, farmAreaMap
+}
+
+func (ln Ln) GetManageFarmAreaer(status, language, farmId string) ([]model_services.MyFarmManageFarmArea, int) {
+	var manageFA model_services.MyFarmManageFarmArea
+	var manageFAList []model_services.MyFarmManageFarmArea
+	var total int
+
+	tranSoc, farmAreaIdList, socketIdList, _, total := IntMyFarm.GetTransSocketAreaer(ln, config.STATUS_ACTIVE, farmId)
+	if total == 0 {
+		return manageFAList, total
+	}
+
+	// Get Socket and Sensor
+	_, socSenMap, _ := IntMyFarm.GetSocketWithSensorer(ln, status, language, socketIdList)
+
+	// Get FarmArea
+	farmArea, _ := IntMyFarm.GetFarmAreaByIder(ln, status, farmAreaIdList)
+	for _, fa := range farmArea {
+		mapstructure.Decode(fa, &manageFA)
+		// Get Socket and Sensor by farm area
+		manageFA.SenSocDetail, _ = IntMyFarm.GetSocSenByKeyer(ln, "", fa.FarmAreaId.UUID.String(), tranSoc, socSenMap)
+		manageFAList = append(manageFAList, manageFA)
+	}
+
+	total = len(manageFAList)
+
+	return manageFAList, total
 }
 
