@@ -41,7 +41,7 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
-	//fmt.Println(reflect.TypeOf(db))
+
 	//var oo []Jj
 	////db.Raw("SELECT jjoy, eiei FROM tests").Scan(&oo)
 	//db.Exec("SELECT jjoy, eiei FROM tests").Scan(&oo)
@@ -107,6 +107,7 @@ func main() {
 	http.POST("/farmAreaDetailSensor", GetFarmAreaDetailSensor)
 
 	http.POST("/overviewFarm", GetOverviewFarm)
+	http.POST("/manageMainbox", GetManageMainbox)
 	http.Run(config.SERVER_HOST)
 
 
@@ -146,12 +147,11 @@ func main() {
 }
 
 func Test(c *gin.Context) {
-	aa := me.Ctrl.GetOverviewFarmer(config.STATUS_ACTIVE, "41470e4b-005d-4df9-aa4d-c59f37f6390b")
-	fmt.Println(aa)
+	aa, bb := me.Ctrl.GetManageMainboxer(config.STATUS_ACTIVE, config.LANGUAGE_EN, "41470e4b-005d-4df9-aa4d-c59f37f6390b")
 
 	c.JSON(http.StatusOK, gin.H{
 		"01": aa,
-		//"02": bb,
+		"02": bb,
 		//"03": cc,
 		//"04": dd,
 		//"05": ee,
@@ -302,7 +302,6 @@ func GetFarmAreaDetailSensor(c *gin.Context) {
 func GetOverviewFarm(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
-
 	//GetOverviewFarmer(status, farmId string) (model_services.MyFarmOverviewFarm)
 	overviewFarm := me.Ctrl.GetOverviewFarmer(config.STATUS_ACTIVE, bodyModel.FarmId)
 	if reflect.DeepEqual(overviewFarm,model_services.MyFarmOverviewFarm{}) {
@@ -314,4 +313,17 @@ func GetOverviewFarm(c *gin.Context) {
 	}
 }
 
-
+func GetManageMainbox(c *gin.Context) {
+	var bodyModel model_other.PostBody
+	bodyModel = utility.GetModelFromBody(c)
+	// GetManageMainboxer(status, language, farmId string) ([]model_services.MyFarmManageMainbox, int)
+	manageMainbox, total := me.Ctrl.GetManageMainboxer(config.STATUS_ACTIVE, bodyModel.Language, bodyModel.FarmId)
+	if total == 0 {
+		c.JSON(http.StatusNoContent, gin.H{})
+	}else {
+		c.JSON(http.StatusOK, gin.H{
+			"item":  manageMainbox,
+			"total": total,
+		})
+	}
+}

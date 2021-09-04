@@ -149,12 +149,10 @@ func (ln Ln) GetFarmAreaDetailSensorer(status, farmAreaId, language string) ([]m
 	var senSocMain model_services.SenSocMainList
 	var senSocMainList []model_services.SenSocMainList
 	var found bool
-	var sensorTypeMap map[string]string
-	var statusSensorMap map[string]string
 	var total int
 
-	sensorTypeMap = make(map[string]string)
-	statusSensorMap = make(map[string]string)
+	sensorTypeMap := make(map[string]string)
+	statusSensorMap := make(map[string]string)
 
 	socAreaAr , sensorIdList, mainboxIdList := IntDashboard.GetSocketLister(ln, status, farmAreaId)
 

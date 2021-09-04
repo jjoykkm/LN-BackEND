@@ -33,13 +33,13 @@ func (u *DashboardFarmList) New() *DashboardFarmList {
 //-------------------------------------------------------------------------------//
 //Model
 type DashboardFarmAreaList struct {
-	FarmId				uuid.UUID	 `mapstructure:"farm_id" json:"farm_id"`
-	FarmAreaId			uuid.UUID	 `mapstructure:"farm_area_id" json:"farm_area_id"`
-	FarmAreaName		string	 	 `mapstructure:"farm_area_name" json:"farm_area_name"`
-	FormulaPlantId		string	 	 `mapstructure:"formula_plant_id" json:"formula_plant_id"`
-	FormulaName			string	 	 `mapstructure:"formula_name" json:"formula_name"`
-	FormulaDesc			string	 	 `mapstructure:"formula_desc" json:"formula_desc"`
-	SensorDetail		[]SenSocMainList
+	FarmId				uuid.UUID	 		`mapstructure:"farm_id" json:"farm_id"`
+	FarmAreaId			uuid.UUID	 		`mapstructure:"farm_area_id" json:"farm_area_id"`
+	FarmAreaName		string	 	 		`mapstructure:"farm_area_name" json:"farm_area_name"`
+	FormulaPlantId		string	 	 		`mapstructure:"formula_plant_id" json:"formula_plant_id"`
+	FormulaName			string	 	 		`mapstructure:"formula_name" json:"formula_name"`
+	FormulaDesc			string	 	 		`mapstructure:"formula_desc" json:"formula_desc"`
+	SensorDetail		[]SenSocMainList	`mapstructure:"sensor_detail" json:"sensor_detail"`
 }
 // New instance
 func (u *DashboardFarmAreaList) New() *DashboardFarmAreaList {
