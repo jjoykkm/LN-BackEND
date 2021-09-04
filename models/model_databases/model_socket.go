@@ -11,7 +11,6 @@ import (
 //model socket
 type Socket struct {
 	SocketId      	uuid.UUID	 `mapstructure:"socket_id" json:"socket_id,omitempty"`
-	MainboxId      	uuid.UUID	 `mapstructure:"mainbox_id" json:"mainbox_id,omitempty"`
 	SensorId      	uuid.UUID	 `mapstructure:"sensor_id" json:"sensor_id,omitempty"`
 	StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
 	SocketName      string	 	 `mapstructure:"socket_name" json:"socket_name,omitempty"`
@@ -24,7 +23,6 @@ type Socket struct {
 func (u *Socket) New() *Socket {
 	return &Socket{
 		SocketId:			u.SocketId ,
-		MainboxId:			u.MainboxId ,
 		SensorId:			u.SensorId ,
 		StatusId:			u.StatusId ,
 		SocketName:			u.SocketName ,

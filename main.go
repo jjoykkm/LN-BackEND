@@ -4,6 +4,7 @@ import (
 	"LN-BackEND/config"
 	"LN-BackEND/controllers"
 	"LN-BackEND/models/model_other"
+	"LN-BackEND/models/model_services"
 	"LN-BackEND/utility"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -11,6 +12,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"net/http"
+	"reflect"
 )
 
 type Ln struct {
@@ -77,7 +79,7 @@ func main() {
 	//
 	//
 	////http.GET("/test", func(c *gin.Context) {
-	////	c.JSON(200, gin.H{
+	////	c.JSON(http.StatusOK, gin.H{
 	////		"message": "test",
 	////	})
 	////})
@@ -92,7 +94,7 @@ func main() {
 	//GetAllDetailSensor(status, farmId, language string) ([]model_services.SenSocMainList, int)
 
 	http := gin.Default()
-	//http.POST("/test", Test)
+	http.POST("/test", Test)
 	http.POST("/plantCategoryList", GetPlantCategoryList)
 	http.POST("/plantCategoryItem", GetPlantCategoryItem)
 	http.POST("/plantOverviewFavorite", GetPlantOverviewFavorite)
@@ -103,6 +105,8 @@ func main() {
 	http.POST("/farmList", GetFarmList)
 	http.POST("/farmAreaList", GetFarmAreaList)
 	http.POST("/farmAreaDetailSensor", GetFarmAreaDetailSensor)
+
+	http.POST("/overviewFarm", GetOverviewFarm)
 	http.Run(config.SERVER_HOST)
 
 
@@ -142,9 +146,17 @@ func main() {
 }
 
 func Test(c *gin.Context) {
+	aa := me.Ctrl.GetOverviewFarmer(config.STATUS_ACTIVE, "41470e4b-005d-4df9-aa4d-c59f37f6390b")
+	fmt.Println(aa)
+
 	c.JSON(http.StatusOK, gin.H{
-		"message": "00001",
+		"01": aa,
+		//"02": bb,
+		//"03": cc,
+		//"04": dd,
+		//"05": ee,
 	})
+
 }
 
 func GetPlantCategoryList(c *gin.Context) {
@@ -152,10 +164,14 @@ func GetPlantCategoryList(c *gin.Context) {
 	bodyModel = utility.GetModelFromBody(c)
 	//GetPlantCategoryLister(status, language string) ([]model_services.ForPlantCatList, int)
 	plantCategoryList, total := me.Ctrl.GetPlantCategoryLister(config.STATUS_ACTIVE, bodyModel.Language)
-	c.JSON(200, gin.H{
-		"item": plantCategoryList,
-		"total": total,
-	})
+	if total == 0 {
+		c.JSON(http.StatusNoContent, gin.H{})
+	}else {
+		c.JSON(http.StatusOK, gin.H{
+			"item":  plantCategoryList,
+			"total": total,
+		})
+	}
 }
 
 func GetPlantCategoryItem(c *gin.Context) {
@@ -163,11 +179,15 @@ func GetPlantCategoryItem(c *gin.Context) {
 	bodyModel = utility.GetModelFromBody(c)
 	//GetPlantCategoryItemer(status, plantTypeId, language string, offset int) ([]model_services.ForPlantCat, int, int)
 	plantCategoryItem, nextOffset, total := me.Ctrl.GetPlantCategoryItemer(config.STATUS_ACTIVE, bodyModel.PlantTypeId,  bodyModel.Language, bodyModel.Offset)
-	c.JSON(200, gin.H{
-		"item": plantCategoryItem,
-		"offset": nextOffset,
-		"total": total,
-	})
+	if total == 0 {
+		c.JSON(http.StatusNoContent, gin.H{})
+	}else {
+		c.JSON(http.StatusOK, gin.H{
+			"item":   plantCategoryItem,
+			"offset": nextOffset,
+			"total":  total,
+		})
+	}
 }
 
 func GetPlantOverviewFavorite(c *gin.Context) {
@@ -175,11 +195,15 @@ func GetPlantOverviewFavorite(c *gin.Context) {
 	bodyModel = utility.GetModelFromBody(c)
 	//GetPlantOverviewFavoriteer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int)
 	plantOverviewFavorite, nextOffset, total := me.Ctrl.GetPlantOverviewFavoriteer(config.STATUS_ACTIVE, bodyModel.Uid, bodyModel.Language, bodyModel.Offset)
-	c.JSON(200, gin.H{
-		"item": plantOverviewFavorite,
-		"offset": nextOffset,
-		"total": total,
-	})
+	if total == 0 {
+		c.JSON(http.StatusNoContent, gin.H{})
+	}else {
+		c.JSON(http.StatusOK, gin.H{
+			"item":   plantOverviewFavorite,
+			"offset": nextOffset,
+			"total":  total,
+		})
+	}
 }
 
 func GetMyPlantOverview(c *gin.Context) {
@@ -187,11 +211,15 @@ func GetMyPlantOverview(c *gin.Context) {
 	bodyModel = utility.GetModelFromBody(c)
 	//GetMyPlantOverviewer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int)
 	myPlantOverview, nextOffset, total := me.Ctrl.GetMyPlantOverviewer(config.STATUS_ACTIVE, bodyModel.Uid, bodyModel.Language, bodyModel.Offset)
-	c.JSON(200, gin.H{
-		"item": myPlantOverview,
-		"offset": nextOffset,
-		"total": total,
-	})
+	if total == 0 {
+		c.JSON(http.StatusNoContent, gin.H{})
+	}else {
+		c.JSON(http.StatusOK, gin.H{
+			"item":   myPlantOverview,
+			"offset": nextOffset,
+			"total":  total,
+		})
+	}
 }
 
 func GetPlantOverviewByPlant(c *gin.Context) {
@@ -199,11 +227,15 @@ func GetPlantOverviewByPlant(c *gin.Context) {
 	bodyModel = utility.GetModelFromBody(c)
 	//GetPlantOverviewByPlanter(status, uid, plantId, language string, offset int) ([]model_services.ForPlantItem, int, int)
 	plantOverviewByPlant, nextOffset, total := me.Ctrl.GetPlantOverviewByPlanter(config.STATUS_ACTIVE, bodyModel.Uid, bodyModel.PlantId, bodyModel.Language, bodyModel.Offset)
-	c.JSON(200, gin.H{
-		"item": plantOverviewByPlant,
-		"offset": nextOffset,
-		"total": total,
-	})
+	if total == 0 {
+		c.JSON(http.StatusNoContent, gin.H{})
+	}else {
+		c.JSON(http.StatusOK, gin.H{
+			"item":   plantOverviewByPlant,
+			"offset": nextOffset,
+			"total":  total,
+		})
+	}
 }
 
 func GetFormulaPlantDetail(c *gin.Context) {
@@ -213,9 +245,13 @@ func GetFormulaPlantDetail(c *gin.Context) {
 	//GetFormulaPlantDetailer(status, formulaPlantId, language string) model_services.ForPlantFormula
 	//_, _, formulaPlant := me.Ctrl.GetSensorValueRecRelate(config.STATUS_ACTIVE, "243367fe-fc14-4074-8ff5-374220dadf8f", bodyModel.Language)
 	formulaPlant := me.Ctrl.GetFormulaPlantDetailer(config.STATUS_ACTIVE, bodyModel.FormulaPlantId, bodyModel.Language)
-	c.JSON(200, gin.H{
-		"item": formulaPlant,
-	})
+	if reflect.DeepEqual(formulaPlant,model_services.ForPlantFormula{}) {
+		c.JSON(http.StatusNoContent, gin.H{})
+	}else {
+		c.JSON(http.StatusOK, gin.H{
+			"item": formulaPlant,
+		})
+	}
 }
 // ------------------- dashboard ------------------------------ //
 func GetFarmList(c *gin.Context) {
@@ -223,10 +259,14 @@ func GetFarmList(c *gin.Context) {
 	bodyModel = utility.GetModelFromBody(c)
 	//GetFarmLister(status, uid string) ([]model_services.DashboardFarmList, int)
 	farmList, total := me.Ctrl.GetFarmLister(config.STATUS_ACTIVE, bodyModel.Uid)
-	c.JSON(200, gin.H{
-		"item": farmList,
-		"total": total,
-	})
+	if total == 0 {
+		c.JSON(http.StatusNoContent, gin.H{})
+	}else {
+		c.JSON(http.StatusOK, gin.H{
+			"item":  farmList,
+			"total": total,
+		})
+	}
 }
 
 func GetFarmAreaList(c *gin.Context) {
@@ -234,10 +274,14 @@ func GetFarmAreaList(c *gin.Context) {
 	bodyModel = utility.GetModelFromBody(c)
 	//GetFarmAreaLister(status, language, farmId string) ([]model_services.DashboardFarmList, int)
 	farmAreaList, total := me.Ctrl.GetFarmAreaLister(config.STATUS_ACTIVE, bodyModel.Language, bodyModel.FarmId)
-	c.JSON(200, gin.H{
-		"item": farmAreaList,
-		"total": total,
-	})
+	if total == 0 {
+		c.JSON(http.StatusNoContent, gin.H{})
+	}else {
+		c.JSON(http.StatusOK, gin.H{
+			"item":  farmAreaList,
+			"total": total,
+		})
+	}
 }
 
 func GetFarmAreaDetailSensor(c *gin.Context) {
@@ -245,9 +289,29 @@ func GetFarmAreaDetailSensor(c *gin.Context) {
 	bodyModel = utility.GetModelFromBody(c)
 	//GetFarmAreaDetailSensorer(status, farmId, language string) ([]model_services.SenSocMainList, int)
 	senSocMainList, total := me.Ctrl.GetFarmAreaDetailSensorer(config.STATUS_ACTIVE, bodyModel.FarmAreaId, bodyModel.Language)
-	c.JSON(200, gin.H{
-		"item": senSocMainList,
-		"total": total,
-	})
+	if total == 0 {
+		c.JSON(http.StatusNoContent, gin.H{})
+	}else {
+		c.JSON(http.StatusOK, gin.H{
+			"item":  senSocMainList,
+			"total": total,
+		})
+	}
 }
+
+func GetOverviewFarm(c *gin.Context) {
+	var bodyModel model_other.PostBody
+	bodyModel = utility.GetModelFromBody(c)
+
+	//GetOverviewFarmer(status, farmId string) (model_services.MyFarmOverviewFarm)
+	overviewFarm := me.Ctrl.GetOverviewFarmer(config.STATUS_ACTIVE, bodyModel.FarmId)
+	if reflect.DeepEqual(overviewFarm,model_services.MyFarmOverviewFarm{}) {
+		c.JSON(http.StatusNoContent, gin.H{})
+	}else {
+		c.JSON(http.StatusOK, gin.H{
+			"item": overviewFarm,
+		})
+	}
+}
+
 

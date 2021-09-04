@@ -16,7 +16,6 @@ import (
 type IntDashboard interface {
 	GetFarmLister(status, uid string) ([]model_services.DashboardFarmList, int)
 	GetFarmAreaLister(status, language, farmId string) ([]model_services.DashboardFarmAreaList, int)
-	GetSensorTypeNameer(sensorTypeId, language string) (model_databases.SensorType, string)
 	GetSocketLister(status, farmId string) ([]model_services.JoinSocketAndTrans, []string, []string)
 	GetSensorByIder(status string, socketIdList []string) ([]model_databases.Sensor, map[string]model_databases.Sensor)
 	GetMainboxByIder(status string, mainboxIdList []string) ([]model_databases.Mainbox, map[string]model_databases.Mainbox)
@@ -62,26 +61,6 @@ func (ln Ln) GetFarmAreaLister(status, language, farmId string) ([]model_service
 
 	total = len(farmAreaList)
 	return farmAreaList, total
-}
-
-func (ln Ln) GetSensorTypeNameer(sensorTypeId, language string) (model_databases.SensorType, string) {
-	var sensorTypeModel model_databases.SensorType
-	var sensorTypeName string
-
-	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND sensor_type_id = '%s'",
-		config.DB_SENSOR_TYPE, config.STATUS_ACTIVE, sensorTypeId)
-	err := ln.Db.Raw(sql).Scan(&sensorTypeModel).Error
-	if err != nil {
-		log.Print(err)
-	}
-	switch language {
-	case config.LANGUAGE_EN:
-		sensorTypeName = sensorTypeModel.SensorTypeNameEN
-	case config.LANGUAGE_TH:
-		sensorTypeName = sensorTypeModel.SensorTypeNameTH
-	}
-
-	return sensorTypeModel, sensorTypeName
 }
 
 func (ln Ln) GetSocketLister(status, farmAreaId string) ([]model_services.JoinSocketAndTrans, []string, []string) {
@@ -151,6 +130,21 @@ func (ln Ln) GetMainboxByIder(status string, mainboxIdList []string) ([]model_da
 	return mainboxAr, mainboxMap
 }
 
+func (ln Ln) GetStatusSensorer(sensorStatusId string) (model_databases.StatusSensor, string) {
+	var model model_databases.StatusSensor
+	var status string
+
+	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND status_sensor_id = '%s'",
+		config.DB_STATUS_SENSOR, config.STATUS_ACTIVE, sensorStatusId)
+	fmt.Println(sql)
+	err := ln.Db.Raw(sql).Scan(&model).Error
+	if err != nil {
+		log.Print(err)
+	}
+	status = model.StatusName
+	return model, status
+}
+
 func (ln Ln) GetFarmAreaDetailSensorer(status, farmAreaId, language string) ([]model_services.SenSocMainList, int) {
 	var senSocMain model_services.SenSocMainList
 	var senSocMainList []model_services.SenSocMainList
@@ -192,7 +186,7 @@ func (ln Ln) GetFarmAreaDetailSensorer(status, farmAreaId, language string) ([]m
 		//Get Sensor Type name
 		senSocMain.Sensor.SensorTypeName, found = sensorTypeMap[senSocMain.Sensor.SensorTypeId.UUID.String()]
 		if !found {
-			_, senSocMain.Sensor.SensorTypeName = IntDashboard.GetSensorTypeNameer(ln, senSocMain.Sensor.SensorTypeId.UUID.String(), language)
+			_, senSocMain.Sensor.SensorTypeName = IntCommon.GetSensorTypeNameer(ln, senSocMain.Sensor.SensorTypeId.UUID.String(), language)
 			sensorTypeMap[senSocMain.Sensor.SensorTypeId.UUID.String()] = senSocMain.Sensor.SensorTypeName
 		}
 
@@ -201,19 +195,4 @@ func (ln Ln) GetFarmAreaDetailSensorer(status, farmAreaId, language string) ([]m
 	total = len(senSocMainList)
 
 	return senSocMainList, total
-}
-
-func (ln Ln) GetStatusSensorer(sensorStatusId string) (model_databases.StatusSensor, string) {
-	var model model_databases.StatusSensor
-	var status string
-
-	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND status_sensor_id = '%s'",
-		config.DB_STATUS_SENSOR, config.STATUS_ACTIVE, sensorStatusId)
-	fmt.Println(sql)
-	err := ln.Db.Raw(sql).Scan(&model).Error
-	if err != nil {
-		log.Print(err)
-	}
-	status = model.StatusName
-	return model, status
 }
