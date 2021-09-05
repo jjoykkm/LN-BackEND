@@ -95,8 +95,8 @@ func (u *MyFarmManageMainbox) New() *MyFarmManageMainbox {
 //-------------------------------------------------------------------------------//
 //Model
 type MyFarmManageFarmArea struct {
-	FarmAreaId      	uuid.UUID	 			`mapstructure:"farm_area_id" json:"farm_area_id,omitempty"`
-	FarmAreaName    	string		 			`mapstructure:"farm_area_name" json:"farm_area_name,omitempty"`
+	FarmAreaId      	uuid.UUID	 			`mapstructure:"farm_area_id" json:"farm_area_id"`
+	FarmAreaName    	string		 			`mapstructure:"farm_area_name" json:"farm_area_name"`
 	SenSocDetail		[]MyFarmSenSocDetail	`mapstructure:"sen_soc_detail" json:"sen_soc_detail"`
 }
 
@@ -106,5 +106,41 @@ func (u *MyFarmManageFarmArea) New() *MyFarmManageFarmArea {
 		FarmAreaId:			u.FarmAreaId ,
 		FarmAreaName:		u.FarmAreaName ,
 		SenSocDetail:		u.SenSocDetail ,
+	}
+}
+
+
+//-------------------------------------------------------------------------------//
+//							Table Manage Role
+//-------------------------------------------------------------------------------//
+//Model
+type MyFarmManageRole struct {
+	Uid      		uuid.UUID	 `mapstructure:"uid" json:"uid"`
+	Username     	string	 	 `mapstructure:"username" json:"username"`
+	FullName      	string	 	 `mapstructure:"full_name" json:"full_name"`
+	SurName      	string	 	 `mapstructure:"sur_name" json:"sur_name"`
+	NickName      	string	 	 `mapstructure:"nick_name" json:"nick_name"`
+	FarmId     		uuid.UUID	 `mapstructure:"farm_id" json:"farm_id"`
+	RoleId      	uuid.UUID	 `mapstructure:"role_id" json:"role_id"`
+	RoleName      	string		 `mapstructure:"role_name" json:"role_name"`
+	RoleDesc      	string		 `mapstructure:"role_desc" json:"role_desc"`
+	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date"`
+	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date"`
+}
+
+// New instance
+func (u *MyFarmManageRole) New() *MyFarmManageRole {
+	return &MyFarmManageRole{
+		Uid:			u.Uid ,
+		Username:       u.Username ,
+		FullName:       u.FullName ,
+		SurName:       	u.SurName ,
+		NickName:       u.NickName ,
+		FarmId:			u.FarmId ,
+		RoleId:			u.RoleId ,
+		RoleName:		u.RoleName ,
+		RoleDesc:		u.RoleDesc ,
+		CreateDate:		u.CreateDate ,
+		ChangeDate:		u.ChangeDate ,
 	}
 }

@@ -23,6 +23,7 @@ type IntMyFarm interface {
 	GetManageMainboxer(status, language, farmId string) ([]model_services.MyFarmManageMainbox, int)
 	GetFarmAreaByIder(status string, farmAreaIdList []string) ([]model_databases.FarmArea, map[string]model_databases.FarmArea)
 	GetManageFarmAreaer(status, language, farmId string) ([]model_services.MyFarmManageFarmArea, int)
+	GetManageRoleer(status, language, farmId string) ([]model_services.MyFarmManageRole, int)
 }
 
 /*-------------------------------------------------------------------------------------------*/
@@ -271,5 +272,29 @@ func (ln Ln) GetManageFarmAreaer(status, language, farmId string) ([]model_servi
 	total = len(manageFAList)
 
 	return manageFAList, total
+}
+
+func (ln Ln) GetManageRoleer(status, language, farmId string) ([]model_services.MyFarmManageRole, int) {
+	var roleList []model_services.MyFarmManageRole
+	var total int
+
+	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.uid = %s.uid WHERE %s.status_id = '%s' AND %s.farm_id = '%s'",
+		config.DB_TRANS_MANAGEMENT, config.DB_USERS, config.DB_TRANS_MANAGEMENT, config.DB_USERS, config.DB_TRANS_MANAGEMENT, status, config.DB_TRANS_MANAGEMENT, farmId)
+	fmt.Println(sql)
+	err := ln.Db.Raw(sql).Scan(&roleList).Error
+	if err != nil {
+		log.Print(err)
+	}
+	fmt.Println(roleList)
+	for idx, r := range roleList {
+		fmt.Println(r.RoleId.UUID.String())
+		fmt.Println("ssssssssss")
+		_, r.RoleName, r.RoleDesc = IntCommon.GetRoleNameer(ln, r.RoleId.UUID.String(), language)
+		fmt.Println(r.RoleName)
+		roleList[idx] = r
+	}
+
+	total = len(roleList)
+	return roleList, total
 }
 
