@@ -94,6 +94,8 @@ func main() {
 	//GetAllDetailSensor(status, farmId, language string) ([]model_services.SenSocMainList, int)
 
 	http := gin.Default()
+
+	// Formula Plant
 	http.POST("/test", Test)
 	http.POST("/plantCategoryList", GetPlantCategoryList)
 	http.POST("/plantCategoryItem", GetPlantCategoryItem)
@@ -102,14 +104,21 @@ func main() {
 	http.POST("/plantOverviewByPlant", GetPlantOverviewByPlant)
 	http.POST("/formulaPlantDetail", GetFormulaPlantDetail)
 
+	// Dashboard
 	http.POST("/farmList", GetFarmList)
-	http.POST("/farmAreaList", GetFarmAreaList)
+	http.POST("/farmAreaDashboardList", GetFarmAreaDashboardList)
 	http.POST("/farmAreaDetailSensor", GetFarmAreaDetailSensor)
 
+	// My Farm
 	http.POST("/overviewFarm", GetOverviewFarm)
 	http.POST("/manageMainbox", GetManageMainbox)
 	http.POST("/manageFarmArea", GetManageFarmArea)
 	http.POST("/manageRole", GetManageRole)
+
+	// Schedule + Reminder
+	http.POST("/farmAreaList", GetFarmAreaList)
+
+
 	http.Run(config.SERVER_HOST)
 
 
@@ -271,11 +280,11 @@ func GetFarmList(c *gin.Context) {
 	}
 }
 
-func GetFarmAreaList(c *gin.Context) {
+func GetFarmAreaDashboardList(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
-	//GetFarmAreaLister(status, language, farmId string) ([]model_services.DashboardFarmList, int)
-	farmAreaList, total := me.Ctrl.GetFarmAreaLister(config.STATUS_ACTIVE, bodyModel.Language, bodyModel.FarmId)
+	//GetFarmAreaDashboardLister(status, language, farmId string) ([]model_services.DashboardFarmList, int)
+	farmAreaList, total := me.Ctrl.GetFarmAreaDashboardLister(config.STATUS_ACTIVE, bodyModel.Language, bodyModel.FarmId)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
 	}else {
@@ -359,3 +368,19 @@ func GetManageRole(c *gin.Context) {
 		})
 	}
 }
+
+func GetFarmAreaList(c *gin.Context) {
+	var bodyModel model_other.PostBody
+	bodyModel = utility.GetModelFromBody(c)
+	// GetFarmAreaLister(status, farmId string) ([]model_services.ScheduleFarmArea, int)
+	farmArea, total := me.Ctrl.GetFarmAreaLister(config.STATUS_ACTIVE, bodyModel.FarmId)
+	if total == 0 {
+		c.JSON(http.StatusNoContent, gin.H{})
+	}else {
+		c.JSON(http.StatusOK, gin.H{
+			"item":  farmArea,
+			"total": total,
+		})
+	}
+}
+

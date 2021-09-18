@@ -15,7 +15,7 @@ import (
 /*-------------------------------------------------------------------------------------------*/
 type IntDashboard interface {
 	GetFarmLister(status, uid string) ([]model_services.DashboardFarmList, int)
-	GetFarmAreaLister(status, language, farmId string) ([]model_services.DashboardFarmAreaList, int)
+	GetFarmAreaDashboardLister(status, language, farmId string) ([]model_services.DashboardFarmAreaList, int)
 	GetSocketLister(status, farmId string) ([]model_services.JoinSocketAndTrans, []string, []string)
 	GetSensorByIder(status string, socketIdList []string) ([]model_databases.Sensor, map[string]model_databases.Sensor)
 	GetMainboxByIder(status string, mainboxIdList []string) ([]model_databases.Mainbox, map[string]model_databases.Mainbox)
@@ -42,7 +42,7 @@ func (ln Ln) GetFarmLister(status, uid string) ([]model_services.DashboardFarmLi
 	return farmList, total
 }
 
-func (ln Ln) GetFarmAreaLister(status, language, farmId string) ([]model_services.DashboardFarmAreaList, int) {
+func (ln Ln) GetFarmAreaDashboardLister(status, language, farmId string) ([]model_services.DashboardFarmAreaList, int) {
 	var farmAreaList []model_services.DashboardFarmAreaList
 	var total int
 
