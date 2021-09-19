@@ -117,6 +117,7 @@ func main() {
 
 	// Schedule + Reminder
 	http.POST("/farmAreaList", GetFarmAreaList)
+	http.POST("/scheRemind", GetScheRemind)
 
 
 	http.Run(config.SERVER_HOST)
@@ -384,3 +385,21 @@ func GetFarmAreaList(c *gin.Context) {
 	}
 }
 
+func GetScheRemind(c *gin.Context) {
+	var bodyModel model_other.PostBody
+	bodyModel = utility.GetModelFromBody(c)
+	// GetScheReminder(status string, farmAreaId []string) model_services.ScheduleScheRemind
+	scheRemind := me.Ctrl.GetScheReminder(config.STATUS_ACTIVE, bodyModel.FarmAreaIdList)
+
+	fmt.Printf("%+v\n",scheRemind)
+	c.JSON(http.StatusOK, gin.H{
+		"item":  scheRemind,
+	})
+	//if reflect.ValueOf(scheRemind).IsZero() {
+	//	c.JSON(http.StatusNoContent, gin.H{})
+	//}else {
+	//	c.JSON(http.StatusOK, gin.H{
+	//		"item":  scheRemind,
+	//	})
+	//}
+}

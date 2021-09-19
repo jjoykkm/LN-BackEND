@@ -19,6 +19,7 @@ type IntCommon interface {
 	GetUserNameer(uid string) (model_databases.Users, string)
 	GetSensorTypeNameer(sensorTypeId, language string) (model_databases.SensorType, string)
 	GetRoleNameer(roleId, language string) (model_databases.Role, string, string)
+	GetFarmAreaNameer(farmAreaId string) (model_databases.FarmArea, string)
 }
 
 /*-------------------------------------------------------------------------------------------*/
@@ -186,4 +187,18 @@ func (ln Ln) GetRoleNameer(roleId, language string) (model_databases.Role, strin
 	}
 
 	return roleModel, name, desc
+}
+
+func (ln Ln) GetFarmAreaNameer(farmAreaId string) (model_databases.FarmArea, string) {
+	var farmAreaModel model_databases.FarmArea
+
+	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND farm_area_id = '%s'",
+		config.DB_FARM_AREA, config.STATUS_ACTIVE, farmAreaId)
+	fmt.Println(sql)
+	err := ln.Db.Raw(sql).Scan(&farmAreaModel).Error
+	if err != nil {
+		log.Print(err)
+	}
+
+	return farmAreaModel, farmAreaModel.FarmAreaName
 }

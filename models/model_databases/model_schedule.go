@@ -19,10 +19,11 @@ type Schedule struct {
 	IsAlarm		      	bool		 `mapstructure:"is_alarm" json:"is_alarm,omitempty"`
 	CreateDate			time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
 	ChangeDate	    	time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
-	FreqTypeId			uuid.UUID	 `mapstructure:"frequency_type_id" json:"frequency_type_id,omitempty"`
+	FrequencyTypeId		uuid.UUID	 `mapstructure:"frequency_type_id" json:"frequency_type_id,omitempty"`
 	IndicateTypeId		uuid.UUID	 `mapstructure:"indicate_type_id" json:"indicate_type_id,omitempty"`
 	StatusId			uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
 	IsAllDay	      	bool		 `mapstructure:"is_all_day" json:"is_all_day,omitempty"`
+	IsReminder	      	bool		 `mapstructure:"is_reminder" json:"is_reminder,omitempty"`
 }
 // New instance schedule
 func (u *Schedule) New() *Schedule {
@@ -36,9 +37,10 @@ func (u *Schedule) New() *Schedule {
 		IsAlarm:			u.IsAlarm ,
 		CreateDate:			u.CreateDate ,
 		ChangeDate:			u.ChangeDate ,
-		FreqTypeId:			u.FreqTypeId ,
+		FrequencyTypeId:	u.FrequencyTypeId ,
 		IndicateTypeId:		u.IndicateTypeId ,
 		StatusId:			u.StatusId ,
 		IsAllDay:			u.IsAllDay ,
+		IsReminder:			u.IsReminder ,
 	}
 }

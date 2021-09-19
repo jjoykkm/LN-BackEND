@@ -1,7 +1,8 @@
-package controllers
+package utility
 
 import (
 	"reflect"
+	"strings"
 )
 
 func RemoveDuplicateValues(listData interface{}) interface{} {
@@ -17,4 +18,9 @@ func RemoveDuplicateValues(listData interface{}) interface{} {
 		list = reflect.Append(list, value)
 	}
 	return list.Interface()
+}
+
+func ConvertListToStringIn(listData []string) string {
+	result := "('" + strings.Join(listData, "','") + "')"
+	return result
 }

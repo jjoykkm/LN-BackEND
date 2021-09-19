@@ -4,10 +4,10 @@ import (
 	"LN-BackEND/config"
 	"LN-BackEND/models/model_databases"
 	"LN-BackEND/models/model_services"
+	"LN-BackEND/utility"
 	"fmt"
 	"github.com/mitchellh/mapstructure"
 	"log"
-	"strings"
 )
 
 /*-------------------------------------------------------------------------------------------*/
@@ -94,7 +94,7 @@ func (ln Ln) GetSensorByIder(status string, sensorIdList []string) ([]model_data
 
 	sensorMap = make(map[string]model_databases.Sensor)
 
-	sqlIn := "('" + strings.Join(sensorIdList, "','") + "')"
+	sqlIn := utility.ConvertListToStringIn(sensorIdList)
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND sensor_id IN %s",
 		config.DB_SENSOR, status, sqlIn)
 	fmt.Println(sql)
@@ -115,7 +115,7 @@ func (ln Ln) GetMainboxByIder(status string, mainboxIdList []string) ([]model_da
 
 	mainboxMap = make(map[string]model_databases.Mainbox)
 
-	sqlIn := "('" + strings.Join(mainboxIdList, "','") + "')"
+	sqlIn := utility.ConvertListToStringIn(mainboxIdList)
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND mainbox_id IN %s",
 		config.DB_MAINBOX, status, sqlIn)
 	fmt.Println(sql)

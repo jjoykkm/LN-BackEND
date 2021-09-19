@@ -10,7 +10,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model trans_schedule_farm
 type TransScheduleFarm struct {
-	FarmId      	uuid.UUID	 `mapstructure:"farm_id" json:"farm_id,omitempty"`
+	FarmAreaId      uuid.UUID	 `mapstructure:"farm_area_id" json:"farm_area_id,omitempty"`
 	ScheduleId      uuid.UUID	 `mapstructure:"schedule_id" json:"schedule_id,omitempty"`
 	StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
 	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
@@ -19,7 +19,7 @@ type TransScheduleFarm struct {
 // New instance trans_schedule_farm
 func (u *TransScheduleFarm) New() *TransScheduleFarm {
 	return &TransScheduleFarm{
-		FarmId:			u.FarmId ,
+		FarmAreaId:		u.FarmAreaId ,
 		ScheduleId:		u.ScheduleId ,
 		StatusId:		u.StatusId ,
 		CreateDate:		u.CreateDate ,

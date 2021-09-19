@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"github.com/mitchellh/mapstructure"
 	"log"
-	"strings"
 )
 
 /*-------------------------------------------------------------------------------------------*/
@@ -151,22 +150,18 @@ func (ln Ln) GetPlantOverviewFavoriteer(status, uid, language string, offset int
 	var currentOffset int
 	var total int
 	var found bool
-	var countryMap map[string]string
-	var provinceMap map[string]string
-	var plantTypeMap map[string]string
-	var userMap map[string]string
 
 	if uid == "" {
 		return nil, offset, 0
 	}
 
-	countryMap = make(map[string]string)
-	provinceMap = make(map[string]string)
-	plantTypeMap = make(map[string]string)
-	userMap = make(map[string]string)
+	countryMap := make(map[string]string)
+	provinceMap := make(map[string]string)
+	plantTypeMap := make(map[string]string)
+	userMap := make(map[string]string)
 
 	_, formulaPlantList, _ := IntFormulaPlant.GetFavoriteFormulaPlanter(ln, config.STATUS_ACTIVE, uid)
-	sqlIn := "('" + strings.Join(formulaPlantList, "','") + "')"
+	sqlIn := utility.ConvertListToStringIn(formulaPlantList)
 	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.plant_id = %s.plant_id WHERE %s.status_id = '%s' AND %s.formula_plant_id IN %s OFFSET %d LIMIT 100",
 		config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, status, config.DB_FORMULA_PLANT, sqlIn, offset)
 	fmt.Println(sql)
