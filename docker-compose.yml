@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  bn-joy:
+    build:
+      context: .
+      target: builder
+    image: bn-joy
+    ports:
+      - "5200:5200"
+
+    environment:
+      - ENV=dev
+    volumes:
+      - .:/go/src/bnj
+    # have to use $$ (double-dollar) so docker doesn't try to substitute a variable
+    command: reflex -r "\.go$$" -s -- sh -c "go run ./"

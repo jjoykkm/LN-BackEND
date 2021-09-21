@@ -10,7 +10,7 @@ const DRIVER_NAME = "postgres"
 const DSN = "host=103.212.181.187 user=ln02t password=ln-0110-2 dbname=smartlife port=5432 sslmode=disable TimeZone=Asia/Bangkok"
 
 //const SERVER_HOST = "103.212.181.187:9000"
-const SERVER_HOST = "0.0.0.0:80"
+const SERVER_HOST = "0.0.0.0:5200"
 
 /*-------------------------------------------------------------------------------------------*/
 //                                 LANGUAGE
