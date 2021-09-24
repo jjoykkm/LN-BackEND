@@ -1,13 +1,13 @@
 package main
 
 import (
-	"LN-BackEND/config"
-	"LN-BackEND/controllers"
-	"LN-BackEND/models/model_other"
-	"LN-BackEND/models/model_services"
-	"LN-BackEND/utility"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/jjoykkm/ln-backend/config"
+	"github.com/jjoykkm/ln-backend/controllers"
+	"github.com/jjoykkm/ln-backend/models/model_other"
+	"github.com/jjoykkm/ln-backend/models/model_services"
+	"github.com/jjoykkm/ln-backend/utility"
 	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -16,8 +16,8 @@ import (
 )
 
 type Ln struct {
-	Db			*gorm.DB
-	Ctrl 		controllers.Ln
+	Db   *gorm.DB
+	Ctrl controllers.Ln
 }
 
 var me Ln
@@ -35,7 +35,7 @@ func main() {
 	//fmt.Println(db)
 
 	db, err := gorm.Open(postgres.New(postgres.Config{
-		DSN: config.DSN,
+		DSN:                  config.DSN,
 		PreferSimpleProtocol: false, // disables implicit prepared statement usage
 	}), &gorm.Config{})
 	if err != nil {
@@ -60,7 +60,7 @@ func main() {
 	//}
 	fmt.Printf("Successfully connected to DB!\n")
 
-	controller:= controllers.Ln{db}
+	controller := controllers.Ln{db}
 	me = Ln{db, controller}
 
 	////GetFertilizerRatioRelate(status, formulaPlantId, language string) ([]model_services.ForPlantFert, int)
@@ -119,9 +119,7 @@ func main() {
 	http.POST("/farmAreaList", GetFarmAreaList)
 	http.POST("/scheRemind", GetScheRemind)
 
-
 	http.Run(config.SERVER_HOST)
-
 
 	////GetFertilizerer(status, language string, fertilizerIdList []string) ([]model_services.ForPlantFert, int)
 	//var ff []string
@@ -130,7 +128,6 @@ func main() {
 	//fmt.Println(reflect.TypeOf(ff))
 	//fertilizer,_ := controller.GetFertilizerer(config.STATUS_ACTIVE, config.LANGUAGE_EN, ff)
 	//fmt.Println(fertilizer)
-
 
 	////GetCountryName(db *sql.DB, countryId string, language string) string
 	//countryName := controllers.GetCountryName(db, "067ea4ff-25ef-47b4-b566-fc2ee28aa07e", config.LANGUAGE_EN)
@@ -178,7 +175,7 @@ func GetPlantCategoryList(c *gin.Context) {
 	plantCategoryList, total := me.Ctrl.GetPlantCategoryLister(config.STATUS_ACTIVE, bodyModel.Language)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
-	}else {
+	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"item":  plantCategoryList,
 			"total": total,
@@ -190,10 +187,10 @@ func GetPlantCategoryItem(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
 	//GetPlantCategoryItemer(status, plantTypeId, language string, offset int) ([]model_services.ForPlantCat, int, int)
-	plantCategoryItem, nextOffset, total := me.Ctrl.GetPlantCategoryItemer(config.STATUS_ACTIVE, bodyModel.PlantTypeId,  bodyModel.Language, bodyModel.Offset)
+	plantCategoryItem, nextOffset, total := me.Ctrl.GetPlantCategoryItemer(config.STATUS_ACTIVE, bodyModel.PlantTypeId, bodyModel.Language, bodyModel.Offset)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
-	}else {
+	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"item":   plantCategoryItem,
 			"offset": nextOffset,
@@ -209,7 +206,7 @@ func GetPlantOverviewFavorite(c *gin.Context) {
 	plantOverviewFavorite, nextOffset, total := me.Ctrl.GetPlantOverviewFavoriteer(config.STATUS_ACTIVE, bodyModel.Uid, bodyModel.Language, bodyModel.Offset)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
-	}else {
+	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"item":   plantOverviewFavorite,
 			"offset": nextOffset,
@@ -225,7 +222,7 @@ func GetMyPlantOverview(c *gin.Context) {
 	myPlantOverview, nextOffset, total := me.Ctrl.GetMyPlantOverviewer(config.STATUS_ACTIVE, bodyModel.Uid, bodyModel.Language, bodyModel.Offset)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
-	}else {
+	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"item":   myPlantOverview,
 			"offset": nextOffset,
@@ -241,7 +238,7 @@ func GetPlantOverviewByPlant(c *gin.Context) {
 	plantOverviewByPlant, nextOffset, total := me.Ctrl.GetPlantOverviewByPlanter(config.STATUS_ACTIVE, bodyModel.Uid, bodyModel.PlantId, bodyModel.Language, bodyModel.Offset)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
-	}else {
+	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"item":   plantOverviewByPlant,
 			"offset": nextOffset,
@@ -257,14 +254,15 @@ func GetFormulaPlantDetail(c *gin.Context) {
 	//GetFormulaPlantDetailer(status, formulaPlantId, language string) model_services.ForPlantFormula
 	//_, _, formulaPlant := me.Ctrl.GetSensorValueRecRelate(config.STATUS_ACTIVE, "243367fe-fc14-4074-8ff5-374220dadf8f", bodyModel.Language)
 	formulaPlant := me.Ctrl.GetFormulaPlantDetailer(config.STATUS_ACTIVE, bodyModel.FormulaPlantId, bodyModel.Language)
-	if reflect.DeepEqual(formulaPlant,model_services.ForPlantFormula{}) {
+	if reflect.DeepEqual(formulaPlant, model_services.ForPlantFormula{}) {
 		c.JSON(http.StatusNoContent, gin.H{})
-	}else {
+	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"item": formulaPlant,
 		})
 	}
 }
+
 // ------------------- dashboard ------------------------------ //
 func GetFarmList(c *gin.Context) {
 	var bodyModel model_other.PostBody
@@ -273,7 +271,7 @@ func GetFarmList(c *gin.Context) {
 	farmList, total := me.Ctrl.GetFarmLister(config.STATUS_ACTIVE, bodyModel.Uid)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
-	}else {
+	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"item":  farmList,
 			"total": total,
@@ -288,7 +286,7 @@ func GetFarmAreaDashboardList(c *gin.Context) {
 	farmAreaList, total := me.Ctrl.GetFarmAreaDashboardLister(config.STATUS_ACTIVE, bodyModel.Language, bodyModel.FarmId)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
-	}else {
+	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"item":  farmAreaList,
 			"total": total,
@@ -303,7 +301,7 @@ func GetFarmAreaDetailSensor(c *gin.Context) {
 	senSocMainList, total := me.Ctrl.GetFarmAreaDetailSensorer(config.STATUS_ACTIVE, bodyModel.FarmAreaId, bodyModel.Language)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
-	}else {
+	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"item":  senSocMainList,
 			"total": total,
@@ -316,9 +314,9 @@ func GetOverviewFarm(c *gin.Context) {
 	bodyModel = utility.GetModelFromBody(c)
 	//GetOverviewFarmer(status, farmId string) (model_services.MyFarmOverviewFarm)
 	overviewFarm := me.Ctrl.GetOverviewFarmer(config.STATUS_ACTIVE, bodyModel.FarmId)
-	if reflect.DeepEqual(overviewFarm,model_services.MyFarmOverviewFarm{}) {
+	if reflect.DeepEqual(overviewFarm, model_services.MyFarmOverviewFarm{}) {
 		c.JSON(http.StatusNoContent, gin.H{})
-	}else {
+	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"item": overviewFarm,
 		})
@@ -332,7 +330,7 @@ func GetManageMainbox(c *gin.Context) {
 	manageMainbox, total := me.Ctrl.GetManageMainboxer(config.STATUS_ACTIVE, bodyModel.Language, bodyModel.FarmId)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
-	}else {
+	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"item":  manageMainbox,
 			"total": total,
@@ -347,7 +345,7 @@ func GetManageFarmArea(c *gin.Context) {
 	manageFarmArea, total := me.Ctrl.GetManageFarmAreaer(config.STATUS_ACTIVE, bodyModel.Language, bodyModel.FarmId)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
-	}else {
+	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"item":  manageFarmArea,
 			"total": total,
@@ -362,7 +360,7 @@ func GetManageRole(c *gin.Context) {
 	manageRole, total := me.Ctrl.GetManageRoleer(config.STATUS_ACTIVE, bodyModel.Language, bodyModel.FarmId)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
-	}else {
+	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"item":  manageRole,
 			"total": total,
@@ -377,7 +375,7 @@ func GetFarmAreaList(c *gin.Context) {
 	farmArea, total := me.Ctrl.GetFarmAreaLister(config.STATUS_ACTIVE, bodyModel.FarmId)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
-	}else {
+	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"item":  farmArea,
 			"total": total,
@@ -391,9 +389,9 @@ func GetScheRemind(c *gin.Context) {
 	// GetScheReminder(status string, farmAreaId []string) model_services.ScheduleScheRemind
 	scheRemind := me.Ctrl.GetScheReminder(config.STATUS_ACTIVE, bodyModel.FarmAreaIdList)
 
-	fmt.Printf("%+v\n",scheRemind)
+	fmt.Printf("%+v\n", scheRemind)
 	c.JSON(http.StatusOK, gin.H{
-		"item":  scheRemind,
+		"item": scheRemind,
 	})
 	//if reflect.ValueOf(scheRemind).IsZero() {
 	//	c.JSON(http.StatusNoContent, gin.H{})

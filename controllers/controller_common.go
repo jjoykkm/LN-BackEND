@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"LN-BackEND/config"
-	"LN-BackEND/models/model_databases"
 	"fmt"
+	"github.com/jjoykkm/ln-backend/config"
+	"github.com/jjoykkm/ln-backend/models/model_databases"
 	"log"
 )
 
@@ -31,7 +31,7 @@ func (ln Ln) GetFarmAreaByFarmId(status, farmId string) ([]model_databases.FarmA
 	var total int
 
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND farm_id = '%s'",
-	config.DB_FARM_AREA, status, farmId)
+		config.DB_FARM_AREA, status, farmId)
 	fmt.Println(sql)
 	err := ln.Db.Raw(sql).Scan(&farmModel).Error
 	if err != nil {

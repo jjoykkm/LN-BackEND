@@ -1,4 +1,4 @@
-module LN-BackEND
+module github.com/jjoykkm/ln-backend
 
 go 1.16
 

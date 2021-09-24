@@ -1,11 +1,11 @@
 package controllers
 
 import (
-	"LN-BackEND/config"
-	"LN-BackEND/models/model_databases"
-	"LN-BackEND/models/model_services"
-	"LN-BackEND/utility"
 	"fmt"
+	"github.com/jjoykkm/ln-backend/config"
+	"github.com/jjoykkm/ln-backend/models/model_databases"
+	"github.com/jjoykkm/ln-backend/models/model_services"
+	"github.com/jjoykkm/ln-backend/utility"
 	"github.com/mitchellh/mapstructure"
 	"log"
 )
@@ -154,7 +154,7 @@ func (ln Ln) GetFarmAreaDetailSensorer(status, farmAreaId, language string) ([]m
 	sensorTypeMap := make(map[string]string)
 	statusSensorMap := make(map[string]string)
 
-	socAreaAr , sensorIdList, mainboxIdList := IntDashboard.GetSocketLister(ln, status, farmAreaId)
+	socAreaAr, sensorIdList, mainboxIdList := IntDashboard.GetSocketLister(ln, status, farmAreaId)
 
 	_, sensorMap := IntDashboard.GetSensorByIder(ln, config.STATUS_ACTIVE, sensorIdList)
 	_, mainboxMap := IntDashboard.GetMainboxByIder(ln, config.STATUS_ACTIVE, mainboxIdList)
@@ -167,7 +167,7 @@ func (ln Ln) GetFarmAreaDetailSensorer(status, farmAreaId, language string) ([]m
 		//Get Status Sensor name
 		senSocMain.StatusSensorName, found = statusSensorMap[senSocMain.StatusSensorId.UUID.String()]
 		if !found {
-			_, senSocMain.StatusSensorName= IntDashboard.GetStatusSensorer(ln, senSocMain.StatusSensorId.UUID.String())
+			_, senSocMain.StatusSensorName = IntDashboard.GetStatusSensorer(ln, senSocMain.StatusSensorId.UUID.String())
 			statusSensorMap[senSocMain.StatusSensorId.UUID.String()] = senSocMain.StatusSensorName
 		}
 

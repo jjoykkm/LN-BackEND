@@ -1,11 +1,11 @@
 package controllers
 
 import (
-	"LN-BackEND/config"
-	"LN-BackEND/models/model_databases"
-	"LN-BackEND/models/model_services"
-	"LN-BackEND/utility"
 	"fmt"
+	"github.com/jjoykkm/ln-backend/config"
+	"github.com/jjoykkm/ln-backend/models/model_databases"
+	"github.com/jjoykkm/ln-backend/models/model_services"
+	"github.com/jjoykkm/ln-backend/utility"
 	"github.com/mitchellh/mapstructure"
 	"log"
 )
@@ -72,7 +72,7 @@ func (ln Ln) GetScheduleer(status string, scheIdList []string) ([]model_database
 	if err != nil {
 		log.Print(err)
 	}
-	fmt.Printf("%+v\n",structSR)
+	fmt.Printf("%+v\n", structSR)
 	for _, wa := range structSR {
 		freqTypeIdList = append(freqTypeIdList, wa.FreqType.FrequencyTypeId.UUID.String())
 		inTypeIdList = append(inTypeIdList, wa.IndicateType.IndicateTypeId.UUID.String())
@@ -180,7 +180,7 @@ func (ln Ln) GetScheReminder(status string, farmAreaId []string) model_services.
 		}
 		if wa.IsReminder {
 			scheRemind.ScheduleList = append(scheRemind.ScheduleList, structSR)
-		}else {
+		} else {
 			scheRemind.ReminderList = append(scheRemind.ReminderList, structSR)
 		}
 	}

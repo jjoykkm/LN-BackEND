@@ -1,11 +1,11 @@
 package controllers
 
 import (
-	"LN-BackEND/config"
-	"LN-BackEND/models/model_databases"
-	"LN-BackEND/models/model_services"
-	"LN-BackEND/utility"
 	"fmt"
+	"github.com/jjoykkm/ln-backend/config"
+	"github.com/jjoykkm/ln-backend/models/model_databases"
+	"github.com/jjoykkm/ln-backend/models/model_services"
+	"github.com/jjoykkm/ln-backend/utility"
 	"github.com/mitchellh/mapstructure"
 	"log"
 )
@@ -39,10 +39,9 @@ func (ln Ln) GetPlantCategoryLister(status, language string) ([]model_services.F
 		config.DB_PLANT_TYPE, status)
 	fmt.Println(sql)
 	err := ln.Db.Raw(sql).Scan(&plantTypeArray).Error
-if err != nil {
+	if err != nil {
 		log.Print(err)
 	}
-	
 
 	for _, plantType := range plantTypeArray {
 		mapstructure.Decode(plantType, &catList)
@@ -66,7 +65,7 @@ func (ln Ln) GetPlantCategoryItemer(status, plantTypeId, language string, offset
 	var sqlScopePT string
 
 	if plantTypeId != "" {
-		sqlScopePT = fmt.Sprintf("AND %s.plant_type_id = '%s'",config.DB_PLANT, plantTypeId)
+		sqlScopePT = fmt.Sprintf("AND %s.plant_type_id = '%s'", config.DB_PLANT, plantTypeId)
 	}
 
 	var joinPlantAndPlantTypeArray []model_services.JoinPlantAndPlantType
@@ -436,10 +435,10 @@ func (ln Ln) GetSensorValueRecRelateer(status, formulaPlantId, language string) 
 	for _, join := range joinArray {
 		mapstructure.Decode(join, &plantSensor)
 		switch language {
-			case config.LANGUAGE_EN:
-				plantSensor.SensorTypeName = join.SensorTypeNameEN
-			case config.LANGUAGE_TH:
-				plantSensor.SensorTypeName = join.SensorTypeNameTH
+		case config.LANGUAGE_EN:
+			plantSensor.SensorTypeName = join.SensorTypeNameEN
+		case config.LANGUAGE_TH:
+			plantSensor.SensorTypeName = join.SensorTypeNameTH
 		}
 		plantSensorArray = append(plantSensorArray, plantSensor)
 	}
@@ -452,7 +451,7 @@ func (ln Ln) GetFormulaPlantDetailer(status, formulaPlantId, language string) mo
 	var formulaPlantModel model_databases.FormulaPlant
 	var formula model_services.ForPlantFormula
 
-	if formulaPlantId == ""{
+	if formulaPlantId == "" {
 		return formula
 	}
 

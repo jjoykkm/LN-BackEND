@@ -1,20 +1,21 @@
 package controllers
 
 import (
-	"LN-BackEND/config"
-	"LN-BackEND/models/model_databases"
-	"LN-BackEND/models/model_services"
-	"LN-BackEND/utility"
 	"fmt"
+	"github.com/jjoykkm/ln-backend/config"
+	"github.com/jjoykkm/ln-backend/models/model_databases"
+	"github.com/jjoykkm/ln-backend/models/model_services"
+	"github.com/jjoykkm/ln-backend/utility"
 	"github.com/mitchellh/mapstructure"
 	"log"
 )
+
 /*-------------------------------------------------------------------------------------------*/
 //                                 INTERFACE
 /*-------------------------------------------------------------------------------------------*/
 type IntMyFarm interface {
 	GetFarmListWithRoleer(status, uid, roleId string) ([]model_services.DashboardFarmList, int)
-	GetOverviewFarmer(status, farmId string) (model_services.MyFarmOverviewFarm)
+	GetOverviewFarmer(status, farmId string) model_services.MyFarmOverviewFarm
 	GetTransSocketAreaer(status, farmId string) ([]model_databases.TransSocketArea, []string, []string, []string, int)
 	GetSocketByIder(status string, socketIdList []string) ([]model_databases.Socket, map[string]model_databases.Socket)
 	GetSocketWithSensorer(status, language string, socketIdList []string) ([]model_services.MyFarmSenSocDetail, map[string]model_services.MyFarmSenSocDetail, int)
@@ -44,7 +45,7 @@ func (ln Ln) GetFarmListWithRoleer(status, uid, roleId string) ([]model_services
 	return farmList, total
 }
 
-func (ln Ln) GetOverviewFarmer(status, farmId string) (model_services.MyFarmOverviewFarm) {
+func (ln Ln) GetOverviewFarmer(status, farmId string) model_services.MyFarmOverviewFarm {
 	var farmList []model_databases.TransSocketArea
 	mbList := make(map[string]bool)
 	faList := make(map[string]bool)
@@ -164,7 +165,7 @@ func (ln Ln) GetSocketWithSensorer(status, language string, socketIdList []strin
 		//Get Status Sensor name
 		wa.StatusSensorName, found = statusSensorMap[wa.StatusSensorId.UUID.String()]
 		if !found {
-			_, wa.StatusSensorName= IntDashboard.GetStatusSensorer(ln, wa.StatusSensorId.UUID.String())
+			_, wa.StatusSensorName = IntDashboard.GetStatusSensorer(ln, wa.StatusSensorId.UUID.String())
 			statusSensorMap[wa.StatusSensorId.UUID.String()] = wa.StatusSensorName
 		}
 		joinArray[idx] = wa
@@ -176,7 +177,7 @@ func (ln Ln) GetSocketWithSensorer(status, language string, socketIdList []strin
 	return joinArray, socSenMap, total
 }
 
-func (ln Ln) GetSocSenByKeyer(mainboxId, farmAreaId string, tranSoc []model_databases.TransSocketArea, socSenMap map[string]model_services.MyFarmSenSocDetail) ([]model_services.MyFarmSenSocDetail, int){
+func (ln Ln) GetSocSenByKeyer(mainboxId, farmAreaId string, tranSoc []model_databases.TransSocketArea, socSenMap map[string]model_services.MyFarmSenSocDetail) ([]model_services.MyFarmSenSocDetail, int) {
 	var list []model_services.MyFarmSenSocDetail
 	var total int
 
@@ -186,7 +187,7 @@ func (ln Ln) GetSocSenByKeyer(mainboxId, farmAreaId string, tranSoc []model_data
 				socSen, _ := socSenMap[wa.SocketId.UUID.String()]
 				list = append(list, socSen)
 			}
-		}else if farmAreaId != "" {
+		} else if farmAreaId != "" {
 			if wa.FarmAreaId.UUID.String() == farmAreaId {
 				socSen, _ := socSenMap[wa.SocketId.UUID.String()]
 				list = append(list, socSen)
@@ -296,4 +297,3 @@ func (ln Ln) GetManageRoleer(status, language, farmId string) ([]model_services.
 	total = len(roleList)
 	return roleList, total
 }
-

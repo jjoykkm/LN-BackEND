@@ -1,9 +1,9 @@
 package utility
 
 import (
-	"LN-BackEND/models/model_other"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"github.com/jjoykkm/ln-backend/models/model_other"
 	"net/http"
 )
 
