@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/config"
 	"github.com/jjoykkm/ln-backend/controllers"
@@ -94,7 +95,7 @@ func main() {
 	//GetAllDetailSensor(status, farmId, language string) ([]model_services.SenSocMainList, int)
 
 	http := gin.Default()
-
+	http.Use(cors.Default())
 	// Formula Plant
 	http.POST("/test", Test)
 	http.POST("/plantCategoryList", GetPlantCategoryList)
