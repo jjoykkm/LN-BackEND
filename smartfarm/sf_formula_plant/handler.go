@@ -3,7 +3,6 @@ package sf_formula_plant
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/config"
-	"github.com/jjoykkm/ln-backend/utility"
 	"net/http"
 )
 
@@ -16,15 +15,16 @@ func NewHandler(service Servicer) *Handler {
 }
 
 func (h *Handler) GetPlantCategoryList(c *gin.Context) {
-	bodyModel := utility.GetModelFromBody(c)
+	var bodyReq BodyReq
+	if err := c.Bind(&bodyReq); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{})
+		return
+	}
 	// GetPlantCategoryList(status, language string) ([]model_services.ForPlantCatList, int)
-	plantCategoryList, total := h.service.GetPlantCategoryList(config.STATUS_ACTIVE, bodyModel.Language)
-	if total == 0 {
+	bodyResp := h.service.GetPlantCategoryList(config.STATUS_ACTIVE, bodyReq.Language)
+	if bodyResp.Total < 1 {
 		c.JSON(http.StatusNoContent, gin.H{})
 	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"item":  plantCategoryList,
-			"total": total,
-		})
+		c.JSON(http.StatusOK, bodyResp)
 	}
 }

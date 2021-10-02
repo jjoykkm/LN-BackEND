@@ -1,13 +1,26 @@
 package sf_formula_plant
 
 import (
+	"fmt"
 	"github.com/jjoykkm/ln-backend/config"
+	"github.com/jjoykkm/ln-backend/models/model_databases"
 	"github.com/jjoykkm/ln-backend/models/model_services"
+	"github.com/jjoykkm/ln-backend/utility"
 	"github.com/mitchellh/mapstructure"
+	"log"
 )
 
 type Servicer interface {
-	GetPlantCategoryList(status, language string) ([]model_services.ForPlantCatList, int)
+	GetPlantCategoryList(status, language string) *BodyResp
+	//GetPlantCategoryItem(status, plantTypeId, language string, offset int) ([]PlantTypeCat, int, int)
+	//GetFavoriteFormulaPlant(status, uid string) ([]model_databases.FavoritePlant, []string, map[string]bool)
+	GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlant) (float32, int)
+	//GetPlantOverviewFavorite(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int)
+	//GetMyPlantOverview(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int)
+	//GetPlantOverviewByPlant(status, uid, plantId, language string, offset int) ([]model_services.ForPlantItem, int, int)
+	//GetFertilizerRatioRelate(status, formulaPlantId, language string) ([]model_services.ForPlantFert, int)
+	//GetSensorValueRecRelate(status, formulaPlantId, language string) ([]model_services.ForPlantSensor, int)
+	//GetFormulaPlantDetail(status, formulaPlantId, language string) model_services.ForPlantFormula
 }
 
 type Service struct {
@@ -20,26 +33,448 @@ func NewService(repo Repositorier) Servicer {
 	}
 }
 
-func (s *Service) GetPlantCategoryList(status, language string) ([]model_services.ForPlantCatList, int) {
-	var catList model_services.ForPlantCatList
-	var catListArray []model_services.ForPlantCatList
+func (s *Service) GetPlantCategoryList(status, language string) *BodyResp {
+	var ptCat PlantTypeCat
+	var ptCatList []PlantTypeCat
 
 	plantTypeList, err := s.repo.FindAllPlantType(status)
 
 	if err != nil{
-		return nil, 0
+		return &BodyResp{
+			Item: nil,
+			Total: 0,
+		}
 	}
 
 	for _, plantType := range plantTypeList {
-		mapstructure.Decode(plantType, &catList)
+		mapstructure.Decode(plantType, &ptCat)
 		switch language {
 		case config.LANGUAGE_EN:
-			catList.PlantTypeName = plantType.PlantTypeEN
+			ptCat.PlantTypeName = plantType.PlantTypeEN
 		case config.LANGUAGE_TH:
-			catList.PlantTypeName = plantType.PlantTypeTH
+			ptCat.PlantTypeName = plantType.PlantTypeTH
 		}
-		catListArray = append(catListArray, catList)
+		ptCatList = append(ptCatList, ptCat)
 	}
 
-	return catListArray, len(catListArray)
+	return &BodyResp{
+		Item: ptCatList,
+		Total: len(ptCatList),
+	}
 }
+
+func (s *Service) GetPlantCategoryItem(status, plantTypeId, language string, offset int) ([]PlantTypeCat, int, int) {
+	var plantCat PlantTypeCat
+	var plantCatArray []PlantTypeCat
+	var currentOffset int
+	var total int
+	var sqlScopePT string
+
+	if plantTypeId != "" {
+		sqlScopePT = fmt.Sprintf("AND %s.plant_type_id = '%s'", config.DB_PLANT, plantTypeId)
+	}
+
+	var joinPlantAndPlantTypeArray []model_services.JoinPlantAndPlantType
+
+	//sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.plant_type_id = %s.plant_type_id WHERE %s.status_id = '%s' %s OFFSET %d LIMIT 100",
+	//	config.DB_PLANT, config.DB_PLANT_TYPE, config.DB_PLANT, config.DB_PLANT_TYPE, config.DB_PLANT, status, sqlScopePT, offset)
+	//fmt.Println(sql)
+	//err := ln.Db.Raw(sql).Scan(&joinPlantAndPlantTypeArray).Error
+	//if err != nil {
+	//	log.Print(err)
+	//}
+	//
+	//for _, joinPlantAndPlantType := range joinPlantAndPlantTypeArray {
+	//	mapstructure.Decode(joinPlantAndPlantType, &plantCat)
+	//	switch language {
+	//	case config.LANGUAGE_EN:
+	//		plantCat.PlantTypeName = joinPlantAndPlantType.PlantTypeEN
+	//		plantCat.PlantName = joinPlantAndPlantType.PlantNameEN
+	//		plantCat.PlantDesc = joinPlantAndPlantType.PlantDescEN
+	//	case config.LANGUAGE_TH:
+	//		plantCat.PlantTypeName = joinPlantAndPlantType.PlantTypeTH
+	//		plantCat.PlantName = joinPlantAndPlantType.PlantNameTH
+	//		plantCat.PlantDesc = joinPlantAndPlantType.PlantDescTH
+	//	}
+	//	cond := fmt.Sprintf("plant_id = '%s'", joinPlantAndPlantType.PlantId.UUID.String())
+	//	plantCat.TotalItem = utility.GetCountTable(ln.Db, config.STATUS_ACTIVE, config.DB_FORMULA_PLANT, "formula_plant_id", cond)
+	//	plantCatArray = append(plantCatArray, plantCat)
+	//}
+	//total = len(plantCatArray)
+	//currentOffset = offset + total
+	return plantCatArray, currentOffset, total
+}
+
+//func (s *Service) GetFavoriteFormulaPlanter(status, uid string) ([]model_databases.FavoritePlant, []string, map[string]bool) {
+//	var favPlantArray []model_databases.FavoritePlant
+//	var formulaPlantList []string
+//
+//	if uid == "" {
+//		return nil, nil, nil
+//	}
+//
+//	formulaPlantMap := make(map[string]bool)
+//
+//	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND uid = '%s' ORDER BY change_date ASC",
+//		config.DB_FAVORITE_PLANT, status, uid)
+//	fmt.Println(sql)
+//	err := ln.Db.Raw(sql).Scan(&favPlantArray).Error
+//	if err != nil {
+//		log.Print(err)
+//	}
+//
+//	for _, favPlant := range favPlantArray {
+//		formulaPlantList = append(formulaPlantList, favPlant.FormulaPlantId.UUID.String())
+//		formulaPlantMap[favPlant.FormulaPlantId.UUID.String()] = true
+//	}
+//
+//	return favPlantArray, formulaPlantList, formulaPlantMap
+//}
+
+func (s *Service) GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlant) (float32, int) {
+	var rateScore float32
+	var ratePeople int
+
+	ratePeople = formulaPlant.Recommend1 + formulaPlant.Recommend2 + formulaPlant.Recommend3 + formulaPlant.Recommend4 + formulaPlant.Recommend5
+
+	rateScore += float32(formulaPlant.Recommend1)
+	rateScore += (float32(formulaPlant.Recommend2) * 2)
+	rateScore += (float32(formulaPlant.Recommend3) * 3)
+	rateScore += (float32(formulaPlant.Recommend4) * 4)
+	rateScore += (float32(formulaPlant.Recommend5) * 5)
+	rateScore = rateScore / float32(ratePeople)
+
+	return rateScore, ratePeople
+}
+//
+//func (s *Service) GetPlantOverviewFavoriteer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int) {
+//	var joinArray []model_services.JoinFormulaPlantAndPlant
+//	var formulaPlant model_databases.FormulaPlant
+//	var plantOverview model_services.ForPlantItem
+//	var plantOverviewArray []model_services.ForPlantItem
+//	var currentOffset int
+//	var total int
+//	var found bool
+//
+//	if uid == "" {
+//		return nil, offset, 0
+//	}
+//
+//	countryMap := make(map[string]string)
+//	provinceMap := make(map[string]string)
+//	plantTypeMap := make(map[string]string)
+//	userMap := make(map[string]string)
+//
+//	_, formulaPlantList, _ := IntFormulaPlant.GetFavoriteFormulaPlanter(ln, config.STATUS_ACTIVE, uid)
+//	sqlIn := utility.ConvertListToStringIn(formulaPlantList)
+//	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.plant_id = %s.plant_id WHERE %s.status_id = '%s' AND %s.formula_plant_id IN %s OFFSET %d LIMIT 100",
+//		config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, status, config.DB_FORMULA_PLANT, sqlIn, offset)
+//	fmt.Println(sql)
+//	err := ln.Db.Raw(sql).Scan(&joinArray).Error
+//	if err != nil {
+//		log.Print(err)
+//	}
+//
+//	for _, join := range joinArray {
+//		mapstructure.Decode(join, &plantOverview)
+//		mapstructure.Decode(join, &formulaPlant)
+//		plantOverview.RateScore, plantOverview.RatePeople = IntFormulaPlant.GetRateScoreAndPeopleer(ln, formulaPlant)
+//		plantOverview.IsFavorite = true
+//
+//		//Get Country name
+//		plantOverview.CountryName, found = countryMap[plantOverview.CountryId.UUID.String()]
+//		if !found {
+//			_, plantOverview.CountryName = IntCommon.GetCountryNameer(ln, plantOverview.CountryId.UUID.String(), language)
+//			countryMap[plantOverview.CountryId.UUID.String()] = plantOverview.CountryName
+//		}
+//
+//		//Get Country name
+//		plantOverview.ProvinceName, found = provinceMap[plantOverview.ProvinceId.UUID.String()]
+//		if !found {
+//			_, plantOverview.ProvinceName = IntCommon.GetProvinceNameer(ln, plantOverview.ProvinceId.UUID.String(), language)
+//			provinceMap[plantOverview.ProvinceId.UUID.String()] = plantOverview.ProvinceName
+//		}
+//
+//		//Get Plant Type name
+//		plantOverview.PlantTypeName, found = plantTypeMap[plantOverview.PlantTypeId.UUID.String()]
+//		if !found {
+//			_, plantOverview.PlantTypeName = IntCommon.GetPlantTypeNameer(ln, plantOverview.PlantTypeId.UUID.String(), language)
+//			plantTypeMap[plantOverview.PlantTypeId.UUID.String()] = plantOverview.PlantTypeName
+//		}
+//
+//		//Get User name
+//		plantOverview.Username, found = userMap[plantOverview.Uid.UUID.String()]
+//		if !found {
+//			_, plantOverview.Username = IntCommon.GetUserNameer(ln, plantOverview.Uid.UUID.String())
+//			plantTypeMap[plantOverview.Uid.UUID.String()] = plantOverview.Username
+//		}
+//
+//		plantOverviewArray = append(plantOverviewArray, plantOverview)
+//	}
+//	total = len(plantOverviewArray)
+//	currentOffset = offset + total
+//	return plantOverviewArray, currentOffset, total
+//}
+//
+//func (s *Service) GetMyPlantOverviewer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int) {
+//	var formulaPlant model_databases.FormulaPlant
+//	var plantOverview model_services.ForPlantItem
+//	var joinArray []model_services.JoinFormulaPlantAndPlant
+//	var plantOverviewArray []model_services.ForPlantItem
+//	var currentOffset int
+//	var total int
+//	var found bool
+//	var countryMap map[string]string
+//	var provinceMap map[string]string
+//	var plantTypeMap map[string]string
+//	var formulaPlantFavMap map[string]bool
+//	var userMap map[string]string
+//
+//	if uid == "" {
+//		return nil, offset, 0
+//	}
+//
+//	countryMap = make(map[string]string)
+//	provinceMap = make(map[string]string)
+//	plantTypeMap = make(map[string]string)
+//	userMap = make(map[string]string)
+//
+//	_, _, formulaPlantFavMap = IntFormulaPlant.GetFavoriteFormulaPlanter(ln, config.STATUS_ACTIVE, uid)
+//	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.plant_id = %s.plant_id WHERE %s.status_id = '%s' AND %s.uid = '%s' OFFSET %d LIMIT 100",
+//		config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, status, config.DB_FORMULA_PLANT, uid, offset)
+//	fmt.Println(sql)
+//	err := ln.Db.Raw(sql).Scan(&joinArray).Error
+//	if err != nil {
+//		log.Print(err)
+//	}
+//
+//	for _, join := range joinArray {
+//		mapstructure.Decode(join, &formulaPlant)
+//		mapstructure.Decode(join, &plantOverview)
+//		plantOverview.RateScore, plantOverview.RatePeople = IntFormulaPlant.GetRateScoreAndPeopleer(ln, formulaPlant)
+//
+//		//Get Country name
+//		plantOverview.CountryName, found = countryMap[plantOverview.CountryId.UUID.String()]
+//		if !found {
+//			_, plantOverview.CountryName = IntCommon.GetCountryNameer(ln, plantOverview.CountryId.UUID.String(), language)
+//			countryMap[plantOverview.CountryId.UUID.String()] = plantOverview.CountryName
+//		}
+//
+//		//Get Country name
+//		plantOverview.ProvinceName, found = provinceMap[plantOverview.ProvinceId.UUID.String()]
+//		if !found {
+//			_, plantOverview.ProvinceName = IntCommon.GetProvinceNameer(ln, plantOverview.ProvinceId.UUID.String(), language)
+//			provinceMap[plantOverview.ProvinceId.UUID.String()] = plantOverview.ProvinceName
+//		}
+//
+//		//Get Plant Type name
+//		plantOverview.PlantTypeName, found = plantTypeMap[plantOverview.PlantTypeId.UUID.String()]
+//		if !found {
+//			_, plantOverview.PlantTypeName = IntCommon.GetPlantTypeNameer(ln, plantOverview.PlantTypeId.UUID.String(), language)
+//			plantTypeMap[plantOverview.PlantTypeId.UUID.String()] = plantOverview.PlantTypeName
+//		}
+//
+//		//Check Favorite
+//		plantOverview.IsFavorite, found = formulaPlantFavMap[plantOverview.Uid.UUID.String()]
+//		if !found {
+//			plantOverview.IsFavorite = false
+//		}
+//
+//		//Get User name
+//		plantOverview.Username, found = userMap[plantOverview.Uid.UUID.String()]
+//		if !found {
+//			_, plantOverview.Username = IntCommon.GetUserNameer(ln, plantOverview.Uid.UUID.String())
+//			plantTypeMap[plantOverview.Uid.UUID.String()] = plantOverview.Username
+//		}
+//
+//		plantOverviewArray = append(plantOverviewArray, plantOverview)
+//	}
+//
+//	total = len(plantOverviewArray)
+//	currentOffset = offset + total
+//
+//	return plantOverviewArray, currentOffset, total
+//}
+//
+//func (s *Service) GetPlantOverviewByPlanter(status, uid, plantId, language string, offset int) ([]model_services.ForPlantItem, int, int) {
+//	var formulaPlant model_databases.FormulaPlant
+//	var joinArray []model_services.JoinFormulaPlantAndPlant
+//	var plantOverview model_services.ForPlantItem
+//	var plantOverviewArray []model_services.ForPlantItem
+//	var currentOffset int
+//	var total int
+//	var found bool
+//	var countryMap map[string]string
+//	var provinceMap map[string]string
+//	var plantTypeMap map[string]string
+//	var formulaPlantFavMap map[string]bool
+//	var userMap map[string]string
+//
+//	if uid == "" && plantId == "" {
+//		return nil, offset, 0
+//	}
+//
+//	countryMap = make(map[string]string)
+//	provinceMap = make(map[string]string)
+//	plantTypeMap = make(map[string]string)
+//	userMap = make(map[string]string)
+//
+//	_, _, formulaPlantFavMap = IntFormulaPlant.GetFavoriteFormulaPlanter(ln, config.STATUS_ACTIVE, uid)
+//	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.plant_id = %s.plant_id WHERE %s.status_id = '%s' AND %s.plant_id = '%s' OFFSET %d LIMIT 100",
+//		config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, status, config.DB_FORMULA_PLANT, plantId, offset)
+//	fmt.Println(sql)
+//	err := ln.Db.Raw(sql).Scan(&joinArray).Error
+//	if err != nil {
+//		log.Print(err)
+//	}
+//
+//	for _, join := range joinArray {
+//		mapstructure.Decode(join, &plantOverview)
+//		mapstructure.Decode(join, &formulaPlant)
+//		plantOverview.RateScore, plantOverview.RatePeople = IntFormulaPlant.GetRateScoreAndPeopleer(ln, formulaPlant)
+//
+//		//Get Country name
+//		plantOverview.CountryName, found = countryMap[plantOverview.CountryId.UUID.String()]
+//		if !found {
+//			_, plantOverview.CountryName = IntCommon.GetCountryNameer(ln, plantOverview.CountryId.UUID.String(), language)
+//			countryMap[plantOverview.CountryId.UUID.String()] = plantOverview.CountryName
+//		}
+//
+//		//Get Country name
+//		plantOverview.ProvinceName, found = provinceMap[plantOverview.ProvinceId.UUID.String()]
+//		if !found {
+//			_, plantOverview.ProvinceName = IntCommon.GetProvinceNameer(ln, plantOverview.ProvinceId.UUID.String(), language)
+//			provinceMap[plantOverview.ProvinceId.UUID.String()] = plantOverview.ProvinceName
+//		}
+//
+//		//Get Plant Type name
+//		plantOverview.PlantTypeName, found = plantTypeMap[plantOverview.PlantTypeId.UUID.String()]
+//		if !found {
+//			_, plantOverview.PlantTypeName = IntCommon.GetPlantTypeNameer(ln, plantOverview.PlantTypeId.UUID.String(), language)
+//			plantTypeMap[plantOverview.PlantTypeId.UUID.String()] = plantOverview.PlantTypeName
+//		}
+//
+//		//Check Favorite
+//		plantOverview.IsFavorite, found = formulaPlantFavMap[plantOverview.Uid.UUID.String()]
+//		if !found {
+//			plantOverview.IsFavorite = false
+//		}
+//
+//		//Get User name
+//		plantOverview.Username, found = userMap[plantOverview.Uid.UUID.String()]
+//		if !found {
+//			_, plantOverview.Username = IntCommon.GetUserNameer(ln, plantOverview.Uid.UUID.String())
+//			plantTypeMap[plantOverview.Uid.UUID.String()] = plantOverview.Username
+//		}
+//
+//		plantOverviewArray = append(plantOverviewArray, plantOverview)
+//	}
+//
+//	total = len(plantOverviewArray)
+//	currentOffset = offset + total
+//
+//	return plantOverviewArray, currentOffset, total
+//}
+//
+//func (s *Service) GetFertilizerRatioRelateer(status, formulaPlantId, language string) ([]model_services.ForPlantFert, int) {
+//	var joinArray []model_services.JoinFertilizerAndPlant
+//	var plantFert model_services.ForPlantFert
+//	var plantFertArray []model_services.ForPlantFert
+//	var total int
+//	var found bool
+//	var fertCatMap map[string]string
+//
+//	if formulaPlantId == "" {
+//		return nil, 0
+//	}
+//
+//	fertCatMap = make(map[string]string)
+//	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.fertilizer_id = %s.fertilizer_id WHERE %s.status_id = '%s' AND %s.formula_plant_id = '%s'",
+//		config.DB_FERTILIZER, config.DB_TRANS_FERTILIZER_RATIO, config.DB_FERTILIZER, config.DB_TRANS_FERTILIZER_RATIO, config.DB_FERTILIZER, status, config.DB_TRANS_FERTILIZER_RATIO, formulaPlantId)
+//	fmt.Println(sql)
+//	err := ln.Db.Raw(sql).Scan(&joinArray).Error
+//	if err != nil {
+//		log.Print(err)
+//	}
+//
+//	for _, join := range joinArray {
+//		mapstructure.Decode(join, &plantFert)
+//		switch language {
+//		case config.LANGUAGE_EN:
+//			plantFert.FertilizerName = join.FertilizerEN
+//		case config.LANGUAGE_TH:
+//			plantFert.FertilizerName = join.FertilizerTH
+//		}
+//
+//		//Get Fertilizer category name
+//		plantFert.FertCatName, found = fertCatMap[plantFert.FertCatId.UUID.String()]
+//		if !found {
+//			_, plantFert.FertCatName = IntCommon.GetFertCatNameer(ln, plantFert.FertCatId.UUID.String(), language)
+//			fertCatMap[plantFert.FertCatId.UUID.String()] = plantFert.FertCatName
+//		}
+//
+//		plantFertArray = append(plantFertArray, plantFert)
+//	}
+//
+//	total = len(plantFertArray)
+//
+//	return plantFertArray, total
+//}
+//
+//func (s *Service) GetSensorValueRecRelateer(status, formulaPlantId, language string) ([]model_services.ForPlantSensor, int) {
+//	var joinArray []model_services.JoinSensorTypeAndTrans
+//	var plantSensor model_services.ForPlantSensor
+//	var plantSensorArray []model_services.ForPlantSensor
+//	var total int
+//
+//	if formulaPlantId == "" {
+//		return nil, 0
+//	}
+//
+//	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.sensor_type_id= %s.sensor_type_id WHERE %s.status_id = '%s' AND %s.formula_plant_id = '%s'",
+//		config.DB_SENSOR_TYPE, config.DB_TRANS_SENSOR_VALUE_REC, config.DB_SENSOR_TYPE, config.DB_TRANS_SENSOR_VALUE_REC, config.DB_SENSOR_TYPE, status, config.DB_TRANS_SENSOR_VALUE_REC, formulaPlantId)
+//	fmt.Println(sql)
+//	err := ln.Db.Raw(sql).Scan(&joinArray).Error
+//	if err != nil {
+//		log.Print(err)
+//	}
+//	for _, join := range joinArray {
+//		mapstructure.Decode(join, &plantSensor)
+//		switch language {
+//		case config.LANGUAGE_EN:
+//			plantSensor.SensorTypeName = join.SensorTypeNameEN
+//		case config.LANGUAGE_TH:
+//			plantSensor.SensorTypeName = join.SensorTypeNameTH
+//		}
+//		plantSensorArray = append(plantSensorArray, plantSensor)
+//	}
+//	total = len(plantSensorArray)
+//
+//	return plantSensorArray, total
+//}
+//
+//func (s *Service) GetFormulaPlantDetailer(status, formulaPlantId, language string) model_services.ForPlantFormula {
+//	var formulaPlantModel model_databases.FormulaPlant
+//	var formula model_services.ForPlantFormula
+//
+//	if formulaPlantId == "" {
+//		return formula
+//	}
+//
+//	condition := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND formula_plant_id = '%s'",
+//		config.DB_FORMULA_PLANT, status, formulaPlantId)
+//	fmt.Println(condition)
+//	err := ln.Db.Raw(condition).Scan(&formulaPlantModel).Error
+//	if err != nil {
+//		log.Print(err)
+//	}
+//	mapstructure.Decode(formulaPlantModel, &formula)
+//
+//	_, formula.Username = IntCommon.GetUserNameer(ln, formula.Uid.UUID.String())
+//
+//	formula.SensorList, _ = IntFormulaPlant.GetSensorValueRecRelateer(ln, config.STATUS_ACTIVE, formula.FormulaPlantId.UUID.String(), language)
+//
+//	formula.FertList, _ = IntFormulaPlant.GetFertilizerRatioRelateer(ln, config.STATUS_ACTIVE, formula.FormulaPlantId.UUID.String(), language)
+//
+//	return formula
+//}

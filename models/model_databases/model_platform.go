@@ -2,6 +2,7 @@ package model_databases
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -25,4 +26,9 @@ func (u *Platform) New() *Platform {
 		ChangeDate:		u.ChangeDate ,
 		StatusId:		u.StatusId ,
 	}
+}
+
+// Custom table name for GORM
+func (Platform) TableName() string {
+	return config.DB_PLATFORM
 }

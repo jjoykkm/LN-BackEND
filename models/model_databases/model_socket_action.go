@@ -2,6 +2,7 @@ package model_databases
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -31,5 +32,10 @@ func (u *SocketAction) New() *SocketAction {
 		ChangeDate:			u.ChangeDate ,
 		StatusId:			u.StatusId ,
 	}
+}
+
+// Custom table name for GORM
+func (SocketAction) TableName() string {
+	return config.DB_SOCKET_ACTION
 }
 

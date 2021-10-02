@@ -2,6 +2,7 @@ package model_databases
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -51,6 +52,10 @@ func (u *FormulaPlant) New() *FormulaPlant {
 	}
 }
 
+// Custom table name for GORM
+func (FormulaPlant) TableName() string {
+	return config.DB_FORMULA_PLANT
+}
 
 
 

@@ -2,6 +2,7 @@ package model_databases
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -35,4 +36,9 @@ func (u *SessionTime) New() *SessionTime {
 		Uid:				u.Uid ,
 		SessionActionId:	u.SessionActionId ,
 	}
+}
+
+// Custom table name for GORM
+func (SessionTime) TableName() string {
+	return config.DB_SESSION_TIME
 }

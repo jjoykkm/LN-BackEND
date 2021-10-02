@@ -2,6 +2,7 @@ package model_databases
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -35,4 +36,9 @@ func (u *Plant) New() *Plant {
 		PlantTypeId:	u.PlantTypeId ,
 		TotalItem:		u.TotalItem ,
 	}
+}
+
+// Custom table name for GORM
+func (Plant) TableName() string {
+	return config.DB_PLANT
 }

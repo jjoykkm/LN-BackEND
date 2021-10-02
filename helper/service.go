@@ -1,14 +1,7 @@
 package helper
 
-import (
-	"encoding/json"
-	"github.com/gin-gonic/gin"
-	"github.com/jjoykkm/ln-backend/models/model_other"
-	"net/http"
-)
-
 type Servicer interface {
-	GetModelFromBody(c *gin.Context) model_other.PostBody
+	//GetModelFromBody(c *gin.Context) PostBodyReq
 }
 
 type Service struct {
@@ -21,14 +14,14 @@ func NewService(repo Repositorier) Servicer {
 	}
 }
 
-func (s *Service) GetModelFromBody(c *gin.Context) model_other.PostBody {
-	var bodyModel helper.PostBody
-
-	jsonData, err := c.GetRawData()
-	if err != nil {
-		c.JSON(http.StatusBadRequest, err)
-	}
-	json.Unmarshal([]byte(jsonData), &bodyModel)
-	//fmt.Printf("%+v/n", bodyModel)
-	return bodyModel
-}
+//func (s *Service) GetModelFromBody(c *gin.Context) helper.PostBodyReq {
+//	var bodyReq helper.PostBodyReq
+//
+//	jsonData, err := c.GetRawData()
+//	if err != nil {
+//		c.JSON(http.StatusBadRequest, err)
+//	}
+//	json.Unmarshal([]byte(jsonData), &bodyReq)
+//	//fmt.Printf("%+v/n", bodyReq)
+//	return bodyReq
+//}

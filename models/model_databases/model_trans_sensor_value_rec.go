@@ -2,6 +2,7 @@ package model_databases
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -27,4 +28,9 @@ func (u *TransSensorValueRec) New() *TransSensorValueRec {
 		CreateDate:			u.CreateDate ,
 		ChangeDate:			u.ChangeDate ,
 	}
+}
+
+// Custom table name for GORM
+func (TransSensorValueRec) TableName() string {
+	return config.DB_TRANS_SENSOR_VALUE_REC
 }

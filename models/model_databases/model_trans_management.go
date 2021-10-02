@@ -2,6 +2,7 @@ package model_databases
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -27,4 +28,9 @@ func (u *TransManagement) New() *TransManagement {
 		CreateDate:		u.CreateDate ,
 		ChangeDate:		u.ChangeDate ,
 	}
+}
+
+// Custom table name for GORM
+func (TransManagement) TableName() string {
+	return config.DB_TRANS_MANAGEMENT
 }

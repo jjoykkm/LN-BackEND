@@ -74,6 +74,10 @@ func main() {
 	handlerFormulaPlant := sf_formula_plant.NewHandler(serviceFormulaPlant)
 
 
+	http.POST("/plantCategoryList", func(c *gin.Context) {
+		handlerFormulaPlant.GetPlantCategoryList(c)
+	})
+
 	http.POST("/jjoy", func(c *gin.Context) {
 		handlerFormulaPlant.GetPlantCategoryList(c)
 	})
@@ -81,7 +85,7 @@ func main() {
 
 	// Formula Plant
 	http.POST("/test", Test)
-	http.POST("/plantCategoryList", GetPlantCategoryList)
+	//http.POST("/plantCategoryList", GetPlantCategoryList)
 	http.POST("/plantCategoryItem", GetPlantCategoryItem)
 	http.POST("/plantOverviewFavorite", GetPlantOverviewFavorite)
 	http.POST("/myPlantOverview", GetMyPlantOverview)

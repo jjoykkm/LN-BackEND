@@ -2,6 +2,7 @@ package model_databases
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -31,5 +32,10 @@ func (u *Role) New() *Role {
 		RoleNameTH:		u.RoleNameTH ,
 		RoleDescTH:		u.RoleDescTH ,
 	}
+}
+
+// Custom table name for GORM
+func (Role) TableName() string {
+	return config.DB_ROLE
 }
 

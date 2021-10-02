@@ -2,6 +2,7 @@ package model_databases
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -27,4 +28,9 @@ func (u *TransSocketArea) New() *TransSocketArea {
 		StatusId:		u.StatusId ,
 		MainboxId:		u.MainboxId ,
 	}
+}
+
+// Custom table name for GORM
+func (TransSocketArea) TableName() string {
+	return config.DB_TRANS_SOCKET_AREA
 }

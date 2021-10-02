@@ -2,6 +2,7 @@ package model_databases
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -26,3 +27,9 @@ func (u *FavoritePlant) New() *FavoritePlant {
 		StatusId:			u.StatusId ,
 	}
 }
+
+// Custom table name for GORM
+func (FavoritePlant) TableName() string {
+	return config.DB_FAVORITE_PLANT
+}
+

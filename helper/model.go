@@ -36,8 +36,8 @@ func (u *PostBodyReq) New() *PostBodyReq {
 //-------------------------------------------------------------------------------//
 //Model post body
 type PostBodyResp struct {
-	Item     string		`mapstructure:"item" json:"item"`
-	Total    string		`mapstructure:"total" json:"total"`
+	Item     interface{}	`mapstructure:"item" json:"item"`
+	Total    int			`mapstructure:"total" json:"total"`
 }
 
 // New instance
