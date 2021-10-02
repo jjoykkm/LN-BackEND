@@ -6,6 +6,7 @@ import (
 )
 
 type Servicer interface {
+	GetFarmAreaByFarm(status, farmId, resultType string) ([]model_databases.FarmArea, []string)
 	GetCountryAndName(countryId, language string) (*model_databases.Country, string)
 	GetProvinceAndName(provinceId, language string) (*model_databases.Province, string)
 	GetPlantTypeAndName(plantTypeId, language string) (*model_databases.PlantType, string)
@@ -24,6 +25,19 @@ func NewService(repo Repositorier) Servicer {
 	return &Service{
 		repo:  repo,
 	}
+}
+func (s *Service) GetFarmAreaByFarm(status, farmId, resultType string) ([]model_databases.FarmArea, []string) {
+	var farmAreaIdList []string
+	farmModel, err := s.repo.FindAllFarmAreaByFarm(status, farmId)
+	if err != nil {
+		return nil, nil
+	}
+	if resultType != config.RES_TYPE_STRUCT {
+		for _, array := range farmModel {
+			farmAreaIdList = append(farmAreaIdList, array.FarmAreaId.UUID.String())
+		}
+	}
+	return farmModel, farmAreaIdList
 }
 
 func (s *Service) GetCountryAndName(countryId, language string) (*model_databases.Country, string) {

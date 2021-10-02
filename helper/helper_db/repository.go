@@ -7,6 +7,7 @@ import (
 )
 
 type Repositorier interface {
+	FindAllFarmAreaByFarm(farmId, status string) ([]model_databases.FarmArea, error)
 	FindOneCountry(countryId, status string) (*model_databases.Country, error)
 	FindOneProvince(provinceId, status string) (*model_databases.Province, error)
 	FindOnePlantType(plantTypeId, status string) (*model_databases.PlantType, error)
@@ -23,6 +24,16 @@ type Repository struct {
 
 func NewRepository(db *gorm.DB) Repositorier {
 	return &Repository{db: db}
+}
+
+func (r *Repository) FindAllFarmAreaByFarm(farmId, status string) ([]model_databases.FarmArea, error) {
+	var result []model_databases.FarmArea
+
+	err := r.db.Where("status_id = ? AND farm_id = ?", status, farmId).Find(&result).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	return result, nil
 }
 
 func (r *Repository) FindOneCountry(countryId, status string) (*model_databases.Country, error) {

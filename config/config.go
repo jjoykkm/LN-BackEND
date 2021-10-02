@@ -11,3 +11,9 @@ const DSN = "host=103.212.181.187 user=ln02t password=ln-0110-2 dbname=smartlife
 
 //const SERVER_HOST = "103.212.181.187:9000"
 const SERVER_HOST = "0.0.0.0:5200"
+
+
+const RES_TYPE_STRUCT = "struct"
+const RES_TYPE_MAP = "map"
+const RES_TYPE_KEY = "key"
+const RES_TYPE_ALL = "all"
