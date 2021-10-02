@@ -28,7 +28,7 @@ func (u *ScheduleFarmArea) New() *ScheduleFarmArea {
 //-------------------------------------------------------------------------------//
 //model
 type ScheduleFreqType struct {
-	FrequencyTypeId 	uuid.UUID	 `mapstructure:"frequency_type_id" json:"frequency_type_id" gorm:"frequency_type_id"`
+	FrequencyTypeId 	uuid.UUID	 `mapstructure:"frequency_type_id" json:"frequency_type_id"`
 	FrequencyName   	string		 `mapstructure:"frequency_name" json:"frequency_name"`
 	IntervalRange   	string		 `mapstructure:"interval_range" json:"interval_range"`
 	IsForCustom     	string		 `mapstructure:"is_for_custom" json:"is_for_custom"`
@@ -48,7 +48,7 @@ func (u *ScheduleFreqType) New() *ScheduleFreqType {
 //-------------------------------------------------------------------------------//
 // model
 type ScheduleInType struct {
-	IndicateTypeId      uuid.UUID	 `mapstructure:"indicate_type_id" json:"indicate_type_id gorm:"indicate_type_id"`
+	IndicateTypeId      uuid.UUID	 `mapstructure:"indicate_type_id" json:"indicate_type_id"`
 	IndicateName      	string	 	 `mapstructure:"indicate_name" json:"indicate_name"`
 	IndicateDesc      	string	 	 `mapstructure:"indicate_desc" json:"indicate_desc"`
 	Important	      	int			 `mapstructure:"important" json:"important"`
@@ -117,7 +117,7 @@ type ScheduleStruct struct {
 	FreqInterval      	int		 	 		`mapstructure:"frequency_interval" json:"frequency_interval"`
 	IsAlarm		      	bool		 		`mapstructure:"is_alarm" json:"is_alarm"`
 	FreqType			ScheduleFreqType	`mapstructure:"freq_type" json:"freq_type" gorm:"embedded"`
-	IndicateType		ScheduleInType		`mapstructure:"indicate_type" json:"indicate_type gorm:"embedded foreignKey:indicate_type_id"`
+	IndicateType		ScheduleInType		`mapstructure:"indicate_type" json:"indicate_type" gorm:"embedded"`
 	IsAllDay	      	bool		 		`mapstructure:"is_all_day" json:"is_all_day"`
 	IsReminder	      	bool		 		`mapstructure:"is_reminder" json:"is_reminder"`
 }

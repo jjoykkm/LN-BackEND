@@ -390,7 +390,7 @@ func GetScheRemind(c *gin.Context) {
 	// GetScheReminder(status string, farmAreaId []string) model_services.ScheduleScheRemind
 	scheRemind := me.Ctrl.GetScheReminder(config.STATUS_ACTIVE, bodyModel.FarmAreaIdList)
 
-	fmt.Printf("%+v\n", scheRemind)
+	//fmt.Printf("%+v\n", scheRemind)
 	c.JSON(http.StatusOK, gin.H{
 		"item": scheRemind,
 	})

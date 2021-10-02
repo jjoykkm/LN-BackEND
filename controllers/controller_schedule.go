@@ -96,7 +96,7 @@ func (ln Ln) GetFrequencyTypeer(status string, freqTypeIdList []string) ([]model
 		log.Print(err)
 	}
 	for _, wa := range freqType {
-		mapFreqType[wa.FreqTypeId.UUID.String()] = wa
+		mapFreqType[wa.FrequencyTypeId.UUID.String()] = wa
 	}
 	total := len(freqType)
 
@@ -157,11 +157,14 @@ func (ln Ln) GetScheReminder(status string, farmAreaId []string) model_services.
 	// Get Frequency Type
 	_, freqTypeMap, _ := IntSchedule.GetFrequencyTypeer(ln, config.STATUS_ACTIVE, freqTypeIdList)
 
-	// Get Indicate Type
+	fmt.Printf("%+v\n",freqTypeMap)
+	//Get Indicate Type
 	_, inTypeMap, _ := IntSchedule.GetIndicateTypeer(ln, config.STATUS_ACTIVE, inTypeIdList)
 
+	//fmt.Printf("%+v\n",inTypeMap)
 	for _, wa := range sRList {
 		mapstructure.Decode(wa, &structSR)
+		fmt.Println("ddddddddddddddd")
 		//Get Country name
 		structSR.FarmAreaName, found = farmAreaMap[structSR.FarmAreaId.UUID.String()]
 		if !found {
@@ -171,6 +174,7 @@ func (ln Ln) GetScheReminder(status string, farmAreaId []string) model_services.
 		//Get Frequency Type
 		freqType, f := freqTypeMap[wa.FreqType.FrequencyTypeId.UUID.String()]
 		if f {
+			fmt.Printf("%+v\n",freqType)
 			mapstructure.Decode(freqType, &structSR.FreqType)
 		}
 		//Get Indicate Type
