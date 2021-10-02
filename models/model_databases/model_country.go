@@ -2,6 +2,7 @@ package model_databases
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -27,4 +28,9 @@ func (u *Country) New() *Country {
 		ChangeDate:		u.ChangeDate ,
 		StatusId:		u.StatusId ,
 	}
+}
+
+// Custom table name for GORM
+func (Country) TableName() string {
+	return config.DB_COUNTRY
 }

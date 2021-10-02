@@ -2,6 +2,7 @@ package model_databases
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -30,4 +31,10 @@ func (u *FarmArea) New() *FarmArea {
 		StatusId:			u.StatusId ,
 	}
 }
+
+// Custom table name for GORM
+func (FarmArea) TableName() string {
+	return config.DB_FARM_AREA
+}
+
 

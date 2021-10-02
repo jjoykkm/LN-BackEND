@@ -2,6 +2,7 @@ package model_databases
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -27,5 +28,10 @@ func (u *FertilizerCat) New() *FertilizerCat {
 		ChangeDate:				u.ChangeDate ,
 		StatusId:				u.StatusId ,
 	}
+}
+
+// Custom table name for GORM
+func (FertilizerCat) TableName() string {
+	return config.DB_FERTILIZER_CAT
 }
 

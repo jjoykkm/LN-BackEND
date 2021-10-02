@@ -2,6 +2,7 @@ package model_databases
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -43,4 +44,9 @@ func (u *Schedule) New() *Schedule {
 		IsAllDay:			u.IsAllDay ,
 		IsReminder:			u.IsReminder ,
 	}
+}
+
+// Custom table name for GORM
+func (Schedule) TableName() string {
+	return config.DB_SCHEDULE
 }

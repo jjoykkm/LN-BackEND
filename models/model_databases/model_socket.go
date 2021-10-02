@@ -2,6 +2,7 @@ package model_databases
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -31,4 +32,9 @@ func (u *Socket) New() *Socket {
 		SocketNumber:		u.SocketNumber ,
 		StatusSensorId:		u.StatusSensorId ,
 	}
+}
+
+// Custom table name for GORM
+func (Socket) TableName() string {
+	return config.DB_SOCKET
 }

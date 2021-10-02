@@ -2,6 +2,7 @@ package model_databases
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -27,4 +28,9 @@ func (u *SensorType) New() *SensorType {
 		StatusId:			u.StatusId ,
 		SensorTypeNameTH:	u.SensorTypeNameTH ,
 	}
+}
+
+// Custom table name for GORM
+func (SensorType) TableName() string {
+	return config.DB_SENSOR_TYPE
 }

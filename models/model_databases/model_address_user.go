@@ -2,6 +2,7 @@ package model_databases
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -46,3 +47,9 @@ func (u *AddressUser) New() *AddressUser {
 		Moo:                u.Moo ,
 	}
 }
+
+// Custom table name for GORM
+func (AddressUser) TableName() string {
+	return config.DB_ADDRESS_USER
+}
+

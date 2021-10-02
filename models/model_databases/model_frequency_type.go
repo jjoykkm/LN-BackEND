@@ -2,6 +2,7 @@ package model_databases
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -29,4 +30,9 @@ func (u *FrequencyType) New() *FrequencyType {
 		ChangeDate:		  u.ChangeDate ,
 		StatusId:		  u.StatusId ,
 	}
+}
+
+// Custom table name for GORM
+func (FrequencyType) TableName() string {
+	return config.DB_FREQUENCY_TYPE
 }
