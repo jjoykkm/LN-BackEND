@@ -1,4 +1,4 @@
-package SF_FormulaPlant
+package sf_formula_plant
 
 import (
 	"errors"

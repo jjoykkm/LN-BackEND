@@ -1,12 +1,11 @@
-package Helper
+package helper
 
 import (
-	"github.com/jjoykkm/ln-backend/models/model_databases"
 	"gorm.io/gorm"
 )
 
 type Repositorier interface {
-	FindAllPlantType(status string) ([]model_databases.PlantType, error)
+	//FindAllPlantType(status string) ([]model_databases.PlantType, error)
 }
 
 type Repository struct {

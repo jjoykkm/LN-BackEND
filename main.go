@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/jjoykkm/ln-backend/SmartFarm/SF_FormulaPlant"
+	"github.com/jjoykkm/ln-backend/smartfarm/sf_formula_plant"
 	"github.com/jjoykkm/ln-backend/config"
 	"github.com/jjoykkm/ln-backend/controllers"
 	"github.com/jjoykkm/ln-backend/models/model_other"
@@ -68,10 +68,10 @@ func main() {
 	http := gin.Default()
 	http.Use(cors.Default())
 
-	repoFormulaPlant := SF_FormulaPlant.NewRepository(db)
+	repoFormulaPlant := sf_formula_plant.NewRepository(db)
 	//cache := cache.New(1*time.Hour, 1*time.Hour)
-	serviceFormulaPlant := SF_FormulaPlant.NewService(repoFormulaPlant)
-	handlerFormulaPlant := SF_FormulaPlant.NewHandler(serviceFormulaPlant)
+	serviceFormulaPlant := sf_formula_plant.NewService(repoFormulaPlant)
+	handlerFormulaPlant := sf_formula_plant.NewHandler(serviceFormulaPlant)
 
 
 	http.POST("/jjoy", func(c *gin.Context) {
