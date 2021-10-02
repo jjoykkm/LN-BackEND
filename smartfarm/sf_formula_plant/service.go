@@ -1,13 +1,9 @@
 package sf_formula_plant
 
 import (
-	"fmt"
 	"github.com/jjoykkm/ln-backend/config"
 	"github.com/jjoykkm/ln-backend/models/model_databases"
-	"github.com/jjoykkm/ln-backend/models/model_services"
-	"github.com/jjoykkm/ln-backend/utility"
 	"github.com/mitchellh/mapstructure"
-	"log"
 )
 
 type Servicer interface {
@@ -63,18 +59,18 @@ func (s *Service) GetPlantCategoryList(status, language string) *BodyResp {
 	}
 }
 
-func (s *Service) GetPlantCategoryItem(status, plantTypeId, language string, offset int) ([]PlantTypeCat, int, int) {
-	var plantCat PlantTypeCat
-	var plantCatArray []PlantTypeCat
-	var currentOffset int
-	var total int
-	var sqlScopePT string
-
-	if plantTypeId != "" {
-		sqlScopePT = fmt.Sprintf("AND %s.plant_type_id = '%s'", config.DB_PLANT, plantTypeId)
-	}
-
-	var joinPlantAndPlantTypeArray []model_services.JoinPlantAndPlantType
+//func (s *Service) GetPlantCategoryItem(status, plantTypeId, language string, offset int) ([]PlantTypeCat, int, int) {
+//	var plantCat PlantTypeCat
+//	var plantCatArray []PlantTypeCat
+//	var currentOffset int
+//	var total int
+//	var sqlScopePT string
+//
+//	if plantTypeId != "" {
+//		sqlScopePT = fmt.Sprintf("AND %s.plant_type_id = '%s'", config.DB_PLANT, plantTypeId)
+//	}
+//
+//	var joinPlantAndPlantTypeArray []model_services.JoinPlantAndPlantType
 
 	//sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.plant_type_id = %s.plant_type_id WHERE %s.status_id = '%s' %s OFFSET %d LIMIT 100",
 	//	config.DB_PLANT, config.DB_PLANT_TYPE, config.DB_PLANT, config.DB_PLANT_TYPE, config.DB_PLANT, status, sqlScopePT, offset)
@@ -102,8 +98,8 @@ func (s *Service) GetPlantCategoryItem(status, plantTypeId, language string, off
 	//}
 	//total = len(plantCatArray)
 	//currentOffset = offset + total
-	return plantCatArray, currentOffset, total
-}
+//	return plantCatArray, currentOffset, total
+//}
 
 //func (s *Service) GetFavoriteFormulaPlanter(status, uid string) ([]model_databases.FavoritePlant, []string, map[string]bool) {
 //	var favPlantArray []model_databases.FavoritePlant
