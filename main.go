@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/jjoykkm/ln-backend/SmartFarm/SF_FormulaPlant"
 	"github.com/jjoykkm/ln-backend/config"
 	"github.com/jjoykkm/ln-backend/controllers"
 	"github.com/jjoykkm/ln-backend/models/model_other"
@@ -64,38 +65,20 @@ func main() {
 	controller := controllers.Ln{db}
 	me = Ln{db, controller}
 
-	////GetFertilizerRatioRelate(status, formulaPlantId, language string) ([]model_services.ForPlantFert, int)
-	//fertilizerRatio, _ := controller.GetFertilizerRatioRelate(config.STATUS_ACTIVE, "0c5c896d-dede-41de-ab78-1f1d41dd95cf", config.LANGUAGE_EN)
-	//fmt.Println(fertilizerRatio)
-
-	////GetSensorValueRecRelate(status, formulaPlantId, language string) ([]model_services.ForPlantSensor, int)
-	//sensorValueRec, _ := controller.GetSensorValueRecRelate(config.STATUS_ACTIVE, "0c5c896d-dede-41de-ab78-1f1d41dd95cf", config.LANGUAGE_EN)
-	//fmt.Println(sensorValueRec)
-
-	//_, _, formulaPlantMap := controller.GetFavoriteFormulaPlanter(config.STATUS_ACTIVE, "6f08ea87-47dd-4511-be6c-3f2f6603de6c")
-	//fmt.Println(formulaPlantMap)
-
-	//plantCategoryItem, _,_ := me.Ctrl.GetPlantCategoryItemer(config.STATUS_ACTIVE, "",  "EN", 0)
-	//fmt.Println(plantCategoryItem)
-	//
-	//
-	////http.GET("/test", func(c *gin.Context) {
-	////	c.JSON(http.StatusOK, gin.H{
-	////		"message": "test",
-	////	})
-	////})
-	//GetFarmLister(status, uid string) ([]model_services.DashboardFarmList, int)
-	//farmList, _ := me.Ctrl.GetFarmLister(config.STATUS_ACTIVE, "17ac6921-ece0-43bc-9d88-7b9bfc59ffd3")
-	//fmt.Println(farmList)
-
-	//GetSensorLister(status, language string, socketIdList []string) []model_services.SenSocList
-	//ss:=[]string{"ec2dcb62-e741-47da-9288-4a9ca4f797ed","2b71a9c7-1d59-44d5-80f0-e805ddd82d55"}
-	//senSocList,_ := me.Ctrl.GetSensorBySocketLister(config.STATUS_ACTIVE, config.LANGUAGE_EN, ss)
-	//fmt.Printf("%+v\n",senSocList)
-	//GetAllDetailSensor(status, farmId, language string) ([]model_services.SenSocMainList, int)
-
 	http := gin.Default()
 	http.Use(cors.Default())
+
+	repoFormulaPlant := SF_FormulaPlant.NewRepository(db)
+	//cache := cache.New(1*time.Hour, 1*time.Hour)
+	serviceFormulaPlant := SF_FormulaPlant.NewService(repoFormulaPlant)
+	handlerFormulaPlant := SF_FormulaPlant.NewHandler(serviceFormulaPlant)
+
+
+	http.POST("/jjoy", func(c *gin.Context) {
+		handlerFormulaPlant.GetPlantCategoryList(c)
+	})
+
+
 	// Formula Plant
 	http.POST("/test", Test)
 	http.POST("/plantCategoryList", GetPlantCategoryList)
@@ -122,38 +105,6 @@ func main() {
 
 	http.Run(config.SERVER_HOST)
 
-	////GetFertilizerer(status, language string, fertilizerIdList []string) ([]model_services.ForPlantFert, int)
-	//var ff []string
-	//ff = append(ff, "37be0915-ff7a-4539-a6a2-a04a6cb643d1")
-	//ff = append(ff, "7d74391f-64ca-422e-83aa-78a507338230")
-	//fmt.Println(reflect.TypeOf(ff))
-	//fertilizer,_ := controller.GetFertilizerer(config.STATUS_ACTIVE, config.LANGUAGE_EN, ff)
-	//fmt.Println(fertilizer)
-
-	////GetCountryName(db *sql.DB, countryId string, language string) string
-	//countryName := controllers.GetCountryName(db, "067ea4ff-25ef-47b4-b566-fc2ee28aa07e", config.LANGUAGE_EN)
-	//fmt.Println(countryName)
-
-	////GetPlantCategoryList (db *sql.DB, status string, language string) []model_services.ForPlantCatList
-	//plantCategoryList := controllers.GetPlantCategoryList(config.STATUS_ACTIVE, config.LANGUAGE_EN)
-	//fmt.Println(plantCategoryList)
-
-	////GetPlantCategoryItem (db *sql.DB, status string, plantTypeId string, language string, offset string) ([]model_services.ForPlantCat, int)
-	//plantCategoryItem, nextOffset := controllers.GetPlantCategoryItem(config.STATUS_ACTIVE, "",  config.LANGUAGE_EN, 0)
-	//fmt.Println(plantCategoryItem)
-	//fmt.Println(nextOffset)
-
-	////GetFavoriteFormulaPlant (db *sql.DB, status string, uid string, language string) ([]model_databases.FavoritePlant, []uuid.UUID)
-	//favoritePlant := controllers.GetFavoriteFormulaPlant(config.STATUS_ACTIVE, "6f08ea87-47dd-4511-be6c-3f2f6603de6c", config.LANGUAGE_EN)
-	//fmt.Println(favoritePlant)
-
-	////GetPlantOverviewFavorite(db *sql.DB, status string, uid string, language string, offset int) ([]model_services.ForPlantItem, int)
-	//plantOverviewFavorite, _ := controllers.GetPlantOverviewFavorite(config.STATUS_ACTIVE, "6f08ea87-47dd-4511-be6c-3f2f6603de6c", config.LANGUAGE_EN, 0)
-	//fmt.Println(plantOverviewFavorite)
-
-	////GetMyPlantOverview(status, uid, language string, offset int) ([]model_services.ForPlantItem, int)
-	//myPlantOverview, _ := controller.GetMyPlantOverview(config.STATUS_ACTIVE, "9c21bd63-a1f0-490a-bb5b-1de7ab502a1d", config.LANGUAGE_EN, 0)
-	//fmt.Println(myPlantOverview)
 }
 
 func Test(c *gin.Context) {
