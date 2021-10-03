@@ -104,7 +104,7 @@ func panell(db *gorm.DB) []JoinPanels {
 	//errs := db.Find(&joinPanel).Error
 	////errs := db.Table("panels").Joins("LEFT JOIN panels_lists ON panels_lists.panelId = panels.panelListId").Find(&joinPanel).Error
 	////errs := db.Table("panels_lists").Joins("LEFT JOIN panels_lists ON panels.panel_id = panels_lists.panel_list_id").Find(&joinPanel).Error
-	sql := "SELECT * FROM panels INNER JOIN panels_lists ON panels.panel_id = panels_lists.panel_list_id"
+	sql := "SELECT * FROM panels LEFT JOIN panels_lists ON panels.panel_id = panels_lists.panel_list_id"
 	fmt.Println(sql)
 	errs := db.Raw(sql).Scan(&joinPanel).Error
 	fmt.Printf("%+v\n", joinPanel)
