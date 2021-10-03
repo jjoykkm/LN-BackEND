@@ -70,6 +70,7 @@ func main()  {
 		result := panell(db)
 		c.JSON(200, gin.H{
 			"result": result,
+			"total": len(result),
 		})
 	})
 
