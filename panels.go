@@ -11,68 +11,48 @@ import (
 )
 
 type Panels struct {
-	panelId 			string `gorm:"primaryKey;foreignKey:panelListId;references:panelListId"`
-	panelOwnId			uuid.UUID
-	panelFilename 		string
-	panelName 			string
-	panelNameEn 		string
-	panelType 			string
-	panelSide 			string
-	panelAccess 		string
-	panelDisplay 		string
-	panelStatus 		string
-	panelRestriction 	string
-	panelLanguages 		string
-}
-//// New instance
-//func (u *Panels) New() *Panels {
-//	return &Panels{
-//		panelId 		:      			u.panelId 		 ,
-//		panelOwnId		:      			u.panelOwnId		 ,
-//		panelFilename 	:      			u.panelFilename 	 ,
-//		panelName 		:      			u.panelName 		 ,
-//		panelNameEn 	:      			u.panelNameEn 	 ,
-//		panelType 		:      			u.panelType 		 ,
-//		panelSide 		:      			u.panelSide 		 ,
-//		panelAccess 	:      			u.panelAccess 	 ,
-//		panelDisplay 	:      			u.panelDisplay 	 ,
-//		panelStatus 	:      			u.panelStatus 	 ,
-//		panelRestriction:      			u.panelRestriction ,
-//		panelLanguages 	:      			u.panelLanguages 	 ,
-//	}
-//}
-func (Panels) TableName() string {
-	return "panels"
+	PanelId 			string `gorm:"primaryKey;foreignKey:panelListId;references:panelListId"`
+	PanelOwnId			uuid.UUID
+	PanelFilename 		string
+	PanelName 			string
+	PanelNameEn 		string
+	PanelType 			string
+	PanelSide 			string
+	PanelAccess 		string
+	PanelDisplay 		string
+	PanelStatus 		string
+	PanelRestriction 	string
+	PanelLanguages 		string
 }
 
 type PanelsLists struct {
-	panelListId 		string	`"json:panel_list_id"`	//`gorm:"primaryKey;foreignKey:panelId;references:panelId"`
-	panelListOwnId 		string	`"json:panel_list_own_id"`
-	panelListName 		string	`"json:panel_list_name"`
-	panelListType 		string	`"json:panel_list_type"`
-	panelListStatus 	string	`"json:panel_list_status"`
-	panelListUser 		string	`"json:panel_list_user"`
-	panelListSide 		string	`"json:panel_list_side"`
-	panelListAccess 	string	`"json:panel_list_access"`
-	panelListDisplay 	string	`"json:panel_list_display"`
+	PanelListId 		string	`"json:panel_list_id"`	//`gorm:"primaryKey;foreignKey:panelId;references:panelId"`
+	PanelListOwnId 		string	`"json:panel_list_own_id"`
+	PanelListName 		string	`"json:panel_list_name"`
+	PanelListType 		string	`"json:panel_list_type"`
+	PanelListStatus 	string	`"json:panel_list_status"`
+	PanelListUser 		string	`"json:panel_list_user"`
+	PanelListSide 		string	`"json:panel_list_side"`
+	PanelListAccess 	string	`"json:panel_list_access"`
+	PanelListDisplay 	string	`"json:panel_list_display"`
 }
 func (PanelsLists) TableName() string {
 	return "panels_lists"
 }
 
 type JoinPanels struct {
-	panelId 			string 		 `"json:panel_id"`//`gorm:"primaryKey"`
-	panelOwnId			uuid.UUID	 `"json:panel_own_id"`
-	panelFilename 		string		 `"json:panel_filename"`
-	panelName 			string		 `"json:panel_name"`
-	panelNameEn 		string		 `"json:panel_name_en"`
-	panelType 			string		 `"json:panel_type"`
-	panelSide 			string		 `"json:panel_side"`
-	panelAccess 		string		 `"json:panel_access"`
-	panelDisplay 		string		 `"json:panel_display"`
-	panelStatus 		string		 `"json:panel_status"`
-	panelRestriction 	string		 `"json:panel_restriction"`
-	panelLanguages 		string		 `"json:panel_languages"`
+	PanelId 			string 		 `"json:panel_id"`//`gorm:"primaryKey"`
+	PanelOwnId			uuid.UUID	 `"json:panel_own_id"`
+	PanelFilename 		string		 `"json:panel_filename"`
+	PanelName 			string		 `"json:panel_name"`
+	PanelNameEn 		string		 `"json:panel_name_en"`
+	PanelType 			string		 `"json:panel_type"`
+	PanelSide 			string		 `"json:panel_side"`
+	PanelAccess 		string		 `"json:panel_access"`
+	PanelDisplay 		string		 `"json:panel_display"`
+	PanelStatus 		string		 `"json:panel_status"`
+	PanelRestriction 	string		 `"json:panel_restriction"`
+	PanelLanguages 		string		 `"json:panel_languages"`
 	PanelList			PanelsLists `gorm:"embedded"`//`gorm:"embedded;foreignKey:panelId;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
