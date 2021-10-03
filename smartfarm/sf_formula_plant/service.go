@@ -1,17 +1,21 @@
 package sf_formula_plant
 
 import (
+	"github.com/jjoykkm/ln-backend/common/models/model_other"
 	"github.com/jjoykkm/ln-backend/config"
 	"github.com/jjoykkm/ln-backend/models/model_databases"
 	"github.com/mitchellh/mapstructure"
 )
 
 type Servicer interface {
-	GetPlantCategoryList(status, language string) *BodyResp
-	//GetPlantCategoryItem(status, plantTypeId, language string, offset int) ([]PlantTypeCat, int, int)
-	//GetFavoriteFormulaPlant(status, uid string) ([]model_databases.FavoritePlant, []string, map[string]bool)
+	// Service for API
+	GetPlantCategoryList(status, language string) *model_other.BodyResp
+	GetPlantCategoryItem(status, plantTypeId, language string, offset int) *model_other.BodyRespOffset
+	//GetPlantOverviewFavorite(status, uid, language string, offset int) *model_other.BodyRespOffset
+	
+	// Function
+	GetFavoriteFormulaPlant(status, uid, resultType string) ([]model_databases.FavoritePlant, []string, map[string]bool)
 	GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlant) (float32, int)
-	//GetPlantOverviewFavorite(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int)
 	//GetMyPlantOverview(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int)
 	//GetPlantOverviewByPlant(status, uid, plantId, language string, offset int) ([]model_services.ForPlantItem, int, int)
 	//GetFertilizerRatioRelate(status, formulaPlantId, language string) ([]model_services.ForPlantFert, int)
@@ -29,14 +33,13 @@ func NewService(repo Repositorier) Servicer {
 	}
 }
 
-func (s *Service) GetPlantCategoryList(status, language string) *BodyResp {
+func (s *Service) GetPlantCategoryList(status, language string) *model_other.BodyResp {
 	var ptCat PlantTypeCat
 	var ptCatList []PlantTypeCat
 
 	plantTypeList, err := s.repo.FindAllPlantType(status)
-
 	if err != nil{
-		return &BodyResp{
+		return &model_other.BodyResp{
 			Item: nil,
 			Total: 0,
 		}
@@ -53,79 +56,73 @@ func (s *Service) GetPlantCategoryList(status, language string) *BodyResp {
 		ptCatList = append(ptCatList, ptCat)
 	}
 
-	return &BodyResp{
+	return &model_other.BodyResp{
 		Item: ptCatList,
 		Total: len(ptCatList),
 	}
 }
 
-//func (s *Service) GetPlantCategoryItem(status, plantTypeId, language string, offset int) ([]PlantTypeCat, int, int) {
-//	var plantCat PlantTypeCat
-//	var plantCatArray []PlantTypeCat
-//	var currentOffset int
-//	var total int
-//	var sqlScopePT string
-//
-//	if plantTypeId != "" {
-//		sqlScopePT = fmt.Sprintf("AND %s.plant_type_id = '%s'", config.DB_PLANT, plantTypeId)
-//	}
-//
-//	var joinPlantAndPlantTypeArray []model_services.JoinPlantAndPlantType
+func (s *Service) GetPlantCategoryItem(status, plantTypeId, language string, offset int) *model_other.BodyRespOffset {
+	var plantCat PlantCat
+	var plantCatList []PlantCat
+	var currentOffset int
+	var total int
 
-	//sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.plant_type_id = %s.plant_type_id WHERE %s.status_id = '%s' %s OFFSET %d LIMIT 100",
-	//	config.DB_PLANT, config.DB_PLANT_TYPE, config.DB_PLANT, config.DB_PLANT_TYPE, config.DB_PLANT, status, sqlScopePT, offset)
-	//fmt.Println(sql)
-	//err := ln.Db.Raw(sql).Scan(&joinPlantAndPlantTypeArray).Error
-	//if err != nil {
-	//	log.Print(err)
-	//}
-	//
-	//for _, joinPlantAndPlantType := range joinPlantAndPlantTypeArray {
-	//	mapstructure.Decode(joinPlantAndPlantType, &plantCat)
-	//	switch language {
-	//	case config.LANGUAGE_EN:
-	//		plantCat.PlantTypeName = joinPlantAndPlantType.PlantTypeEN
-	//		plantCat.PlantName = joinPlantAndPlantType.PlantNameEN
-	//		plantCat.PlantDesc = joinPlantAndPlantType.PlantDescEN
-	//	case config.LANGUAGE_TH:
-	//		plantCat.PlantTypeName = joinPlantAndPlantType.PlantTypeTH
-	//		plantCat.PlantName = joinPlantAndPlantType.PlantNameTH
-	//		plantCat.PlantDesc = joinPlantAndPlantType.PlantDescTH
-	//	}
-	//	cond := fmt.Sprintf("plant_id = '%s'", joinPlantAndPlantType.PlantId.UUID.String())
-	//	plantCat.TotalItem = utility.GetCountTable(ln.Db, config.STATUS_ACTIVE, config.DB_FORMULA_PLANT, "formula_plant_id", cond)
-	//	plantCatArray = append(plantCatArray, plantCat)
-	//}
-	//total = len(plantCatArray)
-	//currentOffset = offset + total
-//	return plantCatArray, currentOffset, total
-//}
+	joinList, err := s.repo.FindJoinPlantWithPlantType(status, plantTypeId, offset)
+	if err != nil{
+		return &model_other.BodyRespOffset{
+			Item: nil,
+			Offset: offset,
+			Total: 0,
+		}
+	}
 
-//func (s *Service) GetFavoriteFormulaPlanter(status, uid string) ([]model_databases.FavoritePlant, []string, map[string]bool) {
-//	var favPlantArray []model_databases.FavoritePlant
-//	var formulaPlantList []string
-//
-//	if uid == "" {
-//		return nil, nil, nil
-//	}
-//
-//	formulaPlantMap := make(map[string]bool)
-//
-//	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND uid = '%s' ORDER BY change_date ASC",
-//		config.DB_FAVORITE_PLANT, status, uid)
-//	fmt.Println(sql)
-//	err := ln.Db.Raw(sql).Scan(&favPlantArray).Error
-//	if err != nil {
-//		log.Print(err)
-//	}
-//
-//	for _, favPlant := range favPlantArray {
-//		formulaPlantList = append(formulaPlantList, favPlant.FormulaPlantId.UUID.String())
-//		formulaPlantMap[favPlant.FormulaPlantId.UUID.String()] = true
-//	}
-//
-//	return favPlantArray, formulaPlantList, formulaPlantMap
-//}
+	for _, join := range joinList {
+		mapstructure.Decode(join.PlantType, &plantCat)
+		mapstructure.Decode(join.Plant, &plantCat)
+		switch language {
+		case config.LANGUAGE_EN:
+			plantCat.PlantTypeName = join.PlantType.PlantTypeEN
+			plantCat.PlantName = join.Plant.PlantNameEN
+			plantCat.PlantDesc = join.Plant.PlantDescEN
+		case config.LANGUAGE_TH:
+			plantCat.PlantTypeName = join.PlantType.PlantTypeTH
+			plantCat.PlantName = join.Plant.PlantNameTH
+			plantCat.PlantDesc = join.Plant.PlantDescTH
+		}
+		plantCat.TotalItem = s.repo.GetCountFormulaPlant(config.STATUS_ACTIVE, plantCat.PlantId.UUID.String())
+		plantCatList = append(plantCatList, plantCat)
+	}
+
+	total = len(plantCatList)
+	currentOffset = offset + total
+
+	return &model_other.BodyRespOffset{
+		Item: plantCatList,
+		Offset: currentOffset,
+		Total: total,
+	}
+}
+
+func (s *Service) GetFavoriteFormulaPlant(status, uid, resultType string) ([]model_databases.FavoritePlant, []string, map[string]bool) {
+	var favFPKey []string
+	favFPMap := make(map[string]bool)
+
+	if uid == "" {
+		return nil, nil, nil
+	}
+	favFPList, err := s.repo.FindAllFavoriteFormulaPlant(status, uid)
+	if err != nil{
+		return nil, nil, nil
+	}
+	if resultType != config.RES_TYPE_STRUCT {
+		for _, favFP := range favFPList {
+			favFPKey = append(favFPKey, favFP.FormulaPlantId.UUID.String())
+			favFPMap[favFP.FormulaPlantId.UUID.String()] = true
+		}
+	}
+	return favFPList, favFPKey, favFPMap
+}
 
 func (s *Service) GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlant) (float32, int) {
 	var rateScore float32
@@ -142,8 +139,8 @@ func (s *Service) GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlan
 
 	return rateScore, ratePeople
 }
-//
-//func (s *Service) GetPlantOverviewFavoriteer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int) {
+
+//func (s *Service) GetPlantOverviewFavorite(status, uid, language string, offset int) *model_other.BodyRespOffset {
 //	var joinArray []model_services.JoinFormulaPlantAndPlant
 //	var formulaPlant model_databases.FormulaPlant
 //	var plantOverview model_services.ForPlantItem
@@ -153,7 +150,11 @@ func (s *Service) GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlan
 //	var found bool
 //
 //	if uid == "" {
-//		return nil, offset, 0
+//		return &model_other.BodyRespOffset{
+//			Item: nil,
+//			Offset: offset,
+//			Total: 0,
+//		}
 //	}
 //
 //	countryMap := make(map[string]string)
@@ -209,7 +210,12 @@ func (s *Service) GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlan
 //	}
 //	total = len(plantOverviewArray)
 //	currentOffset = offset + total
-//	return plantOverviewArray, currentOffset, total
+//
+//	return &model_other.BodyRespOffset{
+//		Item: nil,
+//		Offset: offset,
+//		Total: 0,
+//	}
 //}
 //
 //func (s *Service) GetMyPlantOverviewer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int) {

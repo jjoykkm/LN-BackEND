@@ -17,3 +17,8 @@ const RES_TYPE_STRUCT = "struct"
 const RES_TYPE_MAP = "map"
 const RES_TYPE_KEY = "key"
 const RES_TYPE_ALL = "all"
+
+const JOIN_TYPE_INNER = "inner"
+const JOIN_TYPE_LEFT = "left"
+const JOIN_TYPE_RIGHT = "right"
+
