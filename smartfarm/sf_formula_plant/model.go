@@ -65,17 +65,22 @@ func (u *PlantTypeCat) New() *PlantTypeCat {
 //-------------------------------------------------------------------------------//
 //Model
 type JoinPlantAndPlantType struct {
+	PlantType   model_databases.PlantType	`mapstructure:"plant_type" json:"plant_type" gorm:"foreignkey:PlantTypeId; references:PlantTypeId"`
 	Plant     	model_databases.Plant	 	`mapstructure:"plant" json:"plant" gorm:"embedded"`
-	PlantType   model_databases.PlantType	`mapstructure:"plant_type" json:"plant_type" gorm:"embedded"`
 }
 
 // New instance
 func (u *JoinPlantAndPlantType) New() *JoinPlantAndPlantType {
 	return &JoinPlantAndPlantType{
-		Plant:  	u.Plant ,
 		PlantType:  u.PlantType ,
+		Plant:  	u.Plant ,
 	}
 }
+
+func (JoinPlantAndPlantType) TableName() string {
+	return "plant"
+}
+
 
 //-------------------------------------------------------------------------------//
 //							Button Catagory

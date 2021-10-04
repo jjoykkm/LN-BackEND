@@ -10,20 +10,38 @@ import (
 	"time"
 )
 
-type Farm struct {
-	FarmId      	uuid.UUID	 `mapstructure:"farm_id" json:"farm_id,omitempty"`
-	FarmName    	string		 `mapstructure:"farm_name" json:"farm_name,omitempty"`
-	FarmDesc    	string		 `mapstructure:"farm_desc" json:"farm_desc,omitempty"`
+type Plant struct {
+	PlantId          uuid.UUID	 `gorm:"primaryKey" mapstructure:"plant_id" json:"plant_id,omitempty"`
+	PlantTypeId     uuid.UUID	 //`gorm:"column:plant_type_id" mapstructure:"plant_type_id" json:"plant_type_id"`
 	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
 	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
 	StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
 }
-func (Farm) TableName() string {
-	return "farm"
+func (Plant) TableName() string {
+	return "plant"
+}
+type PlantType struct {
+	PlantTypeId     uuid.UUID	 //`gorm:"primaryKey" mapstructure:"plant_type_id" json:"plant_type_id"`
+	PlantTypeEN      string		 //`mapstructure:"plant_type_en" json:"plant_type_en,omitempty"`
+	//CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
+	//ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
+	//StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
+}
+func (PlantType) TableName() string {
+	return "plant_type"
 }
 type JJ struct {
-	Plant     	model_databases.Plant	 		`mapstructure:"plant_type_id" json:"plant_type_id" gorm:"embedded"`
-	PlantType   model_databases.PlantType		 `mapstructure:"plant_type_name" json:"plant_type_name" gorm:"embedded"`
+	//PlantId         uuid.UUID	 `gorm:"primaryKey" mapstructure:"plant_id" json:"plant_id,omitempty"`
+	//PlantTypeId     uuid.UUID	 //`gorm:"column:plant_type_id" mapstructure:"plant_type_id" json:"plant_type_id"`
+	////CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
+	////ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
+	////StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
+	////Plant1     	Plant	 	`gorm:"embedded"`//`gorm:"embeddedPrefix:p_"` // //
+	Plant  model_databases.Plant `gorm:"embedded"`
+	PlantType  model_databases.PlantType 	`gorm:"foreignkey:PlantTypeId; references:PlantTypeId"` //`gorm:"embeddedPrefix:pt_"` //
+}
+func (JJ) TableName() string {
+	return "plant"
 }
 
 func main()  {
@@ -35,14 +53,14 @@ func main()  {
 	if err != nil {
 		panic(err.Error())
 	}
+	var results []JJ
+	//db.Table("plant").Joins("inner join plant_type on plant.plant_type_id = plant_type.plant_type_id").Scan(&results)
+	plantTypeId := "caea388c-aa95-4612-9399-6e07cf42709a"
+	sqlWhere := fmt.Sprintf("%s.status_id = ? AND %s.plant_type_id = ?", config.DB_PLANT, config.DB_PLANT)
+	db.Debug().Where(sqlWhere, config.STATUS_ACTIVE, plantTypeId).Preload("PlantType", "status_id = ?", config.STATUS_ACTIVE).Find(&results)
+	fmt.Printf("%+v\n", results)
+	//helper.ConvertToJson(results)
 
-	var results []Farm
-	var count int64
-
-	//var results []JJ
-	db.Model(&results).Count(&count)
-	fmt.Println(count)
-	fmt.Println(results)
 	//db.Model(&results).Association("StatusId").Count()
 	//db.Table("plant").Joins("inner join plant_type on plant.plant_type_id = plant_type.plant_type_id").Scan(&results)
 	//helper.ConvertToJson(results)

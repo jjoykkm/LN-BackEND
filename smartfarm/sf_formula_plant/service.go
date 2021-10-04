@@ -12,7 +12,7 @@ type Servicer interface {
 	GetPlantCategoryList(status, language string) *model_other.BodyResp
 	GetPlantCategoryItem(status, plantTypeId, language string, offset int) *model_other.BodyRespOffset
 	//GetPlantOverviewFavorite(status, uid, language string, offset int) *model_other.BodyRespOffset
-	
+
 	// Function
 	GetFavoriteFormulaPlant(status, uid, resultType string) ([]model_databases.FavoritePlant, []string, map[string]bool)
 	GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlant) (float32, int)
