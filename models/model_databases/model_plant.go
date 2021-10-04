@@ -11,15 +11,15 @@ import (
 //-------------------------------------------------------------------------------//
 //model plant
 type Plant struct {
-	PlantId          uuid.UUID	 `mapstructure:"plant_id" json:"plant_id,omitempty"`
-	PlantNameEN      string		 `mapstructure:"plant_name_en" json:"plant_name_en,omitempty"`
-	PlantNameTH      string		 `mapstructure:"plant_name_th" json:"plant_name_th,omitempty"`
-	PlantDescEN      string		 `mapstructure:"plant_desc_en" json:"plant_desc_en,omitempty"`
-	PlantDescTH      string		 `mapstructure:"plant_desc_th" json:"plant_desc_th,omitempty"`
-	CreateDate		 time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
-	ChangeDate	     time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
-	StatusId		 uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
-	PlantTypeId      uuid.UUID	 `mapstructure:"plant_type_id" json:"plant_type_id,omitempty"`
+	PlantId          uuid.UUID	 `mapstructure:"plant_id" json:"id,omitempty"`
+	PlantNameEN      string		 `mapstructure:"plant_name_en" json:"name_en,omitempty"`
+	PlantNameTH      string		 `mapstructure:"plant_name_th" json:"name_th,omitempty"`
+	PlantDescEN      string		 `mapstructure:"plant_desc_en" json:"desc_en,omitempty"`
+	PlantDescTH      string		 `mapstructure:"plant_desc_th" json:"desc_th,omitempty"`
+	CreateDate		 time.Time	 `mapstructure:"create_date" json:"-"`
+	ChangeDate	     time.Time	 `mapstructure:"change_date" json:"-"`
+	StatusId		 uuid.UUID	 `mapstructure:"status_id" json:"-"`
+	PlantTypeId      *uuid.UUID	 `mapstructure:"plant_type_id" json:"type_id,omitempty"`
 	TotalItem      	 int		 `mapstructure:"total_item" json:"total_item,omitempty"`
 }
 // New instance plant

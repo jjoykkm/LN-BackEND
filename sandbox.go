@@ -59,6 +59,8 @@ func main()  {
 	sqlWhere := fmt.Sprintf("%s.status_id = ? AND %s.plant_type_id = ?", config.DB_PLANT, config.DB_PLANT)
 	db.Debug().Where(sqlWhere, config.STATUS_ACTIVE, plantTypeId).Preload("PlantType", "status_id = ?", config.STATUS_ACTIVE).Find(&results)
 	fmt.Printf("%+v\n", results)
+	jj := uuid.New()
+	fmt.Println()
 	//helper.ConvertToJson(results)
 
 	//db.Model(&results).Association("StatusId").Count()

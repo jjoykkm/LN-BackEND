@@ -63,8 +63,6 @@ func (s *Service) GetPlantCategoryList(status, language string) *model_other.Bod
 }
 
 func (s *Service) GetPlantCategoryItem(status, plantTypeId, language string, offset int) *model_other.BodyRespOffset {
-	var plantCat PlantCat
-	var plantCatList []PlantCat
 	var currentOffset int
 	var total int
 
@@ -77,28 +75,29 @@ func (s *Service) GetPlantCategoryItem(status, plantTypeId, language string, off
 		}
 	}
 
-	for _, join := range joinList {
-		mapstructure.Decode(join.PlantType, &plantCat)
-		mapstructure.Decode(join.Plant, &plantCat)
+	for idx, join := range joinList {
 		switch language {
 		case config.LANGUAGE_EN:
-			plantCat.PlantTypeName = join.PlantType.PlantTypeEN
-			plantCat.PlantName = join.Plant.PlantNameEN
-			plantCat.PlantDesc = join.Plant.PlantDescEN
+			join.PlantType.PlantTypeTH = ""
+			join.Plant.PlantNameTH = ""
+			join.Plant.PlantDescTH = ""
 		case config.LANGUAGE_TH:
-			plantCat.PlantTypeName = join.PlantType.PlantTypeTH
-			plantCat.PlantName = join.Plant.PlantNameTH
-			plantCat.PlantDesc = join.Plant.PlantDescTH
+			join.PlantType.PlantTypeEN = ""
+			join.Plant.PlantNameEN = ""
+			join.Plant.PlantDescEN = ""
 		}
-		plantCat.TotalItem = s.repo.GetCountFormulaPlant(config.STATUS_ACTIVE, plantCat.PlantId.UUID.String())
-		plantCatList = append(plantCatList, plantCat)
+		join.Plant.TotalItem = int(s.repo.GetCountFormulaPlant(config.STATUS_ACTIVE, join.Plant.PlantId.UUID.String()))
+		// Delete PlantTypeId in struct Plant
+		join.Plant.PlantTypeId = nil
+		// Modify list
+		joinList[idx] = join
 	}
 
-	total = len(plantCatList)
+	total = len(joinList)
 	currentOffset = offset + total
 
 	return &model_other.BodyRespOffset{
-		Item: plantCatList,
+		Item: joinList,
 		Offset: currentOffset,
 		Total: total,
 	}
