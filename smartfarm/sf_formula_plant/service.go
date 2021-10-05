@@ -139,8 +139,8 @@ func (s *Service) GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlan
 	return rateScore, ratePeople
 }
 
-//func (s *Service) GetPlantOverviewFavorite(status, uid, language string, offset int) *model_other.BodyRespOffset {
-//	var joinArray []model_services.JoinFormulaPlantAndPlant
+func (s *Service) GetPlantOverviewFavorite(status, uid, language string, offset int) *model_other.BodyRespOffset {
+	//var joinArray []JoinPlantAndFormulaPlant
 //	var formulaPlant model_databases.FormulaPlant
 //	var plantOverview model_services.ForPlantItem
 //	var plantOverviewArray []model_services.ForPlantItem
@@ -210,14 +210,14 @@ func (s *Service) GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlan
 //	total = len(plantOverviewArray)
 //	currentOffset = offset + total
 //
-//	return &model_other.BodyRespOffset{
-//		Item: nil,
-//		Offset: offset,
-//		Total: 0,
-//	}
-//}
-//
-//func (s *Service) GetMyPlantOverviewer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int) {
+	return &model_other.BodyRespOffset{
+		Item: nil,
+		Offset: offset,
+		Total: 0,
+	}
+}
+
+//func (s *Service) GetMyPlantOverviewer(status, uid, language string, offset int) *model_other.BodyRespOffset {
 //	var formulaPlant model_databases.FormulaPlant
 //	var plantOverview model_services.ForPlantItem
 //	var joinArray []model_services.JoinFormulaPlantAndPlant
@@ -261,7 +261,7 @@ func (s *Service) GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlan
 //			countryMap[plantOverview.CountryId.UUID.String()] = plantOverview.CountryName
 //		}
 //
-//		//Get Country name
+//		//Get Province name
 //		plantOverview.ProvinceName, found = provinceMap[plantOverview.ProvinceId.UUID.String()]
 //		if !found {
 //			_, plantOverview.ProvinceName = IntCommon.GetProvinceNameer(ln, plantOverview.ProvinceId.UUID.String(), language)
@@ -296,7 +296,7 @@ func (s *Service) GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlan
 //
 //	return plantOverviewArray, currentOffset, total
 //}
-//
+
 //func (s *Service) GetPlantOverviewByPlanter(status, uid, plantId, language string, offset int) ([]model_services.ForPlantItem, int, int) {
 //	var formulaPlant model_databases.FormulaPlant
 //	var joinArray []model_services.JoinFormulaPlantAndPlant

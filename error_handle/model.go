@@ -35,30 +35,15 @@ func (u *PostBodyReq) New() *PostBodyReq {
 //				 		    METHOD POST RESPONSE
 //-------------------------------------------------------------------------------//
 //Model post body
-type PostBodyResp struct {
-	Item     interface{}	`mapstructure:"item" json:"item"`
-	Total    int			`mapstructure:"total" json:"total"`
+type ErrContext struct {
+	Code	string	`mapstructure:"code" json:"code"`
+	Err		error	`mapstructure:"err" json:"err"`
 }
 
 // New instance
-func (u *PostBodyResp) New() *PostBodyResp {
-	return &PostBodyResp{
-		Item:     u.Item ,
-		Total:    u.Total ,
+func (u *ErrContext) New() *ErrContext {
+	return &ErrContext{
+		Code:	u.Code ,
+		Err:	u.Err ,
 	}
 }
-
-////-------------------------------------------------------------------------------//
-////							Table plant_type
-////-------------------------------------------------------------------------------//
-//type BatchJobInitialReq struct {
-//	BatchName string `json:"batchName" validate:"nonzero"`
-//	DataDate  string `json:"dataDate"`
-//}
-//
-////-------------------------------------------------------------------------------//
-////							Table plant_type
-////-------------------------------------------------------------------------------//
-//type BatchJobInitialResp struct {
-//	DataDate string `json:"dataDate"`
-//}

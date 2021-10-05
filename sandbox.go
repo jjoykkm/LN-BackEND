@@ -5,6 +5,7 @@ import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/config"
 	"github.com/jjoykkm/ln-backend/models/model_databases"
+	"github.com/jjoykkm/ln-backend/smartfarm/sf_formula_plant"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"time"
@@ -53,14 +54,24 @@ func main()  {
 	if err != nil {
 		panic(err.Error())
 	}
-	var results []JJ
+	var result []sf_formula_plant.JoinPlantAndFormulaPlant
 	//db.Table("plant").Joins("inner join plant_type on plant.plant_type_id = plant_type.plant_type_id").Scan(&results)
-	plantTypeId := "caea388c-aa95-4612-9399-6e07cf42709a"
-	sqlWhere := fmt.Sprintf("%s.status_id = ? AND %s.plant_type_id = ?", config.DB_PLANT, config.DB_PLANT)
-	db.Debug().Where(sqlWhere, config.STATUS_ACTIVE, plantTypeId).Preload("PlantType", "status_id = ?", config.STATUS_ACTIVE).Find(&results)
-	fmt.Printf("%+v\n", results)
-	jj := uuid.New()
-	fmt.Println()
+	//plantTypeId := "caea388c-aa95-4612-9399-6e07cf42709a"
+	//sqlWhere := fmt.Sprintf("%s.status_id = ? AND %s.plant_type_id = ?", config.DB_PLANT, config.DB_PLANT)
+	//db.Joins("Company").Joins("Manager").Joins("Account").Find(&users, "users.id IN ?",
+	//db.Debug().Joins("FormulaPlant").Find(&result, "plant.plant_id = ?","bde0c9e9-8dea-485f-8ec1-cb94dfd4b14e")
+	//db.Debug().Where(sqlWhere, config.STATUS_ACTIVE, plantTypeId).Preload("PlantType", "status_id = ?", config.STATUS_ACTIVE).Find(&results)
+	db.Debug().Where("status_id = ? AND plant_id = ? ", config.STATUS_ACTIVE, "bde0c9e9-8dea-485f-8ec1-cb94dfd4b14e").Preload("FormulaPlant", func(db *gorm.DB) *gorm.DB {
+		return db.Limit(5).Offset(20)
+	}).Preload("PlantType").Joins("Province").Find(&result)
+	//.Preload("JoinPlantAndFormulaPlant.FormulaPlant.Country.CountryId")
+	//db.Debug().Set("gorm:auto_preload", true).Find(&result)
+
+//db.Debug().Where("status_id = ? AND plant_id = ? ", config.STATUS_ACTIVE, "bde0c9e9-8dea-485f-8ec1-cb94dfd4b14e").Preload("Plant").Limit(20).Preload("PlantType").Find(&result)
+	//db.Debug().Where("status_id = ? AND plant_id = ? ", config.STATUS_ACTIVE, "bde0c9e9-8dea-485f-8ec1-cb94dfd4b14e").Preload("FormulaPlant").Find(&result)
+
+	fmt.Println("-----------------------------")
+	//fmt.Printf("%+v\n", result)
 	//helper.ConvertToJson(results)
 
 	//db.Model(&results).Association("StatusId").Count()

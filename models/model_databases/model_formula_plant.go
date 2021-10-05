@@ -20,10 +20,10 @@ type FormulaPlant struct {
 	Recommend3		 int		 `mapstructure:"recommend3" json:"recommend3,omitempty"`
 	Recommend4		 int		 `mapstructure:"recommend4" json:"recommend4,omitempty"`
 	Recommend5		 int		 `mapstructure:"recommend5" json:"recommend5,omitempty"`
-	CreateDate		 time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
-	ChangeDate		 time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
+	CreateDate		 time.Time	 `mapstructure:"create_date" json:"-"`
+	ChangeDate		 time.Time	 `mapstructure:"change_date" json:"-"`
 	PlantId		 	 uuid.UUID	 `mapstructure:"plant_id" json:"plant_id,omitempty"`
-	StatusId		 uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
+	StatusId		 uuid.UUID	 `mapstructure:"status_id" json:"-"`
 	ProvinceId		 uuid.UUID	 `mapstructure:"province_id" json:"province_id,omitempty"`
 	CountryId		 uuid.UUID	 `mapstructure:"country_id" json:"country_id,omitempty"`
 	IsPublic		 bool	 	 `mapstructure:"is_public" json:"is_public,omitempty"`

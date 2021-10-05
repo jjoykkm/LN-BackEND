@@ -68,3 +68,69 @@ func (u *PlantCat) New() *PlantCat {
 		TotalItem:    	u.TotalItem ,
 	}
 }
+
+//-------------------------------------------------------------------------------//
+//				 	   	Join Plant And PlantType (View/Add/Edit)
+//-------------------------------------------------------------------------------//
+//Model
+type JoinPlantAndFormulaPlant struct {
+	Plant     		model_databases.Plant	 		`mapstructure:"plant" json:"plant" gorm:"embedded"`
+	FormulaPlant    model_databases.FormulaPlant	`mapstructure:"formula_plant" json:"formula_plant" gorm:"foreignkey:PlantId; references:PlantId"`
+	PlantType   	model_databases.PlantType		`mapstructure:"plant_type" json:"plant_type" gorm:"foreignkey:PlantTypeId; references:PlantTypeId"`
+	Province   		model_databases.Province		`mapstructure:"province" json:"province" gorm:"foreignkey:ProvinceId; references:ProvinceId"` // association_foreignkey:ProvinceId
+	Country   		model_databases.Country			`mapstructure:"country" json:"country" gorm:"foreignkey:CountryId; references:CountryId"`
+
+	//FormulaPlant    model_databases.FormulaPlant	`mapstructure:"formula_plant" json:"formula_plant" gorm:"embedded"`
+	//Plant     		model_databases.Plant	 		`mapstructure:"plant" json:"plant" gorm:"foreignkey:PlantId; references:PlantId"`
+
+}
+
+// New instance
+func (u *JoinPlantAndFormulaPlant) New() *JoinPlantAndFormulaPlant {
+	return &JoinPlantAndFormulaPlant{
+		FormulaPlant:   u.FormulaPlant ,
+		Plant:  		u.Plant ,
+		PlantType:  	u.PlantType ,
+	}
+}
+
+func (JoinPlantAndFormulaPlant) TableName() string {
+	return "formula_plant"
+}
+
+//-------------------------------------------------------------------------------//
+//				  Button Favorite and My formula (Card Item)
+//-------------------------------------------------------------------------------//
+//Model
+type ForPlantItem struct {
+	PlantType		 model_databases.PlantType
+	FormulaPlant	 model_databases.FormulaPlant
+	RateScore 		 float32	 `mapstructure:"rate_score" json:"rate_score"`
+	RatePeople 		 int		 `mapstructure:"rate_people" json:"rate_people"`
+	IsPublic		 bool	 	 `mapstructure:"is_public" json:"is_public"`
+	IsPlanted		 bool	 	 `mapstructure:"is_planted" json:"is_planted"`
+	IsFavorite		 bool	 	 `mapstructure:"is_favorite" json:"is_favorite"`
+}
+
+// New instance
+//func (u *ForPlantItem) New() *ForPlantItem {
+//	return &ForPlantItem{
+//		PlantTypeId:		u.PlantTypeId ,
+//		PlantTypeName:  	u.PlantTypeName ,
+//		FormulaPlantId:		u.FormulaPlantId ,
+//		FormulaName:		u.FormulaName ,
+//		FormulaDesc:		u.FormulaDesc ,
+//		PeopleUsed:			u.PeopleUsed ,
+//		RateScore:			u.RateScore ,
+//		RatePeople:			u.RatePeople ,
+//		CountryId:			u.CountryId ,
+//		CountryName:		u.CountryName ,
+//		ProvinceId:			u.ProvinceId ,
+//		ProvinceName:		u.ProvinceName ,
+//		IsPublic:			u.IsPublic ,
+//		IsPlanted:			u.IsPlanted ,
+//		IsFavorite:			u.IsFavorite ,
+//		Uid:				u.Uid ,
+//		Username:			u.Username ,
+//	}
+//}

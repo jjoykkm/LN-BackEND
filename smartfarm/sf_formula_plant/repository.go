@@ -68,3 +68,19 @@ func (r *Repository) FindAllFavoriteFormulaPlant(status, uid string) ([]model_da
 	}
 	return result, nil
 }
+
+func (r *Repository) FindJoinPlantWithFormulaPlant(status string, offset int) ([]JoinPlantAndFormulaPlant, error) {
+	var result []JoinPlantAndFormulaPlant
+	//var sqlWhere string
+	// Generate condition when get plant
+	//sqlWhere = fmt.Sprintf("%s.status_id = ?",config.DB_PLANT)
+	//if plantTypeId != "" {
+	//	sqlWhere = sqlWhere + fmt.Sprintf(" AND %s.plant_type_id = ?", config.DB_PLANT)
+	//}
+	//resp := r.db.Debug().Where(sqlWhere, status, plantTypeId).Preload("PlantType", "status_id = ?", config.STATUS_ACTIVE).Limit(LIMIT_GET_DATA).Offset(offset).Find(&result)
+	resp := r.db.Debug().Preload("PlantType", "status_id = ?", config.STATUS_ACTIVE).Limit(LIMIT_GET_DATA).Offset(offset).Find(&result)
+	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
+		return nil, resp.Error
+	}
+	return result, nil
+}
