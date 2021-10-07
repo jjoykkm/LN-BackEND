@@ -69,16 +69,18 @@ func (r *Repository) FindAllFavoriteFormulaPlant(status, uid string) ([]model_da
 	return result, nil
 }
 
-func (r *Repository) FindJoinPlantWithFormulaPlant(status string, offset int) ([]JoinPlantAndFormulaPlant, error) {
+func (r *Repository) FindJoinPlantWithFormulaPlant(status, plantId string, offset int) ([]JoinPlantAndFormulaPlant, error) {
 	var result []JoinPlantAndFormulaPlant
-	//var sqlWhere string
-	// Generate condition when get plant
-	//sqlWhere = fmt.Sprintf("%s.status_id = ?",config.DB_PLANT)
-	//if plantTypeId != "" {
-	//	sqlWhere = sqlWhere + fmt.Sprintf(" AND %s.plant_type_id = ?", config.DB_PLANT)
-	//}
-	//resp := r.db.Debug().Where(sqlWhere, status, plantTypeId).Preload("PlantType", "status_id = ?", config.STATUS_ACTIVE).Limit(LIMIT_GET_DATA).Offset(offset).Find(&result)
-	resp := r.db.Debug().Preload("PlantType", "status_id = ?", config.STATUS_ACTIVE).Limit(LIMIT_GET_DATA).Offset(offset).Find(&result)
+	var sqlWhere string
+	//// Generate condition when get plant
+	sqlWhere = fmt.Sprintf("status_id = '%s'",config.STATUS_ACTIVE)
+	if plantId != "" {
+		sqlWhere = sqlWhere + fmt.Sprintf(" AND plant_id = '%s'", plantId)
+	}
+	resp := r.db.Debug().Limit(5).Offset(0).Where(sqlWhere).Preload("Plant", func(db *gorm.DB) *gorm.DB {
+		return db.Where("status_id = ?", config.STATUS_ACTIVE).Preload("PlantType", "status_id = ?", config.STATUS_ACTIVE)
+	}).Preload("Province", "status_id = ?", config.STATUS_ACTIVE).Preload("Country", "status_id = ?", config.STATUS_ACTIVE).Find(&result)
+
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error
 	}

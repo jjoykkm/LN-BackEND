@@ -73,10 +73,19 @@ func (u *PlantCat) New() *PlantCat {
 //				 	   	Join Plant And PlantType (View/Add/Edit)
 //-------------------------------------------------------------------------------//
 //Model
+type Plant struct {
+	Plant  model_databases.Plant `gorm:"embedded"`
+	PlantType  model_databases.PlantType `gorm:"foreignkey:PlantTypeId; references:PlantTypeId"`
+}
+func (Plant) TableName() string {
+	return "plant"
+}
+
 type JoinPlantAndFormulaPlant struct {
-	Plant     		model_databases.Plant	 		`mapstructure:"plant" json:"plant" gorm:"embedded"`
-	FormulaPlant    model_databases.FormulaPlant	`mapstructure:"formula_plant" json:"formula_plant" gorm:"foreignkey:PlantId; references:PlantId"`
-	PlantType   	model_databases.PlantType		`mapstructure:"plant_type" json:"plant_type" gorm:"foreignkey:PlantTypeId; references:PlantTypeId"`
+	FormulaPlant    model_databases.FormulaPlant	`mapstructure:"formula_plant" json:"formula_plant" gorm:"embedded"`
+	Plant     		Plant			 		`mapstructure:"plant" json:"plant" gorm:"foreignkey:PlantId; references:PlantId;"`
+	//Plant     		model_databases.Plant	 		`mapstructure:"plant" json:"plant" gorm:"foreignkey:PlantId; references:PlantId;"`
+	//PlantType   	model_databases.PlantType		`mapstructure:"plant_type" json:"plant_type" gorm:"-"` // gorm:"foreignkey:PlantTypeId; references:PlantTypeId;"
 	Province   		model_databases.Province		`mapstructure:"province" json:"province" gorm:"foreignkey:ProvinceId; references:ProvinceId"` // association_foreignkey:ProvinceId
 	Country   		model_databases.Country			`mapstructure:"country" json:"country" gorm:"foreignkey:CountryId; references:CountryId"`
 
@@ -86,15 +95,16 @@ type JoinPlantAndFormulaPlant struct {
 }
 
 // New instance
-func (u *JoinPlantAndFormulaPlant) New() *JoinPlantAndFormulaPlant {
-	return &JoinPlantAndFormulaPlant{
-		FormulaPlant:   u.FormulaPlant ,
-		Plant:  		u.Plant ,
-		PlantType:  	u.PlantType ,
-	}
-}
+//func (u *JoinPlantAndFormulaPlant) New() *JoinPlantAndFormulaPlant {
+//	return &JoinPlantAndFormulaPlant{
+//		FormulaPlant:   u.FormulaPlant ,
+//		Plant:  		u.Plant ,
+//		PlantType:  	u.PlantType ,
+//	}
+//}
 
 func (JoinPlantAndFormulaPlant) TableName() string {
+	//return "plant"
 	return "formula_plant"
 }
 
