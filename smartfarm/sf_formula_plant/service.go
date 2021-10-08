@@ -12,7 +12,8 @@ type Servicer interface {
 	GetPlantCategoryList(status, language string) *model_other.BodyResp
 	GetPlantCategoryItem(status, plantTypeId, language string, offset int) *model_other.BodyRespOffset
 	GetPlantOverviewByPlant(status, uid, plantId string, offset int) *model_other.BodyRespOffset
-	//GetPlantOverviewFavorite(status, uid, language string, offset int) *model_other.BodyRespOffset
+	GetPlantOverviewFavorite(status, uid, language string, offset int) *model_other.BodyRespOffset
+	GetMyPlantOverview(status, uid, language string, offset int) *model_other.BodyRespOffset
 
 	// Function
 	GetFavoriteFormulaPlant(status, uid, resultType string) ([]model_databases.FavoritePlant, []string, map[string]bool)
@@ -67,7 +68,7 @@ func (s *Service) GetPlantCategoryItem(status, plantTypeId, language string, off
 	var currentOffset int
 	var total int
 
-	joinList, err := s.repo.FindJoinPlantWithPlantType(status, plantTypeId, offset)
+	joinList, err := s.repo.FindAllPlantWithPlantType(status, plantTypeId, offset)
 	if err != nil{
 		return &model_other.BodyRespOffset{
 			Item: nil,
@@ -141,166 +142,15 @@ func (s *Service) GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlan
 }
 
 func (s *Service) GetPlantOverviewFavorite(status, uid, language string, offset int) *model_other.BodyRespOffset {
-	//var joinArray []JoinPlantAndFormulaPlant
-//	var formulaPlant model_databases.FormulaPlant
-//	var plantOverview model_services.ForPlantItem
-//	var plantOverviewArray []model_services.ForPlantItem
-//	var currentOffset int
-//	var total int
-//	var found bool
-//
-//	if uid == "" {
-//		return &model_other.BodyRespOffset{
-//			Item: nil,
-//			Offset: offset,
-//			Total: 0,
-//		}
-//	}
-//
-//	countryMap := make(map[string]string)
-//	provinceMap := make(map[string]string)
-//	plantTypeMap := make(map[string]string)
-//	userMap := make(map[string]string)
-//
-//	_, formulaPlantList, _ := IntFormulaPlant.GetFavoriteFormulaPlanter(ln, config.GetStatus().Active, uid)
-//	sqlIn := utility.ConvertListToStringIn(formulaPlantList)
-//	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.plant_id = %s.plant_id WHERE %s.status_id = '%s' AND %s.formula_plant_id IN %s OFFSET %d LIMIT 100",
-//		config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, status, config.DB_FORMULA_PLANT, sqlIn, offset)
-//	fmt.Println(sql)
-//	err := ln.Db.Raw(sql).Scan(&joinArray).Error
-//	if err != nil {
-//		log.Print(err)
-//	}
-//
-//	for _, join := range joinArray {
-//		mapstructure.Decode(join, &plantOverview)
-//		mapstructure.Decode(join, &formulaPlant)
-//		plantOverview.RateScore, plantOverview.RatePeople = IntFormulaPlant.GetRateScoreAndPeopleer(ln, formulaPlant)
-//		plantOverview.IsFavorite = true
-//
-//		//Get Country name
-//		plantOverview.CountryName, found = countryMap[plantOverview.CountryId.UUID.String()]
-//		if !found {
-//			_, plantOverview.CountryName = IntCommon.GetCountryNameer(ln, plantOverview.CountryId.UUID.String(), language)
-//			countryMap[plantOverview.CountryId.UUID.String()] = plantOverview.CountryName
-//		}
-//
-//		//Get Country name
-//		plantOverview.ProvinceName, found = provinceMap[plantOverview.ProvinceId.UUID.String()]
-//		if !found {
-//			_, plantOverview.ProvinceName = IntCommon.GetProvinceNameer(ln, plantOverview.ProvinceId.UUID.String(), language)
-//			provinceMap[plantOverview.ProvinceId.UUID.String()] = plantOverview.ProvinceName
-//		}
-//
-//		//Get Plant Type name
-//		plantOverview.PlantTypeName, found = plantTypeMap[plantOverview.PlantTypeId.UUID.String()]
-//		if !found {
-//			_, plantOverview.PlantTypeName = IntCommon.GetPlantTypeNameer(ln, plantOverview.PlantTypeId.UUID.String(), language)
-//			plantTypeMap[plantOverview.PlantTypeId.UUID.String()] = plantOverview.PlantTypeName
-//		}
-//
-//		//Get User name
-//		plantOverview.Username, found = userMap[plantOverview.Uid.UUID.String()]
-//		if !found {
-//			_, plantOverview.Username = IntCommon.GetUserNameer(ln, plantOverview.Uid.UUID.String())
-//			plantTypeMap[plantOverview.Uid.UUID.String()] = plantOverview.Username
-//		}
-//
-//		plantOverviewArray = append(plantOverviewArray, plantOverview)
-//	}
-//	total = len(plantOverviewArray)
-//	currentOffset = offset + total
-//
-	return &model_other.BodyRespOffset{
-		Item: nil,
-		Offset: offset,
-		Total: 0,
+	if uid == "" {
+		return &model_other.BodyRespOffset{
+			Item: nil,
+			Offset: offset,
+			Total: 0,
+		}
 	}
-}
-
-//func (s *Service) GetMyPlantOverviewer(status, uid, language string, offset int) *model_other.BodyRespOffset {
-//	var formulaPlant model_databases.FormulaPlant
-//	var plantOverview model_services.ForPlantItem
-//	var joinArray []model_services.JoinFormulaPlantAndPlant
-//	var plantOverviewArray []model_services.ForPlantItem
-//	var currentOffset int
-//	var total int
-//	var found bool
-//	var countryMap map[string]string
-//	var provinceMap map[string]string
-//	var plantTypeMap map[string]string
-//	var formulaPlantFavMap map[string]bool
-//	var userMap map[string]string
-//
-//	if uid == "" {
-//		return nil, offset, 0
-//	}
-//
-//	countryMap = make(map[string]string)
-//	provinceMap = make(map[string]string)
-//	plantTypeMap = make(map[string]string)
-//	userMap = make(map[string]string)
-//
-//	_, _, formulaPlantFavMap = IntFormulaPlant.GetFavoriteFormulaPlanter(ln, config.GetStatus().Active, uid)
-//	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.plant_id = %s.plant_id WHERE %s.status_id = '%s' AND %s.uid = '%s' OFFSET %d LIMIT 100",
-//		config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, status, config.DB_FORMULA_PLANT, uid, offset)
-//	fmt.Println(sql)
-//	err := ln.Db.Raw(sql).Scan(&joinArray).Error
-//	if err != nil {
-//		log.Print(err)
-//	}
-//
-//	for _, join := range joinArray {
-//		mapstructure.Decode(join, &formulaPlant)
-//		mapstructure.Decode(join, &plantOverview)
-//		plantOverview.RateScore, plantOverview.RatePeople = IntFormulaPlant.GetRateScoreAndPeopleer(ln, formulaPlant)
-//
-//		//Get Country name
-//		plantOverview.CountryName, found = countryMap[plantOverview.CountryId.UUID.String()]
-//		if !found {
-//			_, plantOverview.CountryName = IntCommon.GetCountryNameer(ln, plantOverview.CountryId.UUID.String(), language)
-//			countryMap[plantOverview.CountryId.UUID.String()] = plantOverview.CountryName
-//		}
-//
-//		//Get Province name
-//		plantOverview.ProvinceName, found = provinceMap[plantOverview.ProvinceId.UUID.String()]
-//		if !found {
-//			_, plantOverview.ProvinceName = IntCommon.GetProvinceNameer(ln, plantOverview.ProvinceId.UUID.String(), language)
-//			provinceMap[plantOverview.ProvinceId.UUID.String()] = plantOverview.ProvinceName
-//		}
-//
-//		//Get Plant Type name
-//		plantOverview.PlantTypeName, found = plantTypeMap[plantOverview.PlantTypeId.UUID.String()]
-//		if !found {
-//			_, plantOverview.PlantTypeName = IntCommon.GetPlantTypeNameer(ln, plantOverview.PlantTypeId.UUID.String(), language)
-//			plantTypeMap[plantOverview.PlantTypeId.UUID.String()] = plantOverview.PlantTypeName
-//		}
-//
-//		//Check Favorite
-//		plantOverview.IsFavorite, found = formulaPlantFavMap[plantOverview.Uid.UUID.String()]
-//		if !found {
-//			plantOverview.IsFavorite = false
-//		}
-//
-//		//Get User name
-//		plantOverview.Username, found = userMap[plantOverview.Uid.UUID.String()]
-//		if !found {
-//			_, plantOverview.Username = IntCommon.GetUserNameer(ln, plantOverview.Uid.UUID.String())
-//			plantTypeMap[plantOverview.Uid.UUID.String()] = plantOverview.Username
-//		}
-//
-//		plantOverviewArray = append(plantOverviewArray, plantOverview)
-//	}
-//
-//	total = len(plantOverviewArray)
-//	currentOffset = offset + total
-//
-//	return plantOverviewArray, currentOffset, total
-//}
-
-func (s *Service) GetPlantOverviewByPlant(status, uid, plantId string, offset int) *model_other.BodyRespOffset {
-
-	if uid == "" || plantId == "" {
+	forPlant, err := s.repo.FindAllFormulaPlantFavorite(status, uid, offset)
+	if err != nil{
 		return &model_other.BodyRespOffset{
 			Item: nil,
 			Offset: offset,
@@ -308,7 +158,32 @@ func (s *Service) GetPlantOverviewByPlant(status, uid, plantId string, offset in
 		}
 	}
 
-	forPlant, err := s.repo.FindPlantWithFormulaPlant(status, plantId, offset)
+	// Get planted formula plant
+	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, uid)
+	for idx, wa := range forPlant {
+		wa.IsFavorite = true
+		// Check planted
+		wa.IsPlanted = plantedMap[wa.FormulaPlant.FormulaPlantId.UUID.String()]
+		forPlant[idx] = wa
+	}
+	total := len(forPlant)
+	currentOffset := offset + total
+	return &model_other.BodyRespOffset{
+		Item: forPlant,
+		Offset: currentOffset,
+		Total: total,
+	}
+}
+
+func (s *Service) GetMyPlantOverview(status, uid, language string, offset int) *model_other.BodyRespOffset {
+	if uid == ""{
+		return &model_other.BodyRespOffset{
+			Item: nil,
+			Offset: offset,
+			Total: 0,
+		}
+	}
+	forPlant, err := s.repo.FindAllMyFormulaPlant(status, uid, offset)
 	if err != nil{
 		return &model_other.BodyRespOffset{
 			Item: nil,
@@ -318,18 +193,49 @@ func (s *Service) GetPlantOverviewByPlant(status, uid, plantId string, offset in
 	}
 	// Get favorite formula plant
 	_, favMap, _ := s.repo.FindAllFavForPlantId(status, config.GetResType().Map, uid)
-
 	// Get planted formula plant
 	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, uid)
-
 	for idx, wa := range forPlant {
-
 		// Check is favorite
 		wa.IsFavorite = favMap[wa.FormulaPlant.FormulaPlantId.UUID.String()]
-
 		// Check planted
 		wa.IsPlanted = plantedMap[wa.FormulaPlant.FormulaPlantId.UUID.String()]
+		forPlant[idx] = wa
+	}
+	total := len(forPlant)
+	currentOffset := offset + total
+	return &model_other.BodyRespOffset{
+		Item: forPlant,
+		Offset: currentOffset,
+		Total: total,
+	}
+}
 
+func (s *Service) GetPlantOverviewByPlant(status, uid, plantId string, offset int) *model_other.BodyRespOffset {
+	if uid == "" || plantId == "" {
+		return &model_other.BodyRespOffset{
+			Item: nil,
+			Offset: offset,
+			Total: 0,
+		}
+	}
+	forPlant, err := s.repo.FindAllFormulaPlantByPlant(status, plantId, offset)
+	if err != nil{
+		return &model_other.BodyRespOffset{
+			Item: nil,
+			Offset: offset,
+			Total: 0,
+		}
+	}
+	// Get favorite formula plant
+	_, favMap, _ := s.repo.FindAllFavForPlantId(status, config.GetResType().Map, uid)
+	// Get planted formula plant
+	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, uid)
+	for idx, wa := range forPlant {
+		// Check is favorite
+		wa.IsFavorite = favMap[wa.FormulaPlant.FormulaPlantId.UUID.String()]
+		// Check planted
+		wa.IsPlanted = plantedMap[wa.FormulaPlant.FormulaPlantId.UUID.String()]
 		forPlant[idx] = wa
 	}
 	total := len(forPlant)

@@ -12,12 +12,14 @@ import (
 
 type Repositorier interface {
 	FindAllPlantType(status string) ([]model_databases.PlantType, error)
-	FindJoinPlantWithPlantType(status, plantTypeId string, offset int) ([]JoinPlantAndPlantType, error)
+	FindAllPlantWithPlantType(status, plantTypeId string, offset int) ([]JoinPlantAndPlantType, error)
 	GetCountFormulaPlant(status, plantId string) int64
 	FindAllFavoriteFormulaPlant(status, uid string) ([]model_databases.FavoritePlant, error)
-	FindPlantWithFormulaPlant(status, plantId string, offset int) ([]FormulaPlantItem, error)
+	FindAllFormulaPlantByPlant(status, plantId string, offset int) ([]FormulaPlantItem, error)
 	FindAllFavForPlantId(status, resultType, uid string) ([]uuid.UUID, map[string]bool, error)
 	FindAllPlantedForPlantId(status, resultType, uid string) ([]uuid.UUID, map[string]bool, error)
+	FindAllFormulaPlantFavorite(status, uid string, offset int) ([]FormulaPlantItem, error)
+	FindAllMyFormulaPlant(status, uid string, offset int) ([]FormulaPlantItem, error)
 }
 
 type Repository struct {
@@ -38,7 +40,7 @@ func (r *Repository) FindAllPlantType(status string) ([]model_databases.PlantTyp
 	return result, nil
 }
 
-func (r *Repository) FindJoinPlantWithPlantType(status, plantTypeId string, offset int) ([]JoinPlantAndPlantType, error) {
+func (r *Repository) FindAllPlantWithPlantType(status, plantTypeId string, offset int) ([]JoinPlantAndPlantType, error) {
 	var result []JoinPlantAndPlantType
 	var sqlWhere string
 	// Generate condition when get plant
@@ -74,7 +76,7 @@ func (r *Repository) FindAllFavoriteFormulaPlant(status, uid string) ([]model_da
 	return result, nil
 }
 
-func (r *Repository) FindPlantWithFormulaPlant(status, plantId string, offset int) ([]FormulaPlantItem, error) {
+func (r *Repository) FindAllFormulaPlantByPlant(status, plantId string, offset int) ([]FormulaPlantItem, error) {
 	var result []FormulaPlantItem
 	var sqlWhere string
 
@@ -121,4 +123,33 @@ func (r *Repository) FindAllPlantedForPlantId(status, resultType, uid string) ([
 		resultMap = helper.ConvertUUIDtoStringMap(result)
 	}
 	return result, resultMap, nil
+}
+
+func (r *Repository) FindAllFormulaPlantFavorite(status, uid string, offset int) ([]FormulaPlantItem, error) {
+	var result []FormulaPlantItem
+
+	resp := r.db.Debug().Order("create_date desc, formula_name").Limit(LIMIT_GET_DATA).Offset(offset).Where(
+		"status_id = ? AND formula_plant_id IN (?)", config.GetStatus().Active, r.db.Debug().Table(config.DB_FAVORITE_PLANT).Select("formula_plant_id").Find(&result,
+			"status_id = ? AND uid = ?", status, uid)).Preload("Plant", func(db *gorm.DB) *gorm.DB {
+		return db.Where("status_id = ?", config.GetStatus().Active).Preload("PlantType", "status_id = ?", config.GetStatus().Active)
+	}).Preload("Province", "status_id = ?", config.GetStatus().Active).Preload("Country", "status_id = ?", config.GetStatus().Active).Find(&result)
+
+	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
+		return nil, resp.Error
+	}
+	return result, nil
+}
+
+func (r *Repository) FindAllMyFormulaPlant(status, uid string, offset int) ([]FormulaPlantItem, error) {
+	var result []FormulaPlantItem
+
+	resp := r.db.Debug().Order("create_date desc, formula_name").Limit(LIMIT_GET_DATA).Offset(offset).Where(
+		"status_id = ? AND uid = ?", status, uid).Preload("Plant", func(db *gorm.DB) *gorm.DB {
+		return db.Where("status_id = ?", config.GetStatus().Active).Preload("PlantType", "status_id = ?", config.GetStatus().Active)
+	}).Preload("Province", "status_id = ?", config.GetStatus().Active).Preload("Country", "status_id = ?", config.GetStatus().Active).Find(&result)
+
+	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
+		return nil, resp.Error
+	}
+	return result, nil
 }

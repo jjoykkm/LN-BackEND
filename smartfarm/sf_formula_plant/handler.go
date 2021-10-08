@@ -51,8 +51,38 @@ func (h *Handler) GetPlantOverviewByPlant(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{})
 		return
 	}
-	//  GetPlantOverviewByPlant(status, uid, plantId string, offset int) ([]FormulaPlantItem, int, int)
+	//  GetPlantOverviewByPlant(status, uid, plantId string, offset int) *model_other.BodyRespOffset
 	bodyResp := h.service.GetPlantOverviewByPlant(config.GetStatus().Active, bodyReq.Uid, bodyReq.PlantId, bodyReq.Offset)
+	if bodyResp.Total < 1 {
+		c.JSON(http.StatusNoContent, gin.H{})
+	} else {
+		c.JSON(http.StatusOK, bodyResp)
+	}
+}
+
+func (h *Handler) GetPlantOverviewFavorite(c *gin.Context) {
+	var bodyReq model_other.BodyReq
+	if err := c.Bind(&bodyReq); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{})
+		return
+	}
+	//  GetPlantOverviewFavorite(status, uid, language string, offset int) *model_other.BodyRespOffset
+	bodyResp := h.service.GetPlantOverviewFavorite(config.GetStatus().Active, bodyReq.Uid, bodyReq.Language, bodyReq.Offset)
+	if bodyResp.Total < 1 {
+		c.JSON(http.StatusNoContent, gin.H{})
+	} else {
+		c.JSON(http.StatusOK, bodyResp)
+	}
+}
+
+func (h *Handler) GetMyPlantOverview(c *gin.Context) {
+	var bodyReq model_other.BodyReq
+	if err := c.Bind(&bodyReq); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{})
+		return
+	}
+	//  GetMyPlantOverview(status, uid, language string, offset int) *model_other.BodyRespOffset
+	bodyResp := h.service.GetMyPlantOverview(config.GetStatus().Active, bodyReq.Uid, bodyReq.Language, bodyReq.Offset)
 	if bodyResp.Total < 1 {
 		c.JSON(http.StatusNoContent, gin.H{})
 	} else {

@@ -7,6 +7,7 @@ import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/config"
 	"github.com/jjoykkm/ln-backend/models/model_databases"
+	"github.com/lnelectronic/algorithmId/algorithmln"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -109,7 +110,7 @@ func main()  {
 	//	subQuery4).Find(&result).Select("formula_plant_id").Where("uid = ?","9c21bd63-a1f0-490a-bb5b-1de7ab502a1d")
 	//
 
-	fmt.Println(config.GetResType().All)
+	fmt.Println(algorithmln.ID())
 	fmt.Println("-----------------------------")
 	fmt.Printf("%+v\n", result)
 	//helper.ConvertToJson(results)

@@ -83,6 +83,12 @@ func main() {
 	http.POST("/plantOverviewByPlant", func(c *gin.Context) {
 		handlerFormulaPlant.GetPlantOverviewByPlant(c)
 	})
+	http.POST("/plantOverviewFavorite", func(c *gin.Context) {
+		handlerFormulaPlant.GetPlantOverviewFavorite(c)
+	})
+	http.POST("/myPlantOverview", func(c *gin.Context) {
+		handlerFormulaPlant.GetMyPlantOverview(c)
+	})
 
 
 	http.POST("/jjoy", func(c *gin.Context) {
@@ -94,8 +100,8 @@ func main() {
 	http.POST("/test", Test)
 	//http.POST("/plantCategoryList", GetPlantCategoryList)
 	//http.POST("/plantCategoryItem", GetPlantCategoryItem)
-	http.POST("/plantOverviewFavorite", GetPlantOverviewFavorite)
-	http.POST("/myPlantOverview", GetMyPlantOverview)
+	//http.POST("/plantOverviewFavorite", GetPlantOverviewFavorite)
+	//http.POST("/myPlantOverview", GetMyPlantOverview)
 	//http.POST("/plantOverviewByPlant", GetPlantOverviewByPlant)
 	http.POST("/formulaPlantDetail", GetFormulaPlantDetail)
 
