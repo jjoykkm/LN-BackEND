@@ -91,7 +91,7 @@ func (ln Ln) GetPlantCategoryItemer(status, plantTypeId, language string, offset
 			plantCat.PlantDesc = joinPlantAndPlantType.PlantDescTH
 		}
 		cond := fmt.Sprintf("plant_id = '%s'", joinPlantAndPlantType.PlantId.UUID.String())
-		plantCat.TotalItem = utility.GetCountTable(ln.Db, config.STATUS_ACTIVE, config.DB_FORMULA_PLANT, "formula_plant_id", cond)
+		plantCat.TotalItem = utility.GetCountTable(ln.Db, config.GetStatus().Active, config.DB_FORMULA_PLANT, "formula_plant_id", cond)
 		plantCatArray = append(plantCatArray, plantCat)
 	}
 	total = len(plantCatArray)
@@ -159,7 +159,7 @@ func (ln Ln) GetPlantOverviewFavoriteer(status, uid, language string, offset int
 	plantTypeMap := make(map[string]string)
 	userMap := make(map[string]string)
 
-	_, formulaPlantList, _ := IntFormulaPlant.GetFavoriteFormulaPlanter(ln, config.STATUS_ACTIVE, uid)
+	_, formulaPlantList, _ := IntFormulaPlant.GetFavoriteFormulaPlanter(ln, config.GetStatus().Active, uid)
 	sqlIn := utility.ConvertListToStringIn(formulaPlantList)
 	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.plant_id = %s.plant_id WHERE %s.status_id = '%s' AND %s.formula_plant_id IN %s OFFSET %d LIMIT 100",
 		config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, status, config.DB_FORMULA_PLANT, sqlIn, offset)
@@ -233,7 +233,7 @@ func (ln Ln) GetMyPlantOverviewer(status, uid, language string, offset int) ([]m
 	plantTypeMap = make(map[string]string)
 	userMap = make(map[string]string)
 
-	_, _, formulaPlantFavMap = IntFormulaPlant.GetFavoriteFormulaPlanter(ln, config.STATUS_ACTIVE, uid)
+	_, _, formulaPlantFavMap = IntFormulaPlant.GetFavoriteFormulaPlanter(ln, config.GetStatus().Active, uid)
 	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.plant_id = %s.plant_id WHERE %s.status_id = '%s' AND %s.uid = '%s' OFFSET %d LIMIT 100",
 		config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, status, config.DB_FORMULA_PLANT, uid, offset)
 	fmt.Println(sql)
@@ -313,7 +313,7 @@ func (ln Ln) GetPlantOverviewByPlanter(status, uid, plantId, language string, of
 	plantTypeMap = make(map[string]string)
 	userMap = make(map[string]string)
 
-	_, _, formulaPlantFavMap = IntFormulaPlant.GetFavoriteFormulaPlanter(ln, config.STATUS_ACTIVE, uid)
+	_, _, formulaPlantFavMap = IntFormulaPlant.GetFavoriteFormulaPlanter(ln, config.GetStatus().Active, uid)
 	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.plant_id = %s.plant_id WHERE %s.status_id = '%s' AND %s.plant_id = '%s' OFFSET %d LIMIT 100",
 		config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, status, config.DB_FORMULA_PLANT, plantId, offset)
 	fmt.Println(sql)
@@ -466,9 +466,9 @@ func (ln Ln) GetFormulaPlantDetailer(status, formulaPlantId, language string) mo
 
 	_, formula.Username = IntCommon.GetUserNameer(ln, formula.Uid.UUID.String())
 
-	formula.SensorList, _ = IntFormulaPlant.GetSensorValueRecRelateer(ln, config.STATUS_ACTIVE, formula.FormulaPlantId.UUID.String(), language)
+	formula.SensorList, _ = IntFormulaPlant.GetSensorValueRecRelateer(ln, config.GetStatus().Active, formula.FormulaPlantId.UUID.String(), language)
 
-	formula.FertList, _ = IntFormulaPlant.GetFertilizerRatioRelateer(ln, config.STATUS_ACTIVE, formula.FormulaPlantId.UUID.String(), language)
+	formula.FertList, _ = IntFormulaPlant.GetFertilizerRatioRelateer(ln, config.GetStatus().Active, formula.FormulaPlantId.UUID.String(), language)
 
 	return formula
 }

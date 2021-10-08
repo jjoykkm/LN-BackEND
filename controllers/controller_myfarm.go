@@ -53,7 +53,7 @@ func (ln Ln) GetOverviewFarmer(status, farmId string) model_services.MyFarmOverv
 
 	// Get Farm detail
 	sqlFarm := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND farm_id = '%s' ",
-		config.DB_FARM, config.STATUS_ACTIVE, farmId)
+		config.DB_FARM, config.GetStatus().Active, farmId)
 	fmt.Println(sqlFarm)
 	errFarm := ln.Db.Raw(sqlFarm).Scan(&farmOver).Error
 	if errFarm != nil {
@@ -61,7 +61,7 @@ func (ln Ln) GetOverviewFarmer(status, farmId string) model_services.MyFarmOverv
 	}
 
 	//Get Farm Area detail
-	_, farmAreaIdList, _ := IntCommon.GetFarmAreaByFarmId(ln, config.STATUS_ACTIVE, farmId)
+	_, farmAreaIdList, _ := IntCommon.GetFarmAreaByFarmId(ln, config.GetStatus().Active, farmId)
 	sqlIn := utility.ConvertListToStringIn(farmAreaIdList)
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND farm_area_id IN %s ",
 		config.DB_TRANS_SOCKET_AREA, status, sqlIn)
@@ -204,7 +204,7 @@ func (ln Ln) GetManageMainboxer(status, language, farmId string) ([]model_servic
 	var manageMBList []model_services.MyFarmManageMainbox
 	var total int
 
-	tranSoc, _, socketIdList, mainboxIdList, total := IntMyFarm.GetTransSocketAreaer(ln, config.STATUS_ACTIVE, farmId)
+	tranSoc, _, socketIdList, mainboxIdList, total := IntMyFarm.GetTransSocketAreaer(ln, config.GetStatus().Active, farmId)
 	if total == 0 {
 		return manageMBList, total
 	}
@@ -252,7 +252,7 @@ func (ln Ln) GetManageFarmAreaer(status, language, farmId string) ([]model_servi
 	var manageFAList []model_services.MyFarmManageFarmArea
 	var total int
 
-	tranSoc, farmAreaIdList, socketIdList, _, total := IntMyFarm.GetTransSocketAreaer(ln, config.STATUS_ACTIVE, farmId)
+	tranSoc, farmAreaIdList, socketIdList, _, total := IntMyFarm.GetTransSocketAreaer(ln, config.GetStatus().Active, farmId)
 	if total == 0 {
 		return manageFAList, total
 	}

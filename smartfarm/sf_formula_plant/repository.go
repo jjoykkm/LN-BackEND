@@ -3,7 +3,9 @@ package sf_formula_plant
 import (
 	"errors"
 	"fmt"
+	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/config"
+	"github.com/jjoykkm/ln-backend/helper"
 	"github.com/jjoykkm/ln-backend/models/model_databases"
 	"gorm.io/gorm"
 )
@@ -13,6 +15,9 @@ type Repositorier interface {
 	FindJoinPlantWithPlantType(status, plantTypeId string, offset int) ([]JoinPlantAndPlantType, error)
 	GetCountFormulaPlant(status, plantId string) int64
 	FindAllFavoriteFormulaPlant(status, uid string) ([]model_databases.FavoritePlant, error)
+	FindPlantWithFormulaPlant(status, plantId string, offset int) ([]FormulaPlantItem, error)
+	FindAllFavForPlantId(status, resultType, uid string) ([]uuid.UUID, map[string]bool, error)
+	FindAllPlantedForPlantId(status, resultType, uid string) ([]uuid.UUID, map[string]bool, error)
 }
 
 type Repository struct {
@@ -41,7 +46,7 @@ func (r *Repository) FindJoinPlantWithPlantType(status, plantTypeId string, offs
 	if plantTypeId != "" {
 		sqlWhere = sqlWhere + fmt.Sprintf(" AND %s.plant_type_id = ?", config.DB_PLANT)
 	}
-	resp := r.db.Debug().Where(sqlWhere, status, plantTypeId).Preload("PlantType", "status_id = ?", config.STATUS_ACTIVE).Limit(LIMIT_GET_DATA).Offset(offset).Find(&result)
+	resp := r.db.Debug().Where(sqlWhere, status, plantTypeId).Preload("PlantType", "status_id = ?", config.GetStatus().Active).Limit(LIMIT_GET_DATA).Offset(offset).Find(&result)
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error
 	}
@@ -69,20 +74,51 @@ func (r *Repository) FindAllFavoriteFormulaPlant(status, uid string) ([]model_da
 	return result, nil
 }
 
-func (r *Repository) FindJoinPlantWithFormulaPlant(status, plantId string, offset int) ([]JoinPlantAndFormulaPlant, error) {
-	var result []JoinPlantAndFormulaPlant
+func (r *Repository) FindPlantWithFormulaPlant(status, plantId string, offset int) ([]FormulaPlantItem, error) {
+	var result []FormulaPlantItem
 	var sqlWhere string
-	//// Generate condition when get plant
-	sqlWhere = fmt.Sprintf("status_id = '%s'",config.STATUS_ACTIVE)
+
+	sqlWhere = fmt.Sprintf("status_id = '%s'",status)
+	// Generate condition when get plant
 	if plantId != "" {
 		sqlWhere = sqlWhere + fmt.Sprintf(" AND plant_id = '%s'", plantId)
 	}
-	resp := r.db.Debug().Limit(5).Offset(0).Where(sqlWhere).Preload("Plant", func(db *gorm.DB) *gorm.DB {
-		return db.Where("status_id = ?", config.STATUS_ACTIVE).Preload("PlantType", "status_id = ?", config.STATUS_ACTIVE)
-	}).Preload("Province", "status_id = ?", config.STATUS_ACTIVE).Preload("Country", "status_id = ?", config.STATUS_ACTIVE).Find(&result)
+	resp := r.db.Debug().Order("create_date desc, formula_name").Limit(LIMIT_GET_DATA).Offset(offset).Where(sqlWhere).Preload("Plant", func(db *gorm.DB) *gorm.DB {
+		return db.Where("status_id = ?", config.GetStatus().Active).Preload("PlantType", "status_id = ?", config.GetStatus().Active)
+	}).Preload("Province", "status_id = ?", config.GetStatus().Active).Preload("Country", "status_id = ?", config.GetStatus().Active).Find(&result)
 
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error
 	}
 	return result, nil
+}
+
+func (r *Repository) FindAllFavForPlantId(status, resultType, uid string) ([]uuid.UUID, map[string]bool, error) {
+	var resultMap map[string]bool
+	result:= []uuid.UUID{}
+
+	resp := r.db.Debug().Table(config.DB_FAVORITE_PLANT).Select("formula_plant_id").Find(&result, "status_id = ? AND uid = ?", status, uid)
+	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
+		return nil, nil, resp.Error
+	}
+	if resultType == config.GetResType().Map {
+		resultMap = helper.ConvertUUIDtoStringMap(result)
+	}
+	return result, resultMap, nil
+}
+
+func (r *Repository) FindAllPlantedForPlantId(status, resultType, uid string) ([]uuid.UUID, map[string]bool, error) {
+	var resultMap map[string]bool
+	result:= []uuid.UUID{}
+
+	resp := r.db.Debug().Table(config.DB_FARM_AREA).Where(
+		"status_id = ? AND farm_id IN (?)", status, r.db.Table(config.DB_TRANS_MANAGEMENT).Select("farm_id").Where(
+			"status_id = ? AND uid = ?",config.GetStatus().Active, uid)).Select("formula_plant_id").Find(&result)
+	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
+		return nil, nil, resp.Error
+	}
+	if resultType == config.GetResType().Map {
+		resultMap = helper.ConvertUUIDtoStringMap(result)
+	}
+	return result, resultMap, nil
 }

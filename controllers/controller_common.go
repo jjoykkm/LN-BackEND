@@ -50,7 +50,7 @@ func (ln Ln) GetCountryNameer(countryId, language string) (model_databases.Count
 	var countryName string
 
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND country_id = '%s'",
-		config.DB_COUNTRY, config.STATUS_ACTIVE, countryId)
+		config.DB_COUNTRY, config.GetStatus().Active, countryId)
 	fmt.Println(sql)
 	err := ln.Db.Raw(sql).Scan(&countryModel).Error
 	if err != nil {
@@ -71,7 +71,7 @@ func (ln Ln) GetProvinceNameer(provinceId, language string) (model_databases.Pro
 	var provinceName string
 
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND province_id = '%s'",
-		config.DB_PROVINCE, config.STATUS_ACTIVE, provinceId)
+		config.DB_PROVINCE, config.GetStatus().Active, provinceId)
 	fmt.Println(sql)
 	err := ln.Db.Raw(sql).Scan(&provinceModel).Error
 	if err != nil {
@@ -92,7 +92,7 @@ func (ln Ln) GetPlantTypeNameer(plantTypeId, language string) (model_databases.P
 	var plantTypeName string
 
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND plant_type_id = '%s'",
-		config.DB_PLANT_TYPE, config.STATUS_ACTIVE, plantTypeId)
+		config.DB_PLANT_TYPE, config.GetStatus().Active, plantTypeId)
 	fmt.Println(sql)
 	err := ln.Db.Raw(sql).Scan(&plantTypeModel).Error
 	if err != nil {
@@ -112,7 +112,7 @@ func (ln Ln) GetFertCatNameer(fertCatId, language string) (model_databases.Ferti
 	var fertCatName string
 
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND fertilizer_cat_id = '%s'",
-		config.DB_FERTILIZER_CAT, config.STATUS_ACTIVE, fertCatId)
+		config.DB_FERTILIZER_CAT, config.GetStatus().Active, fertCatId)
 	fmt.Println(sql)
 	err := ln.Db.Raw(sql).Scan(&fertCatModel).Error
 	if err != nil {
@@ -133,7 +133,7 @@ func (ln Ln) GetUserNameer(uid string) (model_databases.Users, string) {
 	var userName string
 
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND uid = '%s'",
-		config.DB_USERS, config.STATUS_ACTIVE, uid)
+		config.DB_USERS, config.GetStatus().Active, uid)
 	err := ln.Db.Raw(sql).Scan(&userModel).Error
 	if err != nil {
 		log.Print(err)
@@ -148,7 +148,7 @@ func (ln Ln) GetSensorTypeNameer(sensorTypeId, language string) (model_databases
 	var sensorTypeName string
 
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND sensor_type_id = '%s'",
-		config.DB_SENSOR_TYPE, config.STATUS_ACTIVE, sensorTypeId)
+		config.DB_SENSOR_TYPE, config.GetStatus().Active, sensorTypeId)
 	fmt.Println(sql)
 	err := ln.Db.Raw(sql).Scan(&sensorTypeModel).Error
 	if err != nil {
@@ -170,7 +170,7 @@ func (ln Ln) GetRoleNameer(roleId, language string) (model_databases.Role, strin
 	var desc string
 
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND role_id = '%s'",
-		config.DB_ROLE, config.STATUS_ACTIVE, roleId)
+		config.DB_ROLE, config.GetStatus().Active, roleId)
 	fmt.Println(sql)
 	err := ln.Db.Raw(sql).Scan(&roleModel).Error
 	if err != nil {
@@ -193,7 +193,7 @@ func (ln Ln) GetFarmAreaNameer(farmAreaId string) (model_databases.FarmArea, str
 	var farmAreaModel model_databases.FarmArea
 
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND farm_area_id = '%s'",
-		config.DB_FARM_AREA, config.STATUS_ACTIVE, farmAreaId)
+		config.DB_FARM_AREA, config.GetStatus().Active, farmAreaId)
 	fmt.Println(sql)
 	err := ln.Db.Raw(sql).Scan(&farmAreaModel).Error
 	if err != nil {

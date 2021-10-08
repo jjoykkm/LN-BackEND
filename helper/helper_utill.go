@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/models/model_other"
 	"net/http"
 )
@@ -35,4 +36,12 @@ func ConcatJoin(typeJoin, leftTable, rightTable, joinKey string) string {
 		typeJoin, rightTable, leftTable, joinKey, rightTable, joinKey)
 	fmt.Println(sql)
 	return sql
+}
+
+func ConvertUUIDtoStringMap(uuidList []uuid.UUID) map[string]bool {
+	strMap := make(map[string]bool)
+	for _, wa := range uuidList {
+		strMap[wa.UUID.String()] = true
+	}
+	return strMap
 }

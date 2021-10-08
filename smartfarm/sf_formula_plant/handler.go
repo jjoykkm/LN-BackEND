@@ -22,7 +22,7 @@ func (h *Handler) GetPlantCategoryList(c *gin.Context) {
 		return
 	}
 	// GetPlantCategoryList(status, language string) ([]model_services.ForPlantCatList, int)
-	bodyResp := h.service.GetPlantCategoryList(config.STATUS_ACTIVE, bodyReq.Language)
+	bodyResp := h.service.GetPlantCategoryList(config.GetStatus().Active, bodyReq.Language)
 	if bodyResp.Total < 1 {
 		c.JSON(http.StatusNoContent, gin.H{})
 	} else {
@@ -37,7 +37,22 @@ func (h *Handler) GetPlantCategoryItem(c *gin.Context) {
 		return
 	}
 	// GetPlantCategoryItem(status, plantTypeId, language string, offset int)
-	bodyResp := h.service.GetPlantCategoryItem(config.STATUS_ACTIVE, bodyReq.PlantTypeId, bodyReq.Language, bodyReq.Offset)
+	bodyResp := h.service.GetPlantCategoryItem(config.GetStatus().Active, bodyReq.PlantTypeId, bodyReq.Language, bodyReq.Offset)
+	if bodyResp.Total < 1 {
+		c.JSON(http.StatusNoContent, gin.H{})
+	} else {
+		c.JSON(http.StatusOK, bodyResp)
+	}
+}
+
+func (h *Handler) GetPlantOverviewByPlant(c *gin.Context) {
+	var bodyReq model_other.BodyReq
+	if err := c.Bind(&bodyReq); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{})
+		return
+	}
+	//  GetPlantOverviewByPlant(status, uid, plantId string, offset int) ([]FormulaPlantItem, int, int)
+	bodyResp := h.service.GetPlantOverviewByPlant(config.GetStatus().Active, bodyReq.Uid, bodyReq.PlantId, bodyReq.Offset)
 	if bodyResp.Total < 1 {
 		c.JSON(http.StatusNoContent, gin.H{})
 	} else {

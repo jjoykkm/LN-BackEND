@@ -80,6 +80,9 @@ func main() {
 	http.POST("/plantCategoryItem", func(c *gin.Context) {
 		handlerFormulaPlant.GetPlantCategoryItem(c)
 	})
+	http.POST("/plantOverviewByPlant", func(c *gin.Context) {
+		handlerFormulaPlant.GetPlantOverviewByPlant(c)
+	})
 
 
 	http.POST("/jjoy", func(c *gin.Context) {
@@ -93,7 +96,7 @@ func main() {
 	//http.POST("/plantCategoryItem", GetPlantCategoryItem)
 	http.POST("/plantOverviewFavorite", GetPlantOverviewFavorite)
 	http.POST("/myPlantOverview", GetMyPlantOverview)
-	http.POST("/plantOverviewByPlant", GetPlantOverviewByPlant)
+	//http.POST("/plantOverviewByPlant", GetPlantOverviewByPlant)
 	http.POST("/formulaPlantDetail", GetFormulaPlantDetail)
 
 	// Dashboard
@@ -116,7 +119,7 @@ func main() {
 }
 
 func Test(c *gin.Context) {
-	aa, bb := me.Ctrl.GetManageMainboxer(config.STATUS_ACTIVE, config.LANGUAGE_EN, "41470e4b-005d-4df9-aa4d-c59f37f6390b")
+	aa, bb := me.Ctrl.GetManageMainboxer(config.GetStatus().Active, config.LANGUAGE_EN, "41470e4b-005d-4df9-aa4d-c59f37f6390b")
 
 	c.JSON(http.StatusOK, gin.H{
 		"01": aa,
@@ -132,7 +135,7 @@ func GetPlantCategoryList(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
 	//GetPlantCategoryLister(status, language string) ([]model_services.ForPlantCatList, int)
-	plantCategoryList, total := me.Ctrl.GetPlantCategoryLister(config.STATUS_ACTIVE, bodyModel.Language)
+	plantCategoryList, total := me.Ctrl.GetPlantCategoryLister(config.GetStatus().Active, bodyModel.Language)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
 	} else {
@@ -147,7 +150,7 @@ func GetPlantCategoryItem(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
 	//GetPlantCategoryItemer(status, plantTypeId, language string, offset int) ([]model_services.ForPlantCat, int, int)
-	plantCategoryItem, nextOffset, total := me.Ctrl.GetPlantCategoryItemer(config.STATUS_ACTIVE, bodyModel.PlantTypeId, bodyModel.Language, bodyModel.Offset)
+	plantCategoryItem, nextOffset, total := me.Ctrl.GetPlantCategoryItemer(config.GetStatus().Active, bodyModel.PlantTypeId, bodyModel.Language, bodyModel.Offset)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
 	} else {
@@ -163,7 +166,7 @@ func GetPlantOverviewFavorite(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
 	//GetPlantOverviewFavoriteer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int)
-	plantOverviewFavorite, nextOffset, total := me.Ctrl.GetPlantOverviewFavoriteer(config.STATUS_ACTIVE, bodyModel.Uid, bodyModel.Language, bodyModel.Offset)
+	plantOverviewFavorite, nextOffset, total := me.Ctrl.GetPlantOverviewFavoriteer(config.GetStatus().Active, bodyModel.Uid, bodyModel.Language, bodyModel.Offset)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
 	} else {
@@ -179,7 +182,7 @@ func GetMyPlantOverview(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
 	//GetMyPlantOverviewer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int)
-	myPlantOverview, nextOffset, total := me.Ctrl.GetMyPlantOverviewer(config.STATUS_ACTIVE, bodyModel.Uid, bodyModel.Language, bodyModel.Offset)
+	myPlantOverview, nextOffset, total := me.Ctrl.GetMyPlantOverviewer(config.GetStatus().Active, bodyModel.Uid, bodyModel.Language, bodyModel.Offset)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
 	} else {
@@ -195,7 +198,7 @@ func GetPlantOverviewByPlant(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
 	//GetPlantOverviewByPlanter(status, uid, plantId, language string, offset int) ([]model_services.ForPlantItem, int, int)
-	plantOverviewByPlant, nextOffset, total := me.Ctrl.GetPlantOverviewByPlanter(config.STATUS_ACTIVE, bodyModel.Uid, bodyModel.PlantId, bodyModel.Language, bodyModel.Offset)
+	plantOverviewByPlant, nextOffset, total := me.Ctrl.GetPlantOverviewByPlanter(config.GetStatus().Active, bodyModel.Uid, bodyModel.PlantId, bodyModel.Language, bodyModel.Offset)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
 	} else {
@@ -212,8 +215,8 @@ func GetFormulaPlantDetail(c *gin.Context) {
 	bodyModel = utility.GetModelFromBody(c)
 
 	//GetFormulaPlantDetailer(status, formulaPlantId, language string) model_services.ForPlantFormula
-	//_, _, formulaPlant := me.Ctrl.GetSensorValueRecRelate(config.STATUS_ACTIVE, "243367fe-fc14-4074-8ff5-374220dadf8f", bodyModel.Language)
-	formulaPlant := me.Ctrl.GetFormulaPlantDetailer(config.STATUS_ACTIVE, bodyModel.FormulaPlantId, bodyModel.Language)
+	//_, _, formulaPlant := me.Ctrl.GetSensorValueRecRelate(config.GetStatus().Active, "243367fe-fc14-4074-8ff5-374220dadf8f", bodyModel.Language)
+	formulaPlant := me.Ctrl.GetFormulaPlantDetailer(config.GetStatus().Active, bodyModel.FormulaPlantId, bodyModel.Language)
 	if reflect.DeepEqual(formulaPlant, model_services.ForPlantFormula{}) {
 		c.JSON(http.StatusNoContent, gin.H{})
 	} else {
@@ -228,7 +231,7 @@ func GetFarmList(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
 	//GetFarmLister(status, uid string) ([]model_services.DashboardFarmList, int)
-	farmList, total := me.Ctrl.GetFarmLister(config.STATUS_ACTIVE, bodyModel.Uid)
+	farmList, total := me.Ctrl.GetFarmLister(config.GetStatus().Active, bodyModel.Uid)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
 	} else {
@@ -243,7 +246,7 @@ func GetFarmAreaDashboardList(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
 	//GetFarmAreaDashboardLister(status, language, farmId string) ([]model_services.DashboardFarmList, int)
-	farmAreaList, total := me.Ctrl.GetFarmAreaDashboardLister(config.STATUS_ACTIVE, bodyModel.Language, bodyModel.FarmId)
+	farmAreaList, total := me.Ctrl.GetFarmAreaDashboardLister(config.GetStatus().Active, bodyModel.Language, bodyModel.FarmId)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
 	} else {
@@ -258,7 +261,7 @@ func GetFarmAreaDetailSensor(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
 	//GetFarmAreaDetailSensorer(status, farmId, language string) ([]model_services.SenSocMainList, int)
-	senSocMainList, total := me.Ctrl.GetFarmAreaDetailSensorer(config.STATUS_ACTIVE, bodyModel.FarmAreaId, bodyModel.Language)
+	senSocMainList, total := me.Ctrl.GetFarmAreaDetailSensorer(config.GetStatus().Active, bodyModel.FarmAreaId, bodyModel.Language)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
 	} else {
@@ -273,7 +276,7 @@ func GetOverviewFarm(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
 	//GetOverviewFarmer(status, farmId string) (model_services.MyFarmOverviewFarm)
-	overviewFarm := me.Ctrl.GetOverviewFarmer(config.STATUS_ACTIVE, bodyModel.FarmId)
+	overviewFarm := me.Ctrl.GetOverviewFarmer(config.GetStatus().Active, bodyModel.FarmId)
 	if reflect.DeepEqual(overviewFarm, model_services.MyFarmOverviewFarm{}) {
 		c.JSON(http.StatusNoContent, gin.H{})
 	} else {
@@ -287,7 +290,7 @@ func GetManageMainbox(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
 	// GetManageMainboxer(status, language, farmId string) ([]model_services.MyFarmManageMainbox, int)
-	manageMainbox, total := me.Ctrl.GetManageMainboxer(config.STATUS_ACTIVE, bodyModel.Language, bodyModel.FarmId)
+	manageMainbox, total := me.Ctrl.GetManageMainboxer(config.GetStatus().Active, bodyModel.Language, bodyModel.FarmId)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
 	} else {
@@ -302,7 +305,7 @@ func GetManageFarmArea(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
 	// GetManageFarmAreaer(status, language, farmId string) ([]model_services.MyFarmManageFarmArea, int)
-	manageFarmArea, total := me.Ctrl.GetManageFarmAreaer(config.STATUS_ACTIVE, bodyModel.Language, bodyModel.FarmId)
+	manageFarmArea, total := me.Ctrl.GetManageFarmAreaer(config.GetStatus().Active, bodyModel.Language, bodyModel.FarmId)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
 	} else {
@@ -317,7 +320,7 @@ func GetManageRole(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
 	// GetManageRoleer(status, language, farmId string) ([]model_services.MyFarmManageRole, int)
-	manageRole, total := me.Ctrl.GetManageRoleer(config.STATUS_ACTIVE, bodyModel.Language, bodyModel.FarmId)
+	manageRole, total := me.Ctrl.GetManageRoleer(config.GetStatus().Active, bodyModel.Language, bodyModel.FarmId)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
 	} else {
@@ -332,7 +335,7 @@ func GetFarmAreaList(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
 	// GetFarmAreaLister(status, farmId string) ([]model_services.ScheduleFarmArea, int)
-	farmArea, total := me.Ctrl.GetFarmAreaLister(config.STATUS_ACTIVE, bodyModel.FarmId)
+	farmArea, total := me.Ctrl.GetFarmAreaLister(config.GetStatus().Active, bodyModel.FarmId)
 	if total == 0 {
 		c.JSON(http.StatusNoContent, gin.H{})
 	} else {
@@ -347,7 +350,7 @@ func GetScheRemind(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
 	// GetScheReminder(status string, farmAreaId []string) model_services.ScheduleScheRemind
-	scheRemind := me.Ctrl.GetScheReminder(config.STATUS_ACTIVE, bodyModel.FarmAreaIdList)
+	scheRemind := me.Ctrl.GetScheReminder(config.GetStatus().Active, bodyModel.FarmAreaIdList)
 
 	//fmt.Printf("%+v\n", scheRemind)
 	c.JSON(http.StatusOK, gin.H{

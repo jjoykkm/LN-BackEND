@@ -55,7 +55,7 @@ func (ln Ln) GetFarmAreaDashboardLister(status, language, farmId string) ([]mode
 	}
 
 	for idx, wa := range farmAreaList {
-		wa.SensorDetail, _ = IntDashboard.GetFarmAreaDetailSensorer(ln, config.STATUS_ACTIVE, wa.FarmAreaId.UUID.String(), language)
+		wa.SensorDetail, _ = IntDashboard.GetFarmAreaDetailSensorer(ln, config.GetStatus().Active, wa.FarmAreaId.UUID.String(), language)
 		farmAreaList[idx] = wa
 	}
 
@@ -135,7 +135,7 @@ func (ln Ln) GetStatusSensorer(sensorStatusId string) (model_databases.StatusSen
 	var status string
 
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND status_sensor_id = '%s'",
-		config.DB_STATUS_SENSOR, config.STATUS_ACTIVE, sensorStatusId)
+		config.DB_STATUS_SENSOR, config.GetStatus().Active, sensorStatusId)
 	fmt.Println(sql)
 	err := ln.Db.Raw(sql).Scan(&model).Error
 	if err != nil {
@@ -156,8 +156,8 @@ func (ln Ln) GetFarmAreaDetailSensorer(status, farmAreaId, language string) ([]m
 
 	socAreaAr, sensorIdList, mainboxIdList := IntDashboard.GetSocketLister(ln, status, farmAreaId)
 
-	_, sensorMap := IntDashboard.GetSensorByIder(ln, config.STATUS_ACTIVE, sensorIdList)
-	_, mainboxMap := IntDashboard.GetMainboxByIder(ln, config.STATUS_ACTIVE, mainboxIdList)
+	_, sensorMap := IntDashboard.GetSensorByIder(ln, config.GetStatus().Active, sensorIdList)
+	_, mainboxMap := IntDashboard.GetMainboxByIder(ln, config.GetStatus().Active, mainboxIdList)
 
 	for _, wa := range socAreaAr {
 		mapstructure.Decode(wa, &senSocMain)

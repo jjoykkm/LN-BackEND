@@ -32,7 +32,7 @@ func (s *Service) GetFarmAreaByFarm(status, farmId, resultType string) ([]model_
 	if err != nil {
 		return nil, nil
 	}
-	if resultType != config.RES_TYPE_STRUCT {
+	if resultType != config.GetResType().Struct {
 		for _, array := range farmModel {
 			farmAreaIdList = append(farmAreaIdList, array.FarmAreaId.UUID.String())
 		}
@@ -43,7 +43,7 @@ func (s *Service) GetFarmAreaByFarm(status, farmId, resultType string) ([]model_
 func (s *Service) GetCountryAndName(countryId, language string) (*model_databases.Country, string) {
 	var countryName string
 
-	countryModel, err := s.repo.FindOneCountry(config.STATUS_ACTIVE, countryId)
+	countryModel, err := s.repo.FindOneCountry(config.GetStatus().Active, countryId)
 	if err != nil {
 		return nil, ""
 	}
@@ -59,7 +59,7 @@ func (s *Service) GetCountryAndName(countryId, language string) (*model_database
 func (s *Service) GetProvinceAndName(provinceId, language string) (*model_databases.Province, string) {
 	var provinceName string
 
-	provinceModel, err := s.repo.FindOneProvince(config.STATUS_ACTIVE, provinceId)
+	provinceModel, err := s.repo.FindOneProvince(config.GetStatus().Active, provinceId)
 	if err != nil {
 		return nil, ""
 	}
@@ -75,7 +75,7 @@ func (s *Service) GetProvinceAndName(provinceId, language string) (*model_databa
 func (s *Service) GetPlantTypeAndName(plantTypeId, language string) (*model_databases.PlantType, string) {
 	var plantTypeName string
 
-	plantTypeModel, err := s.repo.FindOnePlantType(config.STATUS_ACTIVE, plantTypeId)
+	plantTypeModel, err := s.repo.FindOnePlantType(config.GetStatus().Active, plantTypeId)
 	if err != nil {
 		return nil, ""
 	}
@@ -91,7 +91,7 @@ func (s *Service) GetPlantTypeAndName(plantTypeId, language string) (*model_data
 func (s *Service) GetFertCatAndName(fertCatId, language string) (*model_databases.FertilizerCat, string) {
 	var fertCatName string
 
-	fertCatModel, err := s.repo.FindOneFertCat(config.STATUS_ACTIVE, fertCatId)
+	fertCatModel, err := s.repo.FindOneFertCat(config.GetStatus().Active, fertCatId)
 	if err != nil {
 		return nil, ""
 	}
@@ -107,7 +107,7 @@ func (s *Service) GetFertCatAndName(fertCatId, language string) (*model_database
 func (s *Service) GetUserAndName(uid string) (*model_databases.Users, string) {
 	var userName string
 
-	userModel, err := s.repo.FindOneUser(config.STATUS_ACTIVE, uid)
+	userModel, err := s.repo.FindOneUser(config.GetStatus().Active, uid)
 	if err != nil {
 		return nil, ""
 	}
@@ -118,7 +118,7 @@ func (s *Service) GetUserAndName(uid string) (*model_databases.Users, string) {
 func (s *Service) GetSensorTypeAndName(sensorTypeId, language string) (*model_databases.SensorType, string) {
 	var sensorTypeName string
 	
-	sensorTypeModel, err := s.repo.FindOneSensorType(config.STATUS_ACTIVE, sensorTypeId)
+	sensorTypeModel, err := s.repo.FindOneSensorType(config.GetStatus().Active, sensorTypeId)
 	if err != nil {
 		return nil, ""
 	}
@@ -135,7 +135,7 @@ func (s *Service) GetRoleAndName(roleId, language string) (*model_databases.Role
 	var name string
 	var desc string
 
-	roleModel, err := s.repo.FindOneRole(config.STATUS_ACTIVE, roleId)
+	roleModel, err := s.repo.FindOneRole(config.GetStatus().Active, roleId)
 	if err != nil {
 		return nil, "", ""
 	}
@@ -151,7 +151,7 @@ func (s *Service) GetRoleAndName(roleId, language string) (*model_databases.Role
 }
 
 func (s *Service) GetFarmAreaAndName(farmAreaId string) (*model_databases.FarmArea, string) {
-	farmAreaModel, err := s.repo.FindOneFarmArea(config.STATUS_ACTIVE, farmAreaId)
+	farmAreaModel, err := s.repo.FindOneFarmArea(config.GetStatus().Active, farmAreaId)
 	if err != nil {
 		return nil, ""
 	}

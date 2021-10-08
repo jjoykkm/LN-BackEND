@@ -152,14 +152,14 @@ func (ln Ln) GetScheReminder(status string, farmAreaId []string) model_services.
 	}
 	fmt.Println(inTypeIdList)
 	//
-	////scheList, freqTypeIdList, inTypeIdList, _ := IntSchedule.GetScheduleer(ln, config.STATUS_ACTIVE, scheIdList)
+	////scheList, freqTypeIdList, inTypeIdList, _ := IntSchedule.GetScheduleer(ln, config.GetStatus().Active, scheIdList)
 	//
 	// Get Frequency Type
-	_, freqTypeMap, _ := IntSchedule.GetFrequencyTypeer(ln, config.STATUS_ACTIVE, freqTypeIdList)
+	_, freqTypeMap, _ := IntSchedule.GetFrequencyTypeer(ln, config.GetStatus().Active, freqTypeIdList)
 
 	fmt.Printf("%+v\n",freqTypeMap)
 	//Get Indicate Type
-	_, inTypeMap, _ := IntSchedule.GetIndicateTypeer(ln, config.STATUS_ACTIVE, inTypeIdList)
+	_, inTypeMap, _ := IntSchedule.GetIndicateTypeer(ln, config.GetStatus().Active, inTypeIdList)
 
 	//fmt.Printf("%+v\n",inTypeMap)
 	for _, wa := range sRList {
