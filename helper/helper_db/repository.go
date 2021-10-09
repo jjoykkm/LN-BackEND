@@ -2,7 +2,7 @@ package helper_db
 
 import (
 	"errors"
-	"github.com/jjoykkm/ln-backend/models/model_databases"
+	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
 	"gorm.io/gorm"
 )
 

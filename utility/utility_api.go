@@ -3,7 +3,7 @@ package utility
 import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	"github.com/jjoykkm/ln-backend/models/model_other"
+	"github.com/jjoykkm/ln-backend/modelsOld/model_other"
 	"net/http"
 )
 

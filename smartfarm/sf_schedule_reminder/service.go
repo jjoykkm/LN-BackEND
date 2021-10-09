@@ -2,7 +2,7 @@ package SF_FormulaPlant
 
 import (
 	"github.com/jjoykkm/ln-backend/config"
-	"github.com/jjoykkm/ln-backend/models/model_services"
+	"github.com/jjoykkm/ln-backend/modelsOld/model_services"
 	"github.com/mitchellh/mapstructure"
 )
 

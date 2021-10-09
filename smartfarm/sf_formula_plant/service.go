@@ -3,7 +3,7 @@ package sf_formula_plant
 import (
 	"github.com/jjoykkm/ln-backend/common/models/model_other"
 	"github.com/jjoykkm/ln-backend/config"
-	"github.com/jjoykkm/ln-backend/models/model_databases"
+	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
 )
 
 type Servicer interface {
@@ -92,9 +92,9 @@ func (s *Service) GetPlantOverviewByPlant(status string, ReqModel *model_other.R
 	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, ReqModel.Uid)
 	for idx, wa := range forPlant {
 		// Check is favorite
-		wa.IsFavorite = favMap[wa.FormulaPlant.FormulaPlantId.UUID.String()]
+		wa.IsFavorite = favMap[wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()]
 		// Check planted
-		wa.IsPlanted = plantedMap[wa.FormulaPlant.FormulaPlantId.UUID.String()]
+		wa.IsPlanted = plantedMap[wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()]
 		forPlant[idx] = wa
 	}
 	total := len(forPlant)
@@ -116,7 +116,7 @@ func (s *Service) GetPlantOverviewFavorite(status string, ReqModel *model_other.
 	for idx, wa := range forPlant {
 		wa.IsFavorite = true
 		// Check planted
-		wa.IsPlanted = plantedMap[wa.FormulaPlant.FormulaPlantId.UUID.String()]
+		wa.IsPlanted = plantedMap[wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()]
 		forPlant[idx] = wa
 	}
 	total := len(forPlant)
@@ -139,9 +139,9 @@ func (s *Service) GetMyPlantOverview(status string, ReqModel *model_other.ReqMod
 	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, ReqModel.Uid)
 	for idx, wa := range forPlant {
 		// Check is favorite
-		wa.IsFavorite = favMap[wa.FormulaPlant.FormulaPlantId.UUID.String()]
+		wa.IsFavorite = favMap[wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()]
 		// Check planted
-		wa.IsPlanted = plantedMap[wa.FormulaPlant.FormulaPlantId.UUID.String()]
+		wa.IsPlanted = plantedMap[wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()]
 		forPlant[idx] = wa
 	}
 	total := len(forPlant)

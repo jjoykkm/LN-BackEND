@@ -3,8 +3,8 @@ package controllers
 import (
 	"fmt"
 	"github.com/jjoykkm/ln-backend/config"
-	"github.com/jjoykkm/ln-backend/models/model_databases"
-	"github.com/jjoykkm/ln-backend/models/model_services"
+	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
+	"github.com/jjoykkm/ln-backend/modelsOld/model_services"
 	"github.com/jjoykkm/ln-backend/utility"
 	"github.com/mitchellh/mapstructure"
 	"log"

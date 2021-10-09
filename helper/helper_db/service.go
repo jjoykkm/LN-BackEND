@@ -2,7 +2,7 @@ package helper_db
 
 import (
 	"github.com/jjoykkm/ln-backend/config"
-	"github.com/jjoykkm/ln-backend/models/model_databases"
+	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
 )
 
 type Servicer interface {

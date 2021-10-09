@@ -5,14 +5,14 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/config"
-	"github.com/jjoykkm/ln-backend/models/model_databases"
+	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 //type Test struct {
-//	Plant  model_databases.Plant `gorm:"embedded"`
-//	PlantType  model_databases.PlantType `gorm:"foreignkey:PlantTypeId; references:PlantTypeId"`
+//	Plant  model_db.Plant `gorm:"embedded"`
+//	PlantType  model_db.PlantType `gorm:"foreignkey:PlantTypeId; references:PlantTypeId"`
 //}
 
 type JJ struct {
@@ -92,16 +92,16 @@ func main()  {
 	//ww := db.Debug().Table(config.DB_FARM_AREA).Where(
 	//	"farm_id IN (?)", db.Table(config.DB_TRANS_MANAGEMENT).Select("farm_id").Where(
 	//		"uid = ?","6f08ea87-47dd-4511-be6c-3f2f6603de6c")).Select("formula_plant_id").Find(&result)
-	//Model([]model_databases.FavoritePlant{})
+	//Model([]model_db.FavoritePlant{})
 	//ww := db.Debug().Table("FarmArea").Find(&result).Error config.DB_FARM_AREA
 	//result := []uuid.UUID{}
 	//db.Debug().Table(config.DB_FAVORITE_PLANT).Select("formula_plant_id").Find(&result)
 	//fmt.Println(result)
 	//db.Debug().Select("formula_plant_id").Find(&result)
 	//db.Debug().Table("(?) as u", db.Model(&User{}).Select("name", "age")).Where("age = ?", 18}).Find(&User{})
-	//subQuery1 := db.Debug().Model(&model_databases.TransManagement{}).Select("uid, farm_id")
-	//subQuery3 := db.Debug().Model(&model_databases.FarmArea{}).Select("farm_id, farm_id")
-	//subQuery4 := db.Debug().Model(&model_databases.FormulaPlant{}).Select("formula_plant_id")
+	//subQuery1 := db.Debug().Model(&model_db.TransManagement{}).Select("uid, farm_id")
+	//subQuery3 := db.Debug().Model(&model_db.FarmArea{}).Select("farm_id, farm_id")
+	//subQuery4 := db.Debug().Model(&model_db.FormulaPlant{}).Select("formula_plant_id")
 	//db.Debug().Table(
 	//	"(?) as tm, (?) as f, (?) as fa, (?) as fp",
 	//	subQuery1, subQuery2, subQuery3,
@@ -130,7 +130,7 @@ func main()  {
 	//		"SensorType","status_id = ?", config.GetStatus().Active)
 	//			}).Find(&result)
 	var result []model_databases.Farm
-	//result := []model_databases.TransManagement{}
+	//result := []model_db.TransManagement{}
 	//result := []map[string]interface{}{}
 	subQuery := db.Debug().Select("farm_id").Where("uid = ?", "17ac6921-ece0-43bc-9d88-7b9bfc59ffd3").Table(config.DB_TRANS_MANAGEMENT)
 	db.Debug().Where("status_id = ? AND farm_id IN (?)", config.GetStatus().Active, subQuery).Find(&result)
