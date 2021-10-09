@@ -2,6 +2,7 @@ package sf_formula_plant
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
+	"github.com/jjoykkm/ln-backend/config"
 	"github.com/jjoykkm/ln-backend/models/model_databases"
 )
 
@@ -46,8 +47,8 @@ type PlantCat struct {
 //-------------------------------------------------------------------------------//
 //Model
 type Plant struct {
-	Plant  model_databases.Plant `gorm:"embedded"`
-	PlantType  model_databases.PlantType `gorm:"foreignkey:PlantTypeId; references:PlantTypeId"`
+	Plant  		model_databases.Plant 		`mapstructure:"plant" json:"plant" gorm:"embedded"`
+	PlantType  	model_databases.PlantType 	`mapstructure:"plant_type" json:"plant_type" gorm:"foreignkey:PlantTypeId; references:PlantTypeId"`
 }
 func (Plant) TableName() string {
 	return "plant"
@@ -80,4 +81,70 @@ type ForPlantItem struct {
 	IsPublic		 bool	 	 `mapstructure:"is_public" json:"is_public"`
 	IsPlanted		 bool	 	 `mapstructure:"is_planted" json:"is_planted"`
 	IsFavorite		 bool	 	 `mapstructure:"is_favorite" json:"is_favorite"`
+}
+
+//-------------------------------------------------------------------------------//
+//				 	    	Sensor
+//-------------------------------------------------------------------------------//
+//Model
+type ForPlantSensor struct {
+	SensorValueRec	model_databases.TransSensorValueRec	 `mapstructure:"sensor_value_rec" json:"sensor_value_rec" gorm:"embedded"`
+	SensorType		model_databases.SensorType			 `mapstructure:"sensor_type" json:"sensor_type" gorm:"foreignkey:SensorTypeId; references:SensorTypeId;"`
+
+//	SensorTypeId      	uuid.UUID	 `mapstructure:"sensor_type_id" json:"sensor_type_id"`
+//	SensorTypeName      string	 	 `mapstructure:"sensor_type_name" json:"sensor_type_name"`
+//	ValueRec      		float64		 `mapstructure:"value_rec" json:"value_rec"`
+}
+
+func (ForPlantSensor) TableName() string {
+	return config.DB_TRANS_SENSOR_VALUE_REC
+}
+//-------------------------------------------------------------------------------//
+//				 	    	Fertilizer
+//-------------------------------------------------------------------------------//
+//Model
+
+type Fertilizer struct {
+	Fertilizer		model_databases.Fertilizer		`mapstructure:"fertilizer" json:"fertilizer" gorm:"embedded"`
+	FertilizerCat	model_databases.FertilizerCat	`mapstructure:"fertilizer_cat" json:"fertilizer_cat" gorm:"foreignkey:FertilizerCatId; references:FertilizerCatId;"`
+}
+
+func (Fertilizer) TableName() string {
+	return config.DB_FERTILIZER
+}
+
+type ForPlantFert struct {
+	TransFertRatio	model_databases.TransFertRatio	`mapstructure:"trans_fert_ratio" json:"trans_fert_ratio" gorm:"embedded"`
+	Fertilizer		Fertilizer						`mapstructure:"fertilizer" json:"fertilizer" gorm:"foreignkey:FertilizerId; references:FertilizerId;"`
+	//FertilizerCat	model_databases.FertilizerCat	`mapstructure:"fertilizer_cat" json:"fertilizer_cat" gorm:"foreignkey:FertilizerCatId; references:FertilizerCatId;"`
+
+//	FertilizerId     uuid.UUID	 `mapstructure:"fertilizer_id" json:"fertilizer_id"`
+//	FertilizerName   string		 `mapstructure:"fertilizer_name" json:"fertilizer_name"`
+//	Nitrogen       	 float64	 `mapstructure:"nitrogen" json:"nitrogen"`
+//	Phosphorus    	 float64	 `mapstructure:"phosphorus" json:"phosphorus"`
+//	Potassium      	 float64	 `mapstructure:"potassium" json:"potassium"`
+//	Ratio	      	 float64	 `mapstructure:"ratio" json:"ratio"`
+//	FertCatId      	 uuid.UUID	 `mapstructure:"fertilizer_cat_id" json:"fertilizer_cat_id"`
+//	FertCatName    	 string		 `mapstructure:"fertilizer_cat_name" json:"fertilizer_cat_name"`
+}
+
+func (ForPlantFert) TableName() string {
+	return config.DB_TRANS_FERTILIZER_RATIO
+}
+//-------------------------------------------------------------------------------//
+//				 	   	Formula Plant Detail
+//-------------------------------------------------------------------------------//
+
+//Model
+type ForPlantFormula struct {
+	FormulaPlant 	 model_databases.FormulaPlant	`mapstructure:"formula_plant" json:"formula_plant" gorm:"embedded"`
+	ForPlantSensor	 	 []ForPlantSensor				`mapstructure:"sensor_list" json:"sensor_list" gorm:"foreignkey:FormulaPlantId; references:FormulaPlantId"`
+	ForPlantFert		 []ForPlantFert					`mapstructure:"fert_list" json:"fert_list" gorm:"foreignkey:FormulaPlantId; references:FormulaPlantId"`
+	//SensorList	 	 []ForPlantSensor				`mapstructure:"sensor_list" json:"sensor_list" gorm:"foreignkey:FormulaPlantId; references:FormulaPlantId"`
+	//FertList		 []ForPlantFert					`mapstructure:"fert_list" json:"fert_list" gorm:"foreignkey:FormulaPlantId; references:FormulaPlantId"`
+	//SensorList	 	 []ForPlantSensor		`mapstructure:"sensor_list" json:"sensor_list"`
+	//FertList		 []ForPlantFert			`mapstructure:"fert_list" json:"fert_list"`
+}
+func (ForPlantFormula) TableName() string {
+	return config.DB_FORMULA_PLANT
 }

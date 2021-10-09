@@ -1,4 +1,4 @@
-package error_handle
+package errs
 
 type Handler struct {
 	service Servicer

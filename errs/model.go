@@ -1,4 +1,4 @@
-package error_handle
+package errs
 
 //-------------------------------------------------------------------------------//
 //				 		    METHOD POST REQUEST

@@ -1,4 +1,4 @@
-package error_handle
+package errs
 
 type Servicer interface {
 	//GetFarmAreaAndName(farmAreaId string) (*model_databases.FarmArea, string)

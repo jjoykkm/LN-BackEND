@@ -20,6 +20,7 @@ type Repositorier interface {
 	FindAllPlantedForPlantId(status, resultType, uid string) ([]uuid.UUID, map[string]bool, error)
 	FindAllFormulaPlantFavorite(status, uid string, offset int) ([]FormulaPlantItem, error)
 	FindAllMyFormulaPlant(status, uid string, offset int) ([]FormulaPlantItem, error)
+	FindAllFormulaPlantDetail(status, forPlantId string) ([]ForPlantFormula, error)
 }
 
 type Repository struct {
@@ -148,6 +149,22 @@ func (r *Repository) FindAllMyFormulaPlant(status, uid string, offset int) ([]Fo
 		return db.Where("status_id = ?", config.GetStatus().Active).Preload("PlantType", "status_id = ?", config.GetStatus().Active)
 	}).Preload("Province", "status_id = ?", config.GetStatus().Active).Preload("Country", "status_id = ?", config.GetStatus().Active).Find(&result)
 
+	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
+		return nil, resp.Error
+	}
+	return result, nil
+}
+
+func (r *Repository) FindAllFormulaPlantDetail(status, forPlantId string) ([]ForPlantFormula, error) {
+	var result []ForPlantFormula
+
+	resp := r.db.Debug().Where("status_id = ? AND formula_plant_id = ?", status, forPlantId).Preload("ForPlantFert",func(db *gorm.DB) *gorm.DB {
+		return db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("Fertilizer",func(db *gorm.DB) *gorm.DB {
+			return db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("FertilizerCat","status_id = ?", config.GetStatus().Active)
+		}) } ).Preload("ForPlantSensor",func(db *gorm.DB) *gorm.DB {
+		return db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload(
+			"SensorType","status_id = ?", config.GetStatus().Active)
+	}).Find(&result)
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error
 	}

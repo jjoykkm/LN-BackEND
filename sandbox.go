@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/config"
 	"github.com/jjoykkm/ln-backend/models/model_databases"
-	"github.com/lnelectronic/algorithmId/algorithmln"
+	"github.com/jjoykkm/ln-backend/smartfarm/sf_formula_plant"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -96,9 +95,9 @@ func main()  {
 	//		"uid = ?","6f08ea87-47dd-4511-be6c-3f2f6603de6c")).Select("formula_plant_id").Find(&result)
 	//Model([]model_databases.FavoritePlant{})
 	//ww := db.Debug().Table("FarmArea").Find(&result).Error config.DB_FARM_AREA
-	result := []uuid.UUID{}
-	db.Debug().Table(config.DB_FAVORITE_PLANT).Select("formula_plant_id").Find(&result)
-	fmt.Println(result)
+	//result := []uuid.UUID{}
+	//db.Debug().Table(config.DB_FAVORITE_PLANT).Select("formula_plant_id").Find(&result)
+	//fmt.Println(result)
 	//db.Debug().Select("formula_plant_id").Find(&result)
 	//db.Debug().Table("(?) as u", db.Model(&User{}).Select("name", "age")).Where("age = ?", 18}).Find(&User{})
 	//subQuery1 := db.Debug().Model(&model_databases.TransManagement{}).Select("uid, farm_id")
@@ -110,9 +109,30 @@ func main()  {
 	//	subQuery4).Find(&result).Select("formula_plant_id").Where("uid = ?","9c21bd63-a1f0-490a-bb5b-1de7ab502a1d")
 	//
 
-	fmt.Println(algorithmln.ID())
+	//fmt.Println(algorithmln.ID())
+	//ForPlantFert
+	//result := []sf_formula_plant.ForPlantFert{}
+	//db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("Fertilizer",func(db *gorm.DB) *gorm.DB {
+	//		return db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("FertilizerCat","status_id = ?", config.GetStatus().Active)
+	//}).Find(&result)
+
+
+
+	//result := []sf_formula_plant.ForPlantSensor{}
+	//db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload(
+	//	"SensorType","status_id = ?", config.GetStatus().Active).Find(&result)
+	result := []sf_formula_plant.ForPlantFormula{}
+
+	db.Debug().Where("status_id = ? AND formula_plant_id = ?", config.GetStatus().Active, ).Preload("ForPlantFert",func(db *gorm.DB) *gorm.DB {
+				return db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("Fertilizer",func(db *gorm.DB) *gorm.DB {
+					return db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("FertilizerCat","status_id = ?", config.GetStatus().Active)
+				}) } ).Preload("ForPlantSensor",func(db *gorm.DB) *gorm.DB {
+		return db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload(
+			"SensorType","status_id = ?", config.GetStatus().Active)
+				}).Find(&result)
+
 	fmt.Println("-----------------------------")
-	fmt.Printf("%+v\n", result)
+	//fmt.Printf("%+v\n", result)
 	//helper.ConvertToJson(results)
 
 	//db.Model(&results).Association("StatusId").Count()
