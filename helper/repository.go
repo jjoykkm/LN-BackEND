@@ -5,7 +5,7 @@ import (
 )
 
 type Repositorier interface {
-	//FindAllPlantType(status string) ([]model_databases.PlantType, error)
+	//FindAllPlantType(status string) ([]model_db.PlantType, error)
 }
 
 type Repository struct {
