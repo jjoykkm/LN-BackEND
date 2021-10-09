@@ -26,12 +26,21 @@ func (h *Handler) GetPlantCategoryList(c *gin.Context) {
 		return
 	}
 	// GetPlantCategoryList(status, language string) ([]model_services.ForPlantCatList, int) (*model_other.BodyResp, error)
-	bodyResp,_ := h.service.GetPlantCategoryList(config.GetStatus().Active, bodyReq.Language)
-	if bodyResp.Total < 1 {
-		c.JSON(http.StatusNoContent, gin.H{})
-	} else {
-		c.JSON(http.StatusOK, bodyResp)
+	bodyResp,err := h.service.GetPlantCategoryList(config.GetStatus().Active, bodyReq.Language)
+	if err != nil {
+		if errx, ok := err.(*errs.ErrContext); ok {
+			if httpCode, ok := mapErrorCode[errx.Code]; ok {
+				c.JSON(httpCode, err)
+				return
+			}
+		}
+		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
+			Code: "80000",
+			Err:  err,
+		})
+		return
 	}
+	c.JSON(http.StatusOK, bodyResp)
 }
 
 func (h *Handler) GetPlantCategoryItem(c *gin.Context) {
@@ -44,12 +53,21 @@ func (h *Handler) GetPlantCategoryItem(c *gin.Context) {
 		return
 	}
 	// GetPlantCategoryItem(status, plantTypeId, language string, offset int) (*model_other.BodyRespOffset, error)
-	bodyResp,_ := h.service.GetPlantCategoryItem(config.GetStatus().Active, bodyReq.PlantTypeId, bodyReq.Language, bodyReq.Offset)
-	if bodyResp.Total < 1 {
-		c.JSON(http.StatusNoContent, gin.H{})
-	} else {
-		c.JSON(http.StatusOK, bodyResp)
+	bodyResp,err := h.service.GetPlantCategoryItem(config.GetStatus().Active, bodyReq.PlantTypeId, bodyReq.Language, bodyReq.Offset)
+	if err != nil {
+		if errx, ok := err.(*errs.ErrContext); ok {
+			if httpCode, ok := mapErrorCode[errx.Code]; ok {
+				c.JSON(httpCode, err)
+				return
+			}
+		}
+		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
+			Code: "80000",
+			Err:  err,
+		})
+		return
 	}
+	c.JSON(http.StatusOK, bodyResp)
 }
 
 func (h *Handler) GetPlantOverviewByPlant(c *gin.Context) {
@@ -62,12 +80,21 @@ func (h *Handler) GetPlantOverviewByPlant(c *gin.Context) {
 		return
 	}
 	//  GetPlantOverviewByPlant(status, uid, plantId string, offset int) (*model_other.BodyRespOffset, error)
-	bodyResp,_ := h.service.GetPlantOverviewByPlant(config.GetStatus().Active, bodyReq.Uid, bodyReq.PlantId, bodyReq.Offset)
-	if bodyResp.Total < 1 {
-		c.JSON(http.StatusNoContent, gin.H{})
-	} else {
-		c.JSON(http.StatusOK, bodyResp)
+	bodyResp,err := h.service.GetPlantOverviewByPlant(config.GetStatus().Active, bodyReq.Uid, bodyReq.PlantId, bodyReq.Offset)
+	if err != nil {
+		if errx, ok := err.(*errs.ErrContext); ok {
+			if httpCode, ok := mapErrorCode[errx.Code]; ok {
+				c.JSON(httpCode, err)
+				return
+			}
+		}
+		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
+			Code: "80000",
+			Err:  err,
+		})
+		return
 	}
+	c.JSON(http.StatusOK, bodyResp)
 }
 
 func (h *Handler) GetPlantOverviewFavorite(c *gin.Context) {
@@ -80,12 +107,21 @@ func (h *Handler) GetPlantOverviewFavorite(c *gin.Context) {
 		return
 	}
 	//  GetPlantOverviewFavorite(status, uid, language string, offset int) (*model_other.BodyRespOffset, error)
-	bodyResp,_ := h.service.GetPlantOverviewFavorite(config.GetStatus().Active, bodyReq.Uid, bodyReq.Language, bodyReq.Offset)
-	if bodyResp.Total < 1 {
-		c.JSON(http.StatusNoContent, gin.H{})
-	} else {
-		c.JSON(http.StatusOK, bodyResp)
+	bodyResp,err := h.service.GetPlantOverviewFavorite(config.GetStatus().Active, bodyReq.Uid, bodyReq.Language, bodyReq.Offset)
+	if err != nil {
+		if errx, ok := err.(*errs.ErrContext); ok {
+			if httpCode, ok := mapErrorCode[errx.Code]; ok {
+				c.JSON(httpCode, err)
+				return
+			}
+		}
+		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
+			Code: "80000",
+			Err:  err,
+		})
+		return
 	}
+	c.JSON(http.StatusOK, bodyResp)
 }
 
 func (h *Handler) GetMyPlantOverview(c *gin.Context) {
@@ -98,12 +134,21 @@ func (h *Handler) GetMyPlantOverview(c *gin.Context) {
 		return
 	}
 	//  GetMyPlantOverview(status, uid, language string, offset int) (*model_other.BodyRespOffset, error)
-	bodyResp,_ := h.service.GetMyPlantOverview(config.GetStatus().Active, bodyReq.Uid, bodyReq.Language, bodyReq.Offset)
-	if bodyResp.Total < 1 {
-		c.JSON(http.StatusNoContent, gin.H{})
-	} else {
-		c.JSON(http.StatusOK, bodyResp)
+	bodyResp,err := h.service.GetMyPlantOverview(config.GetStatus().Active, bodyReq.Uid, bodyReq.Language, bodyReq.Offset)
+	if err != nil {
+		if errx, ok := err.(*errs.ErrContext); ok {
+			if httpCode, ok := mapErrorCode[errx.Code]; ok {
+				c.JSON(httpCode, err)
+				return
+			}
+		}
+		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
+			Code: "80000",
+			Err:  err,
+		})
+		return
 	}
+	c.JSON(http.StatusOK, bodyResp)
 }
 
 func (h *Handler) GetFormulaPlantDetail(c *gin.Context) {
@@ -118,12 +163,12 @@ func (h *Handler) GetFormulaPlantDetail(c *gin.Context) {
 	//  GetFormulaPlantDetail(status, formulaPlantId, language string) (*model_other.BodyResp, error)
 	bodyResp,err := h.service.GetFormulaPlantDetail(config.GetStatus().Active, bodyReq.FormulaPlantId, bodyReq.Language)
 	if err != nil {
-		//if errx, ok := err.(*errs.ErrContext); ok {
-		//	if httpCode, ok := mapErrorCode[errx.Code]; ok {
-		//		c.JSON(httpCode, err)
-		//		return
-		//	}
-		//}
+		if errx, ok := err.(*errs.ErrContext); ok {
+			if httpCode, ok := mapErrorCode[errx.Code]; ok {
+				c.JSON(httpCode, err)
+				return
+			}
+		}
 		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
 			Code: "80000",
 			Err:  err,
@@ -132,9 +177,4 @@ func (h *Handler) GetFormulaPlantDetail(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, bodyResp)
 
-	//if bodyResp.Total < 1 {
-	//	c.JSON(http.StatusNoContent, gin.H{})
-	//} else {
-	//	c.JSON(http.StatusOK, bodyResp)
-	//}
 }

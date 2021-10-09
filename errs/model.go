@@ -16,3 +16,8 @@ func (u *ErrContext) New() *ErrContext {
 		Err:	u.Err ,
 	}
 }
+
+// For Assertions
+func (r *ErrContext) Error() string {
+	return r.Err.Error()
+}

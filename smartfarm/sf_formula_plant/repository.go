@@ -14,7 +14,6 @@ type Repositorier interface {
 	FindAllPlantType(status string) ([]model_databases.PlantType, error)
 	FindAllPlantWithPlantType(status, plantTypeId string, offset int) ([]JoinPlantAndPlantType, error)
 	GetCountFormulaPlant(status, plantId string) int64
-	//FindAllFavoriteFormulaPlant(status, uid string) ([]model_databases.FavoritePlant, error)
 	FindAllFormulaPlantByPlant(status, plantId string, offset int) ([]FormulaPlantItem, error)
 	FindAllFavForPlantId(status, resultType, uid string) ([]uuid.UUID, map[string]bool, error)
 	FindAllPlantedForPlantId(status, resultType, uid string) ([]uuid.UUID, map[string]bool, error)
@@ -66,16 +65,6 @@ func (r *Repository) GetCountFormulaPlant(status, plantId string) int64 {
 	}
 	return count
 }
-
-//func (r *Repository) FindAllFavoriteFormulaPlant(status, uid string) ([]model_databases.FavoritePlant, error) {
-//	var result []model_databases.FavoritePlant
-//
-//	resp := r.db.Debug().Where("status_id = ? AND uid = ?", status, uid).Order("change_date desc").Find(&result)
-//	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
-//		return nil, resp.Error
-//	}
-//	return result, nil
-//}
 
 func (r *Repository) FindAllFormulaPlantByPlant(status, plantId string, offset int) ([]FormulaPlantItem, error) {
 	var result []FormulaPlantItem

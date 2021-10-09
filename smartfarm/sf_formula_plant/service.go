@@ -4,7 +4,6 @@ import (
 	"github.com/jjoykkm/ln-backend/common/models/model_other"
 	"github.com/jjoykkm/ln-backend/config"
 	"github.com/jjoykkm/ln-backend/models/model_databases"
-	"github.com/mitchellh/mapstructure"
 )
 
 type Servicer interface {
@@ -31,28 +30,14 @@ func NewService(repo Repositorier) Servicer {
 }
 
 func (s *Service) GetPlantCategoryList(status, language string) (*model_other.BodyResp, error) {
-	var ptCat PlantTypeCat
-	var ptCatList []PlantTypeCat
-
 	plantTypeList, err := s.repo.FindAllPlantType(status)
 	if err != nil{
 		return nil, err
 	}
 
-	for _, plantType := range plantTypeList {
-		mapstructure.Decode(plantType, &ptCat)
-		switch language {
-		case config.LANGUAGE_EN:
-			ptCat.PlantTypeName = plantType.PlantTypeEN
-		case config.LANGUAGE_TH:
-			ptCat.PlantTypeName = plantType.PlantTypeTH
-		}
-		ptCatList = append(ptCatList, ptCat)
-	}
-
 	return &model_other.BodyResp{
-		Item: ptCatList,
-		Total: len(ptCatList),
+		Item: plantTypeList,
+		Total: len(plantTypeList),
 	}, nil
 }
 
