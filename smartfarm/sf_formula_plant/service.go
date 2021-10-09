@@ -8,12 +8,18 @@ import (
 
 type Servicer interface {
 	// Service for API
-	GetPlantCategoryList(status, language string) (*model_other.BodyResp, error)
-	GetPlantCategoryItem(status, plantTypeId, language string, offset int) (*model_other.BodyRespOffset, error)
-	GetPlantOverviewByPlant(status, uid, plantId string, offset int) (*model_other.BodyRespOffset, error)
-	GetPlantOverviewFavorite(status, uid, language string, offset int) (*model_other.BodyRespOffset, error)
-	GetMyPlantOverview(status, uid, language string, offset int) (*model_other.BodyRespOffset, error)
-	GetFormulaPlantDetail(status, formulaPlantId, language string) (*model_other.BodyResp, error)
+	// status, language string
+	GetPlantCategoryList(status string, bodyReq *model_other.BodyReq) (*model_other.BodyResp, error)
+	// status, plantTypeId, language string, bodyReq.Offset int
+	GetPlantCategoryItem(status string, bodyReq *model_other.BodyReq) (*model_other.BodyRespOffset, error)
+	// status, bodyReq.Uid, plantId string, bodyReq.Offset int
+	GetPlantOverviewByPlant(status string, bodyReq *model_other.BodyReq) (*model_other.BodyRespOffset, error)
+	// status, bodyReq.Uid, language string, bodyReq.Offset int
+	GetPlantOverviewFavorite(status string, bodyReq *model_other.BodyReq) (*model_other.BodyRespOffset, error)
+	// status, bodyReq.Uid, language string, bodyReq.Offset int
+	GetMyPlantOverview(status string, bodyReq *model_other.BodyReq) (*model_other.BodyRespOffset, error)
+	// status, formulaPlasntId, language string
+	GetFormulaPlantDetail(status string, bodyReq *model_other.BodyReq) (*model_other.BodyResp, error)
 
 	// Function
 	GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlant) (float32, int)
@@ -29,7 +35,7 @@ func NewService(repo Repositorier) Servicer {
 	}
 }
 
-func (s *Service) GetPlantCategoryList(status, language string) (*model_other.BodyResp, error) {
+func (s *Service) GetPlantCategoryList(status string, bodyReq *model_other.BodyReq) (*model_other.BodyResp, error) {
 	plantTypeList, err := s.repo.FindAllPlantType(status)
 	if err != nil{
 		return nil, err
@@ -41,14 +47,14 @@ func (s *Service) GetPlantCategoryList(status, language string) (*model_other.Bo
 	}, nil
 }
 
-func (s *Service) GetPlantCategoryItem(status, plantTypeId, language string, offset int) (*model_other.BodyRespOffset, error) {
-	joinList, err := s.repo.FindAllPlantWithPlantType(status, plantTypeId, offset)
+func (s *Service) GetPlantCategoryItem(status string, bodyReq *model_other.BodyReq) (*model_other.BodyRespOffset, error) {
+	joinList, err := s.repo.FindAllPlantWithPlantType(status, bodyReq.PlantTypeId, bodyReq.Offset)
 	if err != nil{
 		return nil, err
 	}
 
 	for idx, join := range joinList {
-		switch language {
+		switch bodyReq.Language {
 		case config.LANGUAGE_EN:
 			join.PlantType.PlantTypeTH = ""
 			join.Plant.PlantNameTH = ""
@@ -66,7 +72,7 @@ func (s *Service) GetPlantCategoryItem(status, plantTypeId, language string, off
 	}
 
 	total := len(joinList)
-	currentOffset := offset + total
+	currentOffset := bodyReq.Offset + total
 
 	return &model_other.BodyRespOffset{
 		Item: joinList,
@@ -75,15 +81,15 @@ func (s *Service) GetPlantCategoryItem(status, plantTypeId, language string, off
 	}, nil
 }
 
-func (s *Service) GetPlantOverviewByPlant(status, uid, plantId string, offset int) (*model_other.BodyRespOffset, error) {
-	forPlant, err := s.repo.FindAllFormulaPlantByPlant(status, plantId, offset)
+func (s *Service) GetPlantOverviewByPlant(status string, bodyReq *model_other.BodyReq) (*model_other.BodyRespOffset, error) {
+	forPlant, err := s.repo.FindAllFormulaPlantByPlant(status, bodyReq.PlantId, bodyReq.Offset)
 	if err != nil{
 		return nil, err
 	}
 	// Get favorite formula plant
-	_, favMap, _ := s.repo.FindAllFavForPlantId(status, config.GetResType().Map, uid)
+	_, favMap, _ := s.repo.FindAllFavForPlantId(status, config.GetResType().Map, bodyReq.Uid)
 	// Get planted formula plant
-	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, uid)
+	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, bodyReq.Uid)
 	for idx, wa := range forPlant {
 		// Check is favorite
 		wa.IsFavorite = favMap[wa.FormulaPlant.FormulaPlantId.UUID.String()]
@@ -92,7 +98,7 @@ func (s *Service) GetPlantOverviewByPlant(status, uid, plantId string, offset in
 		forPlant[idx] = wa
 	}
 	total := len(forPlant)
-	currentOffset := offset + total
+	currentOffset := bodyReq.Offset + total
 	return &model_other.BodyRespOffset{
 		Item: forPlant,
 		Offset: currentOffset,
@@ -100,13 +106,13 @@ func (s *Service) GetPlantOverviewByPlant(status, uid, plantId string, offset in
 	},nil
 }
 
-func (s *Service) GetPlantOverviewFavorite(status, uid, language string, offset int) (*model_other.BodyRespOffset, error) {
-	forPlant, err := s.repo.FindAllFormulaPlantFavorite(status, uid, offset)
+func (s *Service) GetPlantOverviewFavorite(status string, bodyReq *model_other.BodyReq) (*model_other.BodyRespOffset, error) {
+	forPlant, err := s.repo.FindAllFormulaPlantFavorite(status, bodyReq.Uid, bodyReq.Offset)
 	if err != nil{
 		return nil, err
 	}
 	// Get planted formula plant
-	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, uid)
+	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, bodyReq.Uid)
 	for idx, wa := range forPlant {
 		wa.IsFavorite = true
 		// Check planted
@@ -114,7 +120,7 @@ func (s *Service) GetPlantOverviewFavorite(status, uid, language string, offset 
 		forPlant[idx] = wa
 	}
 	total := len(forPlant)
-	currentOffset := offset + total
+	currentOffset := bodyReq.Offset + total
 	return &model_other.BodyRespOffset{
 		Item: forPlant,
 		Offset: currentOffset,
@@ -122,15 +128,15 @@ func (s *Service) GetPlantOverviewFavorite(status, uid, language string, offset 
 	}, nil
 }
 
-func (s *Service) GetMyPlantOverview(status, uid, language string, offset int) (*model_other.BodyRespOffset, error) {
-	forPlant, err := s.repo.FindAllMyFormulaPlant(status, uid, offset)
+func (s *Service) GetMyPlantOverview(status string, bodyReq *model_other.BodyReq) (*model_other.BodyRespOffset, error) {
+	forPlant, err := s.repo.FindAllMyFormulaPlant(status, bodyReq.Uid, bodyReq.Offset)
 	if err != nil{
 		return nil, err
 	}
 	// Get favorite formula plant
-	_, favMap, _ := s.repo.FindAllFavForPlantId(status, config.GetResType().Map, uid)
+	_, favMap, _ := s.repo.FindAllFavForPlantId(status, config.GetResType().Map, bodyReq.Uid)
 	// Get planted formula plant
-	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, uid)
+	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, bodyReq.Uid)
 	for idx, wa := range forPlant {
 		// Check is favorite
 		wa.IsFavorite = favMap[wa.FormulaPlant.FormulaPlantId.UUID.String()]
@@ -139,7 +145,7 @@ func (s *Service) GetMyPlantOverview(status, uid, language string, offset int) (
 		forPlant[idx] = wa
 	}
 	total := len(forPlant)
-	currentOffset := offset + total
+	currentOffset := bodyReq.Offset + total
 	return &model_other.BodyRespOffset{
 		Item: forPlant,
 		Offset: currentOffset,
@@ -147,11 +153,8 @@ func (s *Service) GetMyPlantOverview(status, uid, language string, offset int) (
 	}, nil
 }
 
-func (s *Service) GetFormulaPlantDetail(status, formulaPlantId, language string) (*model_other.BodyResp, error) {
-	if formulaPlantId == "" {
-		return nil, nil
-	}
-	forPlantDetail, err := s.repo.FindAllFormulaPlantDetail(status, formulaPlantId)
+func (s *Service) GetFormulaPlantDetail(status string, bodyReq *model_other.BodyReq) (*model_other.BodyResp, error) {
+	forPlantDetail, err := s.repo.FindAllFormulaPlantDetail(status, bodyReq.FormulaPlantId)
 	if err != nil{
 		return nil, err
 	}
