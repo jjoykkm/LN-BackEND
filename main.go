@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/jjoykkm/ln-backend/smartfarm/sf_dashboard"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_formula_plant"
 	"github.com/jjoykkm/ln-backend/config"
 	"github.com/jjoykkm/ln-backend/controllers"
@@ -68,11 +69,13 @@ func main() {
 	http := gin.Default()
 	http.Use(cors.Default())
 
-	repoFormulaPlant := sf_formula_plant.NewRepository(db)
 	//cache := cache.New(1*time.Hour, 1*time.Hour)
+
+
+	// Formula Plant
+	repoFormulaPlant := sf_formula_plant.NewRepository(db)
 	serviceFormulaPlant := sf_formula_plant.NewService(repoFormulaPlant)
 	handlerFormulaPlant := sf_formula_plant.NewHandler(serviceFormulaPlant)
-
 
 	http.GET("/formulaPlant/plantCategoryList/api/v1/run", func(c *gin.Context) {
 		handlerFormulaPlant.GetPlantCategoryList(c)
@@ -93,6 +96,32 @@ func main() {
 		handlerFormulaPlant.GetFormulaPlantDetail(c)
 	})
 
+	// Dashboard
+	repoDashboard := sf_dashboard.NewRepository(db)
+	serviceDashboard := sf_dashboard.NewService(repoDashboard)
+	handlerDashboard := sf_dashboard.NewHandler(serviceDashboard)
+
+	http.POST("/dashboard/farmList/api/v1/run", func(c *gin.Context) {
+		handlerDashboard.GetFarmList(c)
+	})
+
+	// My Farm
+	//repoFormulaPlant := sf_formula_plant.NewRepository(db)
+	//serviceFormulaPlant := sf_formula_plant.NewService(repoFormulaPlant)
+	//handlerFormulaPlant := sf_formula_plant.NewHandler(serviceFormulaPlant)
+	//
+	//http.GET("/formulaPlant/plantCategoryList/api/v1/run", func(c *gin.Context) {
+	//	handlerFormulaPlant.GetPlantCategoryList(c)
+	//})
+
+	// Schedule + Reminder
+	//repoFormulaPlant := sf_formula_plant.NewRepository(db)
+	//serviceFormulaPlant := sf_formula_plant.NewService(repoFormulaPlant)
+	//handlerFormulaPlant := sf_formula_plant.NewHandler(serviceFormulaPlant)
+	//
+	//http.GET("/formulaPlant/plantCategoryList/api/v1/run", func(c *gin.Context) {
+	//	handlerFormulaPlant.GetPlantCategoryList(c)
+	//})
 
 	http.POST("/jjoy", func(c *gin.Context) {
 		handlerFormulaPlant.GetPlantCategoryList(c)
@@ -109,7 +138,7 @@ func main() {
 	//http.POST("/formulaPlantDetail", GetFormulaPlantDetail)
 
 	// Dashboard
-	http.POST("/farmList", GetFarmList)
+	//http.POST("/farmList", GetFarmList)
 	http.POST("/farmAreaDashboardList", GetFarmAreaDashboardList)
 	http.POST("/farmAreaDetailSensor", GetFarmAreaDetailSensor)
 

@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/config"
 	"github.com/jjoykkm/ln-backend/models/model_databases"
-	"github.com/jjoykkm/ln-backend/smartfarm/sf_formula_plant"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -121,18 +120,23 @@ func main()  {
 	//result := []sf_formula_plant.ForPlantSensor{}
 	//db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload(
 	//	"SensorType","status_id = ?", config.GetStatus().Active).Find(&result)
-	result := []sf_formula_plant.ForPlantFormula{}
-
-	db.Debug().Where("status_id = ? AND formula_plant_id = ?", config.GetStatus().Active, ).Preload("ForPlantFert",func(db *gorm.DB) *gorm.DB {
-				return db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("Fertilizer",func(db *gorm.DB) *gorm.DB {
-					return db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("FertilizerCat","status_id = ?", config.GetStatus().Active)
-				}) } ).Preload("ForPlantSensor",func(db *gorm.DB) *gorm.DB {
-		return db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload(
-			"SensorType","status_id = ?", config.GetStatus().Active)
-				}).Find(&result)
-
+	//result := []sf_formula_plant.ForPlantFormula{}
+	//
+	//db.Debug().Where("status_id = ? AND formula_plant_id = ?", config.GetStatus().Active, ).Preload("ForPlantFert",func(db *gorm.DB) *gorm.DB {
+	//			return db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("Fertilizer",func(db *gorm.DB) *gorm.DB {
+	//				return db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("FertilizerCat","status_id = ?", config.GetStatus().Active)
+	//			}) } ).Preload("ForPlantSensor",func(db *gorm.DB) *gorm.DB {
+	//	return db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload(
+	//		"SensorType","status_id = ?", config.GetStatus().Active)
+	//			}).Find(&result)
+	var result []model_databases.Farm
+	//result := []model_databases.TransManagement{}
+	//result := []map[string]interface{}{}
+	subQuery := db.Debug().Select("farm_id").Where("uid = ?", "17ac6921-ece0-43bc-9d88-7b9bfc59ffd3").Table(config.DB_TRANS_MANAGEMENT)
+	db.Debug().Where("status_id = ? AND farm_id IN (?)", config.GetStatus().Active, subQuery).Find(&result)
+	//subQuery :=
 	fmt.Println("-----------------------------")
-	//fmt.Printf("%+v\n", result)
+	fmt.Printf("%+v\n", result)
 	//helper.ConvertToJson(results)
 
 	//db.Model(&results).Association("StatusId").Count()

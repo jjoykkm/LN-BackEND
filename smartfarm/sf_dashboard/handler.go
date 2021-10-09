@@ -3,6 +3,7 @@ package sf_dashboard
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/common/models/model_other"
+	"github.com/jjoykkm/ln-backend/config"
 	"github.com/jjoykkm/ln-backend/errs"
 	"net/http"
 )
@@ -24,20 +25,20 @@ func (h *Handler) GetFarmList(c *gin.Context) {
 		})
 		return
 	}
-	//  GetFormulaPlantDetail(status, formulaPlantId, language string) (*model_other.RespModel, error)
-	//respModel,err := h.service.GetFormulaPlantDetail(config.GetStatus().Active, &reqModel)
-	//if err != nil {
-	//	if errx, ok := err.(*errs.ErrContext); ok {
-	//		if httpCode, ok := mapErrorCode[errx.Code]; ok {
-	//			c.JSON(httpCode, err)
-	//			return
-	//		}
-	//	}
-	//	c.JSON(http.StatusInternalServerError, &errs.ErrContext{
-	//		Code: "80000",
-	//		Err:  err,
-	//	})
-	//	return
-	//}
-	//c.JSON(http.StatusOK, respModel)
+	//GetFarmList(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
+	respModel,err := h.service.GetFarmList(config.GetStatus().Active, &reqModel)
+	if err != nil {
+		if errx, ok := err.(*errs.ErrContext); ok {
+			if httpCode, ok := mapErrorCode[errx.Code]; ok {
+				c.JSON(httpCode, err)
+				return
+			}
+		}
+		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
+			Code: "80000",
+			Err:  err,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, respModel)
 }

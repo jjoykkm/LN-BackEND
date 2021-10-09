@@ -1,17 +1,12 @@
 package sf_dashboard
 
 import (
-	"fmt"
 	"github.com/jjoykkm/ln-backend/common/models/model_other"
-	"github.com/jjoykkm/ln-backend/config"
-	"github.com/jjoykkm/ln-backend/models/model_services"
-	"github.com/jjoykkm/ln-backend/utility"
-	"github.com/mitchellh/mapstructure"
-	"log"
 )
 
 type Servicer interface {
-	//GetFarmLister(status, uid string) ([]model_services.DashboardFarmList, int)
+	// status, uid string
+	GetFarmList(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
 	//GetFarmAreaDashboardLister(status, language, farmId string) ([]model_services.DashboardFarmAreaList, int)
 	//GetSocketLister(status, farmId string) ([]model_services.JoinSocketAndTrans, []string, []string)
 	//GetSensorByIder(status string, socketIdList []string) ([]model_databases.Sensor, map[string]model_databases.Sensor)
@@ -29,32 +24,15 @@ func NewService(repo Repositorier) Servicer {
 		repo:  repo,
 	}
 }
-func (s *Service) GetFormulaPlantDetail(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error) {
-	forPlantDetail, err := s.repo.FindAllFormulaPlantDetail(status, ReqModel.FormulaPlantId)
-	if err != nil{
-		return nil, err
-	}
-	return &model_other.RespModel{
-		Item: forPlantDetail,
-		Total: len(forPlantDetail),
-	}, nil
-}
 
 func (s *Service) GetFarmList(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error) {
-	var farmList []model_services.DashboardFarmList
-	var total int
-
-	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.farm_id = %s.farm_id WHERE %s.status_id = '%s' AND %s.uid = '%s'",
-		config.DB_FARM, config.DB_TRANS_MANAGEMENT, config.DB_FARM, config.DB_TRANS_MANAGEMENT, config.DB_FARM, status, config.DB_TRANS_MANAGEMENT, uid)
-	fmt.Println(sql)
-	err := ln.Db.Raw(sql).Scan(&farmList).Error
-
+	myFarm, err := s.repo.FindAllMyFarm(status, ReqModel.Uid)
 	if err != nil{
 		return nil, err
 	}
 	return &model_other.RespModel{
-		Item: forPlantDetail,
-		Total: len(forPlantDetail),
+		Item: myFarm,
+		Total: len(myFarm),
 	}, nil
 }
 
