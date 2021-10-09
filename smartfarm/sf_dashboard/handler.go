@@ -1,9 +1,9 @@
-package SF_FormulaPlant
+package sf_dashboard
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/jjoykkm/ln-backend/config"
-	"github.com/jjoykkm/ln-backend/utility"
+	"github.com/jjoykkm/ln-backend/common/models/model_other"
+	"github.com/jjoykkm/ln-backend/errs"
 	"net/http"
 )
 
@@ -15,16 +15,29 @@ func NewHandler(service Servicer) *Handler {
 	return &Handler{service: service}
 }
 
-func (h *Handler) GetPlantCategoryList(c *gin.Context) {
-	bodyModel := utility.GetModelFromBody(c)
-	// GetPlantCategoryList(status, language string) ([]model_services.ForPlantCatList, int)
-	plantCategoryList, total := h.service.GetPlantCategoryList(config.GetStatus().Active, bodyModel.Language)
-	if total == 0 {
-		c.JSON(http.StatusNoContent, gin.H{})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"item":  plantCategoryList,
-			"total": total,
+func (h *Handler) GetFarmList(c *gin.Context) {
+	var reqModel model_other.ReqModel
+	if err := c.Bind(&reqModel); err != nil {
+		c.JSON(http.StatusBadRequest, &errs.ErrContext{
+			Code: "20000",
+			Err:  err,
 		})
+		return
 	}
+	//  GetFormulaPlantDetail(status, formulaPlantId, language string) (*model_other.RespModel, error)
+	//respModel,err := h.service.GetFormulaPlantDetail(config.GetStatus().Active, &reqModel)
+	//if err != nil {
+	//	if errx, ok := err.(*errs.ErrContext); ok {
+	//		if httpCode, ok := mapErrorCode[errx.Code]; ok {
+	//			c.JSON(httpCode, err)
+	//			return
+	//		}
+	//	}
+	//	c.JSON(http.StatusInternalServerError, &errs.ErrContext{
+	//		Code: "80000",
+	//		Err:  err,
+	//	})
+	//	return
+	//}
+	//c.JSON(http.StatusOK, respModel)
 }

@@ -1,4 +1,4 @@
-package SF_FormulaPlant
+package sf_dashboard
 
 import (
 	"errors"
@@ -18,13 +18,3 @@ func NewRepository(db *gorm.DB) Repositorier {
 	return &Repository{db: db}
 }
 
-func (r *Repository) FindAllPlantType(status string) ([]model_databases.PlantType, error) {
-	var result []model_databases.PlantType
-
-	//SELECT * FROM %s WHERE status_id = '%s'
-	err := r.db.Where("status_id = ? ", status).Find(&result).Error
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, err
-	}
-	return result, nil
-}
