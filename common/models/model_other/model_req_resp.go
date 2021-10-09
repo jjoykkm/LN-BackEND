@@ -4,7 +4,7 @@ package model_other
 //				 		    METHOD POST REQUEST
 //-------------------------------------------------------------------------------//
 //Model post body
-type BodyReq struct {
+type ReqModel struct {
 	Uid     		  string	`mapstructure:"uid" json:"uid"`
 	PlantId    		  string	`mapstructure:"plant_id" json:"plant_id"`
 	FormulaPlantId    string	`mapstructure:"formula_plant_id" json:"formula_plant_id"`
@@ -17,8 +17,8 @@ type BodyReq struct {
 }
 
 // New instance
-func (u *BodyReq) New() *BodyReq {
-	return &BodyReq{
+func (u *ReqModel) New() *ReqModel {
+	return &ReqModel{
 		Uid:      			u.Uid ,
 		PlantId:    		u.PlantId ,
 		FormulaPlantId:   	u.FormulaPlantId ,

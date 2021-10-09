@@ -17,8 +17,8 @@ func NewHandler(service Servicer) *Handler {
 }
 
 func (h *Handler) GetPlantCategoryList(c *gin.Context) {
-	var bodyReq model_other.BodyReq
-	if err := c.Bind(&bodyReq); err != nil {
+	var reqModel model_other.ReqModel
+	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
 			Err:  err,
@@ -26,7 +26,7 @@ func (h *Handler) GetPlantCategoryList(c *gin.Context) {
 		return
 	}
 	// GetPlantCategoryList(status, language string) ([]model_services.ForPlantCatList, int) (*model_other.BodyResp, error)
-	bodyResp,err := h.service.GetPlantCategoryList(config.GetStatus().Active, &bodyReq)
+	bodyResp,err := h.service.GetPlantCategoryList(config.GetStatus().Active, &reqModel)
 	if err != nil {
 		if errx, ok := err.(*errs.ErrContext); ok {
 			if httpCode, ok := mapErrorCode[errx.Code]; ok {
@@ -44,8 +44,8 @@ func (h *Handler) GetPlantCategoryList(c *gin.Context) {
 }
 
 func (h *Handler) GetPlantCategoryItem(c *gin.Context) {
-	var bodyReq model_other.BodyReq
-	if err := c.Bind(&bodyReq); err != nil {
+	var reqModel model_other.ReqModel
+	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
 			Err:  err,
@@ -53,7 +53,7 @@ func (h *Handler) GetPlantCategoryItem(c *gin.Context) {
 		return
 	}
 	// GetPlantCategoryItem(status, plantTypeId, language string, offset int) (*model_other.BodyRespOffset, error)
-	bodyResp,err := h.service.GetPlantCategoryItem(config.GetStatus().Active, &bodyReq)
+	bodyResp,err := h.service.GetPlantCategoryItem(config.GetStatus().Active, &reqModel)
 	if err != nil {
 		if errx, ok := err.(*errs.ErrContext); ok {
 			if httpCode, ok := mapErrorCode[errx.Code]; ok {
@@ -71,8 +71,8 @@ func (h *Handler) GetPlantCategoryItem(c *gin.Context) {
 }
 
 func (h *Handler) GetPlantOverviewByPlant(c *gin.Context) {
-	var bodyReq model_other.BodyReq
-	if err := c.Bind(&bodyReq); err != nil {
+	var reqModel model_other.ReqModel
+	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
 			Err:  err,
@@ -80,7 +80,7 @@ func (h *Handler) GetPlantOverviewByPlant(c *gin.Context) {
 		return
 	}
 	//  GetPlantOverviewByPlant(status, uid, plantId string, offset int) (*model_other.BodyRespOffset, error)
-	bodyResp,err := h.service.GetPlantOverviewByPlant(config.GetStatus().Active, &bodyReq)
+	bodyResp,err := h.service.GetPlantOverviewByPlant(config.GetStatus().Active, &reqModel)
 	if err != nil {
 		if errx, ok := err.(*errs.ErrContext); ok {
 			if httpCode, ok := mapErrorCode[errx.Code]; ok {
@@ -98,8 +98,8 @@ func (h *Handler) GetPlantOverviewByPlant(c *gin.Context) {
 }
 
 func (h *Handler) GetPlantOverviewFavorite(c *gin.Context) {
-	var bodyReq model_other.BodyReq
-	if err := c.Bind(&bodyReq); err != nil {
+	var reqModel model_other.ReqModel
+	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
 			Err:  err,
@@ -107,7 +107,7 @@ func (h *Handler) GetPlantOverviewFavorite(c *gin.Context) {
 		return
 	}
 	//  GetPlantOverviewFavorite(status, uid, language string, offset int) (*model_other.BodyRespOffset, error)
-	bodyResp,err := h.service.GetPlantOverviewFavorite(config.GetStatus().Active, &bodyReq)
+	bodyResp,err := h.service.GetPlantOverviewFavorite(config.GetStatus().Active, &reqModel)
 	if err != nil {
 		if errx, ok := err.(*errs.ErrContext); ok {
 			if httpCode, ok := mapErrorCode[errx.Code]; ok {
@@ -125,8 +125,8 @@ func (h *Handler) GetPlantOverviewFavorite(c *gin.Context) {
 }
 
 func (h *Handler) GetMyPlantOverview(c *gin.Context) {
-	var bodyReq model_other.BodyReq
-	if err := c.Bind(&bodyReq); err != nil {
+	var reqModel model_other.ReqModel
+	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
 			Err:  err,
@@ -134,7 +134,7 @@ func (h *Handler) GetMyPlantOverview(c *gin.Context) {
 		return
 	}
 	//  GetMyPlantOverview(status, uid, language string, offset int) (*model_other.BodyRespOffset, error)
-	bodyResp,err := h.service.GetMyPlantOverview(config.GetStatus().Active, &bodyReq)
+	bodyResp,err := h.service.GetMyPlantOverview(config.GetStatus().Active, &reqModel)
 	if err != nil {
 		if errx, ok := err.(*errs.ErrContext); ok {
 			if httpCode, ok := mapErrorCode[errx.Code]; ok {
@@ -152,8 +152,8 @@ func (h *Handler) GetMyPlantOverview(c *gin.Context) {
 }
 
 func (h *Handler) GetFormulaPlantDetail(c *gin.Context) {
-	var bodyReq model_other.BodyReq
-	if err := c.Bind(&bodyReq); err != nil {
+	var reqModel model_other.ReqModel
+	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
 			Err:  err,
@@ -161,7 +161,7 @@ func (h *Handler) GetFormulaPlantDetail(c *gin.Context) {
 		return
 	}
 	//  GetFormulaPlantDetail(status, formulaPlantId, language string) (*model_other.BodyResp, error)
-	bodyResp,err := h.service.GetFormulaPlantDetail(config.GetStatus().Active, &bodyReq)
+	bodyResp,err := h.service.GetFormulaPlantDetail(config.GetStatus().Active, &reqModel)
 	if err != nil {
 		if errx, ok := err.(*errs.ErrContext); ok {
 			if httpCode, ok := mapErrorCode[errx.Code]; ok {

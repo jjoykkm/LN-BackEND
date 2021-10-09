@@ -1,7 +1,7 @@
 package helper
 
 type Servicer interface {
-	//GetModelFromBody(c *gin.Context) PostBodyReq
+	//GetModelFromBody(c *gin.Context) PostReqModel
 }
 
 type Service struct {
@@ -14,14 +14,14 @@ func NewService(repo Repositorier) Servicer {
 	}
 }
 
-//func (s *Service) GetModelFromBody(c *gin.Context) helper.PostBodyReq {
-//	var bodyReq helper.PostBodyReq
+//func (s *Service) GetModelFromBody(c *gin.Context) helper.PostReqModel {
+//	var ReqModel helper.PostReqModel
 //
 //	jsonData, err := c.GetRawData()
 //	if err != nil {
 //		c.JSON(http.StatusBadRequest, err)
 //	}
-//	json.Unmarshal([]byte(jsonData), &bodyReq)
-//	//fmt.Printf("%+v/n", bodyReq)
-//	return bodyReq
+//	json.Unmarshal([]byte(jsonData), &ReqModel)
+//	//fmt.Printf("%+v/n", ReqModel)
+//	return ReqModel
 //}

@@ -9,14 +9,14 @@ import (
 	"net/http"
 )
 
-func GetModelFromBody(c *gin.Context) model_other.BodyReq {
-	var bodyReq model_other.BodyReq
+func GetModelFromBody(c *gin.Context) model_other.ReqModel {
+	var ReqModel model_other.ReqModel
 
-	if err := c.Bind(&bodyReq); err != nil {
+	if err := c.Bind(&ReqModel); err != nil {
 		c.JSON(http.StatusBadRequest, err)
 	}
-	//fmt.Printf("%+v/n", bodyReq)
-	return bodyReq
+	//fmt.Printf("%+v/n", ReqModel)
+	return ReqModel
 }
 
 func ConvertToJson(data interface{}) {

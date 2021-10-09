@@ -4,7 +4,7 @@ package helper_db
 //				 		    METHOD POST REQUEST
 //-------------------------------------------------------------------------------//
 //Model post body
-type PostBodyReq struct {
+type PostReqModel struct {
 	Uid     		  string	`mapstructure:"uid" json:"uid"`
 	PlantId    		  string	`mapstructure:"plant_id" json:"plant_id"`
 	FormulaPlantId    string	`mapstructure:"formula_plant_id" json:"formula_plant_id"`
@@ -17,8 +17,8 @@ type PostBodyReq struct {
 }
 
 // New instance
-func (u *PostBodyReq) New() *PostBodyReq {
-	return &PostBodyReq{
+func (u *PostReqModel) New() *PostReqModel {
+	return &PostReqModel{
 		Uid:      			u.Uid ,
 		PlantId:    		u.PlantId ,
 		FormulaPlantId:   	u.FormulaPlantId ,
