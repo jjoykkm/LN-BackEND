@@ -74,22 +74,22 @@ func main() {
 	handlerFormulaPlant := sf_formula_plant.NewHandler(serviceFormulaPlant)
 
 
-	http.POST("/plantCategoryList", func(c *gin.Context) {
+	http.POST("/plantCategoryList/api/v1/run", func(c *gin.Context) {
 		handlerFormulaPlant.GetPlantCategoryList(c)
 	})
-	http.POST("/plantCategoryItem", func(c *gin.Context) {
+	http.POST("/plantCategoryItem/api/v1/run", func(c *gin.Context) {
 		handlerFormulaPlant.GetPlantCategoryItem(c)
 	})
-	http.POST("/plantOverviewByPlant", func(c *gin.Context) {
+	http.POST("/plantOverviewByPlant/api/v1/run", func(c *gin.Context) {
 		handlerFormulaPlant.GetPlantOverviewByPlant(c)
 	})
-	http.POST("/plantOverviewFavorite", func(c *gin.Context) {
+	http.POST("/plantOverviewFavorite/api/v1/run", func(c *gin.Context) {
 		handlerFormulaPlant.GetPlantOverviewFavorite(c)
 	})
-	http.POST("/myPlantOverview", func(c *gin.Context) {
+	http.POST("/myPlantOverview/api/v1/run", func(c *gin.Context) {
 		handlerFormulaPlant.GetMyPlantOverview(c)
 	})
-	http.POST("/formulaPlantDetail", func(c *gin.Context) {
+	http.POST("/formulaPlantDetail/api/v1/run", func(c *gin.Context) {
 		handlerFormulaPlant.GetFormulaPlantDetail(c)
 	})
 
