@@ -25,7 +25,6 @@ func (h *Handler) GetFarmList(c *gin.Context) {
 		})
 		return
 	}
-	//GetFarmList(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
 	respModel,err := h.service.GetFarmList(config.GetStatus().Active, &reqModel)
 	if err != nil {
 		if errx, ok := err.(*errs.ErrContext); ok {
