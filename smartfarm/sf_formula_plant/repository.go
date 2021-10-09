@@ -12,7 +12,7 @@ import (
 
 type Repositorier interface {
 	FindAllPlantType(status string) ([]model_databases.PlantType, error)
-	FindAllPlantWithPlantType(status, plantTypeId string, offset int) ([]JoinPlantAndPlantType, error)
+	FindAllPlantWithPlantType(status, plantTypeId string, offset int) ([]PlantAndPlantType, error)
 	GetCountFormulaPlant(status, plantId string) int64
 	FindAllFormulaPlantByPlant(status, plantId string, offset int) ([]FormulaPlantItem, error)
 	FindAllFavForPlantId(status, resultType, uid string) ([]uuid.UUID, map[string]bool, error)
@@ -40,8 +40,8 @@ func (r *Repository) FindAllPlantType(status string) ([]model_databases.PlantTyp
 	return result, nil
 }
 
-func (r *Repository) FindAllPlantWithPlantType(status, plantTypeId string, offset int) ([]JoinPlantAndPlantType, error) {
-	var result []JoinPlantAndPlantType
+func (r *Repository) FindAllPlantWithPlantType(status, plantTypeId string, offset int) ([]PlantAndPlantType, error) {
+	var result []PlantAndPlantType
 	var sqlWhere string
 	// Generate condition when get plant
 	sqlWhere = fmt.Sprintf("%s.status_id = ?",config.DB_PLANT)

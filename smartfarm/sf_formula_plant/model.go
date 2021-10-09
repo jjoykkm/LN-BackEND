@@ -1,56 +1,33 @@
 package sf_formula_plant
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/config"
 	"github.com/jjoykkm/ln-backend/models/model_databases"
 )
 
 
 //-------------------------------------------------------------------------------//
-//				 	   	Join Plant And PlantType (View/Add/Edit)
+//				 	    Plant And PlantType
 //-------------------------------------------------------------------------------//
 //Model
-type JoinPlantAndPlantType struct {
+type PlantAndPlantType struct {
 	PlantType   model_databases.PlantType	`mapstructure:"plant_type" json:"plant_type" gorm:"foreignkey:PlantTypeId; references:PlantTypeId"`
 	Plant     	model_databases.Plant	 	`mapstructure:"plant" json:"plant" gorm:"embedded"`
 }
-func (JoinPlantAndPlantType) TableName() string {
+func (PlantAndPlantType) TableName() string {
 	return "plant"
 }
 
 //-------------------------------------------------------------------------------//
-//							Button Catagory
+//				 	   	Formula Plant Item
 //-------------------------------------------------------------------------------//
-//Model
-type PlantCat struct {
-	PlantTypeId     uuid.UUID	 `mapstructure:"plant_type_id" json:"plant_type_id"`
-	PlantTypeName   string		 `mapstructure:"plant_type_name" json:"plant_type_name"`
-	PlantId     	uuid.UUID	 `mapstructure:"plant_id" json:"plant_id"`
-	PlantName       string		 `mapstructure:"plant_name" json:"plant_name"`
-	PlantDesc       string		 `mapstructure:"plant_desc" json:"plant_desc"`
-	TotalItem       int64	 	 `mapstructure:"total_item" json:"total_item"`
-}
-
-//-------------------------------------------------------------------------------//
-//				 	   	Join Plant And PlantType (View/Add/Edit)
-//-------------------------------------------------------------------------------//
-//Model
-type Plant struct {
-	Plant  		model_databases.Plant 		`mapstructure:"plant" json:"plant" gorm:"embedded"`
-	PlantType  	model_databases.PlantType 	`mapstructure:"plant_type" json:"plant_type" gorm:"foreignkey:PlantTypeId; references:PlantTypeId"`
-}
-func (Plant) TableName() string {
-	return "plant"
-}
-
 type FormulaPlantItem struct {
-	FormulaPlant    model_databases.FormulaPlant	`mapstructure:"formula_plant" json:"formula_plant" gorm:"embedded"`
-	Plant     		Plant			 				`mapstructure:"plant" json:"plant" gorm:"foreignkey:PlantId; references:PlantId;"`
-	Province   		model_databases.Province		`mapstructure:"province" json:"province" gorm:"foreignkey:ProvinceId; references:ProvinceId"` // association_foreignkey:ProvinceId
-	Country   		model_databases.Country			`mapstructure:"country" json:"country" gorm:"foreignkey:CountryId; references:CountryId"`
-	IsPlanted		bool							`mapstructure:"is_planted" json:"is_planted"`
-	IsFavorite		bool							`mapstructure:"is_favorite" json:"is_favorite"`
+	FormulaPlant    model_databases.FormulaPlant	`json:"formula_plant" gorm:"embedded"`
+	Plant     		PlantAndPlantType				`json:"plant" gorm:"foreignkey:PlantId; references:PlantId;"`
+	Province   		model_databases.Province		`json:"province" gorm:"foreignkey:ProvinceId; references:ProvinceId"`
+	Country   		model_databases.Country			`json:"country" gorm:"foreignkey:CountryId; references:CountryId"`
+	IsPlanted		bool							`json:"is_planted"`
+	IsFavorite		bool							`json:"is_favorite"`
 }
 func (FormulaPlantItem) TableName() string {
 	return "formula_plant"
