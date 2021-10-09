@@ -9,17 +9,17 @@ import (
 type Servicer interface {
 	// Service for API
 	// status, language string
-	GetPlantCategoryList(status string, ReqModel *model_other.ReqModel) (*model_other.BodyResp, error)
+	GetPlantCategoryList(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
 	// status, plantTypeId, language string, ReqModel.Offset int
-	GetPlantCategoryItem(status string, ReqModel *model_other.ReqModel) (*model_other.BodyRespOffset, error)
+	GetPlantCategoryItem(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error)
 	// status, ReqModel.Uid, plantId string, ReqModel.Offset int
-	GetPlantOverviewByPlant(status string, ReqModel *model_other.ReqModel) (*model_other.BodyRespOffset, error)
+	GetPlantOverviewByPlant(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error)
 	// status, ReqModel.Uid, language string, ReqModel.Offset int
-	GetPlantOverviewFavorite(status string, ReqModel *model_other.ReqModel) (*model_other.BodyRespOffset, error)
+	GetPlantOverviewFavorite(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error)
 	// status, ReqModel.Uid, language string, ReqModel.Offset int
-	GetMyPlantOverview(status string, ReqModel *model_other.ReqModel) (*model_other.BodyRespOffset, error)
+	GetMyPlantOverview(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error)
 	// status, formulaPlasntId, language string
-	GetFormulaPlantDetail(status string, ReqModel *model_other.ReqModel) (*model_other.BodyResp, error)
+	GetFormulaPlantDetail(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
 
 	// Function
 	GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlant) (float32, int)
@@ -35,19 +35,19 @@ func NewService(repo Repositorier) Servicer {
 	}
 }
 
-func (s *Service) GetPlantCategoryList(status string, ReqModel *model_other.ReqModel) (*model_other.BodyResp, error) {
+func (s *Service) GetPlantCategoryList(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error) {
 	plantTypeList, err := s.repo.FindAllPlantType(status)
 	if err != nil{
 		return nil, err
 	}
 
-	return &model_other.BodyResp{
+	return &model_other.RespModel{
 		Item: plantTypeList,
 		Total: len(plantTypeList),
 	}, nil
 }
 
-func (s *Service) GetPlantCategoryItem(status string, ReqModel *model_other.ReqModel) (*model_other.BodyRespOffset, error) {
+func (s *Service) GetPlantCategoryItem(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error) {
 	joinList, err := s.repo.FindAllPlantWithPlantType(status, ReqModel.PlantTypeId, ReqModel.Offset)
 	if err != nil{
 		return nil, err
@@ -74,14 +74,14 @@ func (s *Service) GetPlantCategoryItem(status string, ReqModel *model_other.ReqM
 	total := len(joinList)
 	currentOffset := ReqModel.Offset + total
 
-	return &model_other.BodyRespOffset{
+	return &model_other.RespOffsetModel{
 		Item: joinList,
 		Offset: currentOffset,
 		Total: total,
 	}, nil
 }
 
-func (s *Service) GetPlantOverviewByPlant(status string, ReqModel *model_other.ReqModel) (*model_other.BodyRespOffset, error) {
+func (s *Service) GetPlantOverviewByPlant(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error) {
 	forPlant, err := s.repo.FindAllFormulaPlantByPlant(status, ReqModel.PlantId, ReqModel.Offset)
 	if err != nil{
 		return nil, err
@@ -99,14 +99,14 @@ func (s *Service) GetPlantOverviewByPlant(status string, ReqModel *model_other.R
 	}
 	total := len(forPlant)
 	currentOffset := ReqModel.Offset + total
-	return &model_other.BodyRespOffset{
+	return &model_other.RespOffsetModel{
 		Item: forPlant,
 		Offset: currentOffset,
 		Total: total,
 	},nil
 }
 
-func (s *Service) GetPlantOverviewFavorite(status string, ReqModel *model_other.ReqModel) (*model_other.BodyRespOffset, error) {
+func (s *Service) GetPlantOverviewFavorite(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error) {
 	forPlant, err := s.repo.FindAllFormulaPlantFavorite(status, ReqModel.Uid, ReqModel.Offset)
 	if err != nil{
 		return nil, err
@@ -121,14 +121,14 @@ func (s *Service) GetPlantOverviewFavorite(status string, ReqModel *model_other.
 	}
 	total := len(forPlant)
 	currentOffset := ReqModel.Offset + total
-	return &model_other.BodyRespOffset{
+	return &model_other.RespOffsetModel{
 		Item: forPlant,
 		Offset: currentOffset,
 		Total: total,
 	}, nil
 }
 
-func (s *Service) GetMyPlantOverview(status string, ReqModel *model_other.ReqModel) (*model_other.BodyRespOffset, error) {
+func (s *Service) GetMyPlantOverview(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error) {
 	forPlant, err := s.repo.FindAllMyFormulaPlant(status, ReqModel.Uid, ReqModel.Offset)
 	if err != nil{
 		return nil, err
@@ -146,19 +146,19 @@ func (s *Service) GetMyPlantOverview(status string, ReqModel *model_other.ReqMod
 	}
 	total := len(forPlant)
 	currentOffset := ReqModel.Offset + total
-	return &model_other.BodyRespOffset{
+	return &model_other.RespOffsetModel{
 		Item: forPlant,
 		Offset: currentOffset,
 		Total: total,
 	}, nil
 }
 
-func (s *Service) GetFormulaPlantDetail(status string, ReqModel *model_other.ReqModel) (*model_other.BodyResp, error) {
+func (s *Service) GetFormulaPlantDetail(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error) {
 	forPlantDetail, err := s.repo.FindAllFormulaPlantDetail(status, ReqModel.FormulaPlantId)
 	if err != nil{
 		return nil, err
 	}
-	return &model_other.BodyResp{
+	return &model_other.RespModel{
 		Item: forPlantDetail,
 		Total: len(forPlantDetail),
 	}, nil

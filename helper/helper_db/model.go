@@ -35,14 +35,14 @@ func (u *PostReqModel) New() *PostReqModel {
 //				 		    METHOD POST RESPONSE
 //-------------------------------------------------------------------------------//
 //Model post body
-type PostBodyResp struct {
+type PostRespModel struct {
 	Item     interface{}	`mapstructure:"item" json:"item"`
 	Total    int			`mapstructure:"total" json:"total"`
 }
 
 // New instance
-func (u *PostBodyResp) New() *PostBodyResp {
-	return &PostBodyResp{
+func (u *PostRespModel) New() *PostRespModel {
+	return &PostRespModel{
 		Item:     u.Item ,
 		Total:    u.Total ,
 	}

@@ -35,29 +35,29 @@ func (u *ReqModel) New() *ReqModel {
 //				 		    METHOD POST RESPONSE
 //-------------------------------------------------------------------------------//
 //Model post body
-type BodyResp struct {
+type RespModel struct {
 	Item     interface{}	`mapstructure:"item" json:"item"`
 	Total    int			`mapstructure:"total" json:"total"`
 }
 
 // New instance
-func (u *BodyResp) New() *BodyResp {
-	return &BodyResp{
+func (u *RespModel) New() *RespModel {
+	return &RespModel{
 		Item:     u.Item ,
 		Total:    u.Total ,
 	}
 }
 
 //Model post body
-type BodyRespOffset struct {
+type RespOffsetModel struct {
 	Item     interface{}	`mapstructure:"item" json:"item"`
 	Offset   int			`mapstructure:"offset" json:"offset"`
 	Total    int			`mapstructure:"total" json:"total"`
 }
 
 // New instance
-func (u *BodyRespOffset) New() *BodyRespOffset {
-	return &BodyRespOffset{
+func (u *RespOffsetModel) New() *RespOffsetModel {
+	return &RespOffsetModel{
 		Item:      u.Item ,
 		Offset:    u.Offset ,
 		Total:     u.Total ,
