@@ -18,7 +18,6 @@ const (
 	ALL		string = "all"
 	LIST	string = "list"
 )
-
 type ResType struct {
 	Struct	string
 	Map		string
@@ -26,7 +25,6 @@ type ResType struct {
 	All		string
 	List	string
 }
-
 func GetResType() ResType {
 	return ResType{
 		Struct: STRUCT ,

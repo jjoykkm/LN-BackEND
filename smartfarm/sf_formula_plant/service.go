@@ -55,11 +55,11 @@ func (s *Service) GetPlantCategoryItem(status string, ReqModel *model_other.ReqM
 
 	for idx, join := range joinList {
 		switch ReqModel.Language {
-		case config.LANGUAGE_EN:
+		case config.GetLanguage().En:
 			join.PlantType.PlantTypeTH = ""
 			join.Plant.PlantNameTH = ""
 			join.Plant.PlantDescTH = ""
-		case config.LANGUAGE_TH:
+		case config.GetLanguage().Th:
 			join.PlantType.PlantTypeEN = ""
 			join.Plant.PlantNameEN = ""
 			join.Plant.PlantDescEN = ""

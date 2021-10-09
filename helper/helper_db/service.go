@@ -48,9 +48,9 @@ func (s *Service) GetCountryAndName(countryId, language string) (*model_database
 		return nil, ""
 	}
 	switch language {
-	case config.LANGUAGE_EN:
+	case config.GetLanguage().En:
 		countryName = countryModel.CountryEN
-	case config.LANGUAGE_TH:
+	case config.GetLanguage().Th:
 		countryName = countryModel.CountryTH
 	}
 	return countryModel, countryName
@@ -64,9 +64,9 @@ func (s *Service) GetProvinceAndName(provinceId, language string) (*model_databa
 		return nil, ""
 	}
 	switch language {
-	case config.LANGUAGE_EN:
+	case config.GetLanguage().En:
 		provinceName = provinceModel.ProvinceEN
-	case config.LANGUAGE_TH:
+	case config.GetLanguage().Th:
 		provinceName = provinceModel.ProvinceTH
 	}
 	return provinceModel, provinceName
@@ -80,9 +80,9 @@ func (s *Service) GetPlantTypeAndName(plantTypeId, language string) (*model_data
 		return nil, ""
 	}
 	switch language {
-	case config.LANGUAGE_EN:
+	case config.GetLanguage().En:
 		plantTypeName = plantTypeModel.PlantTypeEN
-	case config.LANGUAGE_TH:
+	case config.GetLanguage().Th:
 		plantTypeName = plantTypeModel.PlantTypeTH
 	}
 	return plantTypeModel, plantTypeName
@@ -96,9 +96,9 @@ func (s *Service) GetFertCatAndName(fertCatId, language string) (*model_database
 		return nil, ""
 	}
 	switch language {
-	case config.LANGUAGE_EN:
+	case config.GetLanguage().En:
 		fertCatName = fertCatModel.FertilizerCatEN
-	case config.LANGUAGE_TH:
+	case config.GetLanguage().Th:
 		fertCatName = fertCatModel.FertilizerCatTH
 	}
 	return fertCatModel, fertCatName
@@ -123,9 +123,9 @@ func (s *Service) GetSensorTypeAndName(sensorTypeId, language string) (*model_da
 		return nil, ""
 	}
 	switch language {
-	case config.LANGUAGE_EN:
+	case config.GetLanguage().En:
 		sensorTypeName = sensorTypeModel.SensorTypeNameEN
-	case config.LANGUAGE_TH:
+	case config.GetLanguage().Th:
 		sensorTypeName = sensorTypeModel.SensorTypeNameTH
 	}
 	return sensorTypeModel, sensorTypeName
@@ -140,10 +140,10 @@ func (s *Service) GetRoleAndName(roleId, language string) (*model_databases.Role
 		return nil, "", ""
 	}
 	switch language {
-	case config.LANGUAGE_EN:
+	case config.GetLanguage().En:
 		name = roleModel.RoleNameEN
 		desc = roleModel.RoleDescEN
-	case config.LANGUAGE_TH:
+	case config.GetLanguage().Th:
 		name = roleModel.RoleNameTH
 		desc = roleModel.RoleDescTH
 	}

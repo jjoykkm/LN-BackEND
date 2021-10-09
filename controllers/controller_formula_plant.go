@@ -46,9 +46,9 @@ func (ln Ln) GetPlantCategoryLister(status, language string) ([]model_services.F
 	for _, plantType := range plantTypeArray {
 		mapstructure.Decode(plantType, &catList)
 		switch language {
-		case config.LANGUAGE_EN:
+		case config.GetLanguage().En:
 			catList.PlantTypeName = plantType.PlantTypeEN
-		case config.LANGUAGE_TH:
+		case config.GetLanguage().Th:
 			catList.PlantTypeName = plantType.PlantTypeTH
 		}
 		catListArray = append(catListArray, catList)
@@ -81,11 +81,11 @@ func (ln Ln) GetPlantCategoryItemer(status, plantTypeId, language string, offset
 	for _, joinPlantAndPlantType := range joinPlantAndPlantTypeArray {
 		mapstructure.Decode(joinPlantAndPlantType, &plantCat)
 		switch language {
-		case config.LANGUAGE_EN:
+		case config.GetLanguage().En:
 			plantCat.PlantTypeName = joinPlantAndPlantType.PlantTypeEN
 			plantCat.PlantName = joinPlantAndPlantType.PlantNameEN
 			plantCat.PlantDesc = joinPlantAndPlantType.PlantDescEN
-		case config.LANGUAGE_TH:
+		case config.GetLanguage().Th:
 			plantCat.PlantTypeName = joinPlantAndPlantType.PlantTypeTH
 			plantCat.PlantName = joinPlantAndPlantType.PlantNameTH
 			plantCat.PlantDesc = joinPlantAndPlantType.PlantDescTH
@@ -394,9 +394,9 @@ func (ln Ln) GetFertilizerRatioRelateer(status, formulaPlantId, language string)
 	for _, join := range joinArray {
 		mapstructure.Decode(join, &plantFert)
 		switch language {
-		case config.LANGUAGE_EN:
+		case config.GetLanguage().En:
 			plantFert.FertilizerName = join.FertilizerEN
-		case config.LANGUAGE_TH:
+		case config.GetLanguage().Th:
 			plantFert.FertilizerName = join.FertilizerTH
 		}
 
@@ -435,9 +435,9 @@ func (ln Ln) GetSensorValueRecRelateer(status, formulaPlantId, language string) 
 	for _, join := range joinArray {
 		mapstructure.Decode(join, &plantSensor)
 		switch language {
-		case config.LANGUAGE_EN:
+		case config.GetLanguage().En:
 			plantSensor.SensorTypeName = join.SensorTypeNameEN
-		case config.LANGUAGE_TH:
+		case config.GetLanguage().Th:
 			plantSensor.SensorTypeName = join.SensorTypeNameTH
 		}
 		plantSensorArray = append(plantSensorArray, plantSensor)

@@ -33,9 +33,9 @@ func (s *Service) GetPlantCategoryList(status, language string) ([]model_service
 	for _, plantType := range plantTypeList {
 		mapstructure.Decode(plantType, &catList)
 		switch language {
-		case config.LANGUAGE_EN:
+		case config.GetLanguage().En:
 			catList.PlantTypeName = plantType.PlantTypeEN
-		case config.LANGUAGE_TH:
+		case config.GetLanguage().Th:
 			catList.PlantTypeName = plantType.PlantTypeTH
 		}
 		catListArray = append(catListArray, catList)

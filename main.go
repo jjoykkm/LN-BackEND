@@ -128,7 +128,7 @@ func main() {
 }
 
 func Test(c *gin.Context) {
-	aa, bb := me.Ctrl.GetManageMainboxer(config.GetStatus().Active, config.LANGUAGE_EN, "41470e4b-005d-4df9-aa4d-c59f37f6390b")
+	aa, bb := me.Ctrl.GetManageMainboxer(config.GetStatus().Active, config.GetLanguage().En, "41470e4b-005d-4df9-aa4d-c59f37f6390b")
 
 	c.JSON(http.StatusOK, gin.H{
 		"01": aa,

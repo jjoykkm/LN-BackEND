@@ -58,9 +58,9 @@ func (ln Ln) GetCountryNameer(countryId, language string) (model_databases.Count
 	}
 
 	switch language {
-	case config.LANGUAGE_EN:
+	case config.GetLanguage().En:
 		countryName = countryModel.CountryEN
-	case config.LANGUAGE_TH:
+	case config.GetLanguage().Th:
 		countryName = countryModel.CountryTH
 	}
 	return countryModel, countryName
@@ -79,9 +79,9 @@ func (ln Ln) GetProvinceNameer(provinceId, language string) (model_databases.Pro
 	}
 
 	switch language {
-	case config.LANGUAGE_EN:
+	case config.GetLanguage().En:
 		provinceName = provinceModel.ProvinceEN
-	case config.LANGUAGE_TH:
+	case config.GetLanguage().Th:
 		provinceName = provinceModel.ProvinceTH
 	}
 	return provinceModel, provinceName
@@ -99,9 +99,9 @@ func (ln Ln) GetPlantTypeNameer(plantTypeId, language string) (model_databases.P
 		log.Print(err)
 	}
 	switch language {
-	case config.LANGUAGE_EN:
+	case config.GetLanguage().En:
 		plantTypeName = plantTypeModel.PlantTypeEN
-	case config.LANGUAGE_TH:
+	case config.GetLanguage().Th:
 		plantTypeName = plantTypeModel.PlantTypeTH
 	}
 	return plantTypeModel, plantTypeName
@@ -120,9 +120,9 @@ func (ln Ln) GetFertCatNameer(fertCatId, language string) (model_databases.Ferti
 	}
 
 	switch language {
-	case config.LANGUAGE_EN:
+	case config.GetLanguage().En:
 		fertCatName = fertCatModel.FertilizerCatEN
-	case config.LANGUAGE_TH:
+	case config.GetLanguage().Th:
 		fertCatName = fertCatModel.FertilizerCatTH
 	}
 	return fertCatModel, fertCatName
@@ -155,9 +155,9 @@ func (ln Ln) GetSensorTypeNameer(sensorTypeId, language string) (model_databases
 		log.Print(err)
 	}
 	switch language {
-	case config.LANGUAGE_EN:
+	case config.GetLanguage().En:
 		sensorTypeName = sensorTypeModel.SensorTypeNameEN
-	case config.LANGUAGE_TH:
+	case config.GetLanguage().Th:
 		sensorTypeName = sensorTypeModel.SensorTypeNameTH
 	}
 
@@ -178,10 +178,10 @@ func (ln Ln) GetRoleNameer(roleId, language string) (model_databases.Role, strin
 	}
 
 	switch language {
-	case config.LANGUAGE_EN:
+	case config.GetLanguage().En:
 		name = roleModel.RoleNameEN
 		desc = roleModel.RoleDescEN
-	case config.LANGUAGE_TH:
+	case config.GetLanguage().Th:
 		name = roleModel.RoleNameTH
 		desc = roleModel.RoleDescTH
 	}

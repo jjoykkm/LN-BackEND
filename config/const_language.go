@@ -3,5 +3,18 @@ package config
 /*-------------------------------------------------------------------------------------------*/
 //                                 LANGUAGE
 /*-------------------------------------------------------------------------------------------*/
-const LANGUAGE_EN = "EN"
-const LANGUAGE_TH = "TH"
+
+const (
+	EN string = "EN"
+	TH string = "TH"
+)
+type Language struct {
+	En	string
+	Th	string
+}
+func GetLanguage() Language {
+	return Language{
+		En:  EN ,
+		Th:  TH ,
+	}
+}
