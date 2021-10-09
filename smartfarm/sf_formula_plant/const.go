@@ -1,7 +1,5 @@
 package sf_formula_plant
 
-import "net/http"
-
 const LIMIT_GET_DATA = 100
 
 const (
@@ -11,7 +9,7 @@ const (
 
 var (
 	mapErrorCode = map[string]int{
-		ERROR_4002005: http.StatusConflict,
-		ERROR_4001001: http.StatusConflict,
+		//ERROR_4002005: http.StatusConflict,
+		//ERROR_4001001: http.StatusConflict,
 	}
 )
