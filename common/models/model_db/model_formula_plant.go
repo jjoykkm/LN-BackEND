@@ -11,7 +11,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model formula_plant
 type FormulaPlant struct {
-	FormulaPlantId 	 uuid.UUID	 `son:"formula_plant_id,omitempty"`
+	FormulaPlantId 	 uuid.UUID	 `json:"formula_plant_id,omitempty"`
 	FormulaName		 string		 `json:"name,omitempty"`
 	FormulaDesc		 string		 `json:"desc,omitempty"`
 	PeopleUsed 		 int		 `json:"people_used,omitempty"`
