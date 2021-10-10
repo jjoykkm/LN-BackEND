@@ -11,7 +11,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model trans_fertilizer_Ratio
 type TransFertRatio struct {
-	FertId       		uuid.UUID	 `json:"fert_id,omitempty" gorm:"fertilizer_id"`
+	FertId       		uuid.UUID	 `json:"fert_id,omitempty" gorm:"column:fertilizer_id"`
 	FormulaPlantId		uuid.UUID	 `json:"formula_plant_id,omitempty"`
 	StatusId		 	uuid.UUID	 `json:"status_id,omitempty"`
 	Ratio		     	float64		 `json:"ratio,omitempty"`

@@ -1,7 +1,6 @@
 package sf_formula_plant
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/common/models/model_other"
 	"github.com/jjoykkm/ln-backend/config"
@@ -157,7 +156,7 @@ func (h *Handler) GetFormulaPlantDetail(c *gin.Context) {
 		return
 	}
 	respModel,err := h.service.GetFormulaPlantDetail(config.GetStatus().Active, &reqModel)
-	fmt.Printf("%+v\n", respModel)
+	//fmt.Printf("%+v\n", respModel)
 	if err != nil {
 		if errx, ok := err.(*errs.ErrContext); ok {
 			if httpCode, ok := mapErrorCode[errx.Code]; ok {
