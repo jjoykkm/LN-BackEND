@@ -16,7 +16,7 @@ type Farm struct {
 	FarmDesc    	string		 `json:"FarmDesc,omitempty"`
 	CreateDate		time.Time	 `json:"CreateDate,omitempty"`
 	ChangeDate	    time.Time	 `json:"ChangeDate,omitempty"`
-	StatusId		uuid.UUID	 `json:"StatusI,omitempty"`
+	StatusId		uuid.UUID	 `json:"StatusId,omitempty"`
 }
 // New instance farm
 func (u *Farm) New() *Farm {
