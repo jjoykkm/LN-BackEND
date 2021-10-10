@@ -45,7 +45,7 @@ func (r *Repository) FindAllPlantWithPlantType(status, plantTypeId string, offse
 	var sqlWhere string
 	// Generate condition when get plant
 	sqlWhere = fmt.Sprintf("%s.status_id = ?", config.DB_PLANT)
-	if plantTypeId != config.PLANT_TYPE_ALL {
+	if plantTypeId == config.PLANT_TYPE_ALL || plantTypeId == "" {
 		sqlWhere = sqlWhere + fmt.Sprintf(" AND %s.plant_type_id = ?", config.DB_PLANT)
 	}
 	resp := r.db.Debug().Where(sqlWhere, status, plantTypeId).Preload("PlantType",
