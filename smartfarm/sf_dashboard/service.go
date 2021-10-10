@@ -9,10 +9,10 @@ type Servicer interface {
 	GetFarmList(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
 	//GetFarmAreaDashboardLister(status, language, farmId string) ([]model_services.DashboardFarmAreaList, int)
 	//GetSocketLister(status, farmId string) ([]model_services.JoinSocketAndTrans, []string, []string)
-	//GetSensorByIder(status string, socketIdList []string) ([]model_db.Sensor, map[string]model_db.Sensor)
-	//GetMainboxByIder(status string, mainboxIdList []string) ([]model_db.Mainbox, map[string]model_db.Mainbox)
+	//GetSensorByIder(status string, socketIdList []string) ([]model_databases.Sensor, map[string]model_databases.Sensor)
+	//GetMainboxByIder(status string, mainboxIdList []string) ([]model_databases.Mainbox, map[string]model_databases.Mainbox)
 	//GetFarmAreaDetailSensorer(status, farmId, language string) ([]model_services.SenSocMainList, int)
-	//GetStatusSensorer(sensorStatusId string) (model_db.StatusSensor, string)
+	//GetStatusSensorer(sensorStatusId string) (model_databases.StatusSensor, string)
 }
 
 type Service struct {
@@ -82,11 +82,11 @@ func (s *Service) GetFarmList(status string, ReqModel *model_other.ReqModel) (*m
 //	return joinArray, sensorIdList, mainboxIdList
 //}
 //
-//func (s *Service) GetSensorByIder(status string, sensorIdList []string) ([]model_db.Sensor, map[string]model_db.Sensor) {
-//	var sensorAr []model_db.Sensor
-//	var sensorMap map[string]model_db.Sensor
+//func (s *Service) GetSensorByIder(status string, sensorIdList []string) ([]model_databases.Sensor, map[string]model_databases.Sensor) {
+//	var sensorAr []model_databases.Sensor
+//	var sensorMap map[string]model_databases.Sensor
 //
-//	sensorMap = make(map[string]model_db.Sensor)
+//	sensorMap = make(map[string]model_databases.Sensor)
 //
 //	sqlIn := utility.ConvertListToStringIn(sensorIdList)
 //	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND sensor_id IN %s",
@@ -103,11 +103,11 @@ func (s *Service) GetFarmList(status string, ReqModel *model_other.ReqModel) (*m
 //	return sensorAr, sensorMap
 //}
 //
-//func (s *Service) GetMainboxByIder(status string, mainboxIdList []string) ([]model_db.Mainbox, map[string]model_db.Mainbox) {
-//	var mainboxAr []model_db.Mainbox
-//	var mainboxMap map[string]model_db.Mainbox
+//func (s *Service) GetMainboxByIder(status string, mainboxIdList []string) ([]model_databases.Mainbox, map[string]model_databases.Mainbox) {
+//	var mainboxAr []model_databases.Mainbox
+//	var mainboxMap map[string]model_databases.Mainbox
 //
-//	mainboxMap = make(map[string]model_db.Mainbox)
+//	mainboxMap = make(map[string]model_databases.Mainbox)
 //
 //	sqlIn := utility.ConvertListToStringIn(mainboxIdList)
 //	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND mainbox_id IN %s",
@@ -124,8 +124,8 @@ func (s *Service) GetFarmList(status string, ReqModel *model_other.ReqModel) (*m
 //	return mainboxAr, mainboxMap
 //}
 //
-//func (s *Service) GetStatusSensorer(sensorStatusId string) (model_db.StatusSensor, string) {
-//	var model model_db.StatusSensor
+//func (s *Service) GetStatusSensorer(sensorStatusId string) (model_databases.StatusSensor, string) {
+//	var model model_databases.StatusSensor
 //	var status string
 //
 //	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND status_sensor_id = '%s'",
