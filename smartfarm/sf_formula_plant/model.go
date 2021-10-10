@@ -1,8 +1,8 @@
 package sf_formula_plant
 
 import (
+	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
-	"github.com/jjoykkm/ln-backend/config"
 )
 
 //-------------------------------------------------------------------------------//

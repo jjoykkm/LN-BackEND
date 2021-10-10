@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
-	"github.com/jjoykkm/ln-backend/config"
+	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/helper"
 	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
 	"gorm.io/gorm"
@@ -44,7 +44,7 @@ func (r *Repository) FindAllPlantWithPlantType(status, plantTypeId string, offse
 	var result []PlantAndPlantType
 	var sqlWhere string
 	// Generate condition when get plant
-	sqlWhere = fmt.Sprintf("%s.status_id = ?",config.DB_PLANT)
+	sqlWhere = fmt.Sprintf("%s.status_id = ?", config.DB_PLANT)
 	if plantTypeId != "" {
 		sqlWhere = sqlWhere + fmt.Sprintf(" AND %s.plant_type_id = ?", config.DB_PLANT)
 	}
@@ -113,7 +113,7 @@ func (r *Repository) FindAllPlantedForPlantId(status, resultType, uid string) ([
 	result:= []uuid.UUID{}
 	// Get farm_id filter by uid
 	subQuery := r.db.Debug().Table(config.DB_TRANS_MANAGEMENT).Select("farm_id").Where(
-		"status_id = ? AND uid = ?",config.GetStatus().Active, uid)
+		"status_id = ? AND uid = ?", config.GetStatus().Active, uid)
 
 	// Get data by farm list
 	resp := r.db.Debug().Table(config.DB_FARM_AREA).Where(

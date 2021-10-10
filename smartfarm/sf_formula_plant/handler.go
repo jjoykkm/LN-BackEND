@@ -2,8 +2,8 @@ package sf_formula_plant
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_other"
-	"github.com/jjoykkm/ln-backend/config"
 	"github.com/jjoykkm/ln-backend/errs"
 	"net/http"
 )

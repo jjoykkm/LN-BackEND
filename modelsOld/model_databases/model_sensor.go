@@ -3,7 +3,7 @@ package model_databases
 import (
 	"github.com/jackc/pgtype"
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
-	"github.com/jjoykkm/ln-backend/config"
+	"github.com/jjoykkm/ln-backend/common/config"
 	"time"
 )
 
