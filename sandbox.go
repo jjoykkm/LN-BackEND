@@ -29,7 +29,7 @@ func (JJ) TableName() string {
 	return "plant"
 }
 
-func main()  {
+func test()  {
 	//var fm Farm
 	db, err := gorm.Open(postgres.New(postgres.Config{
 		DSN:                  config.DSN,

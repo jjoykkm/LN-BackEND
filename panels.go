@@ -56,7 +56,7 @@ type JoinPanels struct {
 	PanelList			PanelsLists `gorm:"embedded"`//`gorm:"embedded;foreignKey:panelId;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
-func main()  {
+func test()  {
 	db, err := gorm.Open(postgres.New(postgres.Config{
 		DSN:                  config.DSN,
 		PreferSimpleProtocol: false, // disables implicit prepared statement usage
