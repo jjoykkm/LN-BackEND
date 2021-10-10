@@ -156,7 +156,6 @@ func (h *Handler) GetFormulaPlantDetail(c *gin.Context) {
 		return
 	}
 	respModel,err := h.service.GetFormulaPlantDetail(config.GetStatus().Active, &reqModel)
-	//fmt.Printf("%+v\n", respModel)
 	if err != nil {
 		if errx, ok := err.(*errs.ErrContext); ok {
 			if httpCode, ok := mapErrorCode[errx.Code]; ok {

@@ -104,6 +104,9 @@ func main() {
 	http.POST("/dashboard/farmList/api/v1/run", func(c *gin.Context) {
 		handlerDashboard.GetFarmList(c)
 	})
+	http.POST("/farmAreaDashboardList/farmList/api/v1/run", func(c *gin.Context) {
+		handlerDashboard.GetFarmAreaDashboardList(c)
+	})
 
 	// My Farm
 	//repoFormulaPlant := sf_formula_plant.NewRepository(db)
@@ -139,7 +142,7 @@ func main() {
 
 	// Dashboard
 	//http.POST("/farmList", GetFarmList)
-	http.POST("/farmAreaDashboardList", GetFarmAreaDashboardList)
+	//http.POST("/farmAreaDashboardList", GetFarmAreaDashboardList)
 	http.POST("/farmAreaDetailSensor", GetFarmAreaDetailSensor)
 
 	// My Farm
