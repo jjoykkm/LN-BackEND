@@ -84,7 +84,8 @@ func (r *Repository) FindAllFormulaPlantByPlant(status, plantId string, offset i
 		func(db *gorm.DB) *gorm.DB {
 			return plantTypeId
 		}).Preload("Province", "status_id = ?", config.GetStatus().Active).Preload("Country",
-			"status_id = ?", config.GetStatus().Active).Find(&result)
+			"status_id = ?", config.GetStatus().Active).Preload("Owner").Find(&result)
+	//.Preload("Owner", "status_id = ?", config.GetStatus().Active)
 
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error
@@ -141,7 +142,8 @@ func (r *Repository) FindAllFormulaPlantFavorite(status, uid string, offset int)
 			func(db *gorm.DB) *gorm.DB {
 				return plantCond
 			}).Preload("Province", "status_id = ?", config.GetStatus().Active).Preload("Country",
-				"status_id = ?", config.GetStatus().Active).Find(&result)
+				"status_id = ?", config.GetStatus().Active).Preload("Owner").Find(&result)
+	//.Preload("Owner", "status_id = ?", config.GetStatus().Active)
 
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error
@@ -160,7 +162,8 @@ func (r *Repository) FindAllMyFormulaPlant(status, uid string, offset int) ([]Fo
 			func(db *gorm.DB) *gorm.DB {
 				return plantCond
 			}).Preload("Province", "status_id = ?", config.GetStatus().Active).Preload("Country",
-				"status_id = ?", config.GetStatus().Active).Find(&result)
+				"status_id = ?", config.GetStatus().Active).Preload("Owner").Find(&result)
+	//.Preload("Owner", "status_id = ?", config.GetStatus().Active)
 
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error
@@ -190,7 +193,8 @@ func (r *Repository) FindAllFormulaPlantDetail(status, forPlantId string) ([]For
 			}).Preload("ForPlantSensor",
 			func(db *gorm.DB) *gorm.DB {
 				return SensorTypeId
-			}).Find(&result)
+			}).Preload("Owner").Find(&result)
+	//.Preload("Owner", "status_id = ?", config.GetStatus().Active)
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error
 	}
