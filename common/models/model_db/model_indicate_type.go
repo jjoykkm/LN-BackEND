@@ -11,18 +11,18 @@ import (
 //-------------------------------------------------------------------------------//
 //model indicate_type
 type IndicateType struct {
-	IndicateTypeId      uuid.UUID	 `mapstructure:"indicate_type_id" json:"indicate_type_id,omitempty"`
-	IndicateName      	string	 	 `mapstructure:"indicate_name" json:"indicate_name,omitempty"`
-	IndicateDesc      	string	 	 `mapstructure:"indicate_desc" json:"indicate_desc,omitempty"`
-	Important	      	int			 `mapstructure:"important" json:"important,omitempty"`
-	IndColorName      	string	 	 `mapstructure:"ind_color_name" json:"ind_color_name,omitempty"`
-	IndColorCode      	string	 	 `mapstructure:"ind_color_code" json:"ind_color_code,omitempty"`
-	IndColorCodeR      	string	 	 `mapstructure:"ind_color_code_r" json:"ind_color_code_r,omitempty"`
-	IndColorCodeG      	string	 	 `mapstructure:"ind_color_code_g" json:"ind_color_code_g,omitempty"`
-	IndColorCodeB      	string	 	 `mapstructure:"ind_color_code_b" json:"ind_color_code_b,omitempty"`
-	CreateDate			time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
-	ChangeDate	    	time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
-	StatusId			uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
+	IndicateTypeId      uuid.UUID	 `json:"indicate_type_id,omitempty"`
+	IndicateName      	string	 	 `json:"indicate_name,omitempty"`
+	IndicateDesc      	string	 	 `json:"indicate_desc,omitempty"`
+	Important	      	int			 `json:"important,omitempty"`
+	IndColorName      	string	 	 `json:"ind_color_name,omitempty"`
+	IndColorCode      	string	 	 `json:"ind_color_code,omitempty"`
+	IndColorCodeR      	string	 	 `json:"ind_color_code_r,omitempty"`
+	IndColorCodeG      	string	 	 `json:"ind_color_code_g,omitempty"`
+	IndColorCodeB      	string	 	 `json:"ind_color_code_b,omitempty"`
+	CreateDate			time.Time	 `json:"create_date,omitempty"`
+	ChangeDate	    	time.Time	 `json:"change_date,omitempty"`
+	StatusId			uuid.UUID	 `json:"status_id,omitempty"`
 }
 // New instance indicate_type
 func (u *IndicateType) New() *IndicateType {

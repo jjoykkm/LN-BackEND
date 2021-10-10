@@ -11,21 +11,21 @@ import (
 //-------------------------------------------------------------------------------//
 //model address_farm
 type AddressFarm struct {
-	AddressFarmId		 uuid.UUID	 `mapstructure:"address_farm_id" json:"address_farm_id,omitempty"`
-	HouseNo				 string  	 `mapstructure:"house_no" json:"house_no,omitempty"`
-	Alley				 string  	 `mapstructure:"alley" json:"alley,omitempty"`
-	Road				 string  	 `mapstructure:"road" json:"road,omitempty"`
-	LocationX			 float64	 `mapstructure:"change_date" json:"change_date,omitempty"`
-	LocationY			 float64	 `mapstructure:"change_date" json:"change_date,omitempty"`
-	CreateDate		 	 time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
-	ChangeDate	     	 time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
-	StatusId			 uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
-	SubDistrictId		 uuid.UUID	 `mapstructure:"sub_district_id" json:"sub_district_id,omitempty"`
-	DistrictId			 uuid.UUID	 `mapstructure:"district_id" json:"district_id,omitempty"`
-	ProvinceId			 uuid.UUID	 `mapstructure:"province_id" json:"province_id,omitempty"`
-	CountryId			 uuid.UUID	 `mapstructure:"country_id" json:"country_id,omitempty"`
-	FarmId				 uuid.UUID	 `mapstructure:"farm_id" json:"farm_id,omitempty"`
-	Moo					 string  	 `mapstructure:"moo" json:"moo,omitempty"`
+	AddressFarmId		 uuid.UUID	 `json:"address_farm_id,omitempty"`
+	HouseNo				 string  	 `json:"house_no,omitempty"`
+	Alley				 string  	 `json:"alley,omitempty"`
+	Road				 string  	 `json:"road,omitempty"`
+	LocationX			 float64	 `json:"change_date,omitempty"`
+	LocationY			 float64	 `json:"change_date,omitempty"`
+	CreateDate		 	 time.Time	 `json:"create_date,omitempty"`
+	ChangeDate	     	 time.Time	 `json:"change_date,omitempty"`
+	StatusId			 uuid.UUID	 `json:"status_id,omitempty"`
+	SubDistrictId		 uuid.UUID	 `json:"sub_district_id,omitempty"`
+	DistrictId			 uuid.UUID	 `json:"district_id,omitempty"`
+	ProvinceId			 uuid.UUID	 `json:"province_id,omitempty"`
+	CountryId			 uuid.UUID	 `json:"country_id,omitempty"`
+	FarmId				 uuid.UUID	 `json:"farm_id,omitempty"`
+	Moo					 string  	 `json:"moo,omitempty"`
 }
 // New instance address_farm
 func (u *AddressFarm) New() *AddressFarm {

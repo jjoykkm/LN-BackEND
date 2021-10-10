@@ -11,14 +11,14 @@ import (
 //-------------------------------------------------------------------------------//
 //model socket_action
 type SocketAction struct {
-	ScheduleId      uuid.UUID	 `mapstructure:"schedule_id" json:"schedule_id,omitempty"`
-	SocketId      	uuid.UUID	 `mapstructure:"socket_id" json:"socket_id,omitempty"`
-	Uid	      		uuid.UUID	 `mapstructure:"uid" json:"uid,omitempty"`
-	StatusSensorId	uuid.UUID	 `mapstructure:"status_sensor_id" json:"status_sensor_id,omitempty"`
-	IsManual    	bool		 `mapstructure:"is_manual" json:"is_manual,omitempty"`
-	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
-	StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
+	ScheduleId      uuid.UUID	 `json:"schedule_id,omitempty"`
+	SocketId      	uuid.UUID	 `json:"socket_id,omitempty"`
+	Uid	      		uuid.UUID	 `json:"uid,omitempty"`
+	StatusSensorId	uuid.UUID	 `json:"status_sensor_id,omitempty"`
+	IsManual    	bool		 `json:"is_manual,omitempty"`
+	CreateDate		time.Time	 `json:"create_date,omitempty"`
+	ChangeDate	    time.Time	 `json:"change_date,omitempty"`
+	StatusId		uuid.UUID	 `json:"status_id,omitempty"`
 }
 // New instance socket_action
 func (u *SocketAction) New() *SocketAction {

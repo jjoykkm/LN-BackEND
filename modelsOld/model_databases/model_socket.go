@@ -11,14 +11,14 @@ import (
 //-------------------------------------------------------------------------------//
 //model socket
 type Socket struct {
-	SocketId      	uuid.UUID	 `mapstructure:"socket_id" json:"socket_id,omitempty"`
-	SensorId      	uuid.UUID	 `mapstructure:"sensor_id" json:"sensor_id,omitempty"`
-	StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
-	SocketName      string	 	 `mapstructure:"socket_name" json:"socket_name,omitempty"`
-	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
-	SocketNumber	int64		 `mapstructure:"socket_number" json:"socket_number,omitempty"`
-	StatusSensorId	uuid.UUID	 `mapstructure:"status_sensor_id" json:"status_sensor_id,omitempty"`
+	SocketId      	uuid.UUID	 `json:"socket_id,omitempty"`
+	SensorId      	uuid.UUID	 `json:"sensor_id,omitempty"`
+	StatusId		uuid.UUID	 `json:"status_id,omitempty"`
+	SocketName      string	 	 `json:"socket_name,omitempty"`
+	CreateDate		time.Time	 `json:"create_date,omitempty"`
+	ChangeDate	    time.Time	 `json:"change_date,omitempty"`
+	SocketNumber	int64		 `json:"socket_number,omitempty"`
+	StatusSensorId	uuid.UUID	 `json:"status_sensor_id,omitempty"`
 }
 // New instance socket
 func (u *Socket) New() *Socket {

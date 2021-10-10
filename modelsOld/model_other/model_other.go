@@ -6,15 +6,15 @@ package model_other
 //-------------------------------------------------------------------------------//
 //Model post body
 type PostBody struct {
-	Uid     		  string	`mapstructure:"uid" json:"uid"`
-	PlantId    		  string	`mapstructure:"plant_id" json:"plant_id"`
-	FormulaPlantId    string	`mapstructure:"formula_plant_id" json:"formula_plant_id"`
-	PlantTypeId    	  string	`mapstructure:"plant_type_id" json:"plant_type_id"`
-	FarmId	    	  string	`mapstructure:"farm_id" json:"farm_id"`
-	FarmAreaId	      string	`mapstructure:"farm_area_id" json:"farm_area_id"`
-	FarmAreaIdList    []string	`mapstructure:"farm_area_id_list" json:"farm_area_id_list"`
-	Language    	  string	`mapstructure:"language" json:"language"`
-	Offset    		  int		`mapstructure:"offset" json:"offset"`
+	Uid     		  string	`json:"uid"`
+	PlantId    		  string	`json:"plant_id"`
+	FormulaPlantId    string	`json:"formula_plant_id"`
+	PlantTypeId    	  string	`json:"plant_type_id"`
+	FarmId	    	  string	`json:"farm_id"`
+	FarmAreaId	      string	`json:"farm_area_id"`
+	FarmAreaIdList    []string	`json:"farm_area_id_list"`
+	Language    	  string	`json:"language"`
+	Offset    		  int		`json:"offset"`
 }
 
 // New instance

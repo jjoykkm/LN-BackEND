@@ -11,16 +11,16 @@ import (
 //-------------------------------------------------------------------------------//
 //model fertilizer
 type Fertilizer struct {
-	FertilizerId     	 uuid.UUID	 `mapstructure:"fertilizer_id" json:"fertilizer_id,omitempty"`
-	FertilizerEN     	 string		 `mapstructure:"fertilizer_en" json:"fertilizer_en,omitempty"`
-	FertilizerTH     	 string		 `mapstructure:"fertilizer_th" json:"fertilizer_th,omitempty"`
-	Nitrogen       	 	 float64	 `mapstructure:"nitrogen" json:"nitrogen,omitempty"`
-	Phosphorus    	 	 float64	 `mapstructure:"phosphorus" json:"phosphorus,omitempty"`
-	Potassium      	 	 float64	 `mapstructure:"potassium" json:"potassium,omitempty"`
-	CreateDate		 	 time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
-	ChangeDate	     	 time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
-	FertilizerCatId		 uuid.UUID	 `mapstructure:"fertilizer_cat_id" json:"fertilizer_cat_id,omitempty"`
-	StatusId		 	 uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
+	FertilizerId     	 uuid.UUID	 `json:"fertilizer_id,omitempty"`
+	FertilizerEN     	 string		 `json:"fertilizer_en,omitempty"`
+	FertilizerTH     	 string		 `json:"fertilizer_th,omitempty"`
+	Nitrogen       	 	 float64	 `json:"nitrogen,omitempty"`
+	Phosphorus    	 	 float64	 `json:"phosphorus,omitempty"`
+	Potassium      	 	 float64	 `json:"potassium,omitempty"`
+	CreateDate		 	 time.Time	 `json:"create_date,omitempty"`
+	ChangeDate	     	 time.Time	 `json:"change_date,omitempty"`
+	FertilizerCatId		 uuid.UUID	 `json:"fertilizer_cat_id,omitempty"`
+	StatusId		 	 uuid.UUID	 `json:"status_id,omitempty"`
 }
 // New instance fertilizer
 func (u *Fertilizer) New() *Fertilizer {

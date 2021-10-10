@@ -11,23 +11,23 @@ import (
 //-------------------------------------------------------------------------------//
 //model formula_plant
 type FormulaPlant struct {
-	FormulaPlantId 	 uuid.UUID	 `mapstructure:"formula_plant_id" json:"formula_plant_id,omitempty"`
-	FormulaName		 string		 `mapstructure:"formula_name" json:"formula_name,omitempty"`
-	FormulaDesc		 string		 `mapstructure:"formula_desc" json:"formula_desc,omitempty"`
-	PeopleUsed 		 int		 `mapstructure:"people_used" json:"people_used,omitempty"`
-	Recommend1 		 int		 `mapstructure:"recommend1" json:"recommend1,omitempty"`
-	Recommend2		 int		 `mapstructure:"recommend2" json:"recommend2,omitempty"`
-	Recommend3		 int		 `mapstructure:"recommend3" json:"recommend3,omitempty"`
-	Recommend4		 int		 `mapstructure:"recommend4" json:"recommend4,omitempty"`
-	Recommend5		 int		 `mapstructure:"recommend5" json:"recommend5,omitempty"`
-	CreateDate		 time.Time	 `mapstructure:"create_date" json:"-"`
-	ChangeDate		 time.Time	 `mapstructure:"change_date" json:"-"`
-	PlantId		 	 uuid.UUID	 `mapstructure:"plant_id" json:"plant_id,omitempty"`
-	StatusId		 uuid.UUID	 `mapstructure:"status_id" json:"-"`
-	ProvinceId		 uuid.UUID	 `mapstructure:"province_id" json:"province_id,omitempty"`
-	CountryId		 uuid.UUID	 `mapstructure:"country_id" json:"country_id,omitempty"`
-	IsPublic		 bool	 	 `mapstructure:"is_public" json:"is_public,omitempty"`
-	Uid				 uuid.UUID	 `mapstructure:"uid" json:"uid,omitempty"`
+	FormulaPlantId 	 uuid.UUID	 `json:"formula_plant_id,omitempty"`
+	FormulaName		 string		 `json:"formula_name,omitempty"`
+	FormulaDesc		 string		 `json:"formula_desc,omitempty"`
+	PeopleUsed 		 int		 `json:"people_used,omitempty"`
+	Recommend1 		 int		 `json:"recommend1,omitempty"`
+	Recommend2		 int		 `json:"recommend2,omitempty"`
+	Recommend3		 int		 `json:"recommend3,omitempty"`
+	Recommend4		 int		 `json:"recommend4,omitempty"`
+	Recommend5		 int		 `json:"recommend5,omitempty"`
+	CreateDate		 time.Time	 `json:"-"`
+	ChangeDate		 time.Time	 `json:"-"`
+	PlantId		 	 uuid.UUID	 `json:"plant_id,omitempty"`
+	StatusId		 uuid.UUID	 `json:"-"`
+	ProvinceId		 uuid.UUID	 `json:"province_id,omitempty"`
+	CountryId		 uuid.UUID	 `json:"country_id,omitempty"`
+	IsPublic		 bool	 	 `json:"is_public,omitempty"`
+	Uid				 uuid.UUID	 `json:"uid,omitempty"`
 }
 // New instance formula_plant
 func (u *FormulaPlant) New() *FormulaPlant {

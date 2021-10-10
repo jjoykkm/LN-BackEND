@@ -11,11 +11,11 @@ import (
 //-------------------------------------------------------------------------------//
 //Model
 type MyFarmOverviewFarm struct {
-	FarmId      	uuid.UUID	 `mapstructure:"farm_id" json:"farm_id"`
-	FarmName    	string		 `mapstructure:"farm_name" json:"farm_name"`
-	FarmDesc    	string		 `mapstructure:"farm_desc" json:"farm_desc"`
-	MainboxCount	int			 `mapstructure:"mainbox_count" json:"mainbox_count"`
-	FarmAreaCount	int			 `mapstructure:"farm_area_count" json:"farm_area_count"`
+	FarmId      	uuid.UUID	 `json:"farm_id"`
+	FarmName    	string		 `json:"farm_name"`
+	FarmDesc    	string		 `json:"farm_desc"`
+	MainboxCount	int			 `json:"mainbox_count"`
+	FarmAreaCount	int			 `json:"farm_area_count"`
 }
 
 // New instance
@@ -33,17 +33,17 @@ func (u *MyFarmOverviewFarm) New() *MyFarmOverviewFarm {
 //-------------------------------------------------------------------------------//
 //Model
 type MyFarmSenSocDetail struct {
-	SocketId       		uuid.UUID 		`mapstructure:"socket_id" json:"socket_id"`
-	SocketName     		string    		`mapstructure:"socket_name" json:"socket_name"`
-	SocketNumber		int64		 	`mapstructure:"socket_number" json:"socket_number"`
-	StatusSensorId 		uuid.UUID 		`mapstructure:"status_sensor_id" json:"status_sensor_id"`
-	StatusSensorName 	string			`mapstructure:"status_sensor_name" json:"status_sensor_name"`
-	SensorId      		uuid.UUID	 	`mapstructure:"sensor_id" json:"sensor_id"`
-	SensorModel     	string	 	 	`mapstructure:"sensor_model" json:"sensor_model"`
-	SensorLots      	string	 	 	`mapstructure:"sensor_lots" json:"sensor_lots"`
-	BitTransfer	    	pgtype.Bit	 	`mapstructure:"bit_transfer" json:"bit_transfer"`
-	SensorTypeId		uuid.UUID	 	`mapstructure:"sensor_type_id" json:"sensor_type_id"`
-	SensorTypeName  	string	 	 	`mapstructure:"sensor_type_name" json:"sensor_type_name"`
+	SocketId       		uuid.UUID 		`json:"socket_id"`
+	SocketName     		string    		`json:"socket_name"`
+	SocketNumber		int64		 	`json:"socket_number"`
+	StatusSensorId 		uuid.UUID 		`json:"status_sensor_id"`
+	StatusSensorName 	string			`json:"status_sensor_name"`
+	SensorId      		uuid.UUID	 	`json:"sensor_id"`
+	SensorModel     	string	 	 	`json:"sensor_model"`
+	SensorLots      	string	 	 	`json:"sensor_lots"`
+	BitTransfer	    	pgtype.Bit	 	`json:"bit_transfer"`
+	SensorTypeId		uuid.UUID	 	`json:"sensor_type_id"`
+	SensorTypeName  	string	 	 	`json:"sensor_type_name"`
 }
 
 // New instance
@@ -68,13 +68,13 @@ func (u *MyFarmSenSocDetail) New() *MyFarmSenSocDetail {
 //-------------------------------------------------------------------------------//
 //Model
 type MyFarmManageMainbox struct {
-	MainboxId      		uuid.UUID	 			`mapstructure:"mainbox_id" json:"mainbox_id"`
-	MainboxName     	string		 			`mapstructure:"mainbox_name" json:"mainbox_name"`
-	MainboxModel    	string		 			`mapstructure:"mainbox_model" json:"mainbox_model"`
-	MainboxLots     	string		 			`mapstructure:"mainbox_lots" json:"mainbox_lots"`
-	StartWarranty		time.Time	 			`mapstructure:"start_warranty" json:"start_warranty"`
-	EndWarranty			time.Time	 			`mapstructure:"end_warranty" json:"end_warranty"`
-	SenSocDetail		[]MyFarmSenSocDetail	`mapstructure:"sen_soc_detail" json:"sen_soc_detail"`
+	MainboxId      		uuid.UUID	 			`json:"mainbox_id"`
+	MainboxName     	string		 			`json:"mainbox_name"`
+	MainboxModel    	string		 			`json:"mainbox_model"`
+	MainboxLots     	string		 			`json:"mainbox_lots"`
+	StartWarranty		time.Time	 			`json:"start_warranty"`
+	EndWarranty			time.Time	 			`json:"end_warranty"`
+	SenSocDetail		[]MyFarmSenSocDetail	`json:"sen_soc_detail"`
 }
 
 // New instance
@@ -95,9 +95,9 @@ func (u *MyFarmManageMainbox) New() *MyFarmManageMainbox {
 //-------------------------------------------------------------------------------//
 //Model
 type MyFarmManageFarmArea struct {
-	FarmAreaId      	uuid.UUID	 			`mapstructure:"farm_area_id" json:"farm_area_id"`
-	FarmAreaName    	string		 			`mapstructure:"farm_area_name" json:"farm_area_name"`
-	SenSocDetail		[]MyFarmSenSocDetail	`mapstructure:"sen_soc_detail" json:"sen_soc_detail"`
+	FarmAreaId      	uuid.UUID	 			`json:"farm_area_id"`
+	FarmAreaName    	string		 			`json:"farm_area_name"`
+	SenSocDetail		[]MyFarmSenSocDetail	`json:"sen_soc_detail"`
 }
 
 // New instance
@@ -115,17 +115,17 @@ func (u *MyFarmManageFarmArea) New() *MyFarmManageFarmArea {
 //-------------------------------------------------------------------------------//
 //Model
 type MyFarmManageRole struct {
-	Uid      		uuid.UUID	 `mapstructure:"uid" json:"uid"`
-	Username     	string	 	 `mapstructure:"username" json:"username"`
-	FullName      	string	 	 `mapstructure:"full_name" json:"full_name"`
-	SurName      	string	 	 `mapstructure:"sur_name" json:"sur_name"`
-	NickName      	string	 	 `mapstructure:"nick_name" json:"nick_name"`
-	FarmId     		uuid.UUID	 `mapstructure:"farm_id" json:"farm_id"`
-	RoleId      	uuid.UUID	 `mapstructure:"role_id" json:"role_id"`
-	RoleName      	string		 `mapstructure:"role_name" json:"role_name"`
-	RoleDesc      	string		 `mapstructure:"role_desc" json:"role_desc"`
-	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date"`
-	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date"`
+	Uid      		uuid.UUID	 `json:"uid"`
+	Username     	string	 	 `json:"username"`
+	FullName      	string	 	 `json:"full_name"`
+	SurName      	string	 	 `json:"sur_name"`
+	NickName      	string	 	 `json:"nick_name"`
+	FarmId     		uuid.UUID	 `json:"farm_id"`
+	RoleId      	uuid.UUID	 `json:"role_id"`
+	RoleName      	string		 `json:"role_name"`
+	RoleDesc      	string		 `json:"role_desc"`
+	CreateDate		time.Time	 `json:"create_date"`
+	ChangeDate	    time.Time	 `json:"change_date"`
 }
 
 // New instance

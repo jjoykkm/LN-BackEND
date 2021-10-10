@@ -11,12 +11,12 @@ import (
 //-------------------------------------------------------------------------------//
 //model trans_sensor_value_rec
 type TransSensorValueRec struct {
-	FormulaPlantId 		uuid.UUID	 `gorm:"primaryKey" mapstructure:"formula_plant_id" json:"formula_plant_id"`
-	SensorTypeId   		uuid.UUID	 `mapstructure:"sensor_type_id" json:"sensor_type_id"`
-	StatusId	   		uuid.UUID	 `mapstructure:"status_id" json:"status_id"`
-	ValueRec      		float64		 `mapstructure:"value_rec" json:"value_rec"`
-	CreateDate	   		time.Time	 `mapstructure:"create_date" json:"create_date"`
-	ChangeDate	   		time.Time	 `mapstructure:"change_date" json:"change_date"`
+	FormulaPlantId 		uuid.UUID	 `gorm:"primaryKey" json:"formula_plant_id"`
+	SensorTypeId   		uuid.UUID	 `json:"sensor_type_id"`
+	StatusId	   		uuid.UUID	 `json:"status_id"`
+	ValueRec      		float64		 `json:"value_rec"`
+	CreateDate	   		time.Time	 `json:"create_date"`
+	ChangeDate	   		time.Time	 `json:"change_date"`
 }
 // New instance trans_sensor_value_rec
 func (u *TransSensorValueRec) New() *TransSensorValueRec {

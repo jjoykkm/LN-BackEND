@@ -5,8 +5,8 @@ package errs
 //-------------------------------------------------------------------------------//
 //Model post body
 type ErrContext struct {
-	Code	string	`mapstructure:"code" json:"code"`
-	Err		error	`mapstructure:"err" json:"err"`
+	Code	string	`json:"code"`
+	Err		error	`json:"err"`
 }
 
 // New instance

@@ -11,12 +11,12 @@ import (
 //-------------------------------------------------------------------------------//
 //model fertilizer_cat
 type FertilizerCat struct {
-	FertilizerCatId      uuid.UUID	 `mapstructure:"fertilizer_cat_id" json:"fertilizer_cat_id,omitempty"`
-	FertilizerCatEN      string		 `mapstructure:"fertilizer_cat_en" json:"fertilizer_cat_en,omitempty"`
-	FertilizerCatTH      string		 `mapstructure:"fertilizer_cat_th" json:"fertilizer_cat_th,omitempty"`
-	ChangeDate	   		 time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
-	CreateDate	   		 time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
-	StatusId	   		 uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
+	FertilizerCatId      uuid.UUID	 `json:"fertilizer_cat_id,omitempty"`
+	FertilizerCatEN      string		 `json:"fertilizer_cat_en,omitempty"`
+	FertilizerCatTH      string		 `json:"fertilizer_cat_th,omitempty"`
+	ChangeDate	   		 time.Time	 `json:"change_date,omitempty"`
+	CreateDate	   		 time.Time	 `json:"create_date,omitempty"`
+	StatusId	   		 uuid.UUID	 `json:"status_id,omitempty"`
 }
 // New instance fertilizer_cat
 func (u *FertilizerCat) New() *FertilizerCat {

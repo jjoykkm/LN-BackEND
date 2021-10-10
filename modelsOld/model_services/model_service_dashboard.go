@@ -13,10 +13,10 @@ import (
 //-------------------------------------------------------------------------------//
 //Model
 type DashboardFarmList struct {
-	Uid      	uuid.UUID	 `mapstructure:"uid" json:"uid"`
-	FarmId      uuid.UUID	 `mapstructure:"farm_id" json:"farm_id"`
-	FarmName    string		 `mapstructure:"farm_name" json:"farm_name"`
-	FarmDesc    string		 `mapstructure:"farm_desc" json:"farm_desc"`
+	Uid      	uuid.UUID	 `json:"uid"`
+	FarmId      uuid.UUID	 `json:"farm_id"`
+	FarmName    string		 `json:"farm_name"`
+	FarmDesc    string		 `json:"farm_desc"`
 }
 // New instance
 func (u *DashboardFarmList) New() *DashboardFarmList {
@@ -33,13 +33,13 @@ func (u *DashboardFarmList) New() *DashboardFarmList {
 //-------------------------------------------------------------------------------//
 //Model
 type DashboardFarmAreaList struct {
-	FarmId				uuid.UUID	 		`mapstructure:"farm_id" json:"farm_id"`
-	FarmAreaId			uuid.UUID	 		`mapstructure:"farm_area_id" json:"farm_area_id"`
-	FarmAreaName		string	 	 		`mapstructure:"farm_area_name" json:"farm_area_name"`
-	FormulaPlantId		string	 	 		`mapstructure:"formula_plant_id" json:"formula_plant_id"`
-	FormulaName			string	 	 		`mapstructure:"formula_name" json:"formula_name"`
-	FormulaDesc			string	 	 		`mapstructure:"formula_desc" json:"formula_desc"`
-	SensorDetail		[]SenSocMainList	`mapstructure:"sensor_detail" json:"sensor_detail"`
+	FarmId				uuid.UUID	 		`json:"farm_id"`
+	FarmAreaId			uuid.UUID	 		`json:"farm_area_id"`
+	FarmAreaName		string	 	 		`json:"farm_area_name"`
+	FormulaPlantId		string	 	 		`json:"formula_plant_id"`
+	FormulaName			string	 	 		`json:"formula_name"`
+	FormulaDesc			string	 	 		`json:"formula_desc"`
+	SensorDetail		[]SenSocMainList	`json:"sensor_detail"`
 }
 // New instance
 func (u *DashboardFarmAreaList) New() *DashboardFarmAreaList {
@@ -59,16 +59,16 @@ func (u *DashboardFarmAreaList) New() *DashboardFarmAreaList {
 //-------------------------------------------------------------------------------//
 //Model
 type JoinSocketAndTrans struct {
-	SocketId      	uuid.UUID	 `mapstructure:"socket_id" json:"socket_id"`
-	MainboxId      	uuid.UUID	 `mapstructure:"mainbox_id" json:"mainbox_id"`
-	SensorId      	uuid.UUID	 `mapstructure:"sensor_id" json:"sensor_id"`
-	StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id"`
-	SocketName      string	 	 `mapstructure:"socket_name" json:"socket_name"`
-	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date"`
-	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date"`
-	SocketNumber	int64		 `mapstructure:"socket_number" json:"socket_number"`
-	StatusSensorId	uuid.UUID	 `mapstructure:"status_sensor_id" json:"status_sensor_id"`
-	FarmAreaId      uuid.UUID	 `mapstructure:"farm_area_id" json:"farm_area_id"`
+	SocketId      	uuid.UUID	 `json:"socket_id"`
+	MainboxId      	uuid.UUID	 `json:"mainbox_id"`
+	SensorId      	uuid.UUID	 `json:"sensor_id"`
+	StatusId		uuid.UUID	 `json:"status_id"`
+	SocketName      string	 	 `json:"socket_name"`
+	CreateDate		time.Time	 `json:"create_date"`
+	ChangeDate	    time.Time	 `json:"change_date"`
+	SocketNumber	int64		 `json:"socket_number"`
+	StatusSensorId	uuid.UUID	 `json:"status_sensor_id"`
+	FarmAreaId      uuid.UUID	 `json:"farm_area_id"`
 }
 
 // New instance
@@ -92,12 +92,12 @@ func (u *JoinSocketAndTrans) New() *JoinSocketAndTrans {
 //-------------------------------------------------------------------------------//
 //Model
 type SensorDetail struct {
-	SensorId      		uuid.UUID	 `mapstructure:"sensor_id" json:"sensor_id"`
-	SensorModel     	string	 	 `mapstructure:"sensor_model" json:"sensor_model"`
-	SensorLots      	string	 	 `mapstructure:"sensor_lots" json:"sensor_lots"`
-	BitTransfer	    	pgtype.Bit	 `mapstructure:"bit_transfer" json:"bit_transfer"`
-	SensorTypeId		uuid.UUID	 `mapstructure:"sensor_type_id" json:"sensor_type_id"`
-	SensorTypeName  	string	 	 `mapstructure:"sensor_type_name" json:"sensor_type_name"`
+	SensorId      		uuid.UUID	 `json:"sensor_id"`
+	SensorModel     	string	 	 `json:"sensor_model"`
+	SensorLots      	string	 	 `json:"sensor_lots"`
+	BitTransfer	    	pgtype.Bit	 `json:"bit_transfer"`
+	SensorTypeId		uuid.UUID	 `json:"sensor_type_id"`
+	SensorTypeName  	string	 	 `json:"sensor_type_name"`
 }
 // New instance
 func (u *SensorDetail) New() *SensorDetail {
@@ -116,12 +116,12 @@ func (u *SensorDetail) New() *SensorDetail {
 //-------------------------------------------------------------------------------//
 //Model
 type MainboxDetail struct {
-	MainboxId      		uuid.UUID	 `mapstructure:"mainbox_id" json:"mainbox_id"`
-	MainboxName     	string		 `mapstructure:"mainbox_name" json:"mainbox_name"`
-	MainboxModel    	string		 `mapstructure:"mainbox_model" json:"mainbox_model"`
-	MainboxLots     	string		 `mapstructure:"mainbox_lots" json:"mainbox_lots"`
-	StartWarranty		time.Time	 `mapstructure:"start_warranty" json:"start_warranty"`
-	EndWarranty			time.Time	 `mapstructure:"end_warranty" json:"end_warranty"`
+	MainboxId      		uuid.UUID	 `json:"mainbox_id"`
+	MainboxName     	string		 `json:"mainbox_name"`
+	MainboxModel    	string		 `json:"mainbox_model"`
+	MainboxLots     	string		 `json:"mainbox_lots"`
+	StartWarranty		time.Time	 `json:"start_warranty"`
+	EndWarranty			time.Time	 `json:"end_warranty"`
 }
 // New instance
 func (u *MainboxDetail) New() *MainboxDetail {
@@ -140,13 +140,13 @@ func (u *MainboxDetail) New() *MainboxDetail {
 //-------------------------------------------------------------------------------//
 //Model
 type SenSocMainList struct {
-	SocketId       		uuid.UUID 		`mapstructure:"socket_id" json:"socket_id"`
-	SocketName     		string    		`mapstructure:"socket_name" json:"socket_name"`
-	SocketNumber		int64		 	`mapstructure:"socket_number" json:"socket_number"`
-	StatusSensorId 		uuid.UUID 		`mapstructure:"status_sensor_id" json:"status_sensor_id"`
-	StatusSensorName 	string			`mapstructure:"status_sensor_name" json:"status_sensor_name"`
-	Sensor         		SensorDetail	`mapstructure:"sensor_detail" json:"sensor_detail"`
-	Mainbox        		MainboxDetail	`mapstructure:"mainbox_detail" json:"mainbox_detail"`
+	SocketId       		uuid.UUID 		`json:"socket_id"`
+	SocketName     		string    		`json:"socket_name"`
+	SocketNumber		int64		 	`json:"socket_number"`
+	StatusSensorId 		uuid.UUID 		`json:"status_sensor_id"`
+	StatusSensorName 	string			`json:"status_sensor_name"`
+	Sensor         		SensorDetail	`json:"sensor_detail"`
+	Mainbox        		MainboxDetail	`json:"mainbox_detail"`
 }
 // New instance
 func (u *SenSocMainList) New() *SenSocMainList {
@@ -166,21 +166,21 @@ func (u *SenSocMainList) New() *SenSocMainList {
 ////-------------------------------------------------------------------------------//
 ////Model
 //type SenSocMainList struct {
-//	SocketId      		uuid.UUID	 `mapstructure:"socket_id" json:"socket_id"`
-//	SocketName      	string	 	 `mapstructure:"socket_name" json:"socket_name"`
-//	StatusSensorId		uuid.UUID	 `mapstructure:"status_sensor_id" json:"status_sensor_id"`
-//	SensorId      		uuid.UUID	 `mapstructure:"sensor_id" json:"sensor_id"`
-//	SensorModel     	string	 	 `mapstructure:"sensor_model" json:"sensor_model"`
-//	SensorLots      	string	 	 `mapstructure:"sensor_lots" json:"sensor_lots"`
-//	BitTransfer	    	pgtype.Bit	 `mapstructure:"bit_transfer" json:"bit_transfer"`
-//	SensorTypeId		uuid.UUID	 `mapstructure:"sensor_type_id" json:"sensor_type_id"`
-//	SensorTypeName  	string	 	 `mapstructure:"sensor_type_name" json:"sensor_type_name"`
-//	MainboxId      		uuid.UUID	 `mapstructure:"mainbox_id" json:"mainbox_id"`
-//	MainboxName     	string		 `mapstructure:"mainbox_name" json:"mainbox_name"`
-//	MainboxModel    	string		 `mapstructure:"mainbox_model" json:"mainbox_model"`
-//	MainboxLots     	string		 `mapstructure:"mainbox_lots" json:"mainbox_lots"`
-//	StartWarranty		time.Time	 `mapstructure:"start_warranty" json:"start_warranty"`
-//	EndWarranty			time.Time	 `mapstructure:"end_warranty" json:"end_warranty"`
+//	SocketId      		uuid.UUID	 `json:"socket_id"`
+//	SocketName      	string	 	 `json:"socket_name"`
+//	StatusSensorId		uuid.UUID	 `json:"status_sensor_id"`
+//	SensorId      		uuid.UUID	 `json:"sensor_id"`
+//	SensorModel     	string	 	 `json:"sensor_model"`
+//	SensorLots      	string	 	 `json:"sensor_lots"`
+//	BitTransfer	    	pgtype.Bit	 `json:"bit_transfer"`
+//	SensorTypeId		uuid.UUID	 `json:"sensor_type_id"`
+//	SensorTypeName  	string	 	 `json:"sensor_type_name"`
+//	MainboxId      		uuid.UUID	 `json:"mainbox_id"`
+//	MainboxName     	string		 `json:"mainbox_name"`
+//	MainboxModel    	string		 `json:"mainbox_model"`
+//	MainboxLots     	string		 `json:"mainbox_lots"`
+//	StartWarranty		time.Time	 `json:"start_warranty"`
+//	EndWarranty			time.Time	 `json:"end_warranty"`
 //}
 //// New instance
 //func (u *SenSocMainList) New() *SenSocMainList {

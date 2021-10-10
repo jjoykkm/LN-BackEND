@@ -11,12 +11,12 @@ import (
 //-------------------------------------------------------------------------------//
 //model sensor_type
 type SensorType struct {
-	SensorTypeId      	uuid.UUID	 `mapstructure:"sensor_type_id" json:"sensor_type_id"`
-	SensorTypeNameEN    string	 	 `mapstructure:"sensor_type_name_en" json:"sensor_type_name_en"`
-	CreateDate			time.Time	 `mapstructure:"create_date" json:"create_date"`
-	ChangeDate	    	time.Time	 `mapstructure:"change_date" json:"change_date"`
-	StatusId			uuid.UUID	 `mapstructure:"status_id" json:"status_id"`
-	SensorTypeNameTH    string	 	 `mapstructure:"sensor_type_name_th" json:"sensor_type_name_th"`
+	SensorTypeId      	uuid.UUID	 `json:"sensor_type_id"`
+	SensorTypeNameEN    string	 	 `json:"sensor_type_name_en"`
+	CreateDate			time.Time	 `json:"create_date"`
+	ChangeDate	    	time.Time	 `json:"change_date"`
+	StatusId			uuid.UUID	 `json:"status_id"`
+	SensorTypeNameTH    string	 	 `json:"sensor_type_name_th"`
 }
 // New instance sensor_type
 func (u *SensorType) New() *SensorType {

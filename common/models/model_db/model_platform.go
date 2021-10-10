@@ -11,11 +11,11 @@ import (
 //-------------------------------------------------------------------------------//
 //model platform
 type Platform struct {
-	PlatformId      uuid.UUID	 `mapstructure:"platform_id" json:"platform_id,omitempty"`
-	PlatformName    string		 `mapstructure:"platform_name" json:"platform_name,omitempty"`
-	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
-	StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
+	PlatformId      uuid.UUID	 `json:"platform_id,omitempty"`
+	PlatformName    string		 `json:"platform_name,omitempty"`
+	CreateDate		time.Time	 `json:"create_date,omitempty"`
+	ChangeDate	    time.Time	 `json:"change_date,omitempty"`
+	StatusId		uuid.UUID	 `json:"status_id,omitempty"`
 }
 // New instance platform
 func (u *Platform) New() *Platform {

@@ -11,12 +11,12 @@ import (
 //-------------------------------------------------------------------------------//
 //model plant_type
 type PlantType struct {
-	PlantTypeId      uuid.UUID	 `mapstructure:"plant_type_id" json:"plant_type_id,omitempty"`
-	PlantTypeEN      string		 `mapstructure:"plant_type_en" json:"plant_type_en,omitempty"`
-	PlantTypeTH      string		 `mapstructure:"plant_type_th" json:"plant_type_th,omitempty"`
-	CreateDate		 time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
-	ChangeDate	     time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
-	StatusId		 uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
+	PlantTypeId      uuid.UUID	 `json:"plant_type_id,omitempty"`
+	PlantTypeEN      string		 `json:"plant_type_en,omitempty"`
+	PlantTypeTH      string		 `json:"plant_type_th,omitempty"`
+	CreateDate		 time.Time	 `json:"create_date,omitempty"`
+	ChangeDate	     time.Time	 `json:"change_date,omitempty"`
+	StatusId		 uuid.UUID	 `json:"status_id,omitempty"`
 }
 // New instance plant_type
 func (u *PlantType) New() *PlantType {

@@ -11,14 +11,14 @@ import (
 //-------------------------------------------------------------------------------//
 //model role
 type Role struct {
-	RoleId      	uuid.UUID	 `mapstructure:"role_id" json:"role_id,omitempty"`
-	RoleNameEN      string		 `mapstructure:"role_name_en" json:"role_name_en,omitempty"`
-	RoleDescEN      string		 `mapstructure:"role_desc_en" json:"role_desc_en,omitempty"`
-	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
-	StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
-	RoleNameTH      string		 `mapstructure:"role_name_th" json:"role_name_th,omitempty"`
-	RoleDescTH      string		 `mapstructure:"role_desc_th" json:"role_desc_th,omitempty"`
+	RoleId      	uuid.UUID	 `json:"role_id,omitempty"`
+	RoleNameEN      string		 `json:"role_name_en,omitempty"`
+	RoleDescEN      string		 `json:"role_desc_en,omitempty"`
+	CreateDate		time.Time	 `json:"create_date,omitempty"`
+	ChangeDate	    time.Time	 `json:"change_date,omitempty"`
+	StatusId		uuid.UUID	 `json:"status_id,omitempty"`
+	RoleNameTH      string		 `json:"role_name_th,omitempty"`
+	RoleDescTH      string		 `json:"role_desc_th,omitempty"`
 }
 // New instance role
 func (u *Role) New() *Role {

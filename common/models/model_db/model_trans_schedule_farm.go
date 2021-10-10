@@ -11,11 +11,11 @@ import (
 //-------------------------------------------------------------------------------//
 //model trans_schedule_farm
 type TransScheduleFarm struct {
-	FarmAreaId      uuid.UUID	 `mapstructure:"farm_area_id" json:"farm_area_id,omitempty"`
-	ScheduleId      uuid.UUID	 `mapstructure:"schedule_id" json:"schedule_id,omitempty"`
-	StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
-	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
+	FarmAreaId      uuid.UUID	 `json:"farm_area_id,omitempty"`
+	ScheduleId      uuid.UUID	 `json:"schedule_id,omitempty"`
+	StatusId		uuid.UUID	 `json:"status_id,omitempty"`
+	CreateDate		time.Time	 `json:"create_date,omitempty"`
+	ChangeDate	    time.Time	 `json:"change_date,omitempty"`
 }
 // New instance trans_schedule_farm
 func (u *TransScheduleFarm) New() *TransScheduleFarm {

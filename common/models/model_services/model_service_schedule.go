@@ -9,9 +9,9 @@ import (
 //-------------------------------------------------------------------------------//
 //Model
 type ScheduleFarmArea struct {
-	FarmId      	uuid.UUID	 			`mapstructure:"farm_id" json:"farm_id"`
-	FarmAreaId      uuid.UUID	 			`mapstructure:"farm_area_id" json:"farm_area_id"`
-	FarmAreaName    string		 			`mapstructure:"farm_area_name" json:"farm_area_name"`
+	FarmId      	uuid.UUID	 			`json:"farm_id"`
+	FarmAreaId      uuid.UUID	 			`json:"farm_area_id"`
+	FarmAreaName    string		 			`json:"farm_area_name"`
 }
 
 // New instance
@@ -28,10 +28,10 @@ func (u *ScheduleFarmArea) New() *ScheduleFarmArea {
 //-------------------------------------------------------------------------------//
 //model
 type ScheduleFreqType struct {
-	FrequencyTypeId 	uuid.UUID	 `mapstructure:"frequency_type_id" json:"frequency_type_id"`
-	FrequencyName   	string		 `mapstructure:"frequency_name" json:"frequency_name"`
-	IntervalRange   	string		 `mapstructure:"interval_range" json:"interval_range"`
-	IsForCustom     	string		 `mapstructure:"is_for_custom" json:"is_for_custom"`
+	FrequencyTypeId 	uuid.UUID	 `json:"frequency_type_id"`
+	FrequencyName   	string		 `json:"frequency_name"`
+	IntervalRange   	string		 `json:"interval_range"`
+	IsForCustom     	string		 `json:"is_for_custom"`
 }
 // New instance
 func (u *ScheduleFreqType) New() *ScheduleFreqType {
@@ -48,15 +48,15 @@ func (u *ScheduleFreqType) New() *ScheduleFreqType {
 //-------------------------------------------------------------------------------//
 // model
 type ScheduleInType struct {
-	IndicateTypeId      uuid.UUID	 `mapstructure:"indicate_type_id" json:"indicate_type_id"`
-	IndicateName      	string	 	 `mapstructure:"indicate_name" json:"indicate_name"`
-	IndicateDesc      	string	 	 `mapstructure:"indicate_desc" json:"indicate_desc"`
-	Important	      	int			 `mapstructure:"important" json:"important"`
-	IndColorName      	string	 	 `mapstructure:"ind_color_name" json:"ind_color_name"`
-	IndColorCode      	string	 	 `mapstructure:"ind_color_code" json:"ind_color_code"`
-	IndColorCodeR      	string	 	 `mapstructure:"ind_color_code_r" json:"ind_color_code_r"`
-	IndColorCodeG      	string	 	 `mapstructure:"ind_color_code_g" json:"ind_color_code_g"`
-	IndColorCodeB      	string	 	 `mapstructure:"ind_color_code_b" json:"ind_color_code_b"`
+	IndicateTypeId      uuid.UUID	 `json:"indicate_type_id"`
+	IndicateName      	string	 	 `json:"indicate_name"`
+	IndicateDesc      	string	 	 `json:"indicate_desc"`
+	Important	      	int			 `json:"important"`
+	IndColorName      	string	 	 `json:"ind_color_name"`
+	IndColorCode      	string	 	 `json:"ind_color_code"`
+	IndColorCodeR      	string	 	 `json:"ind_color_code_r"`
+	IndColorCodeG      	string	 	 `json:"ind_color_code_g"`
+	IndColorCodeB      	string	 	 `json:"ind_color_code_b"`
 }
 // New instance
 func (u *ScheduleInType) New() *ScheduleInType {
@@ -79,14 +79,14 @@ func (u *ScheduleInType) New() *ScheduleInType {
 //-------------------------------------------------------------------------------//
 //model socket_action
 type SocketAction struct {
-	ScheduleId      uuid.UUID	 `mapstructure:"schedule_id" json:"schedule_id"`
-	SocketId      	uuid.UUID	 `mapstructure:"socket_id" json:"socket_id"`
-	Uid	      		uuid.UUID	 `mapstructure:"uid" json:"uid"`
-	StatusSensorId	uuid.UUID	 `mapstructure:"status_sensor_id" json:"status_sensor_id"`
-	IsManual    	bool		 `mapstructure:"is_manual" json:"is_manual"`
-	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date"`
-	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date"`
-	StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id"`
+	ScheduleId      uuid.UUID	 `json:"schedule_id"`
+	SocketId      	uuid.UUID	 `json:"socket_id"`
+	Uid	      		uuid.UUID	 `json:"uid"`
+	StatusSensorId	uuid.UUID	 `json:"status_sensor_id"`
+	IsManual    	bool		 `json:"is_manual"`
+	CreateDate		time.Time	 `json:"create_date"`
+	ChangeDate	    time.Time	 `json:"change_date"`
+	StatusId		uuid.UUID	 `json:"status_id"`
 }
 // New instance socket_action
 func (u *SocketAction) New() *SocketAction {
@@ -107,19 +107,19 @@ func (u *SocketAction) New() *SocketAction {
 //-------------------------------------------------------------------------------//
 //Model
 type ScheduleStruct struct {
-	FarmAreaId      	uuid.UUID	 		`mapstructure:"farm_area_id" json:"farm_area_id"`
-	FarmAreaName    	string		 		`mapstructure:"farm_area_name" json:"farm_area_name"`
-	ScheduleDesc      	string	 	 		`mapstructure:"schedule_desc" json:"schedule_desc"`
-	ScheduleId     		uuid.UUID	 		`mapstructure:"schedule_id" json:"schedule_id"`
-	ScheduleName      	string	 	 		`mapstructure:"schedule_name" json:"schedule_name"`
-	StartDateTime		time.Time	 		`mapstructure:"start_date_time" json:"start_date_time"`
-	EndDateTime			time.Time	 		`mapstructure:"end_date_time" json:"end_date_time"`
-	FreqInterval      	int		 	 		`mapstructure:"frequency_interval" json:"frequency_interval"`
-	IsAlarm		      	bool		 		`mapstructure:"is_alarm" json:"is_alarm"`
-	FreqType			ScheduleFreqType	`mapstructure:"freq_type" json:"freq_type" gorm:"embedded"`
-	IndicateType		ScheduleInType		`mapstructure:"indicate_type" json:"indicate_type" gorm:"embedded"`
-	IsAllDay	      	bool		 		`mapstructure:"is_all_day" json:"is_all_day"`
-	IsReminder	      	bool		 		`mapstructure:"is_reminder" json:"is_reminder"`
+	FarmAreaId      	uuid.UUID	 		`json:"farm_area_id"`
+	FarmAreaName    	string		 		`json:"farm_area_name"`
+	ScheduleDesc      	string	 	 		`json:"schedule_desc"`
+	ScheduleId     		uuid.UUID	 		`json:"schedule_id"`
+	ScheduleName      	string	 	 		`json:"schedule_name"`
+	StartDateTime		time.Time	 		`json:"start_date_time"`
+	EndDateTime			time.Time	 		`json:"end_date_time"`
+	FreqInterval      	int		 	 		`json:"frequency_interval"`
+	IsAlarm		      	bool		 		`json:"is_alarm"`
+	FreqType			ScheduleFreqType	`json:"freq_type" gorm:"embedded"`
+	IndicateType		ScheduleInType		`json:"indicate_type" gorm:"embedded"`
+	IsAllDay	      	bool		 		`json:"is_all_day"`
+	IsReminder	      	bool		 		`json:"is_reminder"`
 }
 
 // New instance
@@ -144,8 +144,8 @@ func (u *ScheduleStruct) New() *ScheduleStruct {
 //-------------------------------------------------------------------------------//
 //Model
 type ScheduleScheRemind struct {
-	ScheduleList    []ScheduleStruct	`mapstructure:"schedule_list" json:"schedule_list"`
-	ReminderList    []ScheduleStruct	`mapstructure:"reminder_list" json:"reminder_list"`
+	ScheduleList    []ScheduleStruct	`json:"schedule_list"`
+	ReminderList    []ScheduleStruct	`json:"reminder_list"`
 }
 
 // New instance
