@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/jjoykkm/ln-backend/config"
+	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
+	"github.com/jjoykkm/ln-backend/smartfarm/sf_formula_plant"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -129,12 +130,18 @@ func main()  {
 	//	return db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload(
 	//		"SensorType","status_id = ?", config.GetStatus().Active)
 	//			}).Find(&result)
-	var result []model_databases.Farm
-	//result := []model_db.TransManagement{}
-	//result := []map[string]interface{}{}
-	subQuery := db.Debug().Select("farm_id").Where("uid = ?", "17ac6921-ece0-43bc-9d88-7b9bfc59ffd3").Table(config.DB_TRANS_MANAGEMENT)
-	db.Debug().Where("status_id = ? AND farm_id IN (?)", config.GetStatus().Active, subQuery).Find(&result)
+	//var result []model_databases.Farm
+	////result := []model_db.TransManagement{}
+	////result := []map[string]interface{}{}
+	//subQuery := db.Debug().Select("farm_id").Where("uid = ?", "17ac6921-ece0-43bc-9d88-7b9bfc59ffd3").Table(config.DB_TRANS_MANAGEMENT)
+	//db.Debug().Where("status_id = ? AND farm_id IN (?)", config.GetStatus().Active, subQuery).Find(&result)
 	//subQuery :=
+	result := []sf_formula_plant.Fertilizer{}
+	////subQuery := db.Debug().Select("farm_id").Where("uid = ?", "17ac6921-ece0-43bc-9d88-7b9bfc59ffd3").Table(config.DB_TRANS_MANAGEMENT)
+	db.Debug().Preload("FertilizerCat").Find(&result)
+	//result := []model_db.UsersShort{}
+	//db.Debug().Find(&result)
+
 	fmt.Println("-----------------------------")
 	fmt.Printf("%+v\n", result)
 	//helper.ConvertToJson(results)

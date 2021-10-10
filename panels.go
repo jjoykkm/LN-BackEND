@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
-	"github.com/jjoykkm/ln-backend/config"
+	"github.com/jjoykkm/ln-backend/common/config"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

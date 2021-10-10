@@ -1,9 +1,10 @@
 package sf_formula_plant
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_other"
-	"github.com/jjoykkm/ln-backend/config"
 	"github.com/jjoykkm/ln-backend/errs"
 	"net/http"
 )
@@ -78,6 +79,7 @@ func (h *Handler) GetPlantOverviewByPlant(c *gin.Context) {
 		return
 	}
 	respModel,err := h.service.GetPlantOverviewByPlant(config.GetStatus().Active, &reqModel)
+	fmt.Printf("%+v\n", respModel)
 	if err != nil {
 		if errx, ok := err.(*errs.ErrContext); ok {
 			if httpCode, ok := mapErrorCode[errx.Code]; ok {

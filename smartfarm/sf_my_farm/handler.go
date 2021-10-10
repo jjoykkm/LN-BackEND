@@ -2,7 +2,7 @@ package SF_FormulaPlant
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/jjoykkm/ln-backend/config"
+	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/utility"
 	"net/http"
 )

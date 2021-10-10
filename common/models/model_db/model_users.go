@@ -2,7 +2,7 @@ package model_db
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
-	"github.com/jjoykkm/ln-backend/config"
+	"github.com/jjoykkm/ln-backend/common/config"
 	"image"
 	"time"
 )
@@ -62,13 +62,13 @@ func (Users) TableName() string {
 //-------------------------------------------------------------------------------//
 //model users
 type UsersShort struct {
-	Uid      		uuid.UUID	 	`json:"uid,omitempty"`
+	Uid      		uuid.UUID	 	`json:"-"`
 	Username     	string	 	 	`json:"username,omitempty"`
 	NickName      	string	 	 	`json:"nick_name,omitempty"`
 	Image	      	string		 	`json:"image,omitempty"`
 	CreateDate		time.Time	 	`json:"create_date,omitempty"`
 	ChangeDate	    time.Time	 	`json:"change_date,omitempty"`
-	StatusId		uuid.UUID	 	`json:"status_id,omitempty"`
+	StatusId		uuid.UUID	 	`json:"status_id,omitempty"  gorm:"column:statusid"`
 	UserNo			string		 	`json:"user_no,omitempty"`
 }
 // New instance users

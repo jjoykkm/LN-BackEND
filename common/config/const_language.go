@@ -14,7 +14,7 @@ type Language struct {
 }
 func GetLanguage() Language {
 	return Language{
-		En:  EN ,
-		Th:  TH ,
+		En: EN,
+		Th: TH,
 	}
 }

@@ -2,7 +2,7 @@ package model_db
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
-	"github.com/jjoykkm/ln-backend/config"
+	"github.com/jjoykkm/ln-backend/common/config"
 	"time"
 )
 
@@ -11,10 +11,10 @@ import (
 //-------------------------------------------------------------------------------//
 //model status
 type Status struct {
-	StatusId      	uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
-	StatusName      string		 `mapstructure:"status_name" json:"status_name,omitempty"`
-	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
+	StatusId      	uuid.UUID	 `json:"StatusId,omitempty"`
+	StatusName      string		 `json:"StatusName,omitempty"`
+	CreateDate		time.Time	 `json:"CreateDate,omitempty"`
+	ChangeDate	    time.Time	 `json:"ChangeDate,omitempty"`
 }
 // New instance status
 func (u *Status) New() *Status {

@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/jjoykkm/ln-backend/config"
+	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
 	"log"
 )

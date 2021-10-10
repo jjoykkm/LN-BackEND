@@ -2,7 +2,7 @@ package model_db
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
-	"github.com/jjoykkm/ln-backend/config"
+	"github.com/jjoykkm/ln-backend/common/config"
 	"time"
 )
 
@@ -11,12 +11,12 @@ import (
 //-------------------------------------------------------------------------------//
 //model district
 type District struct {
-	DistrictId      uuid.UUID	 `mapstructure:"district_id" json:"district_id,omitempty"`
-	DistrictEN      string		 `mapstructure:"district_en" json:"district_en,omitempty"`
-	DistrictTH      string		 `mapstructure:"district_th" json:"district_th,omitempty"`
-	CreateDate		 time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
-	ChangeDate	     time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
-	StatusId		 uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
+	DistrictId      uuid.UUID	 `json:"DistrictId,omitempty"`
+	DistrictEN      string		 `json:"DistrictEN,omitempty"`
+	DistrictTH      string		 `json:"DistrictTH,omitempty"`
+	CreateDate		time.Time	 `json:"CreateDate,omitempty"`
+	ChangeDate	    time.Time	 `json:"ChangeDate,omitempty"`
+	StatusId		uuid.UUID	 `json:"StatusId,omitempty"`
 }
 // New instance district
 func (u *District) New() *District {

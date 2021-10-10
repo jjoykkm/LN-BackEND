@@ -2,7 +2,7 @@ package model_db
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
-	"github.com/jjoykkm/ln-backend/config"
+	"github.com/jjoykkm/ln-backend/common/config"
 	"time"
 )
 
@@ -11,12 +11,12 @@ import (
 //-------------------------------------------------------------------------------//
 //model farm
 type Farm struct {
-	FarmId      	uuid.UUID	 `mapstructure:"farm_id" json:"farm_id,omitempty"`
-	FarmName    	string		 `mapstructure:"farm_name" json:"farm_name,omitempty"`
-	FarmDesc    	string		 `mapstructure:"farm_desc" json:"farm_desc,omitempty"`
-	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
-	StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
+	FarmId      	uuid.UUID	 `json:"FarmId,omitempty"`
+	FarmName    	string		 `json:"FarmName,omitempty"`
+	FarmDesc    	string		 `json:"FarmDesc,omitempty"`
+	CreateDate		time.Time	 `json:"CreateDate,omitempty"`
+	ChangeDate	    time.Time	 `json:"ChangeDate,omitempty"`
+	StatusId		uuid.UUID	 `json:"StatusI,omitempty"`
 }
 // New instance farm
 func (u *Farm) New() *Farm {

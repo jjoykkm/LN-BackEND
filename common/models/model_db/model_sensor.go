@@ -3,7 +3,7 @@ package model_db
 import (
 	"github.com/jackc/pgtype"
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
-	"github.com/jjoykkm/ln-backend/config"
+	"github.com/jjoykkm/ln-backend/common/config"
 	"time"
 )
 
@@ -12,14 +12,14 @@ import (
 //-------------------------------------------------------------------------------//
 //model sensor
 type Sensor struct {
-	SensorId      	uuid.UUID	 `mapstructure:"sensor_id" json:"sensor_id,omitempty"`
-	SensorModel     string	 	 `mapstructure:"sensor_model" json:"sensor_model,omitempty"`
-	SensorLots      string	 	 `mapstructure:"sensor_lots" json:"sensor_lots,omitempty"`
-	BitTransfer	    pgtype.Bit	 `mapstructure:"bit_transfer" json:"bit_transfer,omitempty"`
-	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
-	SensorTypeId	uuid.UUID	 `mapstructure:"sensor_type_id" json:"sensor_type_id,omitempty"`
-	StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
+	SensorId      	uuid.UUID	 `json:"SensorId,omitempty"`
+	SensorModel     string	 	 `json:"SensorModel,omitempty"`
+	SensorLots      string	 	 `json:"SensorLots,omitempty"`
+	BitTransfer	    pgtype.Bit	 `json:"BitTransfer,omitempty"`
+	CreateDate		time.Time	 `json:"CreateDate,omitempty"`
+	ChangeDate	    time.Time	 `json:"ChangeDate,omitempty"`
+	SensorTypeId	uuid.UUID	 `json:"SensorTypeId,omitempty"`
+	StatusId		uuid.UUID	 `json:"StatusId,omitempty"`
 }
 // New instance sensor
 func (u *Sensor) New() *Sensor {
