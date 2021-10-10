@@ -14,7 +14,7 @@ type PlantAndPlantType struct {
 	Plant     	model_db.Plant	 	`json:"plant" gorm:"embedded"`
 }
 func (PlantAndPlantType) TableName() string {
-	return "plant"
+	return config.DB_PLANT
 }
 
 //-------------------------------------------------------------------------------//
@@ -25,7 +25,7 @@ type FormulaPlant struct {
 	Owner     		model_db.UsersShort		`json:"owner" gorm:"foreignkey:Uid; references:Uid;"`
 }
 func (FormulaPlant) TableName() string {
-	return "formula_plant"
+	return config.DB_FORMULA_PLANT
 }
 
 type FormulaPlantItem struct {
@@ -37,7 +37,7 @@ type FormulaPlantItem struct {
 	IsFavorite		bool				`json:"is_favorite"`
 }
 func (FormulaPlantItem) TableName() string {
-	return "formula_plant"
+	return config.DB_FORMULA_PLANT
 }
 
 //-------------------------------------------------------------------------------//

@@ -1,13 +1,17 @@
 package sf_dashboard
 
 import (
+	"fmt"
+	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_other"
+	"log"
 )
 
 type Servicer interface {
 	// status, uid string
 	GetFarmList(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
-	//GetFarmAreaDashboardLister(status, language, farmId string) ([]model_services.DashboardFarmAreaList, int)
+	//status, farmId string
+	GetFarmAreaDashboardList(status, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
 	//GetSocketLister(status, farmId string) ([]model_services.JoinSocketAndTrans, []string, []string)
 	//GetSensorByIder(status string, socketIdList []string) ([]model_databases.Sensor, map[string]model_databases.Sensor)
 	//GetMainboxByIder(status string, mainboxIdList []string) ([]model_databases.Mainbox, map[string]model_databases.Mainbox)
@@ -36,27 +40,27 @@ func (s *Service) GetFarmList(status string, ReqModel *model_other.ReqModel) (*m
 	}, nil
 }
 
-//func (s *Service) GetFarmAreaDashboardLister(status, language, farmId string) ([]model_services.DashboardFarmAreaList, int) {
-//	var farmAreaList []model_services.DashboardFarmAreaList
-//	var total int
-//
-//	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.formula_plant_id = %s.formula_plant_id WHERE %s.status_id = '%s' AND %s.farm_id = '%s'",
-//		config.DB_FARM_AREA, config.DB_FORMULA_PLANT, config.DB_FARM_AREA, config.DB_FORMULA_PLANT, config.DB_FARM_AREA, status, config.DB_FARM_AREA, farmId)
-//	fmt.Println(sql)
-//	err := ln.Db.Raw(sql).Scan(&farmAreaList).Error
-//	if err != nil {
-//		log.Print(err)
-//	}
-//
-//	for idx, wa := range farmAreaList {
-//		wa.SensorDetail, _ = IntDashboard.GetFarmAreaDetailSensorer(ln, config.GetStatus().Active, wa.FarmAreaId.UUID.String(), language)
-//		farmAreaList[idx] = wa
-//	}
-//
-//	total = len(farmAreaList)
-//	return farmAreaList, total
-//}
-//
+func (s *Service) GetFarmAreaDashboardList(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error) {
+	//var farmAreaList []model_services.DashboardFarmAreaList
+	//var total int
+	//
+	//sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.formula_plant_id = %s.formula_plant_id WHERE %s.status_id = '%s' AND %s.farm_id = '%s'",
+	//	config.DB_FARM_AREA, config.DB_FORMULA_PLANT, config.DB_FARM_AREA, config.DB_FORMULA_PLANT, config.DB_FARM_AREA, status, config.DB_FARM_AREA, farmId)
+	//fmt.Println(sql)
+	//err := ln.Db.Raw(sql).Scan(&farmAreaList).Error
+	//if err != nil {
+	//	log.Print(err)
+	//}
+
+	if err != nil{
+		return nil, err
+	}
+	return &model_other.RespModel{
+		Item: myFarm,
+		Total: len(myFarm),
+	}, nil
+}
+
 //func (s *Service) GetSocketLister(status, farmAreaId string) ([]model_services.JoinSocketAndTrans, []string, []string) {
 //	var joinArray []model_services.JoinSocketAndTrans
 //	var sensorStr string
@@ -81,7 +85,7 @@ func (s *Service) GetFarmList(status string, ReqModel *model_other.ReqModel) (*m
 //
 //	return joinArray, sensorIdList, mainboxIdList
 //}
-//
+
 //func (s *Service) GetSensorByIder(status string, sensorIdList []string) ([]model_databases.Sensor, map[string]model_databases.Sensor) {
 //	var sensorAr []model_databases.Sensor
 //	var sensorMap map[string]model_databases.Sensor

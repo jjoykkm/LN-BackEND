@@ -33,7 +33,7 @@ func NewRepository(db *gorm.DB) Repositorier {
 func (r *Repository) FindAllPlantType(status string) ([]model_databases.PlantType, error) {
 	var result []model_databases.PlantType
 
-	resp := r.db.Debug().Where("status_id = ? ", status).Find(&result)
+	resp := r.db.Debug().Where("status_id = ? ", status).Order("change_date desc").Find(&result)
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error
 	}
@@ -45,11 +45,12 @@ func (r *Repository) FindAllPlantWithPlantType(status, plantTypeId string, offse
 	var sqlWhere string
 	// Generate condition when get plant
 	sqlWhere = fmt.Sprintf("%s.status_id = ?", config.DB_PLANT)
-	if plantTypeId != "" {
+	if plantTypeId != config.PLANT_TYPE_ALL {
 		sqlWhere = sqlWhere + fmt.Sprintf(" AND %s.plant_type_id = ?", config.DB_PLANT)
 	}
 	resp := r.db.Debug().Where(sqlWhere, status, plantTypeId).Preload("PlantType",
-		"status_id = ?", config.GetStatus().Active).Limit(LIMIT_GET_DATA).Offset(offset).Find(&result)
+		"status_id = ?", config.GetStatus().Active).Limit(LIMIT_GET_DATA).Offset(offset).Order(
+			"change_date desc").Find(&result)
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error
 	}
@@ -80,7 +81,7 @@ func (r *Repository) FindAllFormulaPlantByPlant(status, plantId string, offset i
 	plantTypeId := r.db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("PlantType",
 		"status_id = ?", config.GetStatus().Active)
 
-	resp := r.db.Debug().Order("create_date desc, formula_name").Limit(LIMIT_GET_DATA).Offset(offset).Where(sqlWhere).Preload("Plant",
+	resp := r.db.Debug().Order("change_date desc, formula_name").Limit(LIMIT_GET_DATA).Offset(offset).Where(sqlWhere).Preload("Plant",
 		func(db *gorm.DB) *gorm.DB {
 			return plantTypeId
 		}).Preload("Province", "status_id = ?", config.GetStatus().Active).Preload("Country",
@@ -137,7 +138,7 @@ func (r *Repository) FindAllFormulaPlantFavorite(status, uid string, offset int)
 	plantCond := r.db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("PlantType",
 		"status_id = ?", config.GetStatus().Active)
 
-	resp := r.db.Debug().Order("create_date desc, formula_name").Limit(LIMIT_GET_DATA).Offset(offset).Where(
+	resp := r.db.Debug().Order("change_date desc, formula_name").Limit(LIMIT_GET_DATA).Offset(offset).Where(
 		"status_id = ? AND formula_plant_id IN (?)", config.GetStatus().Active, forPlantId).Preload("Plant",
 			func(db *gorm.DB) *gorm.DB {
 				return plantCond
@@ -157,7 +158,7 @@ func (r *Repository) FindAllMyFormulaPlant(status, uid string, offset int) ([]Fo
 	plantCond := r.db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("PlantType",
 		"status_id = ?", config.GetStatus().Active)
 
-	resp := r.db.Debug().Order("create_date desc, formula_name").Limit(LIMIT_GET_DATA).Offset(offset).Where(
+	resp := r.db.Debug().Order("change_date desc, formula_name").Limit(LIMIT_GET_DATA).Offset(offset).Where(
 		"status_id = ? AND uid = ?", status, uid).Preload("Plant",
 			func(db *gorm.DB) *gorm.DB {
 				return plantCond
