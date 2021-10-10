@@ -64,12 +64,12 @@ func (Users) TableName() string {
 type UsersShort struct {
 	Uid      		uuid.UUID	 	`json:"-"`
 	Username     	string	 	 	`json:"username,omitempty"`
-	NickName      	string	 	 	`json:"nick_name,omitempty"`
+	NickName      	string	 	 	`json:"nick_name,omitempty" gorm:"column:nickname"`
 	Image	      	string		 	`json:"image,omitempty"`
-	CreateDate		time.Time	 	`json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 	`json:"change_date,omitempty"`
+	CreateDate		time.Time	 	`json:"create_date,omitempty" gorm:"column:createdate"`
+	ChangeDate	    time.Time	 	`json:"change_date,omitempty" gorm:"column:changedate"`
 	StatusId		uuid.UUID	 	`json:"status_id,omitempty" gorm:"column:statusid"`
-	UserNo			string		 	`json:"user_no,omitempty"`
+	UserNo			string		 	`json:"user_no,omitempty" gorm:"column:userno"`
 }
 // New instance users
 func (u *UsersShort) New() *UsersShort {
