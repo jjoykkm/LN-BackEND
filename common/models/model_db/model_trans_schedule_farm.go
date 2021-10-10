@@ -2,7 +2,7 @@ package model_db
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
-	"github.com/jjoykkm/ln-backend/common/config"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -11,11 +11,11 @@ import (
 //-------------------------------------------------------------------------------//
 //model trans_schedule_farm
 type TransScheduleFarm struct {
-	FarmAreaId      uuid.UUID	 `json:"FarmAreaId,omitempty"`
-	ScheduleId      uuid.UUID	 `json:"ScheduleId,omitempty"`
-	StatusId		uuid.UUID	 `json:"StatusId,omitempty"`
-	CreateDate		time.Time	 `json:"CreateDate,omitempty"`
-	ChangeDate	    time.Time	 `json:"ChangeDate,omitempty"`
+	FarmAreaId      uuid.UUID	 `mapstructure:"farm_area_id" json:"farm_area_id,omitempty"`
+	ScheduleId      uuid.UUID	 `mapstructure:"schedule_id" json:"schedule_id,omitempty"`
+	StatusId		uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
+	CreateDate		time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
+	ChangeDate	    time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
 }
 // New instance trans_schedule_farm
 func (u *TransScheduleFarm) New() *TransScheduleFarm {

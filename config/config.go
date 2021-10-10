@@ -27,11 +27,11 @@ type ResType struct {
 }
 func GetResType() ResType {
 	return ResType{
-		Struct: STRUCT,
-		Map:    MAP,
-		Key:    KEY,
-		All:    ALL,
-		List:   LIST,
+		Struct: STRUCT ,
+		Map: 	MAP ,
+		Key: 	KEY ,
+		All: 	ALL ,
+		List: 	LIST ,
 	}
 }
 
@@ -52,10 +52,10 @@ type StatusType struct {
 }
 func GetStatus() StatusType {
 	return StatusType{
-		Active:    ACTIVE,
-		Inactive:  INACTIVE,
-		Cancelled: CANCELLED,
-		Pending:   PENDING,
+		Active: 	ACTIVE ,
+		Inactive: 	INACTIVE ,
+		Cancelled: 	CANCELLED ,
+		Pending: 	PENDING ,
 	}
 }
 

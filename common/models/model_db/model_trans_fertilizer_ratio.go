@@ -2,7 +2,7 @@ package model_db
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
-	"github.com/jjoykkm/ln-backend/common/config"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -11,17 +11,17 @@ import (
 //-------------------------------------------------------------------------------//
 //model trans_fertilizer_Ratio
 type TransFertRatio struct {
-	FertId       	 uuid.UUID	 `json:"FertId,omitempty" gorm:"column:fertilizer_id"`
-	FormulaPlantId	 uuid.UUID	 `json:"ForPlantId,omitempty"`
-	StatusId		 uuid.UUID	 `json:"StatusId,omitempty"`
-	Ratio		     float64	 `json:"Ratio,omitempty"`
-	CreateDate		 time.Time	 `json:"CreateDate,omitempty"`
-	ChangeDate	     time.Time	 `json:"ChangeDate,omitempty"`
+	FertilizerId       	uuid.UUID	 `mapstructure:"fertilizer_id" json:"fertilizer_id,omitempty"`
+	FormulaPlantId		uuid.UUID	 `mapstructure:"formula_plant_id" json:"formula_plant_id,omitempty"`
+	StatusId		 	uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
+	Ratio		     	float64		 `mapstructure:"ratio" json:"ratio,omitempty"`
+	CreateDate		 	time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
+	ChangeDate	     	time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
 }
 // New instance trans_fertilizer_Ratio
 func (u *TransFertRatio) New() *TransFertRatio {
 	return &TransFertRatio{
-		FertId:				u.FertId ,
+		FertilizerId:		u.FertilizerId ,
 		FormulaPlantId:		u.FormulaPlantId ,
 		StatusId:			u.StatusId ,
 		Ratio:				u.Ratio ,

@@ -2,7 +2,7 @@ package model_db
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
-	"github.com/jjoykkm/ln-backend/common/config"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 

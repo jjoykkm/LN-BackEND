@@ -2,7 +2,7 @@ package model_db
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
-	"github.com/jjoykkm/ln-backend/common/config"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -11,23 +11,23 @@ import (
 //-------------------------------------------------------------------------------//
 //model formula_plant
 type FormulaPlant struct {
-	FormulaPlantId 	 uuid.UUID	 `json:"ForPlantId,omitempty"`
-	FormulaName		 string		 `json:"ForName,omitempty"`
-	FormulaDesc		 string		 `json:"ForDesc,omitempty"`
-	PeopleUsed 		 int		 `json:"PeopleUsed,omitempty"`
-	Recommend1 		 int		 `json:"Recommend_1,omitempty"`
-	Recommend2		 int		 `json:"Recommend_2,omitempty"`
-	Recommend3		 int		 `json:"Recommend_3,omitempty"`
-	Recommend4		 int		 `json:"Recommend_4,omitempty"`
-	Recommend5		 int		 `json:"Recommend_5,omitempty"`
-	CreateDate		 time.Time	 `json:"CreateDate,omitempty"`
-	ChangeDate		 time.Time	 `json:"ChangeDate,omitempty"`
-	PlantId		 	 uuid.UUID	 `json:"PlantId,omitempty"`
-	StatusId		 uuid.UUID	 `json:"StatusId,omitempty"`
-	ProvinceId		 uuid.UUID	 `json:"ProvinceId,omitempty"`
-	CountryId		 uuid.UUID	 `json:"CountryId,omitempty"`
-	IsPublic		 bool	 	 `json:"IsPublic,omitempty"`
-	Uid				 uuid.UUID	 `json:"-"`
+	FormulaPlantId 	 uuid.UUID	 `mapstructure:"formula_plant_id" json:"formula_plant_id,omitempty"`
+	FormulaName		 string		 `mapstructure:"formula_name" json:"formula_name,omitempty"`
+	FormulaDesc		 string		 `mapstructure:"formula_desc" json:"formula_desc,omitempty"`
+	PeopleUsed 		 int		 `mapstructure:"people_used" json:"people_used,omitempty"`
+	Recommend1 		 int		 `mapstructure:"recommend1" json:"recommend1,omitempty"`
+	Recommend2		 int		 `mapstructure:"recommend2" json:"recommend2,omitempty"`
+	Recommend3		 int		 `mapstructure:"recommend3" json:"recommend3,omitempty"`
+	Recommend4		 int		 `mapstructure:"recommend4" json:"recommend4,omitempty"`
+	Recommend5		 int		 `mapstructure:"recommend5" json:"recommend5,omitempty"`
+	CreateDate		 time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
+	ChangeDate		 time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
+	PlantId		 	 uuid.UUID	 `mapstructure:"plant_id" json:"plant_id,omitempty"`
+	StatusId		 uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
+	ProvinceId		 uuid.UUID	 `mapstructure:"province_id" json:"province_id,omitempty"`
+	CountryId		 uuid.UUID	 `mapstructure:"country_id" json:"country_id,omitempty"`
+	IsPublic		 bool	 	 `mapstructure:"is_public" json:"is_public,omitempty"`
+	Uid				 uuid.UUID	 `mapstructure:"uid" json:"uid,omitempty"`
 }
 // New instance formula_plant
 func (u *FormulaPlant) New() *FormulaPlant {

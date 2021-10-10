@@ -2,7 +2,7 @@ package model_db
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
-	"github.com/jjoykkm/ln-backend/common/config"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -11,12 +11,12 @@ import (
 //-------------------------------------------------------------------------------//
 //model sensor_type
 type SensorType struct {
-	SensorTypeId      	uuid.UUID	 `json:"TypeId,omitempty"`
-	SensorTypeNameEN    string	 	 `json:"TypeNameEN,omitempty"`
-	CreateDate			time.Time	 `json:"CreateDate,omitempty"`
-	ChangeDate	    	time.Time	 `json:"ChangeDate,omitempty"`
-	StatusId			uuid.UUID	 `json:"StatusId,omitempty"`
-	SensorTypeNameTH    string	 	 `json:"TypeNameTH,omitempty"`
+	SensorTypeId      	uuid.UUID	 `mapstructure:"sensor_type_id" json:"sensor_type_id"`
+	SensorTypeNameEN    string	 	 `mapstructure:"sensor_type_name_en" json:"sensor_type_name_en"`
+	CreateDate			time.Time	 `mapstructure:"create_date" json:"create_date"`
+	ChangeDate	    	time.Time	 `mapstructure:"change_date" json:"change_date"`
+	StatusId			uuid.UUID	 `mapstructure:"status_id" json:"status_id"`
+	SensorTypeNameTH    string	 	 `mapstructure:"sensor_type_name_th" json:"sensor_type_name_th"`
 }
 // New instance sensor_type
 func (u *SensorType) New() *SensorType {

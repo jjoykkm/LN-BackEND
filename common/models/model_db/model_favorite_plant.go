@@ -2,7 +2,7 @@ package model_db
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
-	"github.com/jjoykkm/ln-backend/common/config"
+	"github.com/jjoykkm/ln-backend/config"
 	"time"
 )
 
@@ -11,11 +11,11 @@ import (
 //-------------------------------------------------------------------------------//
 //model favorite_plant
 type FavoritePlant struct {
-	Uid          	 uuid.UUID	 `json:"User,omitempty"`
-	FormulaPlantId   uuid.UUID	 `json:"FormulaPlantId,omitempty"`
-	CreateDate		 time.Time	 `json:"CreateDate,omitempty"`
-	ChangeDate	     time.Time	 `json:"ChangeDate,omitempty"`
-	StatusId		 uuid.UUID	 `json:"StatusId,omitempty"`
+	Uid          	 uuid.UUID	 `mapstructure:"uid" json:"uid,omitempty"`
+	FormulaPlantId   uuid.UUID	 `mapstructure:"formula_plant_id" json:"formula_plant_id,omitempty"`
+	CreateDate		 time.Time	 `mapstructure:"create_date" json:"create_date,omitempty"`
+	ChangeDate	     time.Time	 `mapstructure:"change_date" json:"change_date,omitempty"`
+	StatusId		 uuid.UUID	 `mapstructure:"status_id" json:"status_id,omitempty"`
 }
 // New instance favorite_plant
 func (u *FavoritePlant) New() *FavoritePlant {

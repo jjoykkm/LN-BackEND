@@ -2,13 +2,13 @@ package sf_dashboard
 
 import (
 	"errors"
-	"github.com/jjoykkm/ln-backend/common/config"
-	"github.com/jjoykkm/ln-backend/common/models/model_db"
+	"github.com/jjoykkm/ln-backend/config"
+	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
 	"gorm.io/gorm"
 )
 
 type Repositorier interface {
-	FindAllMyFarm(status, uid string) ([]model_db.Farm, error)
+	FindAllMyFarm(status, uid string) ([]model_databases.Farm, error)
 }
 
 type Repository struct {
@@ -19,8 +19,8 @@ func NewRepository(db *gorm.DB) Repositorier {
 	return &Repository{db: db}
 }
 
-func (r *Repository) FindAllMyFarm(status, uid string) ([]model_db.Farm, error) {
-	var result []model_db.Farm
+func (r *Repository) FindAllMyFarm(status, uid string) ([]model_databases.Farm, error) {
+	var result []model_databases.Farm
 	// Get farm_id
 	farmId := r.db.Debug().Select("farm_id").Where("status_id = ? AND uid = ?",
 		config.GetStatus().Active, uid).Table(config.DB_TRANS_MANAGEMENT)
