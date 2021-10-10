@@ -53,24 +53,24 @@ func (s *Service) GetPlantCategoryItem(status string, ReqModel *model_other.ReqM
 		return nil, err
 	}
 
-	for idx, join := range joinList {
-		switch ReqModel.Language {
-		case config.GetLanguage().En:
-			join.PlantType.PlantTypeTH = ""
-			join.Plant.PlantNameTH = ""
-			join.Plant.PlantDescTH = ""
-		case config.GetLanguage().Th:
-			join.PlantType.PlantTypeEN = ""
-			join.Plant.PlantNameEN = ""
-			join.Plant.PlantDescEN = ""
-		}
-		join.Plant.TotalItem = int(s.repo.GetCountFormulaPlant(config.GetStatus().Active, join.Plant.PlantId.UUID.String()))
-		// Delete PlantTypeId in struct Plant
-		join.Plant.PlantTypeId = nil
-		// Modify list
-		joinList[idx] = join
-	}
-
+	//for idx, join := range joinList {
+	//	switch ReqModel.Language {
+	//	case config.GetLanguage().En:
+	//		join.PlantType.PlantTypeTH = ""
+	//		join.Plant.PlantNameTH = ""
+	//		join.Plant.PlantDescTH = ""
+	//	case config.GetLanguage().Th:
+	//		join.PlantType.PlantTypeEN = ""
+	//		join.Plant.PlantNameEN = ""
+	//		join.Plant.PlantDescEN = ""
+	//	}
+	//	join.Plant.TotalItem = int(s.repo.GetCountFormulaPlant(config.GetStatus().Active, join.Plant.PlantId.UUID.String()))
+	//	// Delete PlantTypeId in struct Plant
+	//	join.Plant.PlantTypeId = nil
+	//	// Modify list
+	//	joinList[idx] = join
+	//}
+	//
 	total := len(joinList)
 	currentOffset := ReqModel.Offset + total
 
