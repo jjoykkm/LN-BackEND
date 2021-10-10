@@ -1,4 +1,4 @@
-package SF_FormulaPlant
+package sf_my_farm
 
 import (
 	"github.com/gin-gonic/gin"

@@ -1,4 +1,4 @@
-package SF_FormulaPlant
+package sf_schedule_reminder
 
 import (
 	"github.com/jjoykkm/ln-backend/common/config"
