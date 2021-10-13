@@ -5,13 +5,13 @@ import (
 	"fmt"
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
+	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"github.com/jjoykkm/ln-backend/helper"
-	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
 	"gorm.io/gorm"
 )
 
 type Repositorier interface {
-	FindAllPlantType(status string) ([]model_databases.PlantType, error)
+	FindAllPlantType(status string) ([]model_db.PlantType, error)
 	FindAllPlantWithPlantType(status, plantTypeId string, offset int) ([]PlantAndPlantType, error)
 	GetCountFormulaPlant(status, plantId string) int64
 	FindAllFormulaPlantByPlant(status, plantId string, offset int) ([]FormulaPlantItem, error)
@@ -30,8 +30,8 @@ func NewRepository(db *gorm.DB) Repositorier {
 	return &Repository{db: db}
 }
 
-func (r *Repository) FindAllPlantType(status string) ([]model_databases.PlantType, error) {
-	var result []model_databases.PlantType
+func (r *Repository) FindAllPlantType(status string) ([]model_db.PlantType, error) {
+	var result []model_db.PlantType
 
 	resp := r.db.Debug().Where("status_id = ? ", status).Order("change_date desc").Find(&result)
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
@@ -58,7 +58,7 @@ func (r *Repository) FindAllPlantWithPlantType(status, plantTypeId string, offse
 }
 
 func (r *Repository) GetCountFormulaPlant(status, plantId string) int64 {
-	var forPlant []model_databases.FormulaPlant
+	var forPlant []model_db.FormulaPlant
 	var count int64
 
 	resp := r.db.Debug().Model(&forPlant).Where("status_id = ? AND plant_id = ?", status, plantId).Count(&count)
