@@ -11,16 +11,16 @@ import (
 //-------------------------------------------------------------------------------//
 //model plant
 type Plant struct {
-	PlantId          uuid.UUID	 `json:"id,omitempty"`
-	PlantNameEN      string		 `json:"name_en,omitempty"`
-	PlantNameTH      string		 `json:"name_th,omitempty"`
-	PlantDescEN      string		 `json:"desc_en,omitempty"`
-	PlantDescTH      string		 `json:"desc_th,omitempty"`
+	PlantId          uuid.UUID	 `json:"id"`
+	PlantNameEN      string		 `json:"name_en"`
+	PlantNameTH      string		 `json:"name_th"`
+	PlantDescEN      string		 `json:"desc_en"`
+	PlantDescTH      string		 `json:"desc_th"`
 	CreateDate		 time.Time	 `json:"-"`
 	ChangeDate	     time.Time	 `json:"-"`
 	StatusId		 uuid.UUID	 `json:"-"`
-	PlantTypeId      *uuid.UUID	 `json:"type_id,omitempty"`
-	TotalItem      	 int		 `json:"total_item,omitempty"`
+	PlantTypeId      *uuid.UUID	 `json:"type_id"`
+	TotalItem      	 int		 `json:"total_item"`
 }
 // New instance plant
 func (u *Plant) New() *Plant {

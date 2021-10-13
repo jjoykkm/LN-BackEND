@@ -11,9 +11,9 @@ import (
 //-------------------------------------------------------------------------------//
 //model plant_type
 type PlantType struct {
-	PlantTypeId      uuid.UUID	 `json:"id,omitempty"`
-	PlantTypeEN      string		 `json:"name_en,omitempty"`
-	PlantTypeTH      string		 `json:"name_th,omitempty"`
+	PlantTypeId      uuid.UUID	 `json:"id"`
+	PlantTypeEN      string		 `json:"name_en"`
+	PlantTypeTH      string		 `json:"name_th"`
 	CreateDate		 time.Time	 `json:"-"`
 	ChangeDate	     time.Time	 `json:"-"`
 	StatusId		 uuid.UUID	 `json:"-"`

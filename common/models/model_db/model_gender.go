@@ -11,11 +11,11 @@ import (
 //-------------------------------------------------------------------------------//
 //model gender
 type Gender struct {
-	GenderId      	uuid.UUID	 `json:"role_id,omitempty"`
-	GenderName      string		 `json:"role_name,omitempty"`
-	CreateDate		time.Time	 `json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 `json:"change_date,omitempty"`
-	StatusId		uuid.UUID	 `json:"status_id,omitempty"`
+	GenderId      	uuid.UUID	 `json:"gender_id"`
+	GenderName      string		 `json:"gender_name"`
+	CreateDate		time.Time	 `json:"create_date"`
+	ChangeDate	    time.Time	 `json:"change_date"`
+	StatusId		uuid.UUID	 `json:"status_id"`
 }
 // New instance gender
 func (u *Gender) New() *Gender {

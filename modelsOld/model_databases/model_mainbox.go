@@ -11,15 +11,15 @@ import (
 //-------------------------------------------------------------------------------//
 //model mainbox
 type Mainbox struct {
-	MainboxId      	uuid.UUID	 `json:"mainbox_id,omitempty"`
-	MainboxName     string		 `json:"mainbox_name,omitempty"`
-	MainboxModel    string		 `json:"mainbox_model,omitempty"`
-	MainboxLots     string		 `json:"mainbox_lots,omitempty"`
-	StartWarranty	time.Time	 `json:"start_warranty,omitempty"`
-	EndWarranty		time.Time	 `json:"end_warranty,omitempty"`
-	CreateDate		time.Time	 `json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 `json:"change_date,omitempty"`
-	StatusId		uuid.UUID	 `json:"status_id,omitempty"`
+	MainboxId      	uuid.UUID	 `json:"mainbox_id"`
+	MainboxName     string		 `json:"mainbox_name"`
+	MainboxModel    string		 `json:"mainbox_model"`
+	MainboxLots     string		 `json:"mainbox_lots"`
+	StartWarranty	time.Time	 `json:"start_warranty"`
+	EndWarranty		time.Time	 `json:"end_warranty"`
+	CreateDate		time.Time	 `json:"create_date"`
+	ChangeDate	    time.Time	 `json:"change_date"`
+	StatusId		uuid.UUID	 `json:"status_id"`
 }
 // New instance mainbox
 func (u *Mainbox) New() *Mainbox {

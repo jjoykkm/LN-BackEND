@@ -19,11 +19,11 @@ import (
 //}
 
 type JJ struct {
-	//PlantId         uuid.UUID	 `gorm:"primaryKey" json:"plant_id,omitempty"`
+	//PlantId         uuid.UUID	 `gorm:"primaryKey" json:"plant_id"`
 	//PlantTypeId     uuid.UUID	 //`gorm:"column:plant_type_id" json:"plant_type_id"`
-	////CreateDate		time.Time	 `json:"create_date,omitempty"`
-	////ChangeDate	    time.Time	 `json:"change_date,omitempty"`
-	////StatusId		uuid.UUID	 `json:"status_id,omitempty"`
+	////CreateDate		time.Time	 `json:"create_date"`
+	////ChangeDate	    time.Time	 `json:"change_date"`
+	////StatusId		uuid.UUID	 `json:"status_id"`
 	////Plant1     	Plant	 	`gorm:"embedded"`//`gorm:"embeddedPrefix:p_"` // //
 	Plant  model_databases.Plant `gorm:"embedded"`
 	PlantType  model_databases.PlantType `gorm:"foreignkey:PlantTypeId; references:PlantTypeId"` //`gorm:"embeddedPrefix:pt_"` //

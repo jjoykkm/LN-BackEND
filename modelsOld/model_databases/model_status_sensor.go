@@ -11,11 +11,11 @@ import (
 //-------------------------------------------------------------------------------//
 //model status_sensor
 type StatusSensor struct {
-	StatusSensorId      uuid.UUID	 `json:"status_sensor_id,omitempty"`
-	StatusName      	string		 `json:"status_name,omitempty"`
-	CreateDate			time.Time	 `json:"create_date,omitempty"`
-	ChangeDate	    	time.Time	 `json:"change_date,omitempty"`
-	StatusId			uuid.UUID	 `json:"status_id,omitempty"`
+	StatusSensorId      uuid.UUID	 `json:"status_sensor_id"`
+	StatusName      	string		 `json:"status_name"`
+	CreateDate			time.Time	 `json:"create_date"`
+	ChangeDate	    	time.Time	 `json:"change_date"`
+	StatusId			uuid.UUID	 `json:"status_id"`
 }
 // New instance status_sensor
 func (u *StatusSensor) New() *StatusSensor {

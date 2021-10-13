@@ -5,28 +5,45 @@ import (
 	"github.com/jjoykkm/ln-backend/common/config"
 	"time"
 )
+//-------------------------------------------------------------------------------//
+//							Table Recommend
+//-------------------------------------------------------------------------------//
+//model formula_plant
+type Recommend struct {
+	Recommend1 		int		`json:"star_1,"`
+	Recommend2		int		`json:"star_2,"`
+	Recommend3		int		`json:"star_3,"`
+	Recommend4		int		`json:"star_4,"`
+	Recommend5		int		`json:"star_5,"`
+}
+// New instance formula_plant
+func (u *Recommend) New() *Recommend {
+	return &Recommend{
+		Recommend1:			u.Recommend1 ,
+		Recommend2:			u.Recommend2 ,
+		Recommend3:			u.Recommend3 ,
+		Recommend4:			u.Recommend4 ,
+		Recommend5:			u.Recommend5 ,
+	}
+}
 
 //-------------------------------------------------------------------------------//
 //							Table formula_plant
 //-------------------------------------------------------------------------------//
 //model formula_plant
 type FormulaPlant struct {
-	FormulaPlantId 	 uuid.UUID	 `json:"formula_plant_id,omitempty"`
-	FormulaName		 string		 `json:"name,omitempty"`
-	FormulaDesc		 string		 `json:"desc,omitempty"`
-	PeopleUsed 		 int		 `json:"people_used,omitempty"`
-	Recommend1 		 int		 `json:"rec_1,omitempty"`
-	Recommend2		 int		 `json:"rec_2,omitempty"`
-	Recommend3		 int		 `json:"rec_3,omitempty"`
-	Recommend4		 int		 `json:"rec_4,omitempty"`
-	Recommend5		 int		 `json:"rec_5,omitempty"`
-	CreateDate		 time.Time	 `json:"create_date,omitempty"`
-	ChangeDate		 time.Time	 `json:"change_date,omitempty"`
-	PlantId		 	 uuid.UUID	 `json:"plant_id,omitempty"`
-	StatusId		 uuid.UUID	 `json:"status_id,omitempty"`
-	ProvinceId		 uuid.UUID	 `json:"province_id,omitempty"`
-	CountryId		 uuid.UUID	 `json:"country_id,omitempty"`
-	IsPublic		 bool	 	 `json:"is_public,omitempty"`
+	FormulaPlantId 	 uuid.UUID	 `json:"formula_plant_id"`
+	FormulaName		 string		 `json:"formula_plant_name"`
+	FormulaDesc		 string		 `json:"formula_plant_desc"`
+	PeopleUsed 		 int		 `json:"people_used"`
+	Recommend		 Recommend	 `json:"recommend" gorm:"embedded"`
+	CreateDate		 time.Time	 `json:"create_date"`
+	ChangeDate		 time.Time	 `json:"change_date"`
+	PlantId		 	 uuid.UUID	 `json:"plant_id"`
+	StatusId		 uuid.UUID	 `json:"status_id"`
+	ProvinceId		 uuid.UUID	 `json:"province_id"`
+	CountryId		 uuid.UUID	 `json:"country_id"`
+	IsPublic		 bool	 	 `json:"is_public"`
 	Uid				 uuid.UUID	 `json:"-"`
 }
 // New instance formula_plant
@@ -36,11 +53,7 @@ func (u *FormulaPlant) New() *FormulaPlant {
 		FormulaName:		u.FormulaName ,
 		FormulaDesc:		u.FormulaDesc ,
 		PeopleUsed:			u.PeopleUsed ,
-		Recommend1:			u.Recommend1 ,
-		Recommend2:			u.Recommend2 ,
-		Recommend3:			u.Recommend3 ,
-		Recommend4:			u.Recommend4 ,
-		Recommend5:			u.Recommend5 ,
+		Recommend:			u.Recommend ,
 		CreateDate:			u.CreateDate ,
 		ChangeDate:			u.ChangeDate ,
 		PlantId:			u.PlantId ,

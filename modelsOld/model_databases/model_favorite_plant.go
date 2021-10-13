@@ -11,11 +11,11 @@ import (
 //-------------------------------------------------------------------------------//
 //model favorite_plant
 type FavoritePlant struct {
-	Uid          	 uuid.UUID	 `json:"uid,omitempty"`
-	FormulaPlantId   uuid.UUID	 `json:"formula_plant_id,omitempty"`
-	CreateDate		 time.Time	 `json:"create_date,omitempty"`
-	ChangeDate	     time.Time	 `json:"change_date,omitempty"`
-	StatusId		 uuid.UUID	 `json:"status_id,omitempty"`
+	Uid          	 uuid.UUID	 `json:"uid"`
+	FormulaPlantId   uuid.UUID	 `json:"formula_plant_id"`
+	CreateDate		 time.Time	 `json:"create_date"`
+	ChangeDate	     time.Time	 `json:"change_date"`
+	StatusId		 uuid.UUID	 `json:"status_id"`
 }
 // New instance favorite_plant
 func (u *FavoritePlant) New() *FavoritePlant {

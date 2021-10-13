@@ -11,12 +11,12 @@ import (
 //-------------------------------------------------------------------------------//
 //model district
 type District struct {
-	DistrictId      uuid.UUID	 `json:"district_id,omitempty"`
-	DistrictEN      string		 `json:"district_en,omitempty"`
-	DistrictTH      string		 `json:"district_th,omitempty"`
-	CreateDate		 time.Time	 `json:"create_date,omitempty"`
-	ChangeDate	     time.Time	 `json:"change_date,omitempty"`
-	StatusId		 uuid.UUID	 `json:"status_id,omitempty"`
+	DistrictId      uuid.UUID	 `json:"district_id"`
+	DistrictEN      string		 `json:"district_en"`
+	DistrictTH      string		 `json:"district_th"`
+	CreateDate		 time.Time	 `json:"create_date"`
+	ChangeDate	     time.Time	 `json:"change_date"`
+	StatusId		 uuid.UUID	 `json:"status_id"`
 }
 // New instance district
 func (u *District) New() *District {

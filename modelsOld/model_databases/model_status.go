@@ -11,10 +11,10 @@ import (
 //-------------------------------------------------------------------------------//
 //model status
 type Status struct {
-	StatusId      	uuid.UUID	 `json:"status_id,omitempty"`
-	StatusName      string		 `json:"status_name,omitempty"`
-	CreateDate		time.Time	 `json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 `json:"change_date,omitempty"`
+	StatusId      	uuid.UUID	 `json:"status_id"`
+	StatusName      string		 `json:"status_name"`
+	CreateDate		time.Time	 `json:"create_date"`
+	ChangeDate	    time.Time	 `json:"change_date"`
 }
 // New instance status
 func (u *Status) New() *Status {

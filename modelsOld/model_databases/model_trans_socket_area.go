@@ -11,12 +11,12 @@ import (
 //-------------------------------------------------------------------------------//
 //model trans_socket_area
 type TransSocketArea struct {
-	FarmAreaId      uuid.UUID	 `json:"farm_area_id,omitempty"`
-	SocketId     	uuid.UUID	 `json:"socket_id,omitempty"`
-	CreateDate		time.Time	 `json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 `json:"change_date,omitempty"`
-	StatusId		uuid.UUID	 `json:"status_id,omitempty"`
-	MainboxId     	uuid.UUID	 `json:"mainbox_id,omitempty"`
+	FarmAreaId      uuid.UUID	 `json:"farm_area_id"`
+	SocketId     	uuid.UUID	 `json:"socket_id"`
+	CreateDate		time.Time	 `json:"create_date"`
+	ChangeDate	    time.Time	 `json:"change_date"`
+	StatusId		uuid.UUID	 `json:"status_id"`
+	MainboxId     	uuid.UUID	 `json:"mainbox_id"`
 }
 // New instance trans_socket_area
 func (u *TransSocketArea) New() *TransSocketArea {

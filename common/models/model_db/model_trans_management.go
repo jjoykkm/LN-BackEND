@@ -11,12 +11,12 @@ import (
 //-------------------------------------------------------------------------------//
 //model trans_management
 type TransManagement struct {
-	Uid      		uuid.UUID	 `json:"uid,omitempty"`
-	FarmId     		uuid.UUID	 `json:"farm_id,omitempty"`
-	RoleId      	uuid.UUID	 `json:"role_id,omitempty"`
-	StatusId		uuid.UUID	 `json:"status_id,omitempty"`
-	CreateDate		time.Time	 `json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 `json:"change_date,omitempty"`
+	Uid      		uuid.UUID	 `json:"uid"`
+	FarmId     		uuid.UUID	 `json:"farm_id"`
+	RoleId      	uuid.UUID	 `json:"role_id"`
+	StatusId		uuid.UUID	 `json:"status_id"`
+	CreateDate		time.Time	 `json:"create_date"`
+	ChangeDate	    time.Time	 `json:"change_date"`
 }
 // New instance trans_management
 func (u *TransManagement) New() *TransManagement {

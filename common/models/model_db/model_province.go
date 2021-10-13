@@ -11,13 +11,13 @@ import (
 //-------------------------------------------------------------------------------//
 //model province
 type Province struct {
-	ProvinceId      uuid.UUID	 `json:"province_id,omitempty"`
-	ProvinceEN      string		 `json:"province_en,omitempty"`
-	ProvinceTH      string		 `json:"province_th,omitempty"`
-	CreateDate		time.Time	 `json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 `json:"change_date,omitempty"`
-	StatusId		uuid.UUID	 `json:"status_id,omitempty"`
-	CountryId       uuid.UUID	 `json:"country_id,omitempty"`
+	ProvinceId      uuid.UUID	 `json:"province_id"`
+	ProvinceEN      string		 `json:"province_name_en"`
+	ProvinceTH      string		 `json:"province_name_th"`
+	CreateDate		time.Time	 `json:"create_date"`
+	ChangeDate	    time.Time	 `json:"change_date"`
+	StatusId		uuid.UUID	 `json:"status_id"`
+	CountryId       uuid.UUID	 `json:"country_id"`
 }
 // New instance province
 func (u *Province) New() *Province {

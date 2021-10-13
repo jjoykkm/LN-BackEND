@@ -11,13 +11,13 @@ import (
 //-------------------------------------------------------------------------------//
 //model frequency_type
 type FrequencyType struct {
-	FrequencyTypeId		uuid.UUID	 `json:"frequency_type_id,omitempty"`
-	FrequencyName   	string		 `json:"frequency_name,omitempty"`
-	IntervalRange   	string		 `json:"interval_range,omitempty"`
-	IsForCustom     	string		 `json:"is_for_custom,omitempty"`
-	CreateDate			time.Time	 `json:"create_date,omitempty"`
-	ChangeDate	    	time.Time	 `json:"change_date,omitempty"`
-	StatusId			uuid.UUID	 `json:"status_id,omitempty"`
+	FrequencyTypeId		uuid.UUID	 `json:"frequency_type_id"`
+	FrequencyName   	string		 `json:"frequency_name"`
+	IntervalRange   	string		 `json:"interval_range"`
+	IsForCustom     	string		 `json:"is_for_custom"`
+	CreateDate			time.Time	 `json:"create_date"`
+	ChangeDate	    	time.Time	 `json:"change_date"`
+	StatusId			uuid.UUID	 `json:"status_id"`
 }
 // New instance frequency_type
 func (u *FrequencyType) New() *FrequencyType {

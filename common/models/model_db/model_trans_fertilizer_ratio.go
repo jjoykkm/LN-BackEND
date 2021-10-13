@@ -11,12 +11,12 @@ import (
 //-------------------------------------------------------------------------------//
 //model trans_fertilizer_Ratio
 type TransFertRatio struct {
-	FertId       		uuid.UUID	 `json:"fert_id,omitempty" gorm:"column:fertilizer_id"`
-	FormulaPlantId		uuid.UUID	 `json:"formula_plant_id,omitempty"`
-	StatusId		 	uuid.UUID	 `json:"status_id,omitempty"`
-	Ratio		     	float64		 `json:"ratio,omitempty"`
-	CreateDate		 	time.Time	 `json:"create_date,omitempty"`
-	ChangeDate	     	time.Time	 `json:"change_date,omitempty"`
+	FertId       		uuid.UUID	 `json:"fert_id" gorm:"column:fertilizer_id"`
+	FormulaPlantId		uuid.UUID	 `json:"formula_plant_id"`
+	StatusId		 	uuid.UUID	 `json:"status_id"`
+	Ratio		     	float64		 `json:"ratio"`
+	CreateDate		 	time.Time	 `json:"create_date"`
+	ChangeDate	     	time.Time	 `json:"change_date"`
 }
 // New instance trans_fertilizer_Ratio
 func (u *TransFertRatio) New() *TransFertRatio {

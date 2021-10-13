@@ -12,22 +12,22 @@ import (
 //-------------------------------------------------------------------------------//
 //model users
 type Users struct {
-	Uid      		uuid.UUID	 	`json:"uid,omitempty"`
-	Username     	string	 	 	`json:"username,omitempty"`
-	Password      	string	 	 	`json:"password,omitempty"`
-	FullName      	string	 	 	`json:"full_name,omitempty"`
-	SurName      	string	 	 	`json:"sur_name,omitempty"`
-	NickName      	string	 	 	`json:"nick_name,omitempty"`
-	Gender			uuid.UUID	 	`json:"gender,omitempty"`
-	BirthDate		time.Time	 	`json:"birth_date,omitempty"`
-	MobilePhone     string	 	 	`json:"mobile_phone,omitempty"`
-	Telephone      	string	 	 	`json:"telephone,omitempty"`
-	Mail      		string	 	 	`json:"mail,omitempty"`
-	Image	      	image.Image	 	`json:"image,omitempty"`
-	CreateDate		time.Time	 	`json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 	`json:"change_date,omitempty"`
-	StatusId		uuid.UUID	 	`json:"status_id,omitempty"`
-	UserNo			string		 	`json:"user_no,omitempty"`
+	Uid      		uuid.UUID	 	`json:"uid"`
+	Username     	string	 	 	`json:"username"`
+	Password      	string	 	 	`json:"password"`
+	FullName      	string	 	 	`json:"full_name"`
+	SurName      	string	 	 	`json:"sur_name"`
+	NickName      	string	 	 	`json:"nick_name"`
+	Gender			uuid.UUID	 	`json:"gender"`
+	BirthDate		time.Time	 	`json:"birth_date"`
+	MobilePhone     string	 	 	`json:"mobile_phone"`
+	Telephone      	string	 	 	`json:"telephone"`
+	Mail      		string	 	 	`json:"mail"`
+	Image	      	image.Image	 	`json:"image"`
+	CreateDate		time.Time	 	`json:"create_date"`
+	ChangeDate	    time.Time	 	`json:"change_date"`
+	StatusId		uuid.UUID	 	`json:"status_id"`
+	UserNo			string		 	`json:"user_no"`
 }
 // New instance users
 func (u *Users) New() *Users {
@@ -63,14 +63,14 @@ func (Users) TableName() string {
 //-------------------------------------------------------------------------------//
 //model users
 type UsersShort struct {
-	Uid      		uuid.UUID	 	`json:"uid,omitempty"`
-	Username     	string	 	 	`json:"username,omitempty"`
-	NickName      	string	 	 	`json:"nick_name,omitempty"`
-	Image	      	string	 		`json:"image,omitempty"`
-	CreateDate		time.Time	 	`json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 	`json:"change_date,omitempty"`
-	StatusId		uuid.UUID	 	`json:"status_id,omitempty"`
-	UserNo			string		 	`json:"user_no,omitempty"`
+	Uid      		uuid.UUID	 	`json:"uid"`
+	Username     	string	 	 	`json:"username"`
+	NickName      	string	 	 	`json:"nick_name"`
+	Image	      	string	 		`json:"image"`
+	CreateDate		time.Time	 	`json:"create_date"`
+	ChangeDate	    time.Time	 	`json:"change_date"`
+	StatusId		uuid.UUID	 	`json:"status_id"`
+	UserNo			string		 	`json:"user_no"`
 }
 // New instance users
 func (u *UsersShort) New() *UsersShort {

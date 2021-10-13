@@ -11,13 +11,13 @@ import (
 //-------------------------------------------------------------------------------//
 //model farm_area
 type FarmArea struct {
-	FarmAreaId      	uuid.UUID	 `json:"farm_area_id,omitempty"`
-	FarmAreaName    	string		 `json:"farm_area_name,omitempty"`
-	CreateDate			time.Time	 `json:"create_date,omitempty"`
-	ChangeDate	    	time.Time	 `json:"change_date,omitempty"`
-	FarmId				uuid.UUID	 `json:"farm_id,omitempty"`
-	FormulaPlantId		uuid.UUID	 `json:"formula_plant_id,omitempty"`
-	StatusId			uuid.UUID	 `json:"status_id,omitempty"`
+	FarmAreaId      	uuid.UUID	 `json:"farm_area_id"`
+	FarmAreaName    	string		 `json:"farm_area_name"`
+	CreateDate			time.Time	 `json:"create_date"`
+	ChangeDate	    	time.Time	 `json:"change_date"`
+	FarmId				uuid.UUID	 `json:"farm_id"`
+	FormulaPlantId		uuid.UUID	 `json:"formula_plant_id"`
+	StatusId			uuid.UUID	 `json:"status_id"`
 }
 // New instance farm_area
 func (u *FarmArea) New() *FarmArea {

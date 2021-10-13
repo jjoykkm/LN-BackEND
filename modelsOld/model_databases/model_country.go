@@ -11,12 +11,12 @@ import (
 //-------------------------------------------------------------------------------//
 //model country
 type Country struct {
-	CountryId       uuid.UUID	 `json:"country_id,omitempty"`
-	CountryEN       string		 `json:"country_en,omitempty"`
-	CountryTH       string		 `json:"country_th,omitempty"`
-	CreateDate		time.Time	 `json:"create_date,omitempty"`
-	ChangeDate	   	time.Time	 `json:"change_date,omitempty"`
-	StatusId		uuid.UUID	 `json:"status_id,omitempty"`
+	CountryId       uuid.UUID	 `json:"country_id"`
+	CountryEN       string		 `json:"country_en"`
+	CountryTH       string		 `json:"country_th"`
+	CreateDate		time.Time	 `json:"create_date"`
+	ChangeDate	   	time.Time	 `json:"change_date"`
+	StatusId		uuid.UUID	 `json:"status_id"`
 }
 // New instance country
 func (u *Country) New() *Country {

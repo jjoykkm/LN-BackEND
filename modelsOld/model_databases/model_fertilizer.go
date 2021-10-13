@@ -11,16 +11,16 @@ import (
 //-------------------------------------------------------------------------------//
 //model fertilizer
 type Fertilizer struct {
-	FertilizerId     	 uuid.UUID	 `json:"fertilizer_id,omitempty"`
-	FertilizerEN     	 string		 `json:"fertilizer_en,omitempty"`
-	FertilizerTH     	 string		 `json:"fertilizer_th,omitempty"`
-	Nitrogen       	 	 float64	 `json:"nitrogen,omitempty"`
-	Phosphorus    	 	 float64	 `json:"phosphorus,omitempty"`
-	Potassium      	 	 float64	 `json:"potassium,omitempty"`
-	CreateDate		 	 time.Time	 `json:"create_date,omitempty"`
-	ChangeDate	     	 time.Time	 `json:"change_date,omitempty"`
-	FertilizerCatId		 uuid.UUID	 `json:"fertilizer_cat_id,omitempty"`
-	StatusId		 	 uuid.UUID	 `json:"status_id,omitempty"`
+	FertilizerId     	 uuid.UUID	 `json:"fertilizer_id"`
+	FertilizerEN     	 string		 `json:"fertilizer_en"`
+	FertilizerTH     	 string		 `json:"fertilizer_th"`
+	Nitrogen       	 	 float64	 `json:"nitrogen"`
+	Phosphorus    	 	 float64	 `json:"phosphorus"`
+	Potassium      	 	 float64	 `json:"potassium"`
+	CreateDate		 	 time.Time	 `json:"create_date"`
+	ChangeDate	     	 time.Time	 `json:"change_date"`
+	FertilizerCatId		 uuid.UUID	 `json:"fertilizer_cat_id"`
+	StatusId		 	 uuid.UUID	 `json:"status_id"`
 }
 // New instance fertilizer
 func (u *Fertilizer) New() *Fertilizer {

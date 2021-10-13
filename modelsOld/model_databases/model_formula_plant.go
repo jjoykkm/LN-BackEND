@@ -11,23 +11,23 @@ import (
 //-------------------------------------------------------------------------------//
 //model formula_plant
 type FormulaPlant struct {
-	FormulaPlantId 	 uuid.UUID	 `json:"formula_plant_id,omitempty"`
-	FormulaName		 string		 `json:"formula_name,omitempty"`
-	FormulaDesc		 string		 `json:"formula_desc,omitempty"`
-	PeopleUsed 		 int		 `json:"people_used,omitempty"`
-	Recommend1 		 int		 `json:"recommend1,omitempty"`
-	Recommend2		 int		 `json:"recommend2,omitempty"`
-	Recommend3		 int		 `json:"recommend3,omitempty"`
-	Recommend4		 int		 `json:"recommend4,omitempty"`
-	Recommend5		 int		 `json:"recommend5,omitempty"`
+	FormulaPlantId 	 uuid.UUID	 `json:"formula_plant_id"`
+	FormulaName		 string		 `json:"formula_name"`
+	FormulaDesc		 string		 `json:"formula_desc"`
+	PeopleUsed 		 int		 `json:"people_used"`
+	Recommend1 		 int		 `json:"recommend1"`
+	Recommend2		 int		 `json:"recommend2"`
+	Recommend3		 int		 `json:"recommend3"`
+	Recommend4		 int		 `json:"recommend4"`
+	Recommend5		 int		 `json:"recommend5"`
 	CreateDate		 time.Time	 `json:"-"`
 	ChangeDate		 time.Time	 `json:"-"`
-	PlantId		 	 uuid.UUID	 `json:"plant_id,omitempty"`
+	PlantId		 	 uuid.UUID	 `json:"plant_id"`
 	StatusId		 uuid.UUID	 `json:"-"`
-	ProvinceId		 uuid.UUID	 `json:"province_id,omitempty"`
-	CountryId		 uuid.UUID	 `json:"country_id,omitempty"`
-	IsPublic		 bool	 	 `json:"is_public,omitempty"`
-	Uid				 uuid.UUID	 `json:"uid,omitempty"`
+	ProvinceId		 uuid.UUID	 `json:"province_id"`
+	CountryId		 uuid.UUID	 `json:"country_id"`
+	IsPublic		 bool	 	 `json:"is_public"`
+	Uid				 uuid.UUID	 `json:"uid"`
 }
 // New instance formula_plant
 func (u *FormulaPlant) New() *FormulaPlant {

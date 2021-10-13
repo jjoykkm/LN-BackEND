@@ -11,14 +11,14 @@ import (
 //-------------------------------------------------------------------------------//
 //model socket
 type Socket struct {
-	SocketId      	uuid.UUID	 `json:"socket_id,omitempty"`
-	SensorId      	uuid.UUID	 `json:"sensor_id,omitempty"`
-	StatusId		uuid.UUID	 `json:"status_id,omitempty"`
-	SocketName      string	 	 `json:"socket_name,omitempty"`
-	CreateDate		time.Time	 `json:"create_date,omitempty"`
-	ChangeDate	    time.Time	 `json:"change_date,omitempty"`
-	SocketNumber	int64		 `json:"socket_number,omitempty"`
-	StatusSensorId	uuid.UUID	 `json:"status_sensor_id,omitempty"`
+	SocketId      	uuid.UUID	 `json:"socket_id"`
+	SensorId      	uuid.UUID	 `json:"sensor_id"`
+	StatusId		uuid.UUID	 `json:"status_id"`
+	SocketName      string	 	 `json:"socket_name"`
+	CreateDate		time.Time	 `json:"create_date"`
+	ChangeDate	    time.Time	 `json:"change_date"`
+	SocketNumber	int64		 `json:"socket_number"`
+	StatusSensorId	uuid.UUID	 `json:"status_sensor_id"`
 }
 // New instance socket
 func (u *Socket) New() *Socket {

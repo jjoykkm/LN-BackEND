@@ -11,7 +11,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model trans_sensor_value_rec
 type TransSensorValueRec struct {
-	FormulaPlantId 		uuid.UUID	 `gorm:"primaryKey" json:"formula_plant_id"`
+	FormulaPlantId 		uuid.UUID	 `json:"formula_plant_id"`
 	SensorTypeId   		uuid.UUID	 `json:"sensor_type_id"`
 	StatusId	   		uuid.UUID	 `json:"status_id"`
 	ValueRec      		float64		 `json:"value_rec"`

@@ -11,16 +11,16 @@ import (
 //-------------------------------------------------------------------------------//
 //model session_time
 type SessionTime struct {
-	SessionTimeId      uuid.UUID	 `json:"session_time_id,omitempty"`
-	PublicToken        string	 	 `json:"public_token,omitempty"`
-	PrivateToken       string	 	 `json:"private_token,omitempty"`
-	BarrierToken       string	 	 `json:"barrier_token,omitempty"`
-	CreateDate		   time.Time	 `json:"create_date,omitempty"`
-	ChangeDate	       time.Time	 `json:"change_date,omitempty"`
-	StatusId		   uuid.UUID	 `json:"status_id,omitempty"`
-	PlatformId	   	   uuid.UUID	 `json:"platform_id,omitempty"`
-	Uid	   			   uuid.UUID	 `json:"uid,omitempty"`
-	SessionActionId	   uuid.UUID	 `json:"session_action_id,omitempty"`
+	SessionTimeId      uuid.UUID	 `json:"session_time_id"`
+	PublicToken        string	 	 `json:"public_token"`
+	PrivateToken       string	 	 `json:"private_token"`
+	BarrierToken       string	 	 `json:"barrier_token"`
+	CreateDate		   time.Time	 `json:"create_date"`
+	ChangeDate	       time.Time	 `json:"change_date"`
+	StatusId		   uuid.UUID	 `json:"status_id"`
+	PlatformId	   	   uuid.UUID	 `json:"platform_id"`
+	Uid	   			   uuid.UUID	 `json:"uid"`
+	SessionActionId	   uuid.UUID	 `json:"session_action_id"`
 }
 // New instance session_time
 func (u *SessionTime) New() *SessionTime {

@@ -11,12 +11,12 @@ import (
 //-------------------------------------------------------------------------------//
 //model sub_district
 type SubDistrict struct {
-	SubDistrictId      uuid.UUID	 `json:"sub_district_id,omitempty"`
-	SubDistrictEN      string		 `json:"sub_district_en,omitempty"`
-	SubDistrictTH      string		 `json:"sub_district_th,omitempty"`
-	CreateDate		   time.Time	 `json:"create_date,omitempty"`
-	ChangeDate	       time.Time	 `json:"change_date,omitempty"`
-	StatusId		   uuid.UUID	 `json:"status_id,omitempty"`
+	SubDistrictId      uuid.UUID	 `json:"sub_district_id"`
+	SubDistrictEN      string		 `json:"sub_district_en"`
+	SubDistrictTH      string		 `json:"sub_district_th"`
+	CreateDate		   time.Time	 `json:"create_date"`
+	ChangeDate	       time.Time	 `json:"change_date"`
+	StatusId		   uuid.UUID	 `json:"status_id"`
 }
 // New instance sub_district
 func (u *SubDistrict) New() *SubDistrict {

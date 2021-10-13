@@ -10,19 +10,35 @@ import (
 //							Table indicate_type
 //-------------------------------------------------------------------------------//
 //model indicate_type
+type ColorRGB struct {
+	IndColorCodeR      	string	 	 `json:"code_r"`
+	IndColorCodeG      	string	 	 `json:"code_g"`
+	IndColorCodeB      	string	 	 `json:"code_b"`
+}
+// New instance indicate_type
+func (u *ColorRGB) New() *ColorRGB {
+	return &ColorRGB{
+		IndColorCodeR:		u.IndColorCodeR ,
+		IndColorCodeG:		u.IndColorCodeG ,
+		IndColorCodeB:		u.IndColorCodeB ,
+	}
+}
+
+//-------------------------------------------------------------------------------//
+//							Table indicate_type
+//-------------------------------------------------------------------------------//
+//model indicate_type
 type IndicateType struct {
-	IndicateTypeId      uuid.UUID	 `json:"indicate_type_id,omitempty"`
-	IndicateName      	string	 	 `json:"indicate_name,omitempty"`
-	IndicateDesc      	string	 	 `json:"indicate_desc,omitempty"`
-	Important	      	int			 `json:"important,omitempty"`
-	IndColorName      	string	 	 `json:"ind_color_name,omitempty"`
-	IndColorCode      	string	 	 `json:"ind_color_code,omitempty"`
-	IndColorCodeR      	string	 	 `json:"ind_color_code_r,omitempty"`
-	IndColorCodeG      	string	 	 `json:"ind_color_code_g,omitempty"`
-	IndColorCodeB      	string	 	 `json:"ind_color_code_b,omitempty"`
-	CreateDate			time.Time	 `json:"create_date,omitempty"`
-	ChangeDate	    	time.Time	 `json:"change_date,omitempty"`
-	StatusId			uuid.UUID	 `json:"status_id,omitempty"`
+	IndicateTypeId      uuid.UUID	 `json:"indicate_type_id"`
+	IndicateName      	string	 	 `json:"indicate_name"`
+	IndicateDesc      	string	 	 `json:"indicate_desc"`
+	Important	      	int			 `json:"important"`
+	IndColorName      	string	 	 `json:"ind_color_name"`
+	IndColorCode      	string	 	 `json:"ind_color_code"`
+	ColorRGB			ColorRGB 	 `json:"color_rgb" gorm:"embedded"`
+	CreateDate			time.Time	 `json:"create_date"`
+	ChangeDate	    	time.Time	 `json:"change_date"`
+	StatusId			uuid.UUID	 `json:"status_id"`
 }
 // New instance indicate_type
 func (u *IndicateType) New() *IndicateType {
@@ -33,9 +49,7 @@ func (u *IndicateType) New() *IndicateType {
 		Important:			u.Important ,
 		IndColorName:		u.IndColorName ,
 		IndColorCode:		u.IndColorCode ,
-		IndColorCodeR:		u.IndColorCodeR ,
-		IndColorCodeG:		u.IndColorCodeG ,
-		IndColorCodeB:		u.IndColorCodeB ,
+		ColorRGB:			u.ColorRGB ,
 		CreateDate:			u.CreateDate ,
 		ChangeDate:			u.ChangeDate ,
 		StatusId:			u.StatusId ,

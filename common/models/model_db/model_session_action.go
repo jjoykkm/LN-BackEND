@@ -11,11 +11,11 @@ import (
 //-------------------------------------------------------------------------------//
 //model session_action
 type SessionAction struct {
-	SessionActionId     uuid.UUID	 `json:"session_action_id,omitempty"`
-	SessionAction     	string	 	 `json:"session_action,omitempty"`
-	CreateDate			time.Time	 `json:"create_date,omitempty"`
-	ChangeDate	    	time.Time	 `json:"change_date,omitempty"`
-	StatusId			uuid.UUID	 `json:"status_id,omitempty"`
+	SessionActionId     uuid.UUID	 `json:"session_action_id"`
+	SessionAction     	string	 	 `json:"session_action"`
+	CreateDate			time.Time	 `json:"create_date"`
+	ChangeDate	    	time.Time	 `json:"change_date"`
+	StatusId			uuid.UUID	 `json:"status_id"`
 }
 // New instance session_action
 func (u *SessionAction) New() *SessionAction {
