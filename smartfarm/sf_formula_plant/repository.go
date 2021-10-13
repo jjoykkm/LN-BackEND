@@ -13,7 +13,7 @@ import (
 type Repositorier interface {
 	FindAllPlantType(status string) ([]model_db.PlantType, error)
 	FindAllPlantWithPlantType(status, plantTypeId string, offset int) ([]PlantAndPlantType, error)
-	GetCountFormulaPlant(status, plantId string) int64
+	GetCountFormulaPlant(status, plantId string) (int64, error)
 	FindAllFormulaPlantByPlant(status, plantId string, offset int) ([]FormulaPlantItem, error)
 	FindAllFavForPlantId(status, resultType, uid string) ([]uuid.UUID, map[string]bool, error)
 	FindAllPlantedForPlantId(status, resultType, uid string) ([]uuid.UUID, map[string]bool, error)
@@ -57,15 +57,15 @@ func (r *Repository) FindAllPlantWithPlantType(status, plantTypeId string, offse
 	return result, nil
 }
 
-func (r *Repository) GetCountFormulaPlant(status, plantId string) int64 {
+func (r *Repository) GetCountFormulaPlant(status, plantId string) (int64, error) {
 	var forPlant []model_db.FormulaPlant
 	var count int64
 
 	resp := r.db.Debug().Model(&forPlant).Where("status_id = ? AND plant_id = ?", status, plantId).Count(&count)
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
-		return 0
+		return 0, resp.Error
 	}
-	return count
+	return count, nil
 }
 
 func (r *Repository) FindAllFormulaPlantByPlant(status, plantId string, offset int) ([]FormulaPlantItem, error) {

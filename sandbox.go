@@ -6,8 +6,8 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/common/config"
+	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
-	"github.com/jjoykkm/ln-backend/smartfarm/sf_dashboard"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"net/http"
@@ -76,7 +76,7 @@ func main()  {
 	//		}
 	//	}
 	//}
-	result := []sf_dashboard.FarmSensorDetail{}
+	//result := []sf_dashboard.FarmSensorDetail{}
 	//result := []model_dbmodel_db.SensorDetail{}
 
 	//sensorDet := db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("SensorType",
@@ -99,20 +99,34 @@ func main()  {
 	//		return mainbox
 	//	})
 
-	db.Debug().Preload("FormulaPlant").Find(&result)
+	//db.Debug().Preload("FormulaPlant").Find(&result)
 	//.Preload("SensorDetail",
 	//	func(db *gorm.DB) *gorm.DB {
 	//		return senSocMain
 	//	})
 	//db.Debug().Preload("Mainbox").Find(&result)
+	result := []model_db.FarmArea{}
+
+	db.Debug().Select("farm_area_id").Where("status_id = ? AND farm_id = ?",
+		config.GetStatus().Active, "41470e4b-005d-4df9-aa4d-c59f37f6390b").Find(&result)//.Table(config.DB_FARM_AREA)
 	fmt.Println("-----------------------------")
-	//fmt.Printf("%+v\n", result)
+	fmt.Printf("%+v\n", result)
+	var trans []model_db.TransSocketArea
+	var count int64
+
+	// Get farm_id
+	farmAreaId := db.Debug().Distinct("farm_area_id").Where("status_id = ? AND farm_id = ?",
+		config.GetStatus().Active, "41470e4b-005d-4df9-aa4d-c59f37f6390b").Table(config.DB_FARM_AREA)
+
+	db.Debug().Model(&trans).Distinct("mainbox_id").Where("farm_area_id IN (?)", farmAreaId).Count(&count)
+	fmt.Println(count)
 
 
 
 	http.POST("/test", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"01": result,
+			//"01": result,
 		})
 	})
 	http.Run(config.SERVER_HOST)
