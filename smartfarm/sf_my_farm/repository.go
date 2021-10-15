@@ -159,8 +159,7 @@ func (r *Repository) FindAllManageMainbox(status, farmId string) ([]ManageMainbo
 		config.GetStatus().Active, mainboxId).Preload("SenSocDetail",
 		func(db *gorm.DB) *gorm.DB {
 			return senSoc
-		}).Preload("Mainbox",
-		"status_id = ? AND mainbox_id IN (?)", status, mainboxId).Find(&result)
+		}).Find(&result)
 
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error
