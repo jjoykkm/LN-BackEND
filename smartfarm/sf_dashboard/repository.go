@@ -3,12 +3,12 @@ package sf_dashboard
 import (
 	"errors"
 	"github.com/jjoykkm/ln-backend/common/config"
-	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
+	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"gorm.io/gorm"
 )
 
 type Repositorier interface {
-	FindAllMyFarm(status, uid string) ([]model_databases.Farm, error)
+	FindAllMyFarm(status, uid string) ([]model_db.Farm, error)
 	FindAllFarmAreaDashboard(status, farmId string) ([]FarmSensorDetail, error)
 }
 
@@ -20,8 +20,8 @@ func NewRepository(db *gorm.DB) Repositorier {
 	return &Repository{db: db}
 }
 
-func (r *Repository) FindAllMyFarm(status, uid string) ([]model_databases.Farm, error) {
-	var result []model_databases.Farm
+func (r *Repository) FindAllMyFarm(status, uid string) ([]model_db.Farm, error) {
+	var result []model_db.Farm
 	// Get farm_id
 	farmId := r.db.Debug().Select("farm_id").Where("status_id = ? AND uid = ?",
 		config.GetStatus().Active, uid).Table(config.DB_TRANS_MANAGEMENT)
@@ -35,6 +35,7 @@ func (r *Repository) FindAllMyFarm(status, uid string) ([]model_databases.Farm, 
 
 func (r *Repository) FindAllFarmAreaDashboard(status, farmId string) ([]FarmSensorDetail, error) {
 	var result []FarmSensorDetail
+
 	//Get Sensor Detail
 	sensorDet := r.db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("SensorType",
 		"status_id = ?", config.GetStatus().Active)

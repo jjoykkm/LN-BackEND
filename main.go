@@ -10,6 +10,7 @@ import (
 	"github.com/jjoykkm/ln-backend/modelsOld/model_services"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_dashboard"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_formula_plant"
+	"github.com/jjoykkm/ln-backend/smartfarm/sf_my_farm"
 	"github.com/jjoykkm/ln-backend/utility"
 	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
@@ -109,20 +110,28 @@ func main() {
 	})
 
 	// My Farm
-	//repoFormulaPlant := sf_formula_plant.NewRepository(db)
-	//serviceFormulaPlant := sf_formula_plant.NewService(repoFormulaPlant)
-	//handlerFormulaPlant := sf_formula_plant.NewHandler(serviceFormulaPlant)
-	//
-	//http.GET("/formulaPlant/plantCategoryList/api/v1/run", func(c *gin.Context) {
-	//	handlerFormulaPlant.GetPlantCategoryList(c)
-	//})
+	repoMyFarm := sf_my_farm.NewRepository(db)
+	serviceMyFarm := sf_my_farm.NewService(repoMyFarm)
+	handlerMyFarm := sf_my_farm.NewHandler(serviceMyFarm)
 
+	http.POST("/myFarm/overviewFarm/api/v1/run", func(c *gin.Context) {
+		handlerMyFarm.GetOverviewFarm(c)
+	})
+	http.POST("/myFarm/manageRole/api/v1/run", func(c *gin.Context) {
+		handlerMyFarm.GetManageRole(c)
+	})
+	http.POST("/myFarm/manageFarmArea/api/v1/run", func(c *gin.Context) {
+		handlerMyFarm.GetManageFarmArea(c)
+	})
+	http.POST("/myFarm/manageMainbox/api/v1/run", func(c *gin.Context) {
+		handlerMyFarm.GetManageMainbox(c)
+	})
 	// Schedule + Reminder
 	//repoFormulaPlant := sf_formula_plant.NewRepository(db)
 	//serviceFormulaPlant := sf_formula_plant.NewService(repoFormulaPlant)
 	//handlerFormulaPlant := sf_formula_plant.NewHandler(serviceFormulaPlant)
 	//
-	//http.GET("/formulaPlant/plantCategoryList/api/v1/run", func(c *gin.Context) {
+	//http.POST("/formulaPlant/plantCategoryList/api/v1/run", func(c *gin.Context) {
 	//	handlerFormulaPlant.GetPlantCategoryList(c)
 	//})
 
@@ -146,10 +155,10 @@ func main() {
 	http.POST("/farmAreaDetailSensor", GetFarmAreaDetailSensor)
 
 	// My Farm
-	http.POST("/overviewFarm", GetOverviewFarm)
-	http.POST("/manageMainbox", GetManageMainbox)
-	http.POST("/manageFarmArea", GetManageFarmArea)
-	http.POST("/manageRole", GetManageRole)
+	//http.POST("/overviewFarm", GetOverviewFarm)
+	//http.POST("/manageMainbox", GetManageMainbox)
+	//http.POST("/manageFarmArea", GetManageFarmArea)
+	//http.POST("/manageRole", GetManageRole)
 
 	// Schedule + Reminder
 	http.POST("/farmAreaList", GetFarmAreaList)

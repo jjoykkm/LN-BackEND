@@ -1,8 +1,15 @@
 package sf_my_farm
 
+import (
+	"github.com/jjoykkm/ln-backend/common/config"
+	"github.com/jjoykkm/ln-backend/common/models/model_other"
+)
+
 type Servicer interface {
 	//GetFarmListWithRoleer(status, uid, roleId string) ([]model_services.DashboardFarmList, int)
-	//GetOverviewFarmer(status, farmId string) model_services.MyFarmOverviewFarm
+	GetAuthorizeCheckForManageFarm(uid, farmId string) (bool, error)
+	// FarmId
+	GetOverviewFarm(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
 	//GetTransSocketAreaer(status, farmId string) ([]model_databases.TransSocketArea, []string, []string, []string, int)
 	//GetSocketByIder(status string, socketIdList []string) ([]model_databases.Socket, map[string]model_databases.Socket)
 	//GetSocketWithSensorer(status, language string, socketIdList []string) ([]model_services.MyFarmSenSocDetail, map[string]model_services.MyFarmSenSocDetail, int)
@@ -10,7 +17,9 @@ type Servicer interface {
 	//GetManageMainboxer(status, language, farmId string) ([]model_services.MyFarmManageMainbox, int)
 	//GetFarmAreaByIder(status string, farmAreaIdList []string) ([]model_databases.FarmArea, map[string]model_databases.FarmArea)
 	//GetManageFarmAreaer(status, language, farmId string) ([]model_services.MyFarmManageFarmArea, int)
-	//GetManageRoleer(status, language, farmId string) ([]model_services.MyFarmManageRole, int)
+	GetManageRole(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
+	GetManageFarmArea(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
+	GetManageMainbox(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
 }
 
 type Service struct {
@@ -22,67 +31,40 @@ func NewService(repo Repositorier) Servicer {
 		repo:  repo,
 	}
 }
-//
-//
-//func (s *Service) GetFarmListWithRoleer(status, uid, roleId string) ([]model_services.DashboardFarmList, int) {
-//	var farmList []model_services.DashboardFarmList
-//	var total int
-//
-//	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.farm_id = %s.farm_id WHERE %s.status_id = '%s' AND %s.uid = '%s' AND %s.role_id = '%s'",
-//		config.DB_FARM, config.DB_TRANS_MANAGEMENT, config.DB_FARM, config.DB_TRANS_MANAGEMENT, config.DB_FARM, status, config.DB_TRANS_MANAGEMENT, uid, config.DB_TRANS_MANAGEMENT, roleId)
-//	fmt.Println(sql)
-//	err := ln.Db.Raw(sql).Scan(&farmList).Error
-//	if err != nil {
-//		log.Print(err)
-//	}
-//
-//	total = len(farmList)
-//	return farmList, total
-//}
-//
-//func (s *Service) GetOverviewFarmer(status, farmId string) model_services.MyFarmOverviewFarm {
-//	var farmList []model_databases.TransSocketArea
-//	mbList := make(map[string]bool)
-//	faList := make(map[string]bool)
-//	var farmOver model_services.MyFarmOverviewFarm
-//
-//	// Get Farm detail
-//	sqlFarm := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND farm_id = '%s' ",
-//		config.DB_FARM, config.GetStatus().Active, farmId)
-//	fmt.Println(sqlFarm)
-//	errFarm := ln.Db.Raw(sqlFarm).Scan(&farmOver).Error
-//	if errFarm != nil {
-//		log.Print(errFarm)
-//	}
-//
-//	//Get Farm Area detail
-//	_, farmAreaIdList, _ := IntCommon.GetFarmAreaByFarmId(ln, config.GetStatus().Active, farmId)
-//	sqlIn := utility.ConvertListToStringIn(farmAreaIdList)
-//	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND farm_area_id IN %s ",
-//		config.DB_TRANS_SOCKET_AREA, status, sqlIn)
-//	fmt.Println(sql)
-//	err := ln.Db.Raw(sql).Scan(&farmList).Error
-//	if err != nil {
-//		log.Print(err)
-//	}
-//
-//	for _, array := range farmList {
-//		//Mainbox unique
-//		if _, value := mbList[array.MainboxId.UUID.String()]; !value {
-//			mbList[array.MainboxId.UUID.String()] = true
-//		}
-//		//FarmArea unique
-//		if _, value := faList[array.FarmAreaId.UUID.String()]; !value {
-//			faList[array.FarmAreaId.UUID.String()] = true
-//		}
-//	}
-//
-//	farmOver.MainboxCount = len(mbList)
-//	farmOver.FarmAreaCount = len(faList)
-//
-//	return farmOver
-//}
-//
+
+func (s *Service) GetAuthorizeCheckForManageFarm(uid, farmId string) (bool, error) {
+	authManage := false
+	trans, err := s.repo.FindOneTransManagement(uid, farmId)
+	if err != nil{
+		return false, err
+	}
+	if trans.RoleId.UUID.String() != config.GetRole().View {
+		authManage = true
+	}
+	return authManage, err
+}
+
+func (s *Service) GetOverviewFarm(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error) {
+	farm, err := s.repo.FindOneFarm(status, ReqModel.FarmId)
+	if err != nil{
+		return nil, err
+	}
+	// Get Mainbox count
+	farm.MainboxCount, err = s.repo.GetCountMainbox(status, ReqModel.FarmId)
+	if err != nil{
+		return nil, err
+	}
+	// Get Farm area count
+	farm.FarmAreaCount, err = s.repo.GetCountFarmArea(status, ReqModel.FarmId)
+	if err != nil{
+		return nil, err
+	}
+	return &model_other.RespModel{
+		Item: farm,
+		Total: 1,
+	}, nil
+}
+
 //func (s *Service) GetTransSocketAreaer(status, farmId string) ([]model_databases.TransSocketArea, []string, []string, []string, int) {
 //	var joinArray []model_databases.TransSocketArea
 //	var socketIdList []string
@@ -269,26 +251,49 @@ func NewService(repo Repositorier) Servicer {
 //	return manageFAList, total
 //}
 //
-//func (s *Service) GetManageRoleer(status, language, farmId string) ([]model_services.MyFarmManageRole, int) {
-//	var roleList []model_services.MyFarmManageRole
-//	var total int
-//
-//	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.uid = %s.uid WHERE %s.status_id = '%s' AND %s.farm_id = '%s'",
-//		config.DB_TRANS_MANAGEMENT, config.DB_USERS, config.DB_TRANS_MANAGEMENT, config.DB_USERS, config.DB_TRANS_MANAGEMENT, status, config.DB_TRANS_MANAGEMENT, farmId)
-//	fmt.Println(sql)
-//	err := ln.Db.Raw(sql).Scan(&roleList).Error
-//	if err != nil {
-//		log.Print(err)
-//	}
-//	fmt.Println(roleList)
-//	for idx, r := range roleList {
-//		fmt.Println(r.RoleId.UUID.String())
-//		fmt.Println("ssssssssss")
-//		_, r.RoleName, r.RoleDesc = IntCommon.GetRoleNameer(ln, r.RoleId.UUID.String(), language)
-//		fmt.Println(r.RoleName)
-//		roleList[idx] = r
-//	}
-//
-//	total = len(roleList)
-//	return roleList, total
-//}
+func (s *Service) GetManageRole(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error) {
+	// Check auth for edit
+	//isAuth, err := Servicer.GetAuthorizeCheckForManageFarm(s, ReqModel.Uid, ReqModel.FarmId)
+	//if err != nil{
+	//	return nil, err
+	//}
+	//// No Auth
+	//if isAuth != true {
+	//	return nil, &errs.ErrContext{
+	//		Code: ERROR_4002005,
+	//		Err:  err,
+	//		Msg:  MSG_NO_AUTH,
+	//	}
+	//}
+
+	manageRole, err := s.repo.FindAllManageRole(status, ReqModel.FarmId)
+	if err != nil{
+		return nil, err
+	}
+	return &model_other.RespModel{
+		Item: manageRole,
+		Total: len(manageRole),
+	}, nil
+}
+
+func (s *Service) GetManageFarmArea(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error) {
+	manageFarmArea, err := s.repo.FindAllManageFarmArea(status, ReqModel.FarmId)
+	if err != nil{
+		return nil, err
+	}
+	return &model_other.RespModel{
+		Item: manageFarmArea,
+		Total: len(manageFarmArea),
+	}, nil
+}
+
+func (s *Service) GetManageMainbox(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error) {
+	manageFarmArea, err := s.repo.FindAllManageMainbox(status, ReqModel.FarmId)
+	if err != nil{
+		return nil, err
+	}
+	return &model_other.RespModel{
+		Item: manageFarmArea,
+		Total: len(manageFarmArea),
+	}, nil
+}

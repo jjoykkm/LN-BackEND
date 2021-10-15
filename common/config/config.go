@@ -19,15 +19,15 @@ const (
 	ALL		string = "all"
 	LIST	string = "list"
 )
-type ResType struct {
+type ResTypeConst struct {
 	Struct	string
 	Map		string
 	Key		string
 	All		string
 	List	string
 }
-func GetResType() ResType {
-	return ResType{
+func GetResType() ResTypeConst {
+	return ResTypeConst{
 		Struct: STRUCT,
 		Map:    MAP,
 		Key:    KEY,
@@ -45,19 +45,41 @@ const (
 	CANCELLED 	string = "c7dde653-fabf-45fe-b589-73297ab5401f"
 	PENDING		string = "fe13e5d7-f467-48e8-9ce1-a997ae2c0d9f"
 )
-type StatusType struct {
+type StatusTypeConst struct {
 	Active		string
 	Inactive 	string
 	Cancelled 	string
 	Pending		string
 }
-func GetStatus() StatusType {
-	return StatusType{
+func GetStatus() StatusTypeConst {
+	return StatusTypeConst{
 		Active:    ACTIVE,
 		Inactive:  INACTIVE,
 		Cancelled: CANCELLED,
 		Pending:   PENDING,
 	}
 }
+
+/*-------------------------------------------------------------------------------------------*/
+//                                 Role Type
+/*-------------------------------------------------------------------------------------------*/
+const (
+	OWNER	string = "cd30c998-7390-4108-b6bc-ab0fb5dbc698"
+	VIEW 	string = "a6a5e973-ce67-4d13-9387-06b5457ea602"
+	CHANGE 	string = "8496b7e8-e23b-45bc-a6c0-d604a7119cc2"
+)
+type RoleTypeConst struct {
+	Owner	string
+	View 	string
+	Change 	string
+}
+func GetRole() RoleTypeConst {
+	return RoleTypeConst{
+		Owner:  	OWNER,
+		View:  		VIEW,
+		Change: 	CHANGE,
+	}
+}
+
 
 

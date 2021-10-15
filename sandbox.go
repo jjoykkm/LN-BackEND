@@ -6,8 +6,8 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/common/config"
-	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
+	"github.com/jjoykkm/ln-backend/smartfarm/sf_my_farm"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"net/http"
@@ -105,21 +105,35 @@ func main()  {
 	//		return senSocMain
 	//	})
 	//db.Debug().Preload("Mainbox").Find(&result)
-	result := []model_db.FarmArea{}
-
-	db.Debug().Select("farm_area_id").Where("status_id = ? AND farm_id = ?",
-		config.GetStatus().Active, "41470e4b-005d-4df9-aa4d-c59f37f6390b").Find(&result)//.Table(config.DB_FARM_AREA)
-	fmt.Println("-----------------------------")
+	result := []sf_my_farm.SenSocDetail{}
+	////Get Sensor Detail
+	//sensorDet := db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("SensorType",
+	//	"status_id = ?", config.GetStatus().Active)
+	//// Get Socket Detail
+	//socketDet := db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("StatusSensor",
+	//	"status_id = ?", config.GetStatus().Active).Preload("Sensor",
+	//	func(db *gorm.DB) *gorm.DB {
+	//		return sensorDet
+	//	})
+	// Get Sensor, Socket
+	db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("Socket").Preload("StatusSensor").Preload("Sensor").Find(&result)
+	//,
+	//	func(db *gorm.DB) *gorm.DB {
+	//		return socketDet
+	//	}).Find(&result)
+	//db.Debug().Select("farm_area_id").Where("status_id = ? AND farm_id = ?",
+	//	config.GetStatus().Active, "41470e4b-005d-4df9-aa4d-c59f37f6390b").Find(&result)//.Table(config.DB_FARM_AREA)
+	//fmt.Println("-----------------------------")
 	fmt.Printf("%+v\n", result)
-	var trans []model_db.TransSocketArea
-	var count int64
-
-	// Get farm_id
-	farmAreaId := db.Debug().Distinct("farm_area_id").Where("status_id = ? AND farm_id = ?",
-		config.GetStatus().Active, "41470e4b-005d-4df9-aa4d-c59f37f6390b").Table(config.DB_FARM_AREA)
-
-	db.Debug().Model(&trans).Distinct("mainbox_id").Where("farm_area_id IN (?)", farmAreaId).Count(&count)
-	fmt.Println(count)
+	//var trans []model_db.TransSocketArea
+	//var count int64
+	//
+	//// Get farm_id
+	//farmAreaId := db.Debug().Distinct("farm_area_id").Where("status_id = ? AND farm_id = ?",
+	//	config.GetStatus().Active, "41470e4b-005d-4df9-aa4d-c59f37f6390b").Table(config.DB_FARM_AREA)
+	//
+	//db.Debug().Model(&trans).Distinct("mainbox_id").Where("farm_area_id IN (?)", farmAreaId).Count(&count)
+	//fmt.Println(count)
 
 
 
