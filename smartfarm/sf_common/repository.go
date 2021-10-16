@@ -9,6 +9,7 @@ import (
 
 type Repositorier interface {
 	FindAllMyFarm(status, uid string) ([]model_db.Farm, error)
+	FindAllMyFarmAndFarmArea(status, uid string) ([]FarmFarmArea, error)
 }
 
 type Repository struct {
@@ -26,6 +27,22 @@ func (r *Repository) FindAllMyFarm(status, uid string) ([]model_db.Farm, error) 
 		config.GetStatus().Active, uid).Table(config.DB_TRANS_MANAGEMENT)
 
 	resp := r.db.Debug().Where("status_id = ? AND farm_id IN (?)", status, farmId).Find(&result)
+	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
+		return nil, resp.Error
+	}
+	return result, nil
+}
+
+func (r *Repository) FindAllMyFarmAndFarmArea(status, uid string) ([]FarmFarmArea, error) {
+	var result []FarmFarmArea
+	// Get farm_id
+	farmId := r.db.Debug().Select("farm_id").Where("status_id = ? AND uid = ?",
+		config.GetStatus().Active, uid).Table(config.DB_TRANS_MANAGEMENT)
+
+	resp := r.db.Debug().Where("status_id = ? AND farm_id IN (?)",
+		status, farmId).Preload("FarmArea","status_id = ?",
+			config.GetStatus().Active).Find(&result)
+
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error
 	}

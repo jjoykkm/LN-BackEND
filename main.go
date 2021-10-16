@@ -80,6 +80,9 @@ func main() {
 	http.POST("/common/farmList/api/v1/run", func(c *gin.Context) {
 		handlerCommon.GetFarmList(c)
 	})
+	http.POST("/common/farmAndFarmAreaList/api/v1/run", func(c *gin.Context) {
+		handlerCommon.GetFarmAndFarmAreaList(c)
+	})
 
 	// Formula Plant
 	repoFormulaPlant := sf_formula_plant.NewRepository(db)
