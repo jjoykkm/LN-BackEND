@@ -1,4 +1,4 @@
-package cm_address
+package cm_plant
 
 import (
 	"github.com/jjoykkm/ln-backend/common/models/model_other"
@@ -6,7 +6,7 @@ import (
 
 type Servicer interface {
 	// status
-	GetProvinceList(status string) (*model_other.RespModel, error)
+	GetFertAndCatList(status string) (*model_other.RespModel, error)
 }
 
 type Service struct {
@@ -19,13 +19,13 @@ func NewService(repo Repositorier) Servicer {
 	}
 }
 
-func (s *Service) GetProvinceList(status string) (*model_other.RespModel, error) {
-	province, err := s.repo.FindAllProvince(status)
+func (s *Service) GetFertAndCatList(status string) (*model_other.RespModel, error) {
+	fert, err := s.repo.GetFertAndCatList(status)
 	if err != nil{
 		return nil, err
 	}
 	return &model_other.RespModel{
-		Item: province,
-		Total: len(province),
+		Item: fert,
+		Total: len(fert),
 	}, nil
 }

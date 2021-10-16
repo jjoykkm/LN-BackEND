@@ -2,12 +2,12 @@ package cm_address
 
 import (
 	"errors"
-	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
+	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"gorm.io/gorm"
 )
 
 type Repositorier interface {
-	FindAllProvince(status string) ([]model_databases.Province, error)
+	FindAllProvince(status string) ([]model_db.Province, error)
 }
 
 type Repository struct {
@@ -18,12 +18,12 @@ func NewRepository(db *gorm.DB) Repositorier {
 	return &Repository{db: db}
 }
 
-func (r *Repository) FindAllProvince(status string) ([]model_databases.Province, error) {
-	var result []model_databases.Province
+func (r *Repository) FindAllProvince(status string) ([]model_db.Province, error) {
+	var result []model_db.Province
 
-	err := r.db.Where("status_id = ?", status).Find(&result).Error
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, err
+	resp := r.db.Debug().Where("status_id = ?", status).Find(&result)
+	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
+		return nil, resp.Error
 	}
 	return result, nil
 }
