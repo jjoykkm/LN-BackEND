@@ -10,7 +10,8 @@ import (
 )
 
 func GetModelFromBody(c *gin.Context) model_other.ReqModel {
-	var ReqModel model_other.ReqModel
+	var reqModel model_other.ReqModel
+	reqModel.Language = c.Query("lang")
 
 	if err := c.Bind(&ReqModel); err != nil {
 		c.JSON(http.StatusBadRequest, err)

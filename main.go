@@ -84,6 +84,11 @@ func main() {
 		handlerCommon.GetFarmAndFarmAreaList(c)
 	})
 
+
+	http.GET("/common/address/province/api/v1/run", func(c *gin.Context) {
+		handlerCommon.GetProvinceList(c)
+	})
+
 	// Formula Plant
 	repoFormulaPlant := sf_formula_plant.NewRepository(db)
 	serviceFormulaPlant := sf_formula_plant.NewService(repoFormulaPlant)
