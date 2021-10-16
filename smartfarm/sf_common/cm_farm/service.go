@@ -9,8 +9,6 @@ type Servicer interface {
 	GetFarmList(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
 	// status, uid string
 	GetFarmAndFarmAreaList(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
-	// status
-	GetProvinceList(status string) (*model_other.RespModel, error)
 }
 
 type Service struct {
@@ -36,17 +34,6 @@ func (s *Service) GetFarmList(status string, ReqModel *model_other.ReqModel) (*m
 
 func (s *Service) GetFarmAndFarmAreaList(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error) {
 	myFarm, err := s.repo.FindAllMyFarmAndFarmArea(status, ReqModel.Uid)
-	if err != nil{
-		return nil, err
-	}
-	return &model_other.RespModel{
-		Item: myFarm,
-		Total: len(myFarm),
-	}, nil
-}
-
-func (s *Service) GetProvinceList(status string) (*model_other.RespModel, error) {
-	myFarm, err := s.repo.FindAllProvince(status)
 	if err != nil{
 		return nil, err
 	}
