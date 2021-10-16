@@ -1,7 +1,6 @@
 package sf_common
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_other"
@@ -74,7 +73,6 @@ func (h *Handler) GetFarmAndFarmAreaList(c *gin.Context) {
 func (h *Handler) GetProvinceList(c *gin.Context) {
 	var reqModel model_other.ReqModel
 	reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
-	fmt.Println(reqModel.Language)
 	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",

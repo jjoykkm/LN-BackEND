@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/common/config"
@@ -62,6 +61,24 @@ func main()  {
 	}
 	http := gin.Default()
 	http.Use(cors.Default())
+	v1 := http.Group("/v1")
+	{
+		v1.GET("/login", func(c *gin.Context) {
+			c.JSON(200, gin.H{
+				"01": "result",
+				//"01": result,
+			})
+		})
+		t2 := v1.Group("run")
+		t2.GET("/test", func(c *gin.Context) {
+			c.JSON(200, gin.H{
+				"01": "222222",
+				//"01": result,
+			})
+		})
+	}
+
+
 	//fmt.Println("***********************************")
 	//ss := doRequest()
 	//if ss != nil {
@@ -105,7 +122,7 @@ func main()  {
 	//		return senSocMain
 	//	})
 	//db.Debug().Preload("Mainbox").Find(&result)
-	result := []sf_my_farm.SenSocDetail{}
+	result := []sf_my_farm.SensorDetail{}
 	////Get Sensor Detail
 	//sensorDet := db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("SensorType",
 	//	"status_id = ?", config.GetStatus().Active)
@@ -124,7 +141,7 @@ func main()  {
 	//db.Debug().Select("farm_area_id").Where("status_id = ? AND farm_id = ?",
 	//	config.GetStatus().Active, "41470e4b-005d-4df9-aa4d-c59f37f6390b").Find(&result)//.Table(config.DB_FARM_AREA)
 	//fmt.Println("-----------------------------")
-	fmt.Printf("%+v\n", result)
+	//fmt.Printf("%+v\n", result)
 	//var trans []model_db.TransSocketArea
 	//var count int64
 	//

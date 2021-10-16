@@ -1,13 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/controllers"
 	"github.com/jjoykkm/ln-backend/modelsOld/model_other"
-	"github.com/jjoykkm/ln-backend/modelsOld/model_services"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_common"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_dashboard"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_formula_plant"
@@ -17,7 +15,6 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"net/http"
-	"reflect"
 )
 
 type Ln struct {
@@ -33,12 +30,6 @@ type Jj struct {
 }
 
 func main() {
-	//db, err := sqlx.Connect("postgres", "host=103.212.181.187 user=ln02t password=ln-0110-2 dbname=smartlife port=5432 sslmode=disable")
-	//if err != nil {
-	//	log.Fatalln(err)
-	//}
-	//fmt.Println(db)
-
 	db, err := gorm.Open(postgres.New(postgres.Config{
 		DSN:                  config.DSN,
 		PreferSimpleProtocol: false, // disables implicit prepared statement usage
@@ -47,277 +38,93 @@ func main() {
 		panic(err.Error())
 	}
 
-	//var oo []Jj
-	////db.Raw("SELECT jjoy, eiei FROM tests").Scan(&oo)
-	//db.Exec("SELECT jjoy, eiei FROM tests").Scan(&oo)
-	////db.Raw("SELECT * FROM tests WHERE jjoy = ?", "111").Scan(&oo)
-	//fmt.Printf("%+v/n",oo)
-	//db, err := sql.Open(config.DRIVER_NAME, config.CONNECTION)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//
-	//defer db.Close()
-	//
-	//err = db.Ping()
-	//if err != nil {
-	//	panic(err)
-	//}
-	fmt.Printf("Successfully connected to DB!\n")
-
 	controller := controllers.Ln{db}
 	me = Ln{db, controller}
 
 	http := gin.Default()
 	http.Use(cors.Default())
 
-	//cache := cache.New(1*time.Hour, 1*time.Hour)
 	// Common
 	repoCommon := sf_common.NewRepository(db)
 	serviceCommon := sf_common.NewService(repoCommon)
 	handlerCommon := sf_common.NewHandler(serviceCommon)
-
-	http.POST("/common/farmList/api/v1/run", func(c *gin.Context) {
-		handlerCommon.GetFarmList(c)
-	})
-	http.POST("/common/farmAndFarmAreaList/api/v1/run", func(c *gin.Context) {
-		handlerCommon.GetFarmAndFarmAreaList(c)
-	})
-
-
-	http.GET("/common/address/province/api/v1/run", func(c *gin.Context) {
-		handlerCommon.GetProvinceList(c)
-	})
-
 	// Formula Plant
 	repoFormulaPlant := sf_formula_plant.NewRepository(db)
 	serviceFormulaPlant := sf_formula_plant.NewService(repoFormulaPlant)
 	handlerFormulaPlant := sf_formula_plant.NewHandler(serviceFormulaPlant)
-
-	http.GET("/formulaPlant/plantCategoryList/api/v1/run", func(c *gin.Context) {
-		handlerFormulaPlant.GetPlantCategoryList(c)
-	})
-	http.POST("/formulaPlant/plantCategoryItem/api/v1/run", func(c *gin.Context) {
-		handlerFormulaPlant.GetPlantCategoryItem(c)
-	})
-	http.POST("/formulaPlant/plantOverviewByPlant/api/v1/run", func(c *gin.Context) {
-		handlerFormulaPlant.GetPlantOverviewByPlant(c)
-	})
-	http.POST("/formulaPlant/plantOverviewFavorite/api/v1/run", func(c *gin.Context) {
-		handlerFormulaPlant.GetPlantOverviewFavorite(c)
-	})
-	http.POST("/formulaPlant/myPlantOverview/api/v1/run", func(c *gin.Context) {
-		handlerFormulaPlant.GetMyPlantOverview(c)
-	})
-	http.POST("/formulaPlant/formulaPlantDetail/api/v1/run", func(c *gin.Context) {
-		handlerFormulaPlant.GetFormulaPlantDetail(c)
-	})
-
 	// Dashboard
 	repoDashboard := sf_dashboard.NewRepository(db)
 	serviceDashboard := sf_dashboard.NewService(repoDashboard)
 	handlerDashboard := sf_dashboard.NewHandler(serviceDashboard)
-
-	http.POST("/farmAreaDashboardList/farmList/api/v1/run", func(c *gin.Context) {
-		handlerDashboard.GetFarmAreaDashboardList(c)
-	})
-
 	// My Farm
 	repoMyFarm := sf_my_farm.NewRepository(db)
 	serviceMyFarm := sf_my_farm.NewService(repoMyFarm)
 	handlerMyFarm := sf_my_farm.NewHandler(serviceMyFarm)
-
-	http.POST("/myFarm/overviewFarm/api/v1/run", func(c *gin.Context) {
-		handlerMyFarm.GetOverviewFarm(c)
-	})
-	http.POST("/myFarm/manageRole/api/v1/run", func(c *gin.Context) {
-		handlerMyFarm.GetManageRole(c)
-	})
-	http.POST("/myFarm/manageFarmArea/api/v1/run", func(c *gin.Context) {
-		handlerMyFarm.GetManageFarmArea(c)
-	})
-	http.POST("/myFarm/manageMainbox/api/v1/run", func(c *gin.Context) {
-		handlerMyFarm.GetManageMainbox(c)
-	})
 	// Schedule + Reminder
-	//repoFormulaPlant := sf_formula_plant.NewRepository(db)
-	//serviceFormulaPlant := sf_formula_plant.NewService(repoFormulaPlant)
-	//handlerFormulaPlant := sf_formula_plant.NewHandler(serviceFormulaPlant)
-	//
-	//http.POST("/formulaPlant/plantCategoryList/api/v1/run", func(c *gin.Context) {
-	//	handlerFormulaPlant.GetPlantCategoryList(c)
-	//})
+	//repoScheRem := sf_my_farm.NewRepository(db)
+	//serviceScheRem := sf_my_farm.NewService(repoScheRem)
+	//handlerScheRem := sf_my_farm.NewHandler(serviceScheRem)
 
-	http.POST("/jjoy", func(c *gin.Context) {
-		handlerFormulaPlant.GetPlantCategoryList(c)
-	})
+	v1 := http.Group("/v1")
+	{
+		api := v1.Group("/api")
+		{
+			common := api.Group("/common")
+			{
+				address := common.Group("/address")
+				{
+					address.POST("/farmList", handlerCommon.GetFarmList)
+					address.POST("/farmAndFarmAreaList", handlerCommon.GetFarmAndFarmAreaList)
+				}
+			}
+			forPlant := api.Group("/formulaPlant")
+			{
+				forPlant.POST("/plantCategoryItem", handlerFormulaPlant.GetPlantCategoryItem)
+				forPlant.POST("/plantOverviewByPlant", handlerFormulaPlant.GetPlantOverviewByPlant)
+				forPlant.POST("/plantOverviewFavorite", handlerFormulaPlant.GetPlantOverviewFavorite)
+				forPlant.POST("/GetMyPlantOverview", handlerFormulaPlant.GetMyPlantOverview)
+				forPlant.POST("/formulaPlantDetail", handlerFormulaPlant.GetFormulaPlantDetail)
+			}
+			dashboard := api.Group("/dashboard")
+			{
+				dashboard.POST("/farmAreaDashboardList", handlerDashboard.GetFarmAreaDashboardList)
+			}
+			myFarm := api.Group("/myFarm")
+			{
+				myFarm.POST("/overviewFarm", handlerMyFarm.GetOverviewFarm)
+				myFarm.POST("/manageRole", handlerMyFarm.GetManageRole)
+				myFarm.POST("/manageFarmArea", handlerMyFarm.GetManageFarmArea)
+				myFarm.POST("/manageMainbox", handlerMyFarm.GetManageMainbox)
+			}
+			//scheRem := app.Group("/scheRem")
+			//{
+			//	//scheRem.GET("/farmAreaDashboardList", handlerScheRem.GetFarmAreaDashboardList)
+			//}
+		}
 
-
-	// Formula Plant
-	http.POST("/test", Test)
-	//http.POST("/plantCategoryList", GetPlantCategoryList)
-	//http.POST("/plantCategoryItem", GetPlantCategoryItem)
-	//http.POST("/plantOverviewFavorite", GetPlantOverviewFavorite)
-	//http.POST("/myPlantOverview", GetMyPlantOverview)
-	//http.POST("/plantOverviewByPlant", GetPlantOverviewByPlant)
-	//http.POST("/formulaPlantDetail", GetFormulaPlantDetail)
+		get := v1.Group("/get")
+		{
+			forPlant := get.Group("/formulaPlant")
+			{
+				forPlant.GET("/plantCategoryList", handlerFormulaPlant.GetPlantCategoryList)
+			}
+			common := get.Group("/common")
+			{
+				address := common.Group("/address")
+				{
+					address.GET("/provinceList", handlerCommon.GetProvinceList)
+				}
+			}
+		}
+	}
 
 	// Dashboard
-	//http.POST("/farmList", GetFarmList)
-	//http.POST("/farmAreaDashboardList", GetFarmAreaDashboardList)
 	http.POST("/farmAreaDetailSensor", GetFarmAreaDetailSensor)
-
-	// My Farm
-	//http.POST("/overviewFarm", GetOverviewFarm)
-	//http.POST("/manageMainbox", GetManageMainbox)
-	//http.POST("/manageFarmArea", GetManageFarmArea)
-	//http.POST("/manageRole", GetManageRole)
-
 	// Schedule + Reminder
-	http.POST("/farmAreaList", GetFarmAreaList)
 	http.POST("/scheRemind", GetScheRemind)
 
 	http.Run(config.SERVER_HOST)
 
-}
-
-func Test(c *gin.Context) {
-	aa, bb := me.Ctrl.GetManageMainboxer(config.GetStatus().Active, config.GetLanguage().En, "41470e4b-005d-4df9-aa4d-c59f37f6390b")
-
-	c.JSON(http.StatusOK, gin.H{
-		"01": aa,
-		"02": bb,
-		//"03": cc,
-		//"04": dd,
-		//"05": ee,
-	})
-
-}
-
-func GetPlantCategoryList(c *gin.Context) {
-	var bodyModel model_other.PostBody
-	bodyModel = utility.GetModelFromBody(c)
-	//GetPlantCategoryLister(status, language string) ([]model_services.ForPlantCatList, int)
-	plantCategoryList, total := me.Ctrl.GetPlantCategoryLister(config.GetStatus().Active, bodyModel.Language)
-	if total == 0 {
-		c.JSON(http.StatusNoContent, gin.H{})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"item":  plantCategoryList,
-			"total": total,
-		})
-	}
-}
-
-func GetPlantCategoryItem(c *gin.Context) {
-	var bodyModel model_other.PostBody
-	bodyModel = utility.GetModelFromBody(c)
-	//GetPlantCategoryItemer(status, plantTypeId, language string, offset int) ([]model_services.ForPlantCat, int, int)
-	plantCategoryItem, nextOffset, total := me.Ctrl.GetPlantCategoryItemer(config.GetStatus().Active, bodyModel.PlantTypeId, bodyModel.Language, bodyModel.Offset)
-	if total == 0 {
-		c.JSON(http.StatusNoContent, gin.H{})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"item":   plantCategoryItem,
-			"offset": nextOffset,
-			"total":  total,
-		})
-	}
-}
-
-func GetPlantOverviewFavorite(c *gin.Context) {
-	var bodyModel model_other.PostBody
-	bodyModel = utility.GetModelFromBody(c)
-	//GetPlantOverviewFavoriteer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int)
-	plantOverviewFavorite, nextOffset, total := me.Ctrl.GetPlantOverviewFavoriteer(config.GetStatus().Active, bodyModel.Uid, bodyModel.Language, bodyModel.Offset)
-	if total == 0 {
-		c.JSON(http.StatusNoContent, gin.H{})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"item":   plantOverviewFavorite,
-			"offset": nextOffset,
-			"total":  total,
-		})
-	}
-}
-
-func GetMyPlantOverview(c *gin.Context) {
-	var bodyModel model_other.PostBody
-	bodyModel = utility.GetModelFromBody(c)
-	//GetMyPlantOverviewer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int)
-	myPlantOverview, nextOffset, total := me.Ctrl.GetMyPlantOverviewer(config.GetStatus().Active, bodyModel.Uid, bodyModel.Language, bodyModel.Offset)
-	if total == 0 {
-		c.JSON(http.StatusNoContent, gin.H{})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"item":   myPlantOverview,
-			"offset": nextOffset,
-			"total":  total,
-		})
-	}
-}
-
-func GetPlantOverviewByPlant(c *gin.Context) {
-	var bodyModel model_other.PostBody
-	bodyModel = utility.GetModelFromBody(c)
-	//GetPlantOverviewByPlanter(status, uid, plantId, language string, offset int) ([]model_services.ForPlantItem, int, int)
-	plantOverviewByPlant, nextOffset, total := me.Ctrl.GetPlantOverviewByPlanter(config.GetStatus().Active, bodyModel.Uid, bodyModel.PlantId, bodyModel.Language, bodyModel.Offset)
-	if total == 0 {
-		c.JSON(http.StatusNoContent, gin.H{})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"item":   plantOverviewByPlant,
-			"offset": nextOffset,
-			"total":  total,
-		})
-	}
-}
-
-func GetFormulaPlantDetail(c *gin.Context) {
-	var bodyModel model_other.PostBody
-	bodyModel = utility.GetModelFromBody(c)
-
-	//GetFormulaPlantDetailer(status, formulaPlantId, language string) model_services.ForPlantFormula
-	//_, _, formulaPlant := me.Ctrl.GetSensorValueRecRelate(config.GetStatus().Active, "243367fe-fc14-4074-8ff5-374220dadf8f", bodyModel.Language)
-	formulaPlant := me.Ctrl.GetFormulaPlantDetailer(config.GetStatus().Active, bodyModel.FormulaPlantId, bodyModel.Language)
-	if reflect.DeepEqual(formulaPlant, model_services.ForPlantFormula{}) {
-		c.JSON(http.StatusNoContent, gin.H{})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"item": formulaPlant,
-		})
-	}
-}
-
-// ------------------- dashboard ------------------------------ //
-func GetFarmList(c *gin.Context) {
-	var bodyModel model_other.PostBody
-	bodyModel = utility.GetModelFromBody(c)
-	//GetFarmLister(status, uid string) ([]model_services.DashboardFarmList, int)
-	farmList, total := me.Ctrl.GetFarmLister(config.GetStatus().Active, bodyModel.Uid)
-	if total == 0 {
-		c.JSON(http.StatusNoContent, gin.H{})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"item":  farmList,
-			"total": total,
-		})
-	}
-}
-
-func GetFarmAreaDashboardList(c *gin.Context) {
-	var bodyModel model_other.PostBody
-	bodyModel = utility.GetModelFromBody(c)
-	//GetFarmAreaDashboardLister(status, language, farmId string) ([]model_services.DashboardFarmList, int)
-	farmAreaList, total := me.Ctrl.GetFarmAreaDashboardLister(config.GetStatus().Active, bodyModel.Language, bodyModel.FarmId)
-	if total == 0 {
-		c.JSON(http.StatusNoContent, gin.H{})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"item":  farmAreaList,
-			"total": total,
-		})
-	}
 }
 
 func GetFarmAreaDetailSensor(c *gin.Context) {
@@ -335,80 +142,6 @@ func GetFarmAreaDetailSensor(c *gin.Context) {
 	}
 }
 
-func GetOverviewFarm(c *gin.Context) {
-	var bodyModel model_other.PostBody
-	bodyModel = utility.GetModelFromBody(c)
-	//GetOverviewFarmer(status, farmId string) (model_services.MyFarmOverviewFarm)
-	overviewFarm := me.Ctrl.GetOverviewFarmer(config.GetStatus().Active, bodyModel.FarmId)
-	if reflect.DeepEqual(overviewFarm, model_services.MyFarmOverviewFarm{}) {
-		c.JSON(http.StatusNoContent, gin.H{})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"item": overviewFarm,
-		})
-	}
-}
-
-func GetManageMainbox(c *gin.Context) {
-	var bodyModel model_other.PostBody
-	bodyModel = utility.GetModelFromBody(c)
-	// GetManageMainboxer(status, language, farmId string) ([]model_services.MyFarmManageMainbox, int)
-	manageMainbox, total := me.Ctrl.GetManageMainboxer(config.GetStatus().Active, bodyModel.Language, bodyModel.FarmId)
-	if total == 0 {
-		c.JSON(http.StatusNoContent, gin.H{})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"item":  manageMainbox,
-			"total": total,
-		})
-	}
-}
-
-func GetManageFarmArea(c *gin.Context) {
-	var bodyModel model_other.PostBody
-	bodyModel = utility.GetModelFromBody(c)
-	// GetManageFarmAreaer(status, language, farmId string) ([]model_services.MyFarmManageFarmArea, int)
-	manageFarmArea, total := me.Ctrl.GetManageFarmAreaer(config.GetStatus().Active, bodyModel.Language, bodyModel.FarmId)
-	if total == 0 {
-		c.JSON(http.StatusNoContent, gin.H{})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"item":  manageFarmArea,
-			"total": total,
-		})
-	}
-}
-
-func GetManageRole(c *gin.Context) {
-	var bodyModel model_other.PostBody
-	bodyModel = utility.GetModelFromBody(c)
-	// GetManageRoleer(status, language, farmId string) ([]model_services.MyFarmManageRole, int)
-	manageRole, total := me.Ctrl.GetManageRoleer(config.GetStatus().Active, bodyModel.Language, bodyModel.FarmId)
-	if total == 0 {
-		c.JSON(http.StatusNoContent, gin.H{})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"item":  manageRole,
-			"total": total,
-		})
-	}
-}
-
-func GetFarmAreaList(c *gin.Context) {
-	var bodyModel model_other.PostBody
-	bodyModel = utility.GetModelFromBody(c)
-	// GetFarmAreaLister(status, farmId string) ([]model_services.ScheduleFarmArea, int)
-	farmArea, total := me.Ctrl.GetFarmAreaLister(config.GetStatus().Active, bodyModel.FarmId)
-	if total == 0 {
-		c.JSON(http.StatusNoContent, gin.H{})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"item":  farmArea,
-			"total": total,
-		})
-	}
-}
-
 func GetScheRemind(c *gin.Context) {
 	var bodyModel model_other.PostBody
 	bodyModel = utility.GetModelFromBody(c)
@@ -419,11 +152,4 @@ func GetScheRemind(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"item": scheRemind,
 	})
-	//if reflect.ValueOf(scheRemind).IsZero() {
-	//	c.JSON(http.StatusNoContent, gin.H{})
-	//}else {
-	//	c.JSON(http.StatusOK, gin.H{
-	//		"item":  scheRemind,
-	//	})
-	//}
 }
