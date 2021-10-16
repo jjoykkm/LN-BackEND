@@ -158,6 +158,17 @@ func (s *Service) GetFormulaPlantDetail(status string, ReqModel *model_other.Req
 	if err != nil{
 		return nil, err
 	}
+	// Get favorite formula plant
+	_, favMap, _ := s.repo.FindAllFavForPlantId(status, config.GetResType().Map, ReqModel.Uid)
+	// Get planted formula plant
+	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, ReqModel.Uid)
+	for idx, wa := range forPlantDetail {
+		// Check is favorite
+		wa.IsFavorite = favMap[wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()]
+		// Check planted
+		wa.IsPlanted = plantedMap[wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()]
+		forPlantDetail[idx] = wa
+	}
 	return &model_other.RespModel{
 		Item: forPlantDetail,
 		Total: len(forPlantDetail),

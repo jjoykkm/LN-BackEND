@@ -77,6 +77,8 @@ type ForPlantFormula struct {
 	FormulaPlant 	 	 FormulaPlant		`json:"formula_plant" gorm:"embedded"`
 	ForPlantSensor	 	 []ForPlantSensor	`json:"sensor_list" gorm:"foreignkey:FormulaPlantId; references:FormulaPlantId"`
 	ForPlantFert		 []ForPlantFert		`json:"fert_list" gorm:"foreignkey:FormulaPlantId; references:FormulaPlantId"`
+	IsPlanted			 bool				`json:"is_planted"`
+	IsFavorite			 bool				`json:"is_favorite"`
 }
 func (ForPlantFormula) TableName() string {
 	return config.DB_FORMULA_PLANT
