@@ -11,13 +11,12 @@ import (
 
 func GetModelFromBody(c *gin.Context) model_other.ReqModel {
 	var reqModel model_other.ReqModel
-	reqModel.Language = c.Query("lang")
 
-	if err := c.Bind(&ReqModel); err != nil {
+	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, err)
 	}
 	//fmt.Printf("%+v/n", ReqModel)
-	return ReqModel
+	return reqModel
 }
 
 func ConvertToJson(data interface{}) {

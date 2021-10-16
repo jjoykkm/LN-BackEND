@@ -18,7 +18,7 @@ func NewHandler(service Servicer) *Handler {
 
 func (h *Handler) GetOverviewFarm(c *gin.Context) {
 	var reqModel model_other.ReqModel
-	reqModel.Language = c.Query("lang")
+	reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
 	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
@@ -45,7 +45,7 @@ func (h *Handler) GetOverviewFarm(c *gin.Context) {
 
 func (h *Handler) GetManageRole(c *gin.Context) {
 	var reqModel model_other.ReqModel
-	reqModel.Language = c.Query("lang")
+	reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
 	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
@@ -72,7 +72,7 @@ func (h *Handler) GetManageRole(c *gin.Context) {
 
 func (h *Handler) GetManageFarmArea(c *gin.Context) {
 	var reqModel model_other.ReqModel
-	reqModel.Language = c.Query("lang")
+	reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
 	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
@@ -99,7 +99,7 @@ func (h *Handler) GetManageFarmArea(c *gin.Context) {
 
 func (h *Handler) GetManageMainbox(c *gin.Context) {
 	var reqModel model_other.ReqModel
-	reqModel.Language = c.Query("lang")
+	reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
 	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",

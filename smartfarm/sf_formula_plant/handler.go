@@ -18,7 +18,7 @@ func NewHandler(service Servicer) *Handler {
 
 func (h *Handler) GetPlantCategoryList(c *gin.Context) {
 	var reqModel model_other.ReqModel
-	reqModel.Language = c.Query("lang")
+	reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
 	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
@@ -45,7 +45,7 @@ func (h *Handler) GetPlantCategoryList(c *gin.Context) {
 
 func (h *Handler) GetPlantCategoryItem(c *gin.Context) {
 	var reqModel model_other.ReqModel
-	reqModel.Language = c.Query("lang")
+	reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
 	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
@@ -72,7 +72,7 @@ func (h *Handler) GetPlantCategoryItem(c *gin.Context) {
 
 func (h *Handler) GetPlantOverviewByPlant(c *gin.Context) {
 	var reqModel model_other.ReqModel
-	reqModel.Language = c.Query("lang")
+	reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
 	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
@@ -99,7 +99,7 @@ func (h *Handler) GetPlantOverviewByPlant(c *gin.Context) {
 
 func (h *Handler) GetPlantOverviewFavorite(c *gin.Context) {
 	var reqModel model_other.ReqModel
-	reqModel.Language = c.Query("lang")
+	reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
 	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
@@ -126,7 +126,7 @@ func (h *Handler) GetPlantOverviewFavorite(c *gin.Context) {
 
 func (h *Handler) GetMyPlantOverview(c *gin.Context) {
 	var reqModel model_other.ReqModel
-	reqModel.Language = c.Query("lang")
+	reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
 	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
@@ -153,7 +153,7 @@ func (h *Handler) GetMyPlantOverview(c *gin.Context) {
 
 func (h *Handler) GetFormulaPlantDetail(c *gin.Context) {
 	var reqModel model_other.ReqModel
-	reqModel.Language = c.Query("lang")
+	reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
 	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
