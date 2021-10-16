@@ -8,6 +8,7 @@ import (
 	"github.com/jjoykkm/ln-backend/controllers"
 	"github.com/jjoykkm/ln-backend/modelsOld/model_other"
 	"github.com/jjoykkm/ln-backend/modelsOld/model_services"
+	"github.com/jjoykkm/ln-backend/smartfarm/sf_common"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_dashboard"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_formula_plant"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_my_farm"
@@ -71,7 +72,14 @@ func main() {
 	http.Use(cors.Default())
 
 	//cache := cache.New(1*time.Hour, 1*time.Hour)
+	// Common
+	repoCommon := sf_common.NewRepository(db)
+	serviceCommon := sf_common.NewService(repoCommon)
+	handlerCommon := sf_common.NewHandler(serviceCommon)
 
+	http.POST("/common/farmList/api/v1/run", func(c *gin.Context) {
+		handlerCommon.GetFarmList(c)
+	})
 
 	// Formula Plant
 	repoFormulaPlant := sf_formula_plant.NewRepository(db)
@@ -102,9 +110,6 @@ func main() {
 	serviceDashboard := sf_dashboard.NewService(repoDashboard)
 	handlerDashboard := sf_dashboard.NewHandler(serviceDashboard)
 
-	http.POST("/dashboard/farmList/api/v1/run", func(c *gin.Context) {
-		handlerDashboard.GetFarmList(c)
-	})
 	http.POST("/farmAreaDashboardList/farmList/api/v1/run", func(c *gin.Context) {
 		handlerDashboard.GetFarmAreaDashboardList(c)
 	})

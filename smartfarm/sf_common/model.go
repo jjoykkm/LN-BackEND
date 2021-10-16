@@ -47,12 +47,12 @@ func (SenSocMainList) TableName() string {
 //				 	    Plant And PlantType
 //-------------------------------------------------------------------------------//
 //Model
-type FarmSensorDetail struct {
-	FarmArea    	model_db.FarmArea		`json:"farm_area" gorm:"embedded"`
-	FormulaPlant	model_db.FormulaPlant	`json:"formula_plant" gorm:"foreignkey:FormulaPlantId; references:FormulaPlantId"`
-	SensorDetail	[]SenSocMainList		`json:"sensor_detail" gorm:"foreignkey:FarmAreaId; references:FarmAreaId"`
-}
-func (FarmSensorDetail) TableName() string {
-	return config.DB_FARM_AREA
-}
-
+//type FarmSensorDetail struct {
+//	FarmArea    	model_db.FarmArea		`json:"farm_area" gorm:"embedded"`
+//	FormulaPlant	model_db.FormulaPlant	`json:"formula_plant" gorm:"foreignkey:FormulaPlantId; references:FormulaPlantId"`
+//	SensorDetail	[]SenSocMainList		`json:"sensor_detail" gorm:"foreignkey:FarmAreaId; references:FarmAreaId"`
+//}
+//func (FarmSensorDetail) TableName() string {
+//	return config.DB_FARM_AREA
+//}
+//
