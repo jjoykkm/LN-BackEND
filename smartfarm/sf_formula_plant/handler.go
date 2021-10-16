@@ -124,7 +124,7 @@ func (h *Handler) GetPlantOverviewFavorite(c *gin.Context) {
 	c.JSON(http.StatusOK, respModel)
 }
 
-func (h *Handler) GetMyPlantOverview(c *gin.Context) {
+func (h *Handler) GetPlantOfMine(c *gin.Context) {
 	var reqModel model_other.ReqModel
 	reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
 	if err := c.Bind(&reqModel); err != nil {
@@ -134,7 +134,7 @@ func (h *Handler) GetMyPlantOverview(c *gin.Context) {
 		})
 		return
 	}
-	respModel,err := h.service.GetMyPlantOverview(config.GetStatus().Active, &reqModel)
+	respModel,err := h.service.GetPlantOfMine(config.GetStatus().Active, &reqModel)
 	if err != nil {
 		if errx, ok := err.(*errs.ErrContext); ok {
 			if httpCode, ok := mapErrorCode[errx.Code]; ok {

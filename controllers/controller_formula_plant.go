@@ -19,7 +19,7 @@ type IntFormulaPlant interface {
 	GetFavoriteFormulaPlanter(status, uid string) ([]model_databases.FavoritePlant, []string, map[string]bool)
 	GetRateScoreAndPeopleer(formulaPlant model_databases.FormulaPlant) (float32, int)
 	GetPlantOverviewFavoriteer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int)
-	GetMyPlantOverviewer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int)
+	GetPlantOfMineer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int)
 	GetPlantOverviewByPlanter(status, uid, plantId, language string, offset int) ([]model_services.ForPlantItem, int, int)
 	GetFertilizerRatioRelateer(status, formulaPlantId, language string) ([]model_services.ForPlantFert, int)
 	GetSensorValueRecRelateer(status, formulaPlantId, language string) ([]model_services.ForPlantSensor, int)
@@ -210,7 +210,7 @@ func (ln Ln) GetPlantOverviewFavoriteer(status, uid, language string, offset int
 	return plantOverviewArray, currentOffset, total
 }
 
-func (ln Ln) GetMyPlantOverviewer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int) {
+func (ln Ln) GetPlantOfMineer(status, uid, language string, offset int) ([]model_services.ForPlantItem, int, int) {
 	var formulaPlant model_databases.FormulaPlant
 	var plantOverview model_services.ForPlantItem
 	var joinArray []model_services.JoinFormulaPlantAndPlant

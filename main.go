@@ -79,11 +79,11 @@ func main() {
 			}
 			forPlant := api.Group("/formulaPlant")
 			{
-				forPlant.POST("/plantCategoryItem", handlerFormulaPlant.GetPlantCategoryItem)
-				forPlant.POST("/plantOverviewByPlant", handlerFormulaPlant.GetPlantOverviewByPlant)
-				forPlant.POST("/plantOverviewFavorite", handlerFormulaPlant.GetPlantOverviewFavorite)
-				forPlant.POST("/GetMyPlantOverview", handlerFormulaPlant.GetMyPlantOverview)
-				forPlant.POST("/formulaPlantDetail", handlerFormulaPlant.GetFormulaPlantDetail)
+				forPlant.POST("/forPlantCategoryItemList", handlerFormulaPlant.GetPlantCategoryItem)
+				forPlant.POST("/forPlantListByPlant", handlerFormulaPlant.GetPlantOverviewByPlant)
+				forPlant.POST("/forPlantListFavorite", handlerFormulaPlant.GetPlantOverviewFavorite)
+				forPlant.POST("/forPlantListOfMine", handlerFormulaPlant.GetPlantOfMine)
+				forPlant.POST("/forPlantDetail", handlerFormulaPlant.GetFormulaPlantDetail)
 			}
 			dashboard := api.Group("/dashboard")
 			{
@@ -106,7 +106,7 @@ func main() {
 		{
 			forPlant := get.Group("/formulaPlant")
 			{
-				forPlant.GET("/plantCategoryList", handlerFormulaPlant.GetPlantCategoryList)
+				forPlant.GET("/forPlantCategoryList", handlerFormulaPlant.GetPlantCategoryList)
 			}
 			common := get.Group("/common")
 			{

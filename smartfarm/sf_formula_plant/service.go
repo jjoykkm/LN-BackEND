@@ -17,7 +17,7 @@ type Servicer interface {
 	// status, ReqModel.Uid, language string, ReqModel.Offset int
 	GetPlantOverviewFavorite(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error)
 	// status, ReqModel.Uid, language string, ReqModel.Offset int
-	GetMyPlantOverview(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error)
+	GetPlantOfMine(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error)
 	// status, formulaPlasntId, language string
 	GetFormulaPlantDetail(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
 
@@ -128,7 +128,7 @@ func (s *Service) GetPlantOverviewFavorite(status string, ReqModel *model_other.
 	}, nil
 }
 
-func (s *Service) GetMyPlantOverview(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error) {
+func (s *Service) GetPlantOfMine(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error) {
 	forPlant, err := s.repo.FindAllMyFormulaPlant(status, ReqModel.Uid, ReqModel.Offset)
 	if err != nil{
 		return nil, err
