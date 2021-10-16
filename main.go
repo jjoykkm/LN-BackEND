@@ -6,7 +6,7 @@ import (
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/controllers"
 	"github.com/jjoykkm/ln-backend/modelsOld/model_other"
-	"github.com/jjoykkm/ln-backend/smartfarm/sf_common"
+	"github.com/jjoykkm/ln-backend/smartfarm/sf_common/cm_farm"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_dashboard"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_formula_plant"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_my_farm"
@@ -45,9 +45,9 @@ func main() {
 	http.Use(cors.Default())
 
 	// Common
-	repoCommon := sf_common.NewRepository(db)
-	serviceCommon := sf_common.NewService(repoCommon)
-	handlerCommon := sf_common.NewHandler(serviceCommon)
+	repoCommon := cm_farm.NewRepository(db)
+	serviceCommon := cm_farm.NewService(repoCommon)
+	handlerCommon := cm_farm.NewHandler(serviceCommon)
 	// Formula Plant
 	repoFormulaPlant := sf_formula_plant.NewRepository(db)
 	serviceFormulaPlant := sf_formula_plant.NewService(repoFormulaPlant)
@@ -71,10 +71,10 @@ func main() {
 		{
 			common := api.Group("/common")
 			{
-				address := common.Group("/address")
+				farm := common.Group("/farm")
 				{
-					address.POST("/farmList", handlerCommon.GetFarmList)
-					address.POST("/farmAndFarmAreaList", handlerCommon.GetFarmAndFarmAreaList)
+					farm.POST("/farmList", handlerCommon.GetFarmList)
+					farm.POST("/farmAndFarmAreaList", handlerCommon.GetFarmAndFarmAreaList)
 				}
 			}
 			forPlant := api.Group("/formulaPlant")

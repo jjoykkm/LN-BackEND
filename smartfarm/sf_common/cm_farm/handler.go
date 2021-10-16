@@ -1,4 +1,4 @@
-package sf_common
+package cm_farm
 
 import (
 	"github.com/gin-gonic/gin"

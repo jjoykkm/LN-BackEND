@@ -1,4 +1,4 @@
-package sf_common
+package cm_address
 
 const LIMIT_GET_DATA = 100
 

@@ -1,4 +1,4 @@
-package sf_common
+package cm_farm
 
 import (
 	"github.com/jjoykkm/ln-backend/common/models/model_other"
@@ -14,7 +14,7 @@ type Servicer interface {
 }
 
 type Service struct {
-	repo  Repositorier
+	repo Repositorier
 }
 
 func NewService(repo Repositorier) Servicer {
