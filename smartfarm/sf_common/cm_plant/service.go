@@ -20,7 +20,7 @@ func NewService(repo Repositorier) Servicer {
 }
 
 func (s *Service) GetFertAndCatList(status string) (*model_other.RespModel, error) {
-	fert, err := s.repo.GetFertAndCatList(status)
+	fert, err := s.repo.FindAllFertAndCatList(status)
 	if err != nil{
 		return nil, err
 	}
