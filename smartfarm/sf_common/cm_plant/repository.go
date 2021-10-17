@@ -3,11 +3,13 @@ package cm_plant
 import (
 	"errors"
 	"github.com/jjoykkm/ln-backend/common/config"
+	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"gorm.io/gorm"
 )
 
 type Repositorier interface {
-	FindAllFertAndCatList(status string) ([]FertilizerAndCat, error)
+	FindAllFertAndCat(status string) ([]FertilizerAndCat, error)
+	FindAllSensorType(status string) ([]model_db.SensorType, error)
 }
 
 type Repository struct {
@@ -18,7 +20,7 @@ func NewRepository(db *gorm.DB) Repositorier {
 	return &Repository{db: db}
 }
 
-func (r *Repository) FindAllFertAndCatList(status string) ([]FertilizerAndCat, error) {
+func (r *Repository) FindAllFertAndCat(status string) ([]FertilizerAndCat, error) {
 	var result []FertilizerAndCat
 	// Get fertilizer
 	fertId := r.db.Debug().Table(config.DB_FERTILIZER_CAT).Select("fertilizer_cat_id").Where("status_id = ?",
@@ -34,12 +36,9 @@ func (r *Repository) FindAllFertAndCatList(status string) ([]FertilizerAndCat, e
 	}
 	return result, nil
 }
-func (r *Repository) GetFertAndCatList(status string) ([]FertilizerAndCat, error) {
-	var result []FertilizerAndCat
-	resp := r.db.Debug().Where("status_id = ?", status).Preload("Fertilizer",
-		func(db *gorm.DB) *gorm.DB {
-			return r.db.Debug().Or("fertilizer_cat_id IN (?)",fertId)
-		}).Find(&result)
+func (r *Repository) FindAllSensorType(status string) ([]model_db.SensorType, error) {
+	var result []model_db.SensorType
+	resp := r.db.Debug().Where("status_id = ?", status).Find(&result)
 
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error

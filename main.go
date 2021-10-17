@@ -134,6 +134,7 @@ func main() {
 				plant := common.Group("/plant")
 				{
 					plant.GET("/fertAndCatList", handlerCommonPlant.GetFertAndCatList)
+					plant.GET("/sensorTypeList", handlerCommonPlant.GetSensorTypeList)
 				}
 			}
 		}
