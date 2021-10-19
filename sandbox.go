@@ -50,7 +50,7 @@ func doRequest() error {
 	}
 }
 
-func main()  {
+func jjjj()  {
 	//var fm Farm
 	db, err := gorm.Open(postgres.New(postgres.Config{
 		DSN:                  config.DSN,
