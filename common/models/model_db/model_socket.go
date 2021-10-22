@@ -19,6 +19,7 @@ type Socket struct {
 	ChangeDate	    time.Time	 `json:"change_date"`
 	SocketNumber	int64		 `json:"socket_number"`
 	StatusSensorId	uuid.UUID	 `json:"status_sensor_id"`
+	MainboxId     	uuid.UUID	 `json:"mainbox_id"`
 }
 // New instance socket
 func (u *Socket) New() *Socket {
@@ -31,6 +32,7 @@ func (u *Socket) New() *Socket {
 		ChangeDate:			u.ChangeDate ,
 		SocketNumber:		u.SocketNumber ,
 		StatusSensorId:		u.StatusSensorId ,
+		MainboxId:			u.MainboxId ,
 	}
 }
 

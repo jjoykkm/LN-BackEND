@@ -16,7 +16,6 @@ type TransSocketArea struct {
 	CreateDate		time.Time	 `json:"create_date"`
 	ChangeDate	    time.Time	 `json:"change_date"`
 	StatusId		uuid.UUID	 `json:"status_id"`
-	MainboxId     	uuid.UUID	 `json:"mainbox_id"`
 }
 // New instance trans_socket_area
 func (u *TransSocketArea) New() *TransSocketArea {
@@ -26,7 +25,6 @@ func (u *TransSocketArea) New() *TransSocketArea {
 		CreateDate:		u.CreateDate ,
 		ChangeDate:		u.ChangeDate ,
 		StatusId:		u.StatusId ,
-		MainboxId:		u.MainboxId ,
 	}
 }
 

@@ -26,11 +26,6 @@ type Ln struct {
 
 var me Ln
 
-type Jj struct {
-	Jjoy string
-	Eiei string
-}
-
 func main() {
 	db, err := gorm.Open(postgres.New(postgres.Config{
 		DSN:                  config.DSN,

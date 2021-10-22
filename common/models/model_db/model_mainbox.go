@@ -20,6 +20,7 @@ type Mainbox struct {
 	CreateDate		time.Time	 `json:"create_date"`
 	ChangeDate	    time.Time	 `json:"change_date"`
 	StatusId		uuid.UUID	 `json:"status_id"`
+	FarmId			uuid.UUID	 `json:"farm_id"`
 }
 // New instance mainbox
 func (u *Mainbox) New() *Mainbox {
@@ -33,6 +34,7 @@ func (u *Mainbox) New() *Mainbox {
 		CreateDate:			u.CreateDate ,
 		ChangeDate:			u.ChangeDate ,
 		StatusId:			u.StatusId ,
+		FarmId:				u.FarmId ,
 	}
 }
 
