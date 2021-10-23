@@ -15,7 +15,7 @@ func GetModelFromBody(c *gin.Context) model_other.ReqModel {
 	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, err)
 	}
-	//fmt.Printf("%+v/n", ReqModel)
+	//fmt.Printf("%+v/n", reqModel)
 	return reqModel
 }
 

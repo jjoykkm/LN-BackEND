@@ -9,17 +9,17 @@ import (
 type Servicer interface {
 	// Service for API
 	// status, language string
-	GetPlantCategoryList(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
-	// status, plantTypeId, language string, ReqModel.Offset int
-	GetPlantCategoryItem(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error)
-	// status, ReqModel.Uid, plantId string, ReqModel.Offset int
-	GetPlantOverviewByPlant(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error)
-	// status, ReqModel.Uid, language string, ReqModel.Offset int
-	GetPlantOverviewFavorite(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error)
-	// status, ReqModel.Uid, language string, ReqModel.Offset int
-	GetPlantOfMine(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error)
+	GetPlantCategoryList(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error)
+	// status, plantTypeId, language string, reqModel.Offset int
+	GetPlantCategoryItem(status string, reqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error)
+	// status, reqModel.Uid, plantId string, reqModel.Offset int
+	GetPlantOverviewByPlant(status string, reqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error)
+	// status, reqModel.Uid, language string, reqModel.Offset int
+	GetPlantOverviewFavorite(status string, reqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error)
+	// status, reqModel.Uid, language string, reqModel.Offset int
+	GetPlantOfMine(status string, reqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error)
 	// status, formulaPlasntId, language string
-	GetFormulaPlantDetail(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
+	GetFormulaPlantDetail(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error)
 
 	// Function
 	GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlant) (float32, int)
@@ -35,7 +35,7 @@ func NewService(repo Repositorier) Servicer {
 	}
 }
 
-func (s *Service) GetPlantCategoryList(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error) {
+func (s *Service) GetPlantCategoryList(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error) {
 	plantTypeList, err := s.repo.FindAllPlantType(status)
 	if err != nil{
 		return nil, err
@@ -47,14 +47,14 @@ func (s *Service) GetPlantCategoryList(status string, ReqModel *model_other.ReqM
 	}, nil
 }
 
-func (s *Service) GetPlantCategoryItem(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error) {
-	joinList, err := s.repo.FindAllPlantWithPlantType(status, ReqModel.PlantTypeId, ReqModel.Offset)
+func (s *Service) GetPlantCategoryItem(status string, reqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error) {
+	joinList, err := s.repo.FindAllPlantWithPlantType(status, reqModel.PlantTypeId, reqModel.Offset)
 	if err != nil{
 		return nil, err
 	}
 
 	//for idx, join := range joinList {
-	//	switch ReqModel.Language {
+	//	switch reqModel.Language {
 	//	case config.GetLanguage().En:
 	//		join.PlantType.PlantTypeTH = ""
 	//		join.Plant.PlantNameTH = ""
@@ -72,7 +72,7 @@ func (s *Service) GetPlantCategoryItem(status string, ReqModel *model_other.ReqM
 	//}
 	//
 	total := len(joinList)
-	currentOffset := ReqModel.Offset + total
+	currentOffset := reqModel.Offset + total
 
 	return &model_other.RespOffsetModel{
 		Item: joinList,
@@ -81,15 +81,15 @@ func (s *Service) GetPlantCategoryItem(status string, ReqModel *model_other.ReqM
 	}, nil
 }
 
-func (s *Service) GetPlantOverviewByPlant(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error) {
-	forPlant, err := s.repo.FindAllFormulaPlantByPlant(status, ReqModel.PlantId, ReqModel.Offset)
+func (s *Service) GetPlantOverviewByPlant(status string, reqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error) {
+	forPlant, err := s.repo.FindAllFormulaPlantByPlant(status, reqModel.PlantId, reqModel.Offset)
 	if err != nil{
 		return nil, err
 	}
 	// Get favorite formula plant
-	_, favMap, _ := s.repo.FindAllFavForPlantId(status, config.GetResType().Map, ReqModel.Uid)
+	_, favMap, _ := s.repo.FindAllFavForPlantId(status, config.GetResType().Map, reqModel.Uid)
 	// Get planted formula plant
-	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, ReqModel.Uid)
+	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, reqModel.Uid)
 	for idx, wa := range forPlant {
 		// Check is favorite
 		wa.IsFavorite = favMap[wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()]
@@ -98,7 +98,7 @@ func (s *Service) GetPlantOverviewByPlant(status string, ReqModel *model_other.R
 		forPlant[idx] = wa
 	}
 	total := len(forPlant)
-	currentOffset := ReqModel.Offset + total
+	currentOffset := reqModel.Offset + total
 	return &model_other.RespOffsetModel{
 		Item: forPlant,
 		Offset: currentOffset,
@@ -106,13 +106,13 @@ func (s *Service) GetPlantOverviewByPlant(status string, ReqModel *model_other.R
 	},nil
 }
 
-func (s *Service) GetPlantOverviewFavorite(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error) {
-	forPlant, err := s.repo.FindAllFormulaPlantFavorite(status, ReqModel.Uid, ReqModel.Offset)
+func (s *Service) GetPlantOverviewFavorite(status string, reqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error) {
+	forPlant, err := s.repo.FindAllFormulaPlantFavorite(status, reqModel.Uid, reqModel.Offset)
 	if err != nil{
 		return nil, err
 	}
 	// Get planted formula plant
-	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, ReqModel.Uid)
+	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, reqModel.Uid)
 	for idx, wa := range forPlant {
 		wa.IsFavorite = true
 		// Check planted
@@ -120,7 +120,7 @@ func (s *Service) GetPlantOverviewFavorite(status string, ReqModel *model_other.
 		forPlant[idx] = wa
 	}
 	total := len(forPlant)
-	currentOffset := ReqModel.Offset + total
+	currentOffset := reqModel.Offset + total
 	return &model_other.RespOffsetModel{
 		Item: forPlant,
 		Offset: currentOffset,
@@ -128,15 +128,15 @@ func (s *Service) GetPlantOverviewFavorite(status string, ReqModel *model_other.
 	}, nil
 }
 
-func (s *Service) GetPlantOfMine(status string, ReqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error) {
-	forPlant, err := s.repo.FindAllMyFormulaPlant(status, ReqModel.Uid, ReqModel.Offset)
+func (s *Service) GetPlantOfMine(status string, reqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error) {
+	forPlant, err := s.repo.FindAllMyFormulaPlant(status, reqModel.Uid, reqModel.Offset)
 	if err != nil{
 		return nil, err
 	}
 	// Get favorite formula plant
-	_, favMap, _ := s.repo.FindAllFavForPlantId(status, config.GetResType().Map, ReqModel.Uid)
+	_, favMap, _ := s.repo.FindAllFavForPlantId(status, config.GetResType().Map, reqModel.Uid)
 	// Get planted formula plant
-	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, ReqModel.Uid)
+	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, reqModel.Uid)
 	for idx, wa := range forPlant {
 		// Check is favorite
 		wa.IsFavorite = favMap[wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()]
@@ -145,7 +145,7 @@ func (s *Service) GetPlantOfMine(status string, ReqModel *model_other.ReqModel) 
 		forPlant[idx] = wa
 	}
 	total := len(forPlant)
-	currentOffset := ReqModel.Offset + total
+	currentOffset := reqModel.Offset + total
 	return &model_other.RespOffsetModel{
 		Item: forPlant,
 		Offset: currentOffset,
@@ -153,15 +153,15 @@ func (s *Service) GetPlantOfMine(status string, ReqModel *model_other.ReqModel) 
 	}, nil
 }
 
-func (s *Service) GetFormulaPlantDetail(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error) {
-	forPlantDetail, err := s.repo.FindAllFormulaPlantDetail(status, ReqModel.FormulaPlantId)
+func (s *Service) GetFormulaPlantDetail(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error) {
+	forPlantDetail, err := s.repo.FindAllFormulaPlantDetail(status, reqModel.FormulaPlantId)
 	if err != nil{
 		return nil, err
 	}
 	// Get favorite formula plant
-	_, favMap, _ := s.repo.FindAllFavForPlantId(status, config.GetResType().Map, ReqModel.Uid)
+	_, favMap, _ := s.repo.FindAllFavForPlantId(status, config.GetResType().Map, reqModel.Uid)
 	// Get planted formula plant
-	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, ReqModel.Uid)
+	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, reqModel.Uid)
 	for idx, wa := range forPlantDetail {
 		// Check is favorite
 		wa.IsFavorite = favMap[wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()]

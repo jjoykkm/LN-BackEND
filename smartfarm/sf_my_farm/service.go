@@ -8,13 +8,15 @@ import (
 type Servicer interface {
 	GetAuthorizeCheckForManageFarm(uid, farmId string) (bool, error)
 	// FarmId
-	GetOverviewFarm(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
+	GetOverviewFarm(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error)
 	// FarmId
-	GetManageRole(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
+	GetManageRole(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error)
 	// FarmId
-	GetManageFarmArea(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
+	GetManageFarmArea(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error)
 	// FarmId
-	GetManageMainbox(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
+	GetManageMainbox(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error)
+
+	//CheckMainboxIsInactivated()
 }
 
 type Service struct {
@@ -39,18 +41,18 @@ func (s *Service) GetAuthorizeCheckForManageFarm(uid, farmId string) (bool, erro
 	return authManage, err
 }
 
-func (s *Service) GetOverviewFarm(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error) {
-	farm, err := s.repo.FindOneFarm(status, ReqModel.FarmId)
+func (s *Service) GetOverviewFarm(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error) {
+	farm, err := s.repo.FindOneFarm(status, reqModel.FarmId)
 	if err != nil{
 		return nil, err
 	}
 	// Get Mainbox count
-	farm.MainboxCount, err = s.repo.GetCountMainbox(status, ReqModel.FarmId)
+	farm.MainboxCount, err = s.repo.GetCountMainbox(status, reqModel.FarmId)
 	if err != nil{
 		return nil, err
 	}
 	// Get Farm area count
-	farm.FarmAreaCount, err = s.repo.GetCountFarmArea(status, ReqModel.FarmId)
+	farm.FarmAreaCount, err = s.repo.GetCountFarmArea(status, reqModel.FarmId)
 	if err != nil{
 		return nil, err
 	}
@@ -60,9 +62,9 @@ func (s *Service) GetOverviewFarm(status string, ReqModel *model_other.ReqModel)
 	}, nil
 }
 
-func (s *Service) GetManageRole(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error) {
+func (s *Service) GetManageRole(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error) {
 	// Check auth for edit
-	//isAuth, err := Servicer.GetAuthorizeCheckForManageFarm(s, ReqModel.Uid, ReqModel.FarmId)
+	//isAuth, err := Servicer.GetAuthorizeCheckForManageFarm(s, reqModel.Uid, reqModel.FarmId)
 	//if err != nil{
 	//	return nil, err
 	//}
@@ -75,7 +77,7 @@ func (s *Service) GetManageRole(status string, ReqModel *model_other.ReqModel) (
 	//	}
 	//}
 
-	manageRole, err := s.repo.FindAllManageRole(status, ReqModel.FarmId)
+	manageRole, err := s.repo.FindAllManageRole(status, reqModel.FarmId)
 	if err != nil{
 		return nil, err
 	}
@@ -85,8 +87,8 @@ func (s *Service) GetManageRole(status string, ReqModel *model_other.ReqModel) (
 	}, nil
 }
 
-func (s *Service) GetManageFarmArea(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error) {
-	manageFarmArea, err := s.repo.FindAllManageFarmArea(status, ReqModel.FarmId)
+func (s *Service) GetManageFarmArea(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error) {
+	manageFarmArea, err := s.repo.FindAllManageFarmArea(status, reqModel.FarmId)
 	if err != nil{
 		return nil, err
 	}
@@ -96,8 +98,8 @@ func (s *Service) GetManageFarmArea(status string, ReqModel *model_other.ReqMode
 	}, nil
 }
 
-func (s *Service) GetManageMainbox(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error) {
-	manageFarmArea, err := s.repo.FindAllManageMainbox(status, ReqModel.FarmId)
+func (s *Service) GetManageMainbox(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error) {
+	manageFarmArea, err := s.repo.FindAllManageMainbox(status, reqModel.FarmId)
 	if err != nil{
 		return nil, err
 	}

@@ -9,6 +9,7 @@ import (
 
 type Repositorier interface {
 	FindOneFarm(status, farmId string) (*FarmOverview, error)
+	FindOneMainboxBySerialNo (serialNo string) (*model_db.Mainbox, error)
 	GetCountMainbox(status, farmId string) (int64, error)
 	GetCountFarmArea(status, farmId string) (int64, error)
 	FindOneTransManagement(uid, farmId string) (*model_db.TransManagement, error)
@@ -42,6 +43,16 @@ func (r *Repository) FindOneFarm(status, farmId string) (*FarmOverview, error) {
 
 	resp := r.db.Debug().Where("status_id = ? AND farm_id = ?", status, farmId).First(&result)
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
+		return nil, resp.Error
+	}
+	return &result, nil
+}
+
+func (r *Repository) FindOneMainboxBySerialNo (serialNo string) (*model_db.Mainbox, error) {
+	var result model_db.Mainbox
+
+	resp := r.db.Debug().Where("mainbox_serial_no = ?", serialNo).First(&result)
+	if resp.Error != nil {
 		return nil, resp.Error
 	}
 	return &result, nil

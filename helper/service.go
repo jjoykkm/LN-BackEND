@@ -15,13 +15,13 @@ func NewService(repo Repositorier) Servicer {
 }
 
 //func (s *Service) GetModelFromBody(c *gin.Context) helper.PostReqModel {
-//	var ReqModel helper.PostReqModel
+//	var reqModel helper.PostReqModel
 //
 //	jsonData, err := c.GetRawData()
 //	if err != nil {
 //		c.JSON(http.StatusBadRequest, err)
 //	}
 //	json.Unmarshal([]byte(jsonData), &ReqModel)
-//	//fmt.Printf("%+v/n", ReqModel)
-//	return ReqModel
+//	//fmt.Printf("%+v/n", reqModel)
+//	return reqModel
 //}

@@ -1,6 +1,7 @@
 package sf_my_farm
 
 import (
+	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
 )
@@ -84,12 +85,12 @@ type ManageMainbox struct {
 	SenSocDetail	[]SenSocMainList	`json:"socket_detail" gorm:"foreignkey:MainboxId; references:MainboxId"`
 }
 // New instance
-//func (u *ManageMainbox) New() *ManageMainbox {
-//	return &ManageMainbox{
-//		Mainbox:		u.Mainbox ,
-//		SenSocDetail:	u.SenSocDetail ,
-//	}
-//}
+func (u *ManageMainbox) New() *ManageMainbox {
+	return &ManageMainbox{
+		Mainbox:		u.Mainbox ,
+		SenSocDetail:	u.SenSocDetail ,
+	}
+}
 func (ManageMainbox) TableName() string {
 	return config.DB_MAINBOX
 }
@@ -115,4 +116,18 @@ func (u *ManageRole) New() *ManageRole {
 func (ManageRole) TableName() string {
 	return config.DB_TRANS_MANAGEMENT
 }
-
+//-------------------------------------------------------------------------------//
+//							Request Mainbox
+//-------------------------------------------------------------------------------//
+//Model
+type ReqMainbox struct {
+	MainboxName     	string		 `json:"mainbox_name"`
+	MainboxSerialNo		uuid.UUID	 `json:"serial_no"`
+}
+// New instance
+func (u *ReqMainbox) New() *ReqMainbox {
+	return &ReqMainbox{
+		MainboxName:		u.MainboxName ,
+		MainboxSerialNo:	u.MainboxSerialNo ,
+	}
+}

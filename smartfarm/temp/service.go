@@ -6,9 +6,9 @@ import (
 
 type Servicer interface {
 	// status, uid string
-	GetFarmList(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
+	GetFarmList(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error)
 	//status, farmId string
-	GetFarmAreaDashboardList(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error)
+	GetFarmAreaDashboardList(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error)
 }
 
 type Service struct {
@@ -21,8 +21,8 @@ func NewService(repo Repositorier) Servicer {
 	}
 }
 
-func (s *Service) GetFarmList(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error) {
-	myFarm, err := s.repo.FindAllMyFarm(status, ReqModel.Uid)
+func (s *Service) GetFarmList(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error) {
+	myFarm, err := s.repo.FindAllMyFarm(status, reqModel.Uid)
 	if err != nil{
 		return nil, err
 	}
@@ -32,8 +32,8 @@ func (s *Service) GetFarmList(status string, ReqModel *model_other.ReqModel) (*m
 	}, nil
 }
 
-func (s *Service) GetFarmAreaDashboardList(status string, ReqModel *model_other.ReqModel) (*model_other.RespModel, error) {
-	dashboardList, err := s.repo.FindAllFarmAreaDashboard(status, ReqModel.FarmId)
+func (s *Service) GetFarmAreaDashboardList(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error) {
+	dashboardList, err := s.repo.FindAllFarmAreaDashboard(status, reqModel.FarmId)
 	if err != nil{
 		return nil, err
 	}
