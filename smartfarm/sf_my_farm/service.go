@@ -3,10 +3,10 @@ package sf_my_farm
 import (
 	"errors"
 	"github.com/jjoykkm/ln-backend/common/config"
-	"github.com/jjoykkm/ln-backend/common/models/model_db"
+	//"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"github.com/jjoykkm/ln-backend/common/models/model_other"
 	"github.com/jjoykkm/ln-backend/errs"
-	"github.com/mitchellh/mapstructure"
+	//"github.com/mitchellh/mapstructure"
 	"gorm.io/gorm"
 )
 
@@ -148,9 +148,9 @@ func (s *Service) ActivateMainbox(reqModel *ReqMainbox) error {
 	if !isInactive || err != nil {
 		return err
 	}
-	data := model_db.Mainbox{}
-	mapstructure.Decode(reqModel, &data)
-	err = s.repo.UpdateOneMainboxBySerialNo(&data)
+	//data := model_db.Mainbox{}
+	//mapstructure.Decode(reqModel, &data)
+	err = s.repo.UpdateOneMainboxBySerialNo(reqModel)
 	if err != nil{
 		return err
 	}

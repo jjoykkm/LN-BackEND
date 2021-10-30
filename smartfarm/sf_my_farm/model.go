@@ -133,6 +133,9 @@ func (u *ReqMainbox) New() *ReqMainbox {
 		StatusId:			u.StatusId ,
 	}
 }
+func (ReqMainbox) TableName() string {
+	return config.DB_MAINBOX
+}
 
 //-------------------------------------------------------------------------------//
 //							Request Socket And Sensor
