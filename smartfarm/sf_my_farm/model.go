@@ -122,12 +122,59 @@ func (ManageRole) TableName() string {
 //Model
 type ReqMainbox struct {
 	MainboxName     	string		 `json:"mainbox_name"`
-	MainboxSerialNo		uuid.UUID	 `json:"serial_no"`
+	MainboxSerialNo		string		 `json:"serial_no"`
+	StatusId			uuid.UUID	 `json:"status_id"`
 }
 // New instance
 func (u *ReqMainbox) New() *ReqMainbox {
 	return &ReqMainbox{
 		MainboxName:		u.MainboxName ,
 		MainboxSerialNo:	u.MainboxSerialNo ,
+		StatusId:			u.StatusId ,
 	}
 }
+
+//-------------------------------------------------------------------------------//
+//							Request Socket And Sensor
+//-------------------------------------------------------------------------------//
+//Model
+type ReqSocSen struct {
+	SocketId      	uuid.UUID	 `json:"socket_id"`
+	SensorId      	uuid.UUID	 `json:"sensor_id"`
+	StatusId		uuid.UUID	 `json:"status_id"`
+	SocketName      string	 	 `json:"socket_name"`
+	SocketNumber	int64		 `json:"socket_number"`
+	StatusSensorId	uuid.UUID	 `json:"status_sensor_id"`
+	MainboxId     	uuid.UUID	 `json:"mainbox_id"`
+
+}
+// New instance
+func (u *ReqSocSen) New() *ReqSocSen {
+	return &ReqSocSen{
+		SocketId:			u.SocketId ,
+		SensorId:			u.SensorId ,
+		StatusId:			u.StatusId ,
+		SocketName:			u.SocketName ,
+		SocketNumber:		u.SocketNumber ,
+		StatusSensorId:		u.StatusSensorId ,
+		MainboxId:			u.MainboxId ,
+	}
+}
+
+//-------------------------------------------------------------------------------//
+//							Request Config Mainbox
+//-------------------------------------------------------------------------------//
+//Model
+type ReqConfMainbox struct {
+	MainboxId      		uuid.UUID	 `json:"mainbox_id"`
+	MainboxName     	string		 `json:"mainbox_name"`
+	SocketSensor     	[]ReqSocSen	 `json:"socket_sensor"`
+}
+// New instance
+func (u *ReqConfMainbox) New() *ReqConfMainbox {
+	return &ReqConfMainbox{
+		MainboxId:			u.MainboxId ,
+		MainboxName:		u.MainboxName ,
+	}
+}
+

@@ -1,8 +1,13 @@
 package sf_my_farm
 
 import (
+	"errors"
 	"github.com/jjoykkm/ln-backend/common/config"
+	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"github.com/jjoykkm/ln-backend/common/models/model_other"
+	"github.com/jjoykkm/ln-backend/errs"
+	"github.com/mitchellh/mapstructure"
+	"gorm.io/gorm"
 )
 
 type Servicer interface {
@@ -16,7 +21,8 @@ type Servicer interface {
 	// FarmId
 	GetManageMainbox(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error)
 
-	//CheckMainboxIsInactivated()
+	CheckMainboxIsInactivated(serialNo string) (bool, error)
+	ActivateMainbox(reqModel *ReqMainbox) error
 }
 
 type Service struct {
@@ -107,4 +113,46 @@ func (s *Service) GetManageMainbox(status string, reqModel *model_other.ReqModel
 		Item: manageFarmArea,
 		Total: len(manageFarmArea),
 	}, nil
+}
+
+func (s *Service) CheckMainboxIsInactivated(serialNo string) (bool, error) {
+	mainbox, err := s.repo.FindOneMainboxBySerialNo(serialNo)
+	if err != nil{
+		// Check serial no has been found in DB
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return false, &errs.ErrContext{
+					Code: ERROR_4001002,
+					Err:  err,
+					Msg:  MSG_WRONG_MB,
+				}
+		}else {
+			return false, err
+		}
+	}
+	// Check serial no is inactive
+	if mainbox.StatusId.UUID.String() == config.GetStatus().Inactive {
+		return true, nil
+	}else {
+		return false, &errs.ErrContext{
+			Code: ERROR_4001001,
+			Err:  err,
+			Msg:  MSG_DUP_MB,
+		}
+	}
+}
+//-------------------------------------------------------------------------------//
+//							Update data
+//-------------------------------------------------------------------------------//
+func (s *Service) ActivateMainbox(reqModel *ReqMainbox) error {
+	isInactive, err := s.CheckMainboxIsInactivated(reqModel.MainboxSerialNo)
+	if !isInactive || err != nil {
+		return err
+	}
+	data := model_db.Mainbox{}
+	mapstructure.Decode(reqModel, &data)
+	err = s.repo.UpdateOneMainboxBySerialNo(&data)
+	if err != nil{
+		return err
+	}
+	return nil
 }

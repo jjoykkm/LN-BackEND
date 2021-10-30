@@ -2,33 +2,33 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/common/config"
-	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
-	"github.com/jjoykkm/ln-backend/smartfarm/sf_my_farm"
+	//"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
+	//"github.com/jjoykkm/ln-backend/smartfarm/sf_my_farm"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"net/http"
 )
-
-//type Test struct {
-//	Plant  model_db.Plant `gorm:"embedded"`
-//	PlantType  model_db.PlantType `gorm:"foreignkey:PlantTypeId; references:PlantTypeId"`
-//}
-
+type Test101 struct {
+	Id 		int
+	Name 	string
+	Fname 	string
+	Lname 	string
+}
+func (Test101) TableName() string {
+	return "test101"
+}
 type JJ struct {
-	//PlantId         uuid.UUID	 `gorm:"primaryKey" json:"plant_id"`
-	//PlantTypeId     uuid.UUID	 //`gorm:"column:plant_type_id" json:"plant_type_id"`
-	////CreateDate		time.Time	 `json:"create_date"`
-	////ChangeDate	    time.Time	 `json:"change_date"`
-	////StatusId		uuid.UUID	 `json:"status_id"`
-	////Plant1     	Plant	 	`gorm:"embedded"`//`gorm:"embeddedPrefix:p_"` // //
-	Plant  model_databases.Plant `gorm:"embedded"`
-	PlantType  model_databases.PlantType `gorm:"foreignkey:PlantTypeId; references:PlantTypeId"` //`gorm:"embeddedPrefix:pt_"` //
+	Jjoy string
+	Eiei string
+	//Kiki string
+	//Test101 []Test101	`gorm:"foreignkey:Jjoy; references:Jjoy"`
 }
 func (JJ) TableName() string {
-	return "plant"
+	return "tests"
 }
 type RequestError struct {
 	StatusCode int
@@ -50,7 +50,7 @@ func doRequest() error {
 	}
 }
 
-func jjjj()  {
+func main()  {
 	//var fm Farm
 	db, err := gorm.Open(postgres.New(postgres.Config{
 		DSN:                  config.DSN,
@@ -77,9 +77,29 @@ func jjjj()  {
 			})
 		})
 	}
+	//activeId := uuid.UUID{}.Get()
 
+	fmt.Println("***********************************")
 
-	//fmt.Println("***********************************")
+	var (
+		data JJ
+		wa_test Test101
+		test1 []Test101
+	)
+	data.Jjoy = "333"
+	//data.Eiei = "666"
+	//db.Debug().Save(&data)
+	wa_test.Id = 111
+	wa_test.Name = "test1"
+	test1 = append(test1, wa_test)
+	wa_test.Id = 222
+	wa_test.Name = "test2"
+	test1 = append(test1, wa_test)
+	//data.Test101 = test1
+	fmt.Printf("%+v,\n", data)
+	db.Debug().Where("jjoy = ?", "333").Updates(&data)
+	//db.Debug().Create(&data)
+
 	//ss := doRequest()
 	//if ss != nil {
 	//	fmt.Println(ss)
@@ -122,7 +142,7 @@ func jjjj()  {
 	//		return senSocMain
 	//	})
 	//db.Debug().Preload("Mainbox").Find(&result)
-	result := []sf_my_farm.SensorDetail{}
+	//result := []sf_my_farm.SensorDetail{}
 	////Get Sensor Detail
 	//sensorDet := db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("SensorType",
 	//	"status_id = ?", config.GetStatus().Active)
@@ -133,7 +153,7 @@ func jjjj()  {
 	//		return sensorDet
 	//	})
 	// Get Sensor, Socket
-	db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("Socket").Preload("StatusSensor").Preload("Sensor").Find(&result)
+	//db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("Socket").Preload("StatusSensor").Preload("Sensor").Find(&result)
 	//,
 	//	func(db *gorm.DB) *gorm.DB {
 	//		return socketDet
@@ -156,7 +176,7 @@ func jjjj()  {
 
 	http.POST("/test", func(c *gin.Context) {
 		c.JSON(200, gin.H{
-			"01": result,
+			//"01": result,
 			//"01": result,
 		})
 	})

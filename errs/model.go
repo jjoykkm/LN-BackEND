@@ -6,7 +6,7 @@ package errs
 //Model post body
 type ErrContext struct {
 	Code	string	`json:"code"`
-	Err		error
+	Err		error	`json:"-"`
 	Msg		string	`json:"msg"`
 }
 
@@ -20,6 +20,6 @@ func (u *ErrContext) New() *ErrContext {
 }
 
 // For Assertions
-func (r *ErrContext) Error() string {
-	return r.Err.Error()
+func (u *ErrContext) Error() string {
+	return u.Err.Error()
 }

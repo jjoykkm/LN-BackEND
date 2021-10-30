@@ -107,6 +107,7 @@ func main() {
 				myFarm.POST("/manageRole", handlerMyFarm.GetManageRole)
 				myFarm.POST("/manageFarmArea", handlerMyFarm.GetManageFarmArea)
 				myFarm.POST("/manageMainbox", handlerMyFarm.GetManageMainbox)
+				myFarm.POST("/activateMainbox", handlerMyFarm.ActivateMainbox)
 			}
 			//scheRem := app.Group("/scheRem")
 			//{

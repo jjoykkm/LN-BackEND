@@ -2,6 +2,7 @@ package sf_my_farm
 
 import (
 	"errors"
+	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"gorm.io/gorm"
@@ -16,6 +17,7 @@ type Repositorier interface {
 	FindAllManageRole(status, farmId string) ([]ManageRole, error)
 	FindAllManageFarmArea(status, farmId string) ([]ManageFarmArea, error)
 	FindAllManageMainbox(status, farmId string) ([]ManageMainbox, error)
+	UpdateOneMainboxBySerialNo (req *model_db.Mainbox) error
 
 	//FindAllPlantType(status string) ([]model_db.PlantType, error)
 	//GetFarmListWithRoleer(status, uid, roleId string) ([]model_services.DashboardFarmList, int)
@@ -176,4 +178,48 @@ func (r *Repository) FindAllManageMainbox(status, farmId string) ([]ManageMainbo
 		return nil, resp.Error
 	}
 	return result, nil
+}
+
+//-------------------------------------------------------------------------------//
+//							Update Data
+//-------------------------------------------------------------------------------//
+func (r *Repository) UpdateOneMainboxBySerialNo (req *model_db.Mainbox) error {
+	resp := r.db.Debug().Model(&model_db.Mainbox{}).Where("mainbox_serial_no = ?",
+			req.MainboxSerialNo).Updates(&req).Update("status_id", // Get active status
+				r.db.Model(&model_db.Status{}).Select("status_id").Where("status_id = ?",
+					config.GetStatus().Active))
+	if resp.Error != nil {
+		return resp.Error
+	}
+	if resp.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}
+
+
+//-------------------------------------------------------------------------------//
+//							Insert Data
+//-------------------------------------------------------------------------------//
+func (r *Repository) InsertMainboxName (req *model_db.Mainbox) error {
+	resp := r.db.Debug().Model(&model_db.Mainbox{}).Where("mainbox_id = ?",
+		req.MainboxId).Updates(&req)
+	if resp.Error != nil {
+		return resp.Error
+	}
+	if resp.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}
+func (r *Repository) InsertSocketSensor (req *model_db.Socket) (uuid.UUID, error) {
+	resp := r.db.Debug().Model(&model_db.Mainbox{}).Where("mainbox_id = ?",
+		req.MainboxId).Updates(&req)
+	if resp.Error != nil {
+		return resp.Error
+	}
+	if resp.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
 }

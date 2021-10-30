@@ -21,7 +21,7 @@ type Mainbox struct {
 	ChangeDate	    	time.Time	 `json:"change_date"`
 	StatusId			uuid.UUID	 `json:"status_id"`
 	FarmId				uuid.UUID	 `json:"farm_id"`
-	MainboxSerialNo		uuid.UUID	 `json:"serial_no"`
+	MainboxSerialNo		string		 `json:"serial_no"`
 }
 // New instance mainbox
 func (u *Mainbox) New() *Mainbox {
