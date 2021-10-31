@@ -3,6 +3,7 @@ package sf_my_farm
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/common/config"
+	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"github.com/jjoykkm/ln-backend/common/models/model_other"
 	"github.com/jjoykkm/ln-backend/errs"
 	"net/http"
@@ -125,7 +126,7 @@ func (h *Handler) GetManageMainbox(c *gin.Context) {
 }
 
 func (h *Handler) ActivateMainbox(c *gin.Context) {
-	var reqModel ReqMainbox
+	var reqModel model_db.MainboxSerialUS
 	//reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
 	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
@@ -135,6 +136,32 @@ func (h *Handler) ActivateMainbox(c *gin.Context) {
 		return
 	}
 	err := h.service.ActivateMainbox(&reqModel)
+	if err != nil {
+		if errx, ok := err.(*errs.ErrContext); ok {
+			if httpCode, ok := mapErrorCode[errx.Code]; ok {
+				c.JSON(httpCode, err)
+				return
+			}
+		}
+		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
+			Code: "80000",
+			Err:  err,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, "success")
+}
+func (h *Handler) ConfigMainbox(c *gin.Context) {
+	var reqModel ReqConfMainbox
+	//reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
+	if err := c.Bind(&reqModel); err != nil {
+		c.JSON(http.StatusBadRequest, &errs.ErrContext{
+			Code: "20000",
+			Err:  err,
+		})
+		return
+	}
+	err := h.service.ConfigMainbox(&reqModel)
 	if err != nil {
 		if errx, ok := err.(*errs.ErrContext); ok {
 			if httpCode, ok := mapErrorCode[errx.Code]; ok {

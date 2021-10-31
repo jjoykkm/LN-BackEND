@@ -6,6 +6,8 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/common/config"
+	"gorm.io/gorm/clause"
+
 	//"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
 	//"github.com/jjoykkm/ln-backend/smartfarm/sf_my_farm"
 	"gorm.io/driver/postgres"
@@ -17,6 +19,7 @@ type Test101 struct {
 	Name 	string
 	Fname 	string
 	Lname 	string
+	Jjoy 	string
 }
 func (Test101) TableName() string {
 	return "test101"
@@ -24,8 +27,8 @@ func (Test101) TableName() string {
 type JJ struct {
 	Jjoy string
 	Eiei string
-	//Kiki string
-	//Test101 []Test101	`gorm:"foreignkey:Jjoy; references:Jjoy"`
+	Kiki string
+	Test101 []Test101	`gorm:"foreignkey:Jjoy; references:Jjoy"`
 }
 func (JJ) TableName() string {
 	return "tests"
@@ -86,20 +89,38 @@ func main()  {
 		wa_test Test101
 		test1 []Test101
 	)
-	data.Jjoy = "333"
-	//data.Eiei = "666"
+	data.Jjoy = "777"
+	data.Eiei = "222"
+	data.Kiki = "333"
 	//db.Debug().Save(&data)
 	wa_test.Id = 111
-	wa_test.Name = "test1"
+	wa_test.Name = "1111"
 	test1 = append(test1, wa_test)
 	wa_test.Id = 222
 	wa_test.Name = "test2"
 	test1 = append(test1, wa_test)
+	data.Test101 = test1
+	db.Debug().Omit("Eiei").Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "jjoy"}},
+		UpdateAll: true,
+	}).Create(&data)//.Model(Test101{})
+	//db.Debug().Clauses(clause.OnConflict{
+	//	Columns:   []clause.Column{{Name: "jjoy"}},
+	//	DoUpdates: clause.AssignmentColumns([]string{"eiei"}),
+	//}).Create(&data)
 	//data.Test101 = test1
 	fmt.Printf("%+v,\n", data)
-	db.Debug().Where("jjoy = ?", "333").Updates(&data)
+	//db.Debug().Where("jjoy = ?", "333").Updates(&data)
 	//db.Debug().Create(&data)
-
+	//mb := sf_my_farm.model_db.MainboxDatailUS{""}
+	//db.Debug().Create(&sf_my_farm.ReqConfMainbox{
+	//	Mainbox: "jinzhu",
+	//	SocketSensor: CreditCard{Number: "411111111111"}
+	//})
+	//res1B, _ := json.Marshal(sf_my_farm.ReqConfMainbox{})
+	//fmt.Println(res1B)
+	//fmt.Printf("%+v\n",res1B)
+	//fmt.Fprint(w, string(res1B))
 	//ss := doRequest()
 	//if ss != nil {
 	//	fmt.Println(ss)

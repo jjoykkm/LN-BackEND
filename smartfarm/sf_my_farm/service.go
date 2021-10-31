@@ -22,7 +22,8 @@ type Servicer interface {
 	GetManageMainbox(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error)
 
 	CheckMainboxIsInactivated(serialNo string) (bool, error)
-	ActivateMainbox(reqModel *ReqMainbox) error
+	ActivateMainbox(reqModel *model_db.MainboxSerialUS) error
+	ConfigMainbox(reqModel *ReqConfMainbox) error
 }
 
 type Service struct {
@@ -143,14 +144,21 @@ func (s *Service) CheckMainboxIsInactivated(serialNo string) (bool, error) {
 //-------------------------------------------------------------------------------//
 //							Update data
 //-------------------------------------------------------------------------------//
-func (s *Service) ActivateMainbox(reqModel *ReqMainbox) error {
+func (s *Service) ActivateMainbox(reqModel *model_db.MainboxSerialUS) error {
 	isInactive, err := s.CheckMainboxIsInactivated(reqModel.MainboxSerialNo)
 	if !isInactive || err != nil {
 		return err
 	}
-	//data := model_db.Mainbox{}
-	//mapstructure.Decode(reqModel, &data)
 	err = s.repo.UpdateOneMainboxBySerialNo(reqModel)
+	if err != nil{
+		return err
+	}
+	return nil
+}
+
+func (s *Service) ConfigMainbox(reqModel *ReqConfMainbox) error {
+
+	err := s.repo.InsertSocketSensor(reqModel.SocketSensor)
 	if err != nil{
 		return err
 	}

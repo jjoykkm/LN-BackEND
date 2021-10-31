@@ -1,7 +1,6 @@
 package sf_my_farm
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
 )
@@ -116,68 +115,54 @@ func (u *ManageRole) New() *ManageRole {
 func (ManageRole) TableName() string {
 	return config.DB_TRANS_MANAGEMENT
 }
+
 //-------------------------------------------------------------------------------//
-//							Request Mainbox
+//							Request Socket
 //-------------------------------------------------------------------------------//
-//Model
-type ReqMainbox struct {
-	MainboxName     	string		 `json:"mainbox_name"`
-	MainboxSerialNo		string		 `json:"serial_no"`
-	StatusId			uuid.UUID	 `json:"status_id"`
-}
-// New instance
-func (u *ReqMainbox) New() *ReqMainbox {
-	return &ReqMainbox{
-		MainboxName:		u.MainboxName ,
-		MainboxSerialNo:	u.MainboxSerialNo ,
-		StatusId:			u.StatusId ,
-	}
-}
-func (ReqMainbox) TableName() string {
-	return config.DB_MAINBOX
-}
+//type ReqSocket struct {
+//	SocketId      	uuid.UUID	 `json:"socket_id"`
+//	SensorId      	uuid.UUID	 `json:"sensor_id"`
+//	StatusId		uuid.UUID	 `json:"status_id"`
+//	StatusSensorId	uuid.UUID	 `json:"status_sensor_id"`
+//	SocketName      string	 	 `json:"socket_name"`
+//	SocketNumber	int64		 `json:"socket_number"`
+//	MainboxId     	uuid.UUID	 `json:"mainbox_id"`
+//}
+//func (ReqSocket) TableName() string {
+//	return config.DB_SOCKET
+//}
+////-------------------------------------------------------------------------------//
+////							Request Sensor
+////-------------------------------------------------------------------------------//
+//type ReqSensor struct {
+//	SocketId      	uuid.UUID	 `json:"socket_id"`
+//	SensorId      	uuid.UUID	 `json:"sensor_id"`
+//	StatusId		uuid.UUID	 `json:"status_id"`
+//	StatusSensorId	uuid.UUID	 `json:"status_sensor_id"`
+//	SocketName      string	 	 `json:"socket_name"`
+//	SocketNumber	int64		 `json:"socket_number"`
+//	MainboxId     	uuid.UUID	 `json:"mainbox_id"`
+//}
+//func (ReqSensor) TableName() string {
+//	return config.DB_SENSOR
+//}
 
 //-------------------------------------------------------------------------------//
 //							Request Socket And Sensor
 //-------------------------------------------------------------------------------//
 //Model
 type ReqSocSen struct {
-	SocketId      	uuid.UUID	 `json:"socket_id"`
-	SensorId      	uuid.UUID	 `json:"sensor_id"`
-	StatusId		uuid.UUID	 `json:"status_id"`
-	SocketName      string	 	 `json:"socket_name"`
-	SocketNumber	int64		 `json:"socket_number"`
-	StatusSensorId	uuid.UUID	 `json:"status_sensor_id"`
-	MainboxId     	uuid.UUID	 `json:"mainbox_id"`
-
+	Socket		model_db.Socket		`json:"socket" gorm:"embedded"`
+	Sensor		model_db.Sensor		`json:"sensor"`
 }
-// New instance
-func (u *ReqSocSen) New() *ReqSocSen {
-	return &ReqSocSen{
-		SocketId:			u.SocketId ,
-		SensorId:			u.SensorId ,
-		StatusId:			u.StatusId ,
-		SocketName:			u.SocketName ,
-		SocketNumber:		u.SocketNumber ,
-		StatusSensorId:		u.StatusSensorId ,
-		MainboxId:			u.MainboxId ,
-	}
+func (ReqSocSen) TableName() string {
+	return config.DB_SOCKET
 }
-
 //-------------------------------------------------------------------------------//
 //							Request Config Mainbox
 //-------------------------------------------------------------------------------//
 //Model
 type ReqConfMainbox struct {
-	MainboxId      		uuid.UUID	 `json:"mainbox_id"`
-	MainboxName     	string		 `json:"mainbox_name"`
+	Mainbox      		model_db.MainboxDatailUS	 `json:"mainbox" gorm:"embedded"`
 	SocketSensor     	[]ReqSocSen	 `json:"socket_sensor"`
 }
-// New instance
-func (u *ReqConfMainbox) New() *ReqConfMainbox {
-	return &ReqConfMainbox{
-		MainboxId:			u.MainboxId ,
-		MainboxName:		u.MainboxName ,
-	}
-}
-

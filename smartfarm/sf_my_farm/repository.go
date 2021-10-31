@@ -5,6 +5,7 @@ import (
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type Repositorier interface {
@@ -16,7 +17,9 @@ type Repositorier interface {
 	FindAllManageRole(status, farmId string) ([]ManageRole, error)
 	FindAllManageFarmArea(status, farmId string) ([]ManageFarmArea, error)
 	FindAllManageMainbox(status, farmId string) ([]ManageMainbox, error)
-	UpdateOneMainboxBySerialNo (req *ReqMainbox) error
+	UpdateOneMainboxBySerialNo (req *model_db.MainboxSerialUS) error
+	UpdateOneMainboxName (req *model_db.MainboxDatailUS) error
+	UpsertSocketSensor (req []ReqSocSen) error
 
 	//FindAllPlantType(status string) ([]model_db.PlantType, error)
 	//GetFarmListWithRoleer(status, uid, roleId string) ([]model_services.DashboardFarmList, int)
@@ -182,7 +185,7 @@ func (r *Repository) FindAllManageMainbox(status, farmId string) ([]ManageMainbo
 //-------------------------------------------------------------------------------//
 //							Update Data
 //-------------------------------------------------------------------------------//
-func (r *Repository) UpdateOneMainboxBySerialNo (req *ReqMainbox) error {
+func (r *Repository) UpdateOneMainboxBySerialNo (req *model_db.MainboxSerialUS) error {
 	resp := r.db.Debug().Where("mainbox_serial_no = ?",
 			req.MainboxSerialNo).Updates(&req).Update("status_id", // Get active status
 				r.db.Model(&model_db.Status{}).Select("status_id").Where("status_id = ?",
@@ -195,13 +198,8 @@ func (r *Repository) UpdateOneMainboxBySerialNo (req *ReqMainbox) error {
 	}
 	return nil
 }
-
-
-//-------------------------------------------------------------------------------//
-//							Insert Data
-//-------------------------------------------------------------------------------//
-func (r *Repository) InsertMainboxName (req *model_db.Mainbox) error {
-	resp := r.db.Debug().Model(&model_db.Mainbox{}).Where("mainbox_id = ?",
+func (r *Repository) UpdateOneMainboxName (req *model_db.MainboxDatailUS) error {
+	resp := r.db.Debug().Where("mainbox_id = ?",
 		req.MainboxId).Updates(&req)
 	if resp.Error != nil {
 		return resp.Error
@@ -211,14 +209,43 @@ func (r *Repository) InsertMainboxName (req *model_db.Mainbox) error {
 	}
 	return nil
 }
-//func (r *Repository) InsertSocketSensor (req *model_db.Socket) (uuid.UUID, error) {
-//	resp := r.db.Debug().Model(&model_db.Mainbox{}).Where("mainbox_id = ?",
-//		req.MainboxId).Updates(&req)
-//	if resp.Error != nil {
-//		return resp.Error
-//	}
-//	if resp.RowsAffected == 0 {
-//		return gorm.ErrRecordNotFound
-//	}
-//	return nil
-//}
+
+//-------------------------------------------------------------------------------//
+//							Upsert Data
+//-------------------------------------------------------------------------------//
+func (r *Repository) UpsertOneMainbox (req *model_db.MainboxDatailUS) error {
+	//resp := r.db.Debug().Model(&model_db.Mainbox{}).Where("mainbox_id = ?",
+	//	req.MainboxId).Updates(&req)
+	//resp := r.db.Debug().Clauses(clause.OnConflict{
+	//	Columns:   []clause.Column{{Name: "id"}},
+	//	DoUpdates: clause.AssignmentColumns([]{"name"}),
+	//}).Create(&req)
+	resp := r.db.Debug().Clauses(clause.OnConflict{
+		UpdateAll: true,
+	}).Create(&req)
+	if resp.Error != nil {
+		return resp.Error
+	}
+	if resp.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}
+func (r *Repository) UpsertSocketSensor (req []ReqSocSen) error {
+	//resp := r.db.Debug().Model(&model_db.Mainbox{}).Where("mainbox_id = ?",
+	//	req.MainboxId).Updates(&req)
+	//resp := r.db.Debug().Clauses(clause.OnConflict{
+	//	Columns:   []clause.Column{{Name: "id"}},
+	//	DoUpdates: clause.AssignmentColumns([]{"name"}),
+	//}).Create(&req)
+	resp := r.db.Debug().Clauses(clause.OnConflict{
+		UpdateAll: true,
+	}).Create(&req)
+	if resp.Error != nil {
+		return resp.Error
+	}
+	if resp.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}

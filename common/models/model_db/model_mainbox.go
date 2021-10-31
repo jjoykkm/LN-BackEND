@@ -44,3 +44,23 @@ func (u *Mainbox) New() *Mainbox {
 func (Mainbox) TableName() string {
 	return config.DB_MAINBOX
 }
+
+//-------------------------------------------------------------------------------//
+//							Request Mainbox
+//-------------------------------------------------------------------------------//
+type MainboxSerialUS struct {
+	MainboxName     	string		 `json:"mainbox_name"`
+	MainboxSerialNo		string		 `json:"serial_no"`
+}
+func (MainboxSerialUS) TableName() string {
+	return config.DB_MAINBOX
+}
+
+type MainboxDatailUS struct {
+	MainboxId			uuid.UUID	 `json:"mainbox_id"`
+	MainboxName     	string		 `json:"mainbox_name"`
+	StatusId			uuid.UUID	 `json:"status_id"`
+}
+func (MainboxDatailUS) TableName() string {
+	return config.DB_MAINBOX
+}
