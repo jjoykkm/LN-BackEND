@@ -24,6 +24,7 @@ func (h *Handler) GetOverviewFarm(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -38,6 +39,7 @@ func (h *Handler) GetOverviewFarm(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
 			Code: "80000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -51,6 +53,7 @@ func (h *Handler) GetManageRole(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -65,6 +68,7 @@ func (h *Handler) GetManageRole(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
 			Code: "80000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -78,6 +82,7 @@ func (h *Handler) GetManageFarmArea(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -92,6 +97,7 @@ func (h *Handler) GetManageFarmArea(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
 			Code: "80000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -105,6 +111,7 @@ func (h *Handler) GetManageMainbox(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -119,6 +126,7 @@ func (h *Handler) GetManageMainbox(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
 			Code: "80000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -132,6 +140,7 @@ func (h *Handler) ActivateMainbox(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -146,18 +155,22 @@ func (h *Handler) ActivateMainbox(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
 			Code: "80000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
 	c.JSON(http.StatusOK, "success")
 }
+
 func (h *Handler) ConfigMainbox(c *gin.Context) {
 	var reqModel ReqConfMainbox
 	//reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
+
 	if err := c.Bind(&reqModel); err != nil {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -172,8 +185,101 @@ func (h *Handler) ConfigMainbox(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
 			Code: "80000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
 	c.JSON(http.StatusOK, "success")
 }
+
+func (h *Handler) ConfigCustomSensor(c *gin.Context) {
+	var reqModel ReqConfMainbox
+	//reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
+
+	if err := c.Bind(&reqModel); err != nil {
+		c.JSON(http.StatusBadRequest, &errs.ErrContext{
+			Code: "20000",
+			Err:  err,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	err := h.service.ConfigAddSensor(&reqModel)
+	if err != nil {
+		if errx, ok := err.(*errs.ErrContext); ok {
+			if httpCode, ok := mapErrorCode[errx.Code]; ok {
+				c.JSON(httpCode, err)
+				return
+			}
+		}
+		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
+			Code: "80000",
+			Err:  err,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, "success")
+}
+
+func (h *Handler) ConfigDeleteSocket(c *gin.Context) {
+	var reqModel ReqDeleteConfig
+	//reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
+
+	if err := c.Bind(&reqModel); err != nil {
+		c.JSON(http.StatusBadRequest, &errs.ErrContext{
+			Code: "20000",
+			Err:  err,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	err := h.service.ConfigDeleteSocket(&reqModel)
+	if err != nil {
+		if errx, ok := err.(*errs.ErrContext); ok {
+			if httpCode, ok := mapErrorCode[errx.Code]; ok {
+				c.JSON(httpCode, err)
+				return
+			}
+		}
+		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
+			Code: "80000",
+			Err:  err,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, "success")
+}
+
+func (h *Handler) ConfigDeleteMainbox(c *gin.Context) {
+	var reqModel ReqDeleteConfig
+	//reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
+
+	if err := c.Bind(&reqModel); err != nil {
+		c.JSON(http.StatusBadRequest, &errs.ErrContext{
+			Code: "20000",
+			Err:  err,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	err := h.service.ConfigDeleteMainbox(&reqModel)
+	if err != nil {
+		if errx, ok := err.(*errs.ErrContext); ok {
+			if httpCode, ok := mapErrorCode[errx.Code]; ok {
+				c.JSON(httpCode, err)
+				return
+			}
+		}
+		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
+			Code: "80000",
+			Err:  err,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, "success")
+}
+
+

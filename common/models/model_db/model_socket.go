@@ -11,7 +11,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model socket
 type Socket struct {
-	SocketId      	uuid.UUID	 `json:"socket_id"`
+	SocketId      	uuid.UUID	 `json:"socket_id gorm:"type:uuid;default:uuid_generate_v4()"`
 	SensorId      	uuid.UUID	 `json:"sensor_id"`
 	StatusId		uuid.UUID	 `json:"status_id"`
 	SocketName      string	 	 `json:"socket_name"`
@@ -38,5 +38,20 @@ func (u *Socket) New() *Socket {
 
 // Custom table name for GORM
 func (Socket) TableName() string {
+	return config.DB_SOCKET
+}
+
+//-------------------------------------------------------------------------------//
+//							Request Socket
+//-------------------------------------------------------------------------------//
+type SocketUS struct {
+	SensorId      	string	 `json:"sensor_id"`
+	StatusId		string	 `json:"status_id"`
+	SocketName      string	 `json:"socket_name"`
+	SocketNumber	int64	 `json:"socket_number"`
+	StatusSensorId	string	 `json:"status_sensor_id"`
+	MainboxId     	string	 `json:"mainbox_id"`
+}
+func (SocketUS) TableName() string {
 	return config.DB_SOCKET
 }

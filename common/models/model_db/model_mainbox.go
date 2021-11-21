@@ -56,11 +56,31 @@ func (MainboxSerialUS) TableName() string {
 	return config.DB_MAINBOX
 }
 
-type MainboxDatailUS struct {
-	MainboxId			uuid.UUID	 `json:"mainbox_id"`
-	MainboxName     	string		 `json:"mainbox_name"`
-	StatusId			uuid.UUID	 `json:"status_id"`
+//type MainboxUS struct {
+//	MainboxId			uuid.UUID	 `json:"mainbox_id"`
+//	MainboxName     	string		 `json:"mainbox_name"`
+//	StatusId			uuid.UUID	 `json:"status_id"`
+//}
+type MainboxUS struct {
+	MainboxId		string	 `json:"mainbox_id"`
+	MainboxName     string	 `json:"mainbox_name"`
+	StatusId		string	 `json:"status_id"`
 }
-func (MainboxDatailUS) TableName() string {
+func (MainboxUS) TableName() string {
 	return config.DB_MAINBOX
 }
+
+
+//func (u *MainboxUS) BeforeUpdate(tx *gorm.DB) (err error) {
+//	fmt.Println("BeforeUpdate")
+//	// if MainboxName changed
+//	if tx.Statement.Changed("MainboxName") {
+//		fmt.Println("Changed")
+//		return errors.New("MainboxName not allowed to change")
+//	}else {
+//		fmt.Println("Not Changed")
+//		tx.Statement.SetColumn("StatusId", "fe13e5d7-f467-48e8-9ce1-a997ae2c0d9f")
+//	}
+//
+//	return nil
+//}

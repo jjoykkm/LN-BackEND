@@ -3,10 +3,9 @@ package sf_my_farm
 import (
 	"errors"
 	"github.com/jjoykkm/ln-backend/common/config"
-	//"github.com/jjoykkm/ln-backend/common/models/model_db"
+	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"github.com/jjoykkm/ln-backend/common/models/model_other"
 	"github.com/jjoykkm/ln-backend/errs"
-	//"github.com/mitchellh/mapstructure"
 	"gorm.io/gorm"
 )
 
@@ -24,6 +23,9 @@ type Servicer interface {
 	CheckMainboxIsInactivated(serialNo string) (bool, error)
 	ActivateMainbox(reqModel *model_db.MainboxSerialUS) error
 	ConfigMainbox(reqModel *ReqConfMainbox) error
+	ConfigAddSensor(reqModel *ReqConfMainbox) error
+	ConfigDeleteSocket(reqModel *ReqDeleteConfig) error
+	ConfigDeleteMainbox(reqModel *ReqDeleteConfig) error
 }
 
 type Service struct {
@@ -157,8 +159,42 @@ func (s *Service) ActivateMainbox(reqModel *model_db.MainboxSerialUS) error {
 }
 
 func (s *Service) ConfigMainbox(reqModel *ReqConfMainbox) error {
+	// Update Mainbox detail
+	if !((model_db.MainboxUS{}) == *reqModel.Mainbox) {	// Check model has value
+		err := s.repo.UpdateOneMainbox(reqModel.Mainbox)
+		if err != nil{
+			return err
+		}
+	}
+	// Upsert Socket
+	err := s.repo.UpsertSocket(reqModel.Socket)
+	if err != nil{
+		return err
+	}
+	return nil
+}
 
-	err := s.repo.InsertSocketSensor(reqModel.SocketSensor)
+func (s *Service) ConfigAddSensor(reqModel *ReqConfMainbox) error {
+	// Create Sensor
+	err := s.repo.CreateOneSensor(reqModel.Sensor)
+	if err != nil{
+		return err
+	}
+	return nil
+}
+
+func (s *Service) ConfigDeleteSocket(reqModel *ReqDeleteConfig) error {
+	// Delete Socket
+	err := s.repo.DeleteOneSocket(reqModel.SocketId)
+	if err != nil{
+		return err
+	}
+	return nil
+}
+
+func (s *Service) ConfigDeleteMainbox(reqModel *ReqDeleteConfig) error {
+	// Deactivate Mainbox
+	err := s.repo.DeactivateOneMainbox(reqModel.MainboxId)
 	if err != nil{
 		return err
 	}

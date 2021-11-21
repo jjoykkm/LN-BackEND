@@ -6,20 +6,17 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/common/config"
-	"gorm.io/gorm/clause"
+	"github.com/jjoykkm/ln-backend/errs"
 
-	//"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
-	//"github.com/jjoykkm/ln-backend/smartfarm/sf_my_farm"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	//"gorm.io/gorm/clause"
+
 	"net/http"
 )
 type Test101 struct {
-	Id 		int
-	Name 	string
-	Fname 	string
-	Lname 	string
-	Jjoy 	string
+	Name 	string `json:"name"`
+}
+type Joy struct {
+	Test []Test101	`json:"test"`
 }
 func (Test101) TableName() string {
 	return "test101"
@@ -28,7 +25,8 @@ type JJ struct {
 	Jjoy string
 	Eiei string
 	Kiki string
-	Test101 []Test101	`gorm:"foreignkey:Jjoy; references:Jjoy"`
+	Key  string //`gorm:"type:uuid;"`
+	//Test101 []Test101	`gorm:"foreignkey:Jjoy; references:Jjoy"`
 }
 func (JJ) TableName() string {
 	return "tests"
@@ -52,18 +50,34 @@ func doRequest() error {
 		Err:        errors.New("unavailable"),
 	}
 }
-
-func main()  {
+//fmt.Printf("%+v\n", req)
+func hh()  {
 	//var fm Farm
-	db, err := gorm.Open(postgres.New(postgres.Config{
-		DSN:                  config.DSN,
-		PreferSimpleProtocol: false, // disables implicit prepared statement usage
-	}), &gorm.Config{})
-	if err != nil {
-		panic(err.Error())
-	}
+	//db, err := gorm.Open(postgres.New(postgres.Config{
+	//	DSN:                  config.DSN,
+	//	PreferSimpleProtocol: false, // disables implicit prepared statement usage
+	//}), &gorm.Config{})
+	//if err != nil {
+	//	panic(err.Error())
+	//}
 	http := gin.Default()
 	http.Use(cors.Default())
+	http.POST("/test", func(c *gin.Context) {
+		var reqModel Joy
+		if err := c.Bind(&reqModel); err != nil {
+			c.JSON(400, &errs.ErrContext{
+				Code: "20000",
+				Err:  err,
+				Msg:  err.Error(),
+			})
+			return
+		}
+		fmt.Printf("%+v\n", reqModel)
+		c.JSON(200, gin.H{
+			"01": "Passss",
+			//"01": result,
+		})
+	})
 	v1 := http.Group("/v1")
 	{
 		v1.GET("/login", func(c *gin.Context) {
@@ -82,37 +96,48 @@ func main()  {
 	}
 	//activeId := uuid.UUID{}.Get()
 
-	fmt.Println("***********************************")
-
-	var (
-		data JJ
-		wa_test Test101
-		test1 []Test101
-	)
-	data.Jjoy = "777"
-	data.Eiei = "222"
-	data.Kiki = "333"
-	//db.Debug().Save(&data)
-	wa_test.Id = 111
-	wa_test.Name = "1111"
-	test1 = append(test1, wa_test)
-	wa_test.Id = 222
-	wa_test.Name = "test2"
-	test1 = append(test1, wa_test)
-	data.Test101 = test1
-	db.Debug().Omit("Eiei").Clauses(clause.OnConflict{
-		Columns:   []clause.Column{{Name: "jjoy"}},
-		UpdateAll: true,
-	}).Create(&data)//.Model(Test101{})
+	//var (
+	//	data JJ
+	//	wa_test Test101
+	//	test1 []Test101
+	//)
+	//data.Jjoy = "777"
+	//data.Eiei = "222"
+	//data.Kiki = "333"
+	////db.Debug().Save(&data)
+	//wa_test.Id = 333
+	//wa_test.Name = "1111"
+	//test1 = append(test1, wa_test)
+	//wa_test.Id = 444
+	//wa_test.Name = "test2"
+	//test1 = append(test1, wa_test)
+	//data.Test101 = test1
+	//db.Debug().Clauses(clause.OnConflict{
+	//	Columns:   []clause.Column{{Name: "jjoy"}},
+	//	UpdateAll: true,
+	//}).Create(&data)//.Model(Test101{})
 	//db.Debug().Clauses(clause.OnConflict{
 	//	Columns:   []clause.Column{{Name: "jjoy"}},
 	//	DoUpdates: clause.AssignmentColumns([]string{"eiei"}),
 	//}).Create(&data)
 	//data.Test101 = test1
-	fmt.Printf("%+v,\n", data)
+	//data := JJ{}
+	//data.Jjoy = "rere"
+	//data.Eiei = "33333"
+	//data.Key = "41470e4b-005d-4df9-aa4d-c59f37f6390b"
+	////data.Kiki = "33333"
+	////data.Key = "866cbed4-b14b-4fb7-a4a8684e29f34"
+	////data.Key = "866cbed4-b14b-4fb7-a4a8684e29f34"
+	//db.Debug().Clauses(clause.OnConflict{
+	//	Columns:   []clause.Column{{Name: "jjoy"}},
+	//	UpdateAll: true,
+	//	//DoUpdates: clause.AssignmentColumns([]string{"jjoy","eiei"}),
+	//}).Create(&data)
+	//fmt.Printf("%+v,\n", data)
+	//db.Debug().Create(&data)
 	//db.Debug().Where("jjoy = ?", "333").Updates(&data)
 	//db.Debug().Create(&data)
-	//mb := sf_my_farm.model_db.MainboxDatailUS{""}
+	//mb := sf_my_farm.model_db.MainboxUS{""}
 	//db.Debug().Create(&sf_my_farm.ReqConfMainbox{
 	//	Mainbox: "jinzhu",
 	//	SocketSensor: CreditCard{Number: "411111111111"}
@@ -195,11 +220,6 @@ func main()  {
 
 
 
-	http.POST("/test", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			//"01": result,
-			//"01": result,
-		})
-	})
+
 	http.Run(config.SERVER_HOST)
 }

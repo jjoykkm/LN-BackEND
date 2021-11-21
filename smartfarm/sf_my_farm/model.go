@@ -117,45 +117,14 @@ func (ManageRole) TableName() string {
 }
 
 //-------------------------------------------------------------------------------//
-//							Request Socket
-//-------------------------------------------------------------------------------//
-//type ReqSocket struct {
-//	SocketId      	uuid.UUID	 `json:"socket_id"`
-//	SensorId      	uuid.UUID	 `json:"sensor_id"`
-//	StatusId		uuid.UUID	 `json:"status_id"`
-//	StatusSensorId	uuid.UUID	 `json:"status_sensor_id"`
-//	SocketName      string	 	 `json:"socket_name"`
-//	SocketNumber	int64		 `json:"socket_number"`
-//	MainboxId     	uuid.UUID	 `json:"mainbox_id"`
-//}
-//func (ReqSocket) TableName() string {
-//	return config.DB_SOCKET
-//}
-////-------------------------------------------------------------------------------//
-////							Request Sensor
-////-------------------------------------------------------------------------------//
-//type ReqSensor struct {
-//	SocketId      	uuid.UUID	 `json:"socket_id"`
-//	SensorId      	uuid.UUID	 `json:"sensor_id"`
-//	StatusId		uuid.UUID	 `json:"status_id"`
-//	StatusSensorId	uuid.UUID	 `json:"status_sensor_id"`
-//	SocketName      string	 	 `json:"socket_name"`
-//	SocketNumber	int64		 `json:"socket_number"`
-//	MainboxId     	uuid.UUID	 `json:"mainbox_id"`
-//}
-//func (ReqSensor) TableName() string {
-//	return config.DB_SENSOR
-//}
-
-//-------------------------------------------------------------------------------//
 //							Request Socket And Sensor
 //-------------------------------------------------------------------------------//
 //Model
-type ReqSocSen struct {
-	Socket		model_db.Socket		`json:"socket" gorm:"embedded"`
-	Sensor		model_db.Sensor		`json:"sensor"`
+type SocSenDetail struct {
+	Socket		model_db.SocketUS		`json:"socket" gorm:"embedded"`
+	//Sensor		model_db.SensorUS		`json:"sensor" gorm:"foreignkey:SensorId; references:SensorId`
 }
-func (ReqSocSen) TableName() string {
+func (SocSenDetail) TableName() string {
 	return config.DB_SOCKET
 }
 //-------------------------------------------------------------------------------//
@@ -163,6 +132,15 @@ func (ReqSocSen) TableName() string {
 //-------------------------------------------------------------------------------//
 //Model
 type ReqConfMainbox struct {
-	Mainbox      		model_db.MainboxDatailUS	 `json:"mainbox" gorm:"embedded"`
-	SocketSensor     	[]ReqSocSen	 `json:"socket_sensor"`
+	Mainbox    	*model_db.MainboxUS	 `json:"mainbox"`
+	Socket		[]model_db.SocketUS	 `json:"socket"`
+	Sensor     	*model_db.SensorUS	 `json:"sensor"`
 }
+
+type ReqDeleteConfig struct {
+	MainboxId      	*string	 `json:"mainbox_id"`
+	SensorId      	*string	 `json:"sensor_id"`
+	SocketId      	*string	 `json:"socket_id"`
+	FarmAreaId     	*string	 `json:"farm_area_id"`
+}
+

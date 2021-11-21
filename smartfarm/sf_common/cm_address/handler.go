@@ -23,6 +23,7 @@ func (h *Handler) GetProvinceList(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -37,6 +38,7 @@ func (h *Handler) GetProvinceList(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
 			Code: "80000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}

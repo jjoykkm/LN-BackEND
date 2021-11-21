@@ -39,3 +39,18 @@ func (u *Sensor) New() *Sensor {
 func (Sensor) TableName() string {
 	return config.DB_SENSOR
 }
+
+
+//-------------------------------------------------------------------------------//
+//							Request Socket
+//-------------------------------------------------------------------------------//
+type SensorUS struct {
+	SensorId      	string	 `json:"sensor_id"  gorm:"type:uuid;default:uuid_generate_v4()"`
+	SensorModel     string	 `json:"sensor_model"`
+	SensorLots      string	 `json:"sensor_lots"`
+	SensorTypeId	string	 `json:"sensor_type_id"`
+	StatusId		string	 `json:"status_id"`
+}
+func (SensorUS) TableName() string {
+	return config.DB_SENSOR
+}

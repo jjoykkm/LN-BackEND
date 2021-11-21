@@ -23,6 +23,7 @@ func (h *Handler) GetPlantCategoryList(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -37,6 +38,7 @@ func (h *Handler) GetPlantCategoryList(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
 			Code: "80000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -50,6 +52,7 @@ func (h *Handler) GetPlantCategoryItem(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -64,6 +67,7 @@ func (h *Handler) GetPlantCategoryItem(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
 			Code: "80000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -77,6 +81,7 @@ func (h *Handler) GetPlantOverviewByPlant(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -91,6 +96,7 @@ func (h *Handler) GetPlantOverviewByPlant(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
 			Code: "80000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -104,6 +110,7 @@ func (h *Handler) GetPlantOverviewFavorite(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -118,6 +125,7 @@ func (h *Handler) GetPlantOverviewFavorite(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
 			Code: "80000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -131,6 +139,7 @@ func (h *Handler) GetPlantOfMine(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -145,6 +154,7 @@ func (h *Handler) GetPlantOfMine(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
 			Code: "80000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -158,6 +168,7 @@ func (h *Handler) GetFormulaPlantDetail(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, &errs.ErrContext{
 			Code: "20000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}
@@ -172,6 +183,7 @@ func (h *Handler) GetFormulaPlantDetail(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
 			Code: "80000",
 			Err:  err,
+			Msg:  err.Error(),
 		})
 		return
 	}

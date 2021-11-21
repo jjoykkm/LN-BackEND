@@ -2,6 +2,7 @@ package sf_my_farm
 
 import (
 	"errors"
+	"fmt"
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"gorm.io/gorm"
@@ -18,9 +19,12 @@ type Repositorier interface {
 	FindAllManageFarmArea(status, farmId string) ([]ManageFarmArea, error)
 	FindAllManageMainbox(status, farmId string) ([]ManageMainbox, error)
 	UpdateOneMainboxBySerialNo (req *model_db.MainboxSerialUS) error
-	UpdateOneMainboxName (req *model_db.MainboxDatailUS) error
-	UpsertSocketSensor (req []ReqSocSen) error
-
+	UpdateOneMainbox (req *model_db.MainboxUS) error
+	UpdateOneSensor (req *model_db.Sensor) error
+	UpsertSocket (req []model_db.SocketUS) error
+	CreateOneSensor (req *model_db.SensorUS) error
+	DeleteOneSocket (socketId *string) error
+	DeactivateOneMainbox (MainboxId *string) error
 	//FindAllPlantType(status string) ([]model_db.PlantType, error)
 	//GetFarmListWithRoleer(status, uid, roleId string) ([]model_services.DashboardFarmList, int)
 	//GetOverviewFarmer(status, farmId string) model_services.MyFarmOverviewFarm
@@ -198,9 +202,21 @@ func (r *Repository) UpdateOneMainboxBySerialNo (req *model_db.MainboxSerialUS) 
 	}
 	return nil
 }
-func (r *Repository) UpdateOneMainboxName (req *model_db.MainboxDatailUS) error {
+func (r *Repository) UpdateOneMainbox (req *model_db.MainboxUS) error {
+	fmt.Println("UpdateOneMainbox")
 	resp := r.db.Debug().Where("mainbox_id = ?",
 		req.MainboxId).Updates(&req)
+	if resp.Error != nil {
+		return resp.Error
+	}
+	if resp.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}
+func (r *Repository) UpdateOneSensor (req *model_db.Sensor) error {
+	resp := r.db.Debug().Where("sensor_id = ?",
+		req.SensorId).Updates(&req)
 	if resp.Error != nil {
 		return resp.Error
 	}
@@ -213,16 +229,36 @@ func (r *Repository) UpdateOneMainboxName (req *model_db.MainboxDatailUS) error 
 //-------------------------------------------------------------------------------//
 //							Upsert Data
 //-------------------------------------------------------------------------------//
-func (r *Repository) UpsertOneMainbox (req *model_db.MainboxDatailUS) error {
-	//resp := r.db.Debug().Model(&model_db.Mainbox{}).Where("mainbox_id = ?",
-	//	req.MainboxId).Updates(&req)
-	//resp := r.db.Debug().Clauses(clause.OnConflict{
-	//	Columns:   []clause.Column{{Name: "id"}},
-	//	DoUpdates: clause.AssignmentColumns([]{"name"}),
-	//}).Create(&req)
-	resp := r.db.Debug().Clauses(clause.OnConflict{
+//func (r *Repository) UpsertOneMainbox (req *model_db.MainboxUS) error {
+//	//resp := r.db.Debug().Model(&model_db.Mainbox{}).Where("mainbox_id = ?",
+//	//	req.MainboxId).Updates(&req)
+//	//resp := r.db.Debug().Clauses(clause.OnConflict{
+//	//	Columns:   []clause.Column{{Name: "id"}},
+//	//	DoUpdates: clause.AssignmentColumns([]{"name"}),
+//	//}).Create(&req)
+//	resp := r.db.Debug().Clauses(clause.OnConflict{
+//		Columns:   []clause.Column{{Name: "id"}},
+//		UpdateAll: true,
+//	}).Create(&req)
+//	if resp.Error != nil {
+//		return resp.Error
+//	}
+//	if resp.RowsAffected == 0 {
+//		return gorm.ErrRecordNotFound
+//	}
+//	return nil
+//}
+func (r *Repository) UpsertSocket (req []model_db.SocketUS) error {
+	// Assign status active
+	for idx, _ := range req {
+		req[idx].StatusId = config.GetStatus().Active
+	}
+	resp := r.db.Debug().Model(model_db.SocketUS{}).Clauses(clause.OnConflict{
+		Columns: []clause.Column{
+			{Name: "socket_id"},
+		},
 		UpdateAll: true,
-	}).Create(&req)
+		}).Create(&req)
 	if resp.Error != nil {
 		return resp.Error
 	}
@@ -231,16 +267,75 @@ func (r *Repository) UpsertOneMainbox (req *model_db.MainboxDatailUS) error {
 	}
 	return nil
 }
-func (r *Repository) UpsertSocketSensor (req []ReqSocSen) error {
-	//resp := r.db.Debug().Model(&model_db.Mainbox{}).Where("mainbox_id = ?",
-	//	req.MainboxId).Updates(&req)
-	//resp := r.db.Debug().Clauses(clause.OnConflict{
-	//	Columns:   []clause.Column{{Name: "id"}},
-	//	DoUpdates: clause.AssignmentColumns([]{"name"}),
-	//}).Create(&req)
-	resp := r.db.Debug().Clauses(clause.OnConflict{
-		UpdateAll: true,
-	}).Create(&req)
+
+func (r *Repository) CreateOneSensor (req *model_db.SensorUS) error {
+	// Assign status pending
+	req.StatusId = config.GetStatus().Pending
+
+	resp := r.db.Debug().Create(&req)
+	if resp.Error != nil {
+		return resp.Error
+	}
+	if resp.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}
+//func (r *Repository) UpsertSensor (req []SocSenDetail) error {
+//	resp := r.db.Debug().Model(model_db.Sensor{}).Clauses(clause.OnConflict{
+//		Columns: []clause.Column{
+//			{Name: "senser_model"},
+//			{Name: "senser_lots"},
+//			{Name: "sensor_type_id"},
+//		},
+//		DoUpdates: clause.AssignmentColumns([]string{
+//			"receiving_account_bank_code",
+//			"receiving_account_branch_code",
+//			"receiving_account_no",
+//			"receiving_account_name_th",
+//			"settlement_status",
+//		})}).Where("registrar_transaction_code in ('R','O')").Create(&req)
+//	if resp.Error != nil {
+//		return resp.Error
+//	}
+//	if resp.RowsAffected == 0 {
+//		return gorm.ErrRecordNotFound
+//	}
+//	return nil
+//}
+//func (r *Repository) UpsertSensor (req []SocSenDetail) error {
+//	resp := r.db.Debug().Model(model_db.Sensor{}).Clauses(clause.OnConflict{
+//		Columns:   []clause.Column{{Name: "sensor_id"}},
+//		UpdateAll: true,
+//	}).Create(&req)
+//	if resp.Error != nil {
+//		return resp.Error
+//	}
+//	if resp.RowsAffected == 0 {
+//		return gorm.ErrRecordNotFound
+//	}
+//	return nil
+//}
+
+//-------------------------------------------------------------------------------//
+//							Delete Data
+//-------------------------------------------------------------------------------//
+func (r *Repository) DeleteOneSocket (socketId *string) error {
+	resp := r.db.Debug().Where("socket_id = ?", socketId).Delete(&model_db.Socket{})
+	if resp.Error != nil {
+		return resp.Error
+	}
+	if resp.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}
+
+func (r *Repository) DeactivateOneMainbox (MainboxId *string) error {
+	// Assign status pending
+	statusId := config.GetStatus().Inactive
+
+	resp := r.db.Debug().Model(&model_db.Mainbox{}).Where("mainbox_id = ?", MainboxId).Update("status_id", statusId)
 	if resp.Error != nil {
 		return resp.Error
 	}
