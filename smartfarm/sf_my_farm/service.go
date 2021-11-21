@@ -26,6 +26,8 @@ type Servicer interface {
 	ConfigAddSensor(reqModel *ReqConfMainbox) error
 	ConfigDeleteSocket(reqModel *ReqDeleteConfig) error
 	ConfigDeleteMainbox(reqModel *ReqDeleteConfig) error
+	ConfigDeleteFarm(reqModel *ReqDeleteConfig) error
+	ConfigDeleteFarmArea(reqModel *ReqDeleteConfig) error
 }
 
 type Service struct {
@@ -195,6 +197,24 @@ func (s *Service) ConfigDeleteSocket(reqModel *ReqDeleteConfig) error {
 func (s *Service) ConfigDeleteMainbox(reqModel *ReqDeleteConfig) error {
 	// Deactivate Mainbox
 	err := s.repo.DeactivateOneMainbox(reqModel.MainboxId)
+	if err != nil{
+		return err
+	}
+	return nil
+}
+
+func (s *Service) ConfigDeleteFarm(reqModel *ReqDeleteConfig) error {
+	// Delete Farm
+	err := s.repo.DeleteOneFarm(reqModel.FarmId)
+	if err != nil{
+		return err
+	}
+	return nil
+}
+
+func (s *Service) ConfigDeleteFarmArea(reqModel *ReqDeleteConfig) error {
+	// Delete FarmArea
+	err := s.repo.DeleteOneFarmArea(reqModel.FarmAreaId)
 	if err != nil{
 		return err
 	}

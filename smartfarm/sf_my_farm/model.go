@@ -141,6 +141,7 @@ type ReqDeleteConfig struct {
 	MainboxId      	*string	 `json:"mainbox_id"`
 	SensorId      	*string	 `json:"sensor_id"`
 	SocketId      	*string	 `json:"socket_id"`
+	FarmId     		*string	 `json:"farm_id"`
 	FarmAreaId     	*string	 `json:"farm_area_id"`
 }
 

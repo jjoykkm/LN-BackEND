@@ -24,7 +24,9 @@ type Repositorier interface {
 	UpsertSocket (req []model_db.SocketUS) error
 	CreateOneSensor (req *model_db.SensorUS) error
 	DeleteOneSocket (socketId *string) error
-	DeactivateOneMainbox (MainboxId *string) error
+	DeactivateOneMainbox (mainboxId *string) error
+	DeleteOneFarm (farmId *string) error
+	DeleteOneFarmArea (farmAreaId *string) error
 	//FindAllPlantType(status string) ([]model_db.PlantType, error)
 	//GetFarmListWithRoleer(status, uid, roleId string) ([]model_services.DashboardFarmList, int)
 	//GetOverviewFarmer(status, farmId string) model_services.MyFarmOverviewFarm
@@ -331,11 +333,33 @@ func (r *Repository) DeleteOneSocket (socketId *string) error {
 	return nil
 }
 
-func (r *Repository) DeactivateOneMainbox (MainboxId *string) error {
+func (r *Repository) DeactivateOneMainbox (mainboxId *string) error {
 	// Assign status pending
 	statusId := config.GetStatus().Inactive
 
-	resp := r.db.Debug().Model(&model_db.Mainbox{}).Where("mainbox_id = ?", MainboxId).Update("status_id", statusId)
+	resp := r.db.Debug().Model(&model_db.Mainbox{}).Where("mainbox_id = ?", mainboxId).Update("status_id", statusId)
+	if resp.Error != nil {
+		return resp.Error
+	}
+	if resp.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}
+
+func (r *Repository) DeleteOneFarm (farmId *string) error {
+	resp := r.db.Debug().Where("farm_id = ?", farmId).Delete(&model_db.Farm{})
+	if resp.Error != nil {
+		return resp.Error
+	}
+	if resp.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}
+
+func (r *Repository) DeleteOneFarmArea (farmAreaId *string) error {
+	resp := r.db.Debug().Where("farm_area_id = ?", farmAreaId).Delete(&model_db.FarmArea{})
 	if resp.Error != nil {
 		return resp.Error
 	}
