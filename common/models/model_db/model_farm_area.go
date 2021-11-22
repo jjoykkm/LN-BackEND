@@ -37,4 +37,18 @@ func (FarmArea) TableName() string {
 	return config.DB_FARM_AREA
 }
 
+//-------------------------------------------------------------------------------//
+//							Upsert FarmArea
+//-------------------------------------------------------------------------------//
+type FarmAreaUS struct {
+	FarmAreaId      	string	 `json:"farm_area_id" gorm:"default:uuid_generate_v4()"`
+	FarmAreaName    	string	 `json:"farm_area_name"`
+	FarmId				string	 `json:"farm_id"`
+	FormulaPlantId		string	 `json:"formula_plant_id"`
+	StatusId			string	 `json:"status_id"`
+}
+func (FarmAreaUS) TableName() string {
+	return config.DB_FARM_AREA
+}
+
 

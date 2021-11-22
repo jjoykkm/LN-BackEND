@@ -11,7 +11,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model socket
 type Socket struct {
-	SocketId      	uuid.UUID	 `json:"socket_id gorm:"type:uuid;default:uuid_generate_v4()"`
+	SocketId      	uuid.UUID	 `json:"socket_id gorm:"default:uuid_generate_v4()"`
 	SensorId      	uuid.UUID	 `json:"sensor_id"`
 	StatusId		uuid.UUID	 `json:"status_id"`
 	SocketName      string	 	 `json:"socket_name"`
@@ -42,7 +42,7 @@ func (Socket) TableName() string {
 }
 
 //-------------------------------------------------------------------------------//
-//							Request Socket
+//							Upsert Socket
 //-------------------------------------------------------------------------------//
 type SocketUS struct {
 	SensorId      	string	 `json:"sensor_id"`

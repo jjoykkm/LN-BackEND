@@ -32,3 +32,16 @@ func (u *TransSocketArea) New() *TransSocketArea {
 func (TransSocketArea) TableName() string {
 	return config.DB_TRANS_SOCKET_AREA
 }
+
+//-------------------------------------------------------------------------------//
+//							Upsert TransSocketArea
+//-------------------------------------------------------------------------------//
+type TransSocketAreaUS struct {
+	FarmAreaId      string	 `json:"farm_area_id"`
+	SocketId     	string	 `json:"socket_id"`
+	StatusId		string	 `json:"status_id"`
+}
+func (TransSocketAreaUS) TableName() string {
+	return config.DB_TRANS_SOCKET_AREA
+}
+

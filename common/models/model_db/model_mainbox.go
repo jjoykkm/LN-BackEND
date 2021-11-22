@@ -46,7 +46,7 @@ func (Mainbox) TableName() string {
 }
 
 //-------------------------------------------------------------------------------//
-//							Request Mainbox
+//							Upsert Mainbox
 //-------------------------------------------------------------------------------//
 type MainboxSerialUS struct {
 	MainboxName     	string		 `json:"mainbox_name"`
@@ -56,11 +56,6 @@ func (MainboxSerialUS) TableName() string {
 	return config.DB_MAINBOX
 }
 
-//type MainboxUS struct {
-//	MainboxId			uuid.UUID	 `json:"mainbox_id"`
-//	MainboxName     	string		 `json:"mainbox_name"`
-//	StatusId			uuid.UUID	 `json:"status_id"`
-//}
 type MainboxUS struct {
 	MainboxId		string	 `json:"mainbox_id"`
 	MainboxName     string	 `json:"mainbox_name"`

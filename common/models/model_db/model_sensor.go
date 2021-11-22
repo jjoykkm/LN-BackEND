@@ -40,12 +40,11 @@ func (Sensor) TableName() string {
 	return config.DB_SENSOR
 }
 
-
 //-------------------------------------------------------------------------------//
-//							Request Socket
+//							Upsert Socket
 //-------------------------------------------------------------------------------//
 type SensorUS struct {
-	SensorId      	string	 `json:"sensor_id"  gorm:"type:uuid;default:uuid_generate_v4()"`
+	SensorId      	string	 `json:"sensor_id"  gorm:"default:uuid_generate_v4()"`
 	SensorModel     string	 `json:"sensor_model"`
 	SensorLots      string	 `json:"sensor_lots"`
 	SensorTypeId	string	 `json:"sensor_type_id"`

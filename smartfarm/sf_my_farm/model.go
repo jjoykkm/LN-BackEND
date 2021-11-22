@@ -33,7 +33,6 @@ type SocketDetail struct {
 	Socket        	model_db.Socket	 	 	`json:"socket" gorm:"embedded"`
 	StatusSensor    model_db.StatusSensor	`json:"status_sensor" gorm:"foreignkey:StatusSensorId; references:StatusSensorId"`
 	Sensor         	[]SensorDetail			`json:"sensor" gorm:"foreignkey:SensorId; references:SensorId"`
-	//SocketAction    model_db.SocketAction	`json:"socket_action" gorm:"foreignkey:StatusSensorId; references:StatusSensorId"`
 }
 func (SocketDetail) TableName() string {
 	return config.DB_SOCKET
@@ -64,7 +63,7 @@ func (SenSocMainList) TableName() string {
 }
 
 //-------------------------------------------------------------------------------//
-//				 	    Plant And PlantType
+//				 	    Manage FarmArea
 //-------------------------------------------------------------------------------//
 //Model
 type ManageFarmArea struct {
@@ -117,17 +116,6 @@ func (ManageRole) TableName() string {
 }
 
 //-------------------------------------------------------------------------------//
-//							Request Socket And Sensor
-//-------------------------------------------------------------------------------//
-//Model
-type SocSenDetail struct {
-	Socket		model_db.SocketUS		`json:"socket" gorm:"embedded"`
-	//Sensor		model_db.SensorUS		`json:"sensor" gorm:"foreignkey:SensorId; references:SensorId`
-}
-func (SocSenDetail) TableName() string {
-	return config.DB_SOCKET
-}
-//-------------------------------------------------------------------------------//
 //							Request Config Mainbox
 //-------------------------------------------------------------------------------//
 //Model
@@ -138,10 +126,14 @@ type ReqConfMainbox struct {
 }
 
 type ReqDeleteConfig struct {
-	MainboxId      	*string	 `json:"mainbox_id"`
-	SensorId      	*string	 `json:"sensor_id"`
-	SocketId      	*string	 `json:"socket_id"`
-	FarmId     		*string	 `json:"farm_id"`
-	FarmAreaId     	*string	 `json:"farm_area_id"`
+	MainboxId      	string	 `json:"mainbox_id"`
+	SensorId      	string	 `json:"sensor_id"`
+	SocketId      	string	 `json:"socket_id"`
+	FarmId     		string	 `json:"farm_id"`
+	FarmAreaId     	string	 `json:"farm_area_id"`
 }
 
+type ReqConfFarmArea struct {
+	FarmArea    		*model_db.FarmAreaUS			`json:"farm_area"`
+	TransSocketArea		[]model_db.TransSocketAreaUS	`json:"trans_socket_area"`
+}

@@ -2,7 +2,6 @@ package sf_my_farm
 
 import (
 	"errors"
-	"fmt"
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"gorm.io/gorm"
@@ -23,10 +22,12 @@ type Repositorier interface {
 	UpdateOneSensor (req *model_db.Sensor) error
 	UpsertSocket (req []model_db.SocketUS) error
 	CreateOneSensor (req *model_db.SensorUS) error
-	DeleteOneSocket (socketId *string) error
-	DeactivateOneMainbox (mainboxId *string) error
-	DeleteOneFarm (farmId *string) error
-	DeleteOneFarmArea (farmAreaId *string) error
+	DeleteOneSocket (socketId string) error
+	DeactivateOneMainbox (mainboxId string) error
+	DeleteOneFarm (farmId string) error
+	DeleteOneFarmArea (farmAreaId string) error
+	UpsertFarmArea (req *model_db.FarmAreaUS) (error, *string)
+	UpsertTransSocketArea (req []model_db.TransSocketAreaUS) error
 	//FindAllPlantType(status string) ([]model_db.PlantType, error)
 	//GetFarmListWithRoleer(status, uid, roleId string) ([]model_services.DashboardFarmList, int)
 	//GetOverviewFarmer(status, farmId string) model_services.MyFarmOverviewFarm
@@ -205,7 +206,6 @@ func (r *Repository) UpdateOneMainboxBySerialNo (req *model_db.MainboxSerialUS) 
 	return nil
 }
 func (r *Repository) UpdateOneMainbox (req *model_db.MainboxUS) error {
-	fmt.Println("UpdateOneMainbox")
 	resp := r.db.Debug().Where("mainbox_id = ?",
 		req.MainboxId).Updates(&req)
 	if resp.Error != nil {
@@ -251,10 +251,6 @@ func (r *Repository) UpdateOneSensor (req *model_db.Sensor) error {
 //	return nil
 //}
 func (r *Repository) UpsertSocket (req []model_db.SocketUS) error {
-	// Assign status active
-	for idx, _ := range req {
-		req[idx].StatusId = config.GetStatus().Active
-	}
 	resp := r.db.Debug().Model(model_db.SocketUS{}).Clauses(clause.OnConflict{
 		Columns: []clause.Column{
 			{Name: "socket_id"},
@@ -271,9 +267,6 @@ func (r *Repository) UpsertSocket (req []model_db.SocketUS) error {
 }
 
 func (r *Repository) CreateOneSensor (req *model_db.SensorUS) error {
-	// Assign status pending
-	req.StatusId = config.GetStatus().Pending
-
 	resp := r.db.Debug().Create(&req)
 	if resp.Error != nil {
 		return resp.Error
@@ -283,46 +276,44 @@ func (r *Repository) CreateOneSensor (req *model_db.SensorUS) error {
 	}
 	return nil
 }
-//func (r *Repository) UpsertSensor (req []SocSenDetail) error {
-//	resp := r.db.Debug().Model(model_db.Sensor{}).Clauses(clause.OnConflict{
-//		Columns: []clause.Column{
-//			{Name: "senser_model"},
-//			{Name: "senser_lots"},
-//			{Name: "sensor_type_id"},
-//		},
-//		DoUpdates: clause.AssignmentColumns([]string{
-//			"receiving_account_bank_code",
-//			"receiving_account_branch_code",
-//			"receiving_account_no",
-//			"receiving_account_name_th",
-//			"settlement_status",
-//		})}).Where("registrar_transaction_code in ('R','O')").Create(&req)
-//	if resp.Error != nil {
-//		return resp.Error
-//	}
-//	if resp.RowsAffected == 0 {
-//		return gorm.ErrRecordNotFound
-//	}
-//	return nil
-//}
-//func (r *Repository) UpsertSensor (req []SocSenDetail) error {
-//	resp := r.db.Debug().Model(model_db.Sensor{}).Clauses(clause.OnConflict{
-//		Columns:   []clause.Column{{Name: "sensor_id"}},
-//		UpdateAll: true,
-//	}).Create(&req)
-//	if resp.Error != nil {
-//		return resp.Error
-//	}
-//	if resp.RowsAffected == 0 {
-//		return gorm.ErrRecordNotFound
-//	}
-//	return nil
-//}
+
+func (r *Repository) UpsertFarmArea (req *model_db.FarmAreaUS) (error, *string) {
+	resp := r.db.Debug().Model(model_db.FarmAreaUS{}).Clauses(clause.OnConflict{
+		Columns: []clause.Column{
+			{Name: "farm_area_id"},
+		},
+		UpdateAll: true,
+	}).Create(&req)
+	if resp.Error != nil {
+		return resp.Error, nil
+	}
+	if resp.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound, nil
+	}
+	return nil, &req.FarmAreaId
+}
+
+func (r *Repository) UpsertTransSocketArea (req []model_db.TransSocketAreaUS) error {
+	resp := r.db.Debug().Model(model_db.TransSocketAreaUS{}).Clauses(clause.OnConflict{
+		Columns: []clause.Column{
+			{Name: "farm_area_id"},
+			{Name: "socket_id"},
+		},
+		UpdateAll: true,
+	}).Create(&req)
+	if resp.Error != nil {
+		return resp.Error
+	}
+	if resp.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}
 
 //-------------------------------------------------------------------------------//
 //							Delete Data
 //-------------------------------------------------------------------------------//
-func (r *Repository) DeleteOneSocket (socketId *string) error {
+func (r *Repository) DeleteOneSocket (socketId string) error {
 	resp := r.db.Debug().Where("socket_id = ?", socketId).Delete(&model_db.Socket{})
 	if resp.Error != nil {
 		return resp.Error
@@ -333,10 +324,9 @@ func (r *Repository) DeleteOneSocket (socketId *string) error {
 	return nil
 }
 
-func (r *Repository) DeactivateOneMainbox (mainboxId *string) error {
+func (r *Repository) DeactivateOneMainbox (mainboxId string) error {
 	// Assign status pending
 	statusId := config.GetStatus().Inactive
-
 	resp := r.db.Debug().Model(&model_db.Mainbox{}).Where("mainbox_id = ?", mainboxId).Update("status_id", statusId)
 	if resp.Error != nil {
 		return resp.Error
@@ -347,7 +337,7 @@ func (r *Repository) DeactivateOneMainbox (mainboxId *string) error {
 	return nil
 }
 
-func (r *Repository) DeleteOneFarm (farmId *string) error {
+func (r *Repository) DeleteOneFarm (farmId string) error {
 	resp := r.db.Debug().Where("farm_id = ?", farmId).Delete(&model_db.Farm{})
 	if resp.Error != nil {
 		return resp.Error
@@ -358,7 +348,7 @@ func (r *Repository) DeleteOneFarm (farmId *string) error {
 	return nil
 }
 
-func (r *Repository) DeleteOneFarmArea (farmAreaId *string) error {
+func (r *Repository) DeleteOneFarmArea (farmAreaId string) error {
 	resp := r.db.Debug().Where("farm_area_id = ?", farmAreaId).Delete(&model_db.FarmArea{})
 	if resp.Error != nil {
 		return resp.Error

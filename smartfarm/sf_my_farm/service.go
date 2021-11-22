@@ -28,6 +28,7 @@ type Servicer interface {
 	ConfigDeleteMainbox(reqModel *ReqDeleteConfig) error
 	ConfigDeleteFarm(reqModel *ReqDeleteConfig) error
 	ConfigDeleteFarmArea(reqModel *ReqDeleteConfig) error
+	ConfigFarmArea(reqModel *ReqConfFarmArea) error
 }
 
 type Service struct {
@@ -145,6 +146,7 @@ func (s *Service) CheckMainboxIsInactivated(serialNo string) (bool, error) {
 		}
 	}
 }
+
 //-------------------------------------------------------------------------------//
 //							Update data
 //-------------------------------------------------------------------------------//
@@ -168,6 +170,12 @@ func (s *Service) ConfigMainbox(reqModel *ReqConfMainbox) error {
 			return err
 		}
 	}
+
+	// Prepare model before upsert data
+	for idx, _ := range reqModel.Socket {
+		// Assign status active
+		reqModel.Socket[idx].StatusId = config.GetStatus().Active
+	}
 	// Upsert Socket
 	err := s.repo.UpsertSocket(reqModel.Socket)
 	if err != nil{
@@ -177,6 +185,9 @@ func (s *Service) ConfigMainbox(reqModel *ReqConfMainbox) error {
 }
 
 func (s *Service) ConfigAddSensor(reqModel *ReqConfMainbox) error {
+	// Prepare model before upsert data
+	// Assign status pending
+	reqModel.Sensor.StatusId = config.GetStatus().Pending
 	// Create Sensor
 	err := s.repo.CreateOneSensor(reqModel.Sensor)
 	if err != nil{
@@ -185,6 +196,33 @@ func (s *Service) ConfigAddSensor(reqModel *ReqConfMainbox) error {
 	return nil
 }
 
+func (s *Service) ConfigFarmArea(reqModel *ReqConfFarmArea) error {
+	// Prepare model before upsert data
+	reqModel.FarmArea.StatusId = config.GetStatus().Active //Assign status active
+	// Upsert FarmArea detail
+	err, farmAreaId := s.repo.UpsertFarmArea(reqModel.FarmArea)
+	if err != nil{
+		return err
+	}
+
+	// Prepare model before upsert data
+	for idx, _ := range reqModel.TransSocketArea {
+		// Assign FarmAreaId
+		reqModel.TransSocketArea[idx].FarmAreaId = *farmAreaId
+		// Assign status active
+		reqModel.TransSocketArea[idx].StatusId 	 = config.GetStatus().Active
+	}
+	// Upsert Socket
+	err = s.repo.UpsertTransSocketArea(reqModel.TransSocketArea)
+	if err != nil{
+		return err
+	}
+	return nil
+}
+
+//-------------------------------------------------------------------------------//
+//							Delete data
+//-------------------------------------------------------------------------------//
 func (s *Service) ConfigDeleteSocket(reqModel *ReqDeleteConfig) error {
 	// Delete Socket
 	err := s.repo.DeleteOneSocket(reqModel.SocketId)
