@@ -109,6 +109,7 @@ func main() {
 				myFarm.POST("/manageMainbox", handlerMyFarm.GetManageMainbox)
 				myFarm.POST("/activateMainbox", handlerMyFarm.ActivateMainbox)
 				myFarm.POST("/configMainbox", handlerMyFarm.ConfigMainbox)
+				myFarm.POST("/configFarm", handlerMyFarm.ConfigFarm)
 				myFarm.POST("/configCustomSensor", handlerMyFarm.ConfigCustomSensor)
 				myFarm.POST("/configDeleteSocket", handlerMyFarm.ConfigDeleteSocket)
 				myFarm.POST("/configDeleteMainbox", handlerMyFarm.ConfigDeleteMainbox)
