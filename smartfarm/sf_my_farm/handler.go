@@ -1,7 +1,6 @@
 package sf_my_farm
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
@@ -132,6 +131,36 @@ func (h *Handler) GetManageMainbox(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, respModel)
+}
+
+func (h *Handler) ConfigFarm(c *gin.Context) {
+	var reqModel ReqConfFarm
+	//reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
+
+	if err := c.Bind(&reqModel); err != nil {
+		c.JSON(http.StatusBadRequest, &errs.ErrContext{
+			Code: "20000",
+			Err:  err,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	err := h.service.ConfigFarm(&reqModel)
+	if err != nil {
+		if errx, ok := err.(*errs.ErrContext); ok {
+			if httpCode, ok := mapErrorCode[errx.Code]; ok {
+				c.JSON(httpCode, err)
+				return
+			}
+		}
+		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
+			Code: "80000",
+			Err:  err,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, "success")
 }
 
 func (h *Handler) ActivateMainbox(c *gin.Context) {
@@ -355,7 +384,7 @@ func (h *Handler) ConfigFarmArea(c *gin.Context) {
 		})
 		return
 	}
-	fmt.Printf("%+v\n", reqModel.FarmArea)
+
 	err := h.service.ConfigFarmArea(&reqModel)
 	if err != nil {
 		if errx, ok := err.(*errs.ErrContext); ok {

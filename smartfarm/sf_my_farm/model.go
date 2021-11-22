@@ -137,3 +137,8 @@ type ReqConfFarmArea struct {
 	FarmArea    		*model_db.FarmAreaUS			`json:"farm_area"`
 	TransSocketArea		[]model_db.TransSocketAreaUS	`json:"trans_socket_area"`
 }
+
+
+type ReqConfFarm struct {
+	Farm   	*model_db.FarmUS	`json:"farm"`
+}

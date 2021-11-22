@@ -22,6 +22,7 @@ type Servicer interface {
 
 	CheckMainboxIsInactivated(serialNo string) (bool, error)
 	ActivateMainbox(reqModel *model_db.MainboxSerialUS) error
+	ConfigFarm(reqModel *ReqConfFarm) error
 	ConfigMainbox(reqModel *ReqConfMainbox) error
 	ConfigAddSensor(reqModel *ReqConfMainbox) error
 	ConfigDeleteSocket(reqModel *ReqDeleteConfig) error
@@ -150,6 +151,18 @@ func (s *Service) CheckMainboxIsInactivated(serialNo string) (bool, error) {
 //-------------------------------------------------------------------------------//
 //							Update data
 //-------------------------------------------------------------------------------//
+func (s *Service) ConfigFarm(reqModel *ReqConfFarm) error {
+	// Prepare model before upsert data
+	// Assign status active
+	reqModel.Farm.StatusId = config.GetStatus().Active
+	// Create Sensor
+	err := s.repo.UpsertFarm(reqModel.Farm)
+	if err != nil{
+		return err
+	}
+	return nil
+}
+
 func (s *Service) ActivateMainbox(reqModel *model_db.MainboxSerialUS) error {
 	isInactive, err := s.CheckMainboxIsInactivated(reqModel.MainboxSerialNo)
 	if !isInactive || err != nil {

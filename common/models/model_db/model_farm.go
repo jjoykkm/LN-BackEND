@@ -35,3 +35,16 @@ func (Farm) TableName() string {
 	return config.DB_FARM
 }
 
+//-------------------------------------------------------------------------------//
+//							Upsert Farm
+//-------------------------------------------------------------------------------//
+type FarmUS struct {
+	FarmId      	string	 `json:"farm_id" gorm:"default:uuid_generate_v4()"`
+	FarmName    	string	 `json:"farm_name"`
+	FarmDesc    	string	 `json:"farm_desc"`
+	StatusId		string	 `json:"status_id"`
+}
+func (FarmUS) TableName() string {
+	return config.DB_FARM
+}
+
