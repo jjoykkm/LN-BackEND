@@ -20,6 +20,7 @@ type Repositorier interface {
 	UpdateOneMainboxBySerialNo (req *model_db.MainboxSerialUS) error
 	UpdateOneMainbox (req *model_db.MainboxUS) error
 	UpdateOneSensor (req *model_db.Sensor) error
+	UpdateAllSocket (req *LinkedSocFarmArea) error
 	UpsertFarm (req *model_db.FarmUS) error
 	UpsertSocket (req []model_db.SocketUS) error
 	CreateOneSensor (req *model_db.SensorUS) error
@@ -220,6 +221,17 @@ func (r *Repository) UpdateOneMainbox (req *model_db.MainboxUS) error {
 func (r *Repository) UpdateOneSensor (req *model_db.Sensor) error {
 	resp := r.db.Debug().Where("sensor_id = ?",
 		req.SensorId).Updates(&req)
+	if resp.Error != nil {
+		return resp.Error
+	}
+	if resp.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}
+func (r *Repository) UpdateAllSocket (req *LinkedSocFarmArea) error {
+	resp := r.db.Debug().Table(config.DB_SOCKET).Select("farm_area_id").Where("socket_id IN ?",
+		req.SocketId).Updates(&req)
 	if resp.Error != nil {
 		return resp.Error
 	}

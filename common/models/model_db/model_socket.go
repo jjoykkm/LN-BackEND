@@ -20,6 +20,7 @@ type Socket struct {
 	SocketNumber	int64		 `json:"socket_number"`
 	StatusSensorId	uuid.UUID	 `json:"status_sensor_id"`
 	MainboxId     	uuid.UUID	 `json:"mainbox_id"`
+	FarmAreaId      uuid.UUID	 `json:"farm_area_id"`
 }
 // New instance socket
 func (u *Socket) New() *Socket {
@@ -33,6 +34,7 @@ func (u *Socket) New() *Socket {
 		SocketNumber:		u.SocketNumber ,
 		StatusSensorId:		u.StatusSensorId ,
 		MainboxId:			u.MainboxId ,
+		FarmAreaId:			u.FarmAreaId ,
 	}
 }
 
@@ -45,12 +47,14 @@ func (Socket) TableName() string {
 //							Upsert Socket
 //-------------------------------------------------------------------------------//
 type SocketUS struct {
-	SensorId      	string	 `json:"sensor_id"`
-	StatusId		string	 `json:"status_id"`
-	SocketName      string	 `json:"socket_name"`
-	SocketNumber	int64	 `json:"socket_number"`
-	StatusSensorId	string	 `json:"status_sensor_id"`
-	MainboxId     	string	 `json:"mainbox_id"`
+	SocketId		string		 `json:"socket_id" gorm:"default:uuid_generate_v4()"`
+	SensorId      	string	 	 `json:"sensor_id"`
+	StatusId		string	 	 `json:"status_id"`
+	SocketName      string	 	 `json:"socket_name"`
+	SocketNumber	int64	 	 `json:"socket_number"`
+	StatusSensorId	string	 	 `json:"status_sensor_id"`
+	MainboxId     	string	 	 `json:"mainbox_id"`
+	FarmAreaId      uuid.UUID	 `json:"farm_area_id"`
 }
 func (SocketUS) TableName() string {
 	return config.DB_SOCKET

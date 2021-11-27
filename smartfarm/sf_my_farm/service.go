@@ -218,17 +218,24 @@ func (s *Service) ConfigFarmArea(reqModel *ReqConfFarmArea) error {
 		return err
 	}
 
-	// Prepare model before upsert data
-	for idx, _ := range reqModel.TransSocketArea {
-		// Assign FarmAreaId
-		reqModel.TransSocketArea[idx].FarmAreaId = *farmAreaId
-		// Assign status active
-		reqModel.TransSocketArea[idx].StatusId 	 = config.GetStatus().Active
-	}
-	// Upsert Socket
-	err = s.repo.UpsertTransSocketArea(reqModel.TransSocketArea)
-	if err != nil{
-		return err
+	// Check array is not empty
+	if len(reqModel.LinkedSocFarmArea.SocketId) > 0 {
+		// Assign FarmAreaId before update data
+		reqModel.LinkedSocFarmArea.FarmAreaId = *farmAreaId
+		// Update Socket
+		err = s.repo.UpdateAllSocket(reqModel.LinkedSocFarmArea)
+		//// Prepare model before upsert data
+		//for idx, _ := range reqModel.TransSocketArea {
+		//	// Assign FarmAreaId
+		//	reqModel.TransSocketArea[idx].FarmAreaId = *farmAreaId
+		//	// Assign status active
+		//	reqModel.TransSocketArea[idx].StatusId 	 = config.GetStatus().Active
+		//}
+		//// Upsert Socket
+		//err = s.repo.UpsertTransSocketArea(reqModel.TransSocketArea)
+		if err != nil{
+			return err
+		}
 	}
 	return nil
 }

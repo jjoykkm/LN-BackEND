@@ -116,6 +116,15 @@ func (ManageRole) TableName() string {
 }
 
 //-------------------------------------------------------------------------------//
+//						Structure Linked socket and farm area
+//-------------------------------------------------------------------------------//
+//Model
+type LinkedSocFarmArea struct {
+	FarmAreaId      string	 		`json:"farm_area_id"`
+	SocketId		[]string		`json:"socket_id"`
+}
+
+//-------------------------------------------------------------------------------//
 //							Request Config Mainbox
 //-------------------------------------------------------------------------------//
 //Model
@@ -134,8 +143,8 @@ type ReqDeleteConfig struct {
 }
 
 type ReqConfFarmArea struct {
-	FarmArea    		*model_db.FarmAreaUS			`json:"farm_area"`
-	TransSocketArea		[]model_db.TransSocketAreaUS	`json:"trans_socket_area"`
+	FarmArea    			*model_db.FarmAreaUS		`json:"farm_area"`
+	LinkedSocFarmArea		*LinkedSocFarmArea			`json:"linked_socket_farm_area"`
 }
 
 
