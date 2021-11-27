@@ -7,7 +7,7 @@ package errs
 type ErrContext struct {
 	Code	string	`json:"code"`
 	Err		error	`json:"-"`
-	Msg		string	`json:"msg"`
+	Msg		string	`json:"error"`
 }
 
 // New instance
