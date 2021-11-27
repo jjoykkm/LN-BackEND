@@ -1,6 +1,7 @@
 package sf_my_farm
 
 import (
+	"database/sql"
 	"errors"
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
@@ -30,6 +31,7 @@ type Repositorier interface {
 	DeleteOneFarmArea (farmAreaId string) error
 	UpsertFarmArea (req *model_db.FarmAreaUS) (error, *string)
 	UpsertTransSocketArea (req []model_db.TransSocketAreaUS) error
+	UpdateAllSocketNullFarmArea (req []string) error
 	//FindAllPlantType(status string) ([]model_db.PlantType, error)
 	//GetFarmListWithRoleer(status, uid, roleId string) ([]model_services.DashboardFarmList, int)
 	//GetOverviewFarmer(status, farmId string) model_services.MyFarmOverviewFarm
@@ -240,6 +242,19 @@ func (r *Repository) UpdateAllSocket (req *LinkedSocFarmArea) error {
 	}
 	return nil
 }
+
+func (r *Repository) UpdateAllSocketNullFarmArea (req []string) error {
+	resp := r.db.Debug().Table(config.DB_SOCKET).Where("socket_id IN ?",
+		req).Update("farm_area_id", sql.NullString{})
+	if resp.Error != nil {
+		return resp.Error
+	}
+	if resp.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}
+
 
 //-------------------------------------------------------------------------------//
 //							Upsert Data

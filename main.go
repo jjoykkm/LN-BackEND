@@ -116,6 +116,7 @@ func main() {
 				myFarm.POST("/configDeleteFarm", handlerMyFarm.ConfigDeleteFarm)
 				myFarm.POST("/configDeleteFarmArea", handlerMyFarm.ConfigDeleteFarmArea)
 				myFarm.POST("/configFarmArea", handlerMyFarm.ConfigFarmArea)
+				myFarm.POST("/removeSocketLinkedFarm", handlerMyFarm.RemoveSocketLinkedFarm)
 			}
 			//scheRem := app.Group("/scheRem")
 			//{

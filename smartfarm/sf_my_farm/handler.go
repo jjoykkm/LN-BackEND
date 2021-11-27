@@ -403,6 +403,37 @@ func (h *Handler) ConfigFarmArea(c *gin.Context) {
 	c.JSON(http.StatusOK, "success")
 }
 
+func (h *Handler) RemoveSocketLinkedFarm(c *gin.Context) {
+	var reqModel ReqRemoveLink
+	//reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
+
+	if err := c.Bind(&reqModel); err != nil {
+		c.JSON(http.StatusBadRequest, &errs.ErrContext{
+			Code: "20000",
+			Err:  err,
+			Msg:  err.Error(),
+		})
+		return
+	}
+
+	err := h.service.RemoveSocketLinkedFarm(&reqModel)
+	if err != nil {
+		if errx, ok := err.(*errs.ErrContext); ok {
+			if httpCode, ok := mapErrorCode[errx.Code]; ok {
+				c.JSON(httpCode, err)
+				return
+			}
+		}
+		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
+			Code: "80000",
+			Err:  err,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, "success")
+}
+
 
 
 

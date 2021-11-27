@@ -147,7 +147,10 @@ type ReqConfFarmArea struct {
 	LinkedSocFarmArea		*LinkedSocFarmArea			`json:"linked_socket_farm_area"`
 }
 
-
 type ReqConfFarm struct {
 	Farm   	*model_db.FarmUS	`json:"farm"`
+}
+
+type ReqRemoveLink struct {
+	LinkedSocFarmArea	*LinkedSocFarmArea		`json:"linked_socket_farm_area"`
 }

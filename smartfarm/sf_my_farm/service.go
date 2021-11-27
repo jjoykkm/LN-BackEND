@@ -30,6 +30,7 @@ type Servicer interface {
 	ConfigDeleteFarm(reqModel *ReqDeleteConfig) error
 	ConfigDeleteFarmArea(reqModel *ReqDeleteConfig) error
 	ConfigFarmArea(reqModel *ReqConfFarmArea) error
+	RemoveSocketLinkedFarm(reqModel *ReqRemoveLink) error
 }
 
 type Service struct {
@@ -273,6 +274,14 @@ func (s *Service) ConfigDeleteFarm(reqModel *ReqDeleteConfig) error {
 func (s *Service) ConfigDeleteFarmArea(reqModel *ReqDeleteConfig) error {
 	// Delete FarmArea
 	err := s.repo.DeleteOneFarmArea(reqModel.FarmAreaId)
+	if err != nil{
+		return err
+	}
+	return nil
+}
+
+func (s *Service) RemoveSocketLinkedFarm(reqModel *ReqRemoveLink) error {
+	err := s.repo.UpdateAllSocketNullFarmArea(reqModel.LinkedSocFarmArea.SocketId)
 	if err != nil{
 		return err
 	}
