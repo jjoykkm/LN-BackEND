@@ -3,7 +3,6 @@ package model_db
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
-	"time"
 )
 
 //-------------------------------------------------------------------------------//
@@ -11,24 +10,20 @@ import (
 //-------------------------------------------------------------------------------//
 //model role
 type Role struct {
+	DBCommon
 	RoleId      	uuid.UUID	 `json:"role_id"`
 	RoleNameEN      string		 `json:"role_name_en"`
 	RoleDescEN      string		 `json:"role_desc_en"`
-	CreateDate		time.Time	 `json:"create_date"`
-	ChangeDate	    time.Time	 `json:"change_date"`
-	StatusId		uuid.UUID	 `json:"status_id"`
 	RoleNameTH      string		 `json:"role_name_th"`
 	RoleDescTH      string		 `json:"role_desc_th"`
 }
 // New instance role
 func (u *Role) New() *Role {
 	return &Role{
+		DBCommon:      	u.DBCommon ,
 		RoleId:			u.RoleId ,
 		RoleNameEN:		u.RoleNameEN ,
 		RoleDescEN:		u.RoleDescEN ,
-		CreateDate:		u.CreateDate ,
-		ChangeDate:		u.ChangeDate ,
-		StatusId:		u.StatusId ,
 		RoleNameTH:		u.RoleNameTH ,
 		RoleDescTH:		u.RoleDescTH ,
 	}

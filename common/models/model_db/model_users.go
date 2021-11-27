@@ -12,6 +12,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model users
 type Users struct {
+	DBCommon
 	Uid      		uuid.UUID	 	`json:"uid"`
 	Username     	string	 	 	`json:"username"`
 	Password      	string	 	 	`json:"password"`
@@ -24,14 +25,12 @@ type Users struct {
 	Telephone      	string	 	 	`json:"telephone"`
 	Mail      		string	 	 	`json:"mail"`
 	Image	      	image.Image	 	`json:"image"`
-	CreateDate		time.Time	 	`json:"create_date"`
-	ChangeDate	    time.Time	 	`json:"change_date"`
-	StatusId		uuid.UUID	 	`json:"status_id"`
 	UserNo			string		 	`json:"user_no"`
 }
 // New instance users
 func (u *Users) New() *Users {
 	return &Users{
+		DBCommon:      	u.DBCommon ,
 		Uid:       		u.Uid ,
 		Username:       u.Username ,
 		Password:       u.Password ,
@@ -44,9 +43,6 @@ func (u *Users) New() *Users {
 		Telephone:      u.Telephone ,
 		Mail:       	u.Mail ,
 		Image:       	u.Image ,
-		CreateDate:     u.CreateDate ,
-		ChangeDate:     u.ChangeDate ,
-		StatusId:       u.StatusId ,
 		UserNo:       	u.UserNo ,
 
 	}

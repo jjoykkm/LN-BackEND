@@ -3,7 +3,6 @@ package model_db
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
-	"time"
 )
 
 //-------------------------------------------------------------------------------//
@@ -11,15 +10,13 @@ import (
 //-------------------------------------------------------------------------------//
 //model address_user
 type AddressUser struct {
+	DBCommon
 	AddressUserId	 	 uuid.UUID	 `json:"address_user_id"`
 	HouseNo				 string  	 `json:"house_no"`
 	Alley				 string  	 `json:"alley"`
 	Road				 string  	 `json:"road"`
-	LocationX			 float64	 `json:"change_date"`
-	LocationY			 float64	 `json:"change_date"`
-	CreateDate		 	 time.Time	 `json:"create_date"`
-	ChangeDate	     	 time.Time	 `json:"change_date"`
-	StatusId			 uuid.UUID	 `json:"status_id"`
+	LocationX			 float64	 `json:"location_x"`
+	LocationY			 float64	 `json:"location_y"`
 	SubDistrictId		 uuid.UUID	 `json:"sub_district_id"`
 	DistrictId			 uuid.UUID	 `json:"district_id"`
 	ProvinceId			 uuid.UUID	 `json:"province_id"`
@@ -30,15 +27,13 @@ type AddressUser struct {
 // New instance address_user
 func (u *AddressUser) New() *AddressUser {
 	return &AddressUser{
+		DBCommon:      		u.DBCommon ,
 		AddressUserId:      u.AddressUserId ,
 		HouseNo:            u.HouseNo ,
 		Alley:              u.Alley ,
 		Road:               u.Road ,
 		LocationX:          u.LocationX ,
 		LocationY:          u.LocationY ,
-		CreateDate:         u.CreateDate ,
-		ChangeDate:         u.ChangeDate ,
-		StatusId:           u.StatusId ,
 		SubDistrictId:      u.SubDistrictId ,
 		DistrictId:         u.DistrictId ,
 		ProvinceId:         u.ProvinceId ,

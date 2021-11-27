@@ -3,7 +3,6 @@ package model_db
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
-	"time"
 )
 
 //-------------------------------------------------------------------------------//
@@ -11,21 +10,17 @@ import (
 //-------------------------------------------------------------------------------//
 //model sensor_type
 type SensorType struct {
+	DBCommon
 	SensorTypeId      	uuid.UUID	 `json:"sensor_type_id"`
 	SensorTypeNameEN    string	 	 `json:"sensor_type_name_en"`
-	CreateDate			time.Time	 `json:"create_date"`
-	ChangeDate	    	time.Time	 `json:"change_date"`
-	StatusId			uuid.UUID	 `json:"status_id"`
 	SensorTypeNameTH    string	 	 `json:"sensor_type_name_th"`
 }
 // New instance sensor_type
 func (u *SensorType) New() *SensorType {
 	return &SensorType{
+		DBCommon:      		u.DBCommon ,
 		SensorTypeId:		u.SensorTypeId ,
 		SensorTypeNameEN:	u.SensorTypeNameEN ,
-		CreateDate:			u.CreateDate ,
-		ChangeDate:			u.ChangeDate ,
-		StatusId:			u.StatusId ,
 		SensorTypeNameTH:	u.SensorTypeNameTH ,
 	}
 }

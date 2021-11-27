@@ -3,7 +3,6 @@ package model_db
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
-	"time"
 )
 
 //-------------------------------------------------------------------------------//
@@ -11,20 +10,16 @@ import (
 //-------------------------------------------------------------------------------//
 //model favorite_plant
 type FavoritePlant struct {
+	DBCommon
 	Uid          	 uuid.UUID	 `json:"uid"`
 	FormulaPlantId   uuid.UUID	 `json:"formula_plant_id"`
-	CreateDate		 time.Time	 `json:"create_date"`
-	ChangeDate	     time.Time	 `json:"change_date"`
-	StatusId		 uuid.UUID	 `json:"status_id"`
 }
 // New instance favorite_plant
 func (u *FavoritePlant) New() *FavoritePlant {
 	return &FavoritePlant{
+		DBCommon:      		u.DBCommon ,
 		Uid:				u.Uid ,
 		FormulaPlantId:		u.FormulaPlantId ,
-		CreateDate:			u.CreateDate ,
-		ChangeDate:			u.ChangeDate ,
-		StatusId:			u.StatusId ,
 	}
 }
 

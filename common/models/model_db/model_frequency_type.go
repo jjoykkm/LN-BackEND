@@ -3,7 +3,6 @@ package model_db
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
-	"time"
 )
 
 //-------------------------------------------------------------------------------//
@@ -11,24 +10,20 @@ import (
 //-------------------------------------------------------------------------------//
 //model frequency_type
 type FrequencyType struct {
+	DBCommon
 	FrequencyTypeId		uuid.UUID	 `json:"frequency_type_id"`
 	FrequencyName   	string		 `json:"frequency_name"`
 	IntervalRange   	string		 `json:"interval_range"`
 	IsForCustom     	string		 `json:"is_for_custom"`
-	CreateDate			time.Time	 `json:"create_date"`
-	ChangeDate	    	time.Time	 `json:"change_date"`
-	StatusId			uuid.UUID	 `json:"status_id"`
 }
 // New instance frequency_type
 func (u *FrequencyType) New() *FrequencyType {
 	return &FrequencyType{
+		DBCommon:      	  u.DBCommon ,
 		FrequencyTypeId:  u.FrequencyTypeId ,
 		FrequencyName:	  u.FrequencyName ,
 		IntervalRange:	  u.IntervalRange ,
 		IsForCustom:	  u.IsForCustom ,
-		CreateDate:		  u.CreateDate ,
-		ChangeDate:		  u.ChangeDate ,
-		StatusId:		  u.StatusId ,
 	}
 }
 

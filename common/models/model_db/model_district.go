@@ -3,7 +3,6 @@ package model_db
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
-	"time"
 )
 
 //-------------------------------------------------------------------------------//
@@ -11,22 +10,18 @@ import (
 //-------------------------------------------------------------------------------//
 //model district
 type District struct {
+	DBCommon
 	DistrictId      uuid.UUID	 `json:"district_id"`
 	DistrictEN      string		 `json:"district_name_en"`
 	DistrictTH      string		 `json:"district_name_th"`
-	CreateDate		 time.Time	 `json:"create_date"`
-	ChangeDate	     time.Time	 `json:"change_date"`
-	StatusId		 uuid.UUID	 `json:"status_id"`
 }
 // New instance district
 func (u *District) New() *District {
 	return &District{
+		DBCommon:      	u.DBCommon ,
 		DistrictId:		u.DistrictId ,
 		DistrictEN:		u.DistrictEN ,
 		DistrictTH:		u.DistrictTH ,
-		CreateDate:		u.CreateDate ,
-		ChangeDate:		u.ChangeDate ,
-		StatusId:		u.StatusId ,
 	}
 }
 
