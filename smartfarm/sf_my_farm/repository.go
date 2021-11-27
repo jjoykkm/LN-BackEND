@@ -359,7 +359,7 @@ func (r *Repository) UpsertTransSocketArea (req []model_db.TransSocketAreaUS) er
 //-------------------------------------------------------------------------------//
 func (r *Repository) DeleteOneSocket (socketId string) error {
 	//resp := r.db.Debug().Where("socket_id = ?", socketId).Delete(&model_db.Socket{})
-	resp := r.db.Debug().Where("socket_id = ?", socketId).Update("status_id",
+	resp := r.db.Debug().Table(config.DB_SOCKET).Where("socket_id = ?", socketId).Update("status_id",
 		config.GetStatus().Inactive)
 	if resp.Error != nil {
 		return resp.Error
@@ -385,7 +385,7 @@ func (r *Repository) DeactivateOneMainbox (mainboxId string) error {
 
 func (r *Repository) DeleteOneFarm (farmId string) error {
 	//resp := r.db.Debug().Where("farm_id = ?", farmId).Delete(&model_db.Farm{})
-	resp := r.db.Debug().Where("farm_id = ?", farmId).Update("status_id",
+	resp := r.db.Debug().Table(config.DB_FARM).Where("farm_id = ?", farmId).Update("status_id",
 		config.GetStatus().Inactive)
 	if resp.Error != nil {
 		return resp.Error
@@ -398,7 +398,7 @@ func (r *Repository) DeleteOneFarm (farmId string) error {
 
 func (r *Repository) DeleteOneFarmArea (farmAreaId string) error {
 	//resp := r.db.Debug().Where("farm_area_id = ?", farmAreaId).Delete(&model_db.FarmArea{})
-	resp := r.db.Debug().Where("farm_area_id = ?", farmAreaId).Update("status_id",
+	resp := r.db.Debug().Table(config.DB_FARM_AREA).Where("farm_area_id = ?", farmAreaId).Update("status_id",
 		config.GetStatus().Inactive)
 	if resp.Error != nil {
 		return resp.Error
