@@ -64,7 +64,22 @@ func (u *RespOffsetModel) New() *RespOffsetModel {
 	}
 }
 
-
+//Model response for success
+type RespSuccessModel struct {
+	MsgTh   	string		`json:"msg_th"`
+	MsgEn    	string		`json:"msg_en"`
+}
+// New instance
+func (u *RespSuccessModel) New() *RespSuccessModel {
+	return &RespSuccessModel{
+		MsgTh:      u.MsgTh ,
+		MsgEn:    	u.MsgEn ,
+	}
+}
+//-------------------------------------------------------------------------------//
+//				 		    Error Context
+//-------------------------------------------------------------------------------//
+//Model post body
 
 ////-------------------------------------------------------------------------------//
 ////				 			 	METHOD POST

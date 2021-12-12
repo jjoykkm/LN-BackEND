@@ -160,7 +160,10 @@ func (h *Handler) ConfigFarm(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, "success")
+	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
+		MsgTh: config.MSG_SUC_TH,
+		MsgEn: config.MSG_SUC_EN,
+	})
 }
 
 func (h *Handler) ActivateMainbox(c *gin.Context) {
@@ -189,7 +192,10 @@ func (h *Handler) ActivateMainbox(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, "success")
+	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
+		MsgTh: config.MSG_SUC_TH,
+		MsgEn: config.MSG_SUC_EN,
+	})
 }
 
 func (h *Handler) ConfigMainbox(c *gin.Context) {
@@ -219,7 +225,10 @@ func (h *Handler) ConfigMainbox(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, "success")
+	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
+		MsgTh: config.MSG_SUC_TH,
+		MsgEn: config.MSG_SUC_EN,
+	})
 }
 
 func (h *Handler) ConfigCustomSensor(c *gin.Context) {
@@ -249,7 +258,10 @@ func (h *Handler) ConfigCustomSensor(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, "success")
+	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
+		MsgTh: config.MSG_SUC_TH,
+		MsgEn: config.MSG_SUC_EN,
+	})
 }
 
 func (h *Handler) ConfigDeleteSocket(c *gin.Context) {
@@ -279,7 +291,10 @@ func (h *Handler) ConfigDeleteSocket(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, "success")
+	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
+		MsgTh: config.MSG_SUC_TH,
+		MsgEn: config.MSG_SUC_EN,
+	})
 }
 
 func (h *Handler) ConfigDeleteMainbox(c *gin.Context) {
@@ -309,7 +324,10 @@ func (h *Handler) ConfigDeleteMainbox(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, "success")
+	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
+		MsgTh: config.MSG_SUC_TH,
+		MsgEn: config.MSG_SUC_EN,
+	})
 }
 
 func (h *Handler) ConfigDeleteFarm(c *gin.Context) {
@@ -339,7 +357,10 @@ func (h *Handler) ConfigDeleteFarm(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, "success")
+	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
+		MsgTh: config.MSG_SUC_TH,
+		MsgEn: config.MSG_SUC_EN,
+	})
 }
 
 func (h *Handler) ConfigDeleteFarmArea(c *gin.Context) {
@@ -369,7 +390,10 @@ func (h *Handler) ConfigDeleteFarmArea(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, "success")
+	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
+		MsgTh: config.MSG_SUC_TH,
+		MsgEn: config.MSG_SUC_EN,
+	})
 }
 
 func (h *Handler) ConfigFarmArea(c *gin.Context) {
@@ -400,7 +424,10 @@ func (h *Handler) ConfigFarmArea(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, "success")
+	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
+		MsgTh: config.MSG_SUC_TH,
+		MsgEn: config.MSG_SUC_EN,
+	})
 }
 
 func (h *Handler) RemoveSocketLinkedFarm(c *gin.Context) {
@@ -431,7 +458,10 @@ func (h *Handler) RemoveSocketLinkedFarm(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, "success")
+	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
+		MsgTh: config.MSG_SUC_TH,
+		MsgEn: config.MSG_SUC_EN,
+	})
 }
 
 
