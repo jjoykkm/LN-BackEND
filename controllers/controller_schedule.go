@@ -5,7 +5,7 @@ import (
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
 	"github.com/jjoykkm/ln-backend/modelsOld/model_services"
-	"github.com/jjoykkm/ln-backend/utility"
+	"github.com/jjoykkm/ln-backend/obsolete_utility"
 	"github.com/mitchellh/mapstructure"
 	"log"
 )
@@ -39,7 +39,7 @@ func (ln Ln) GetScheduleIder(status string, farmAreaIdList []string) ([]model_da
 	var scheduleFarm []model_databases.TransScheduleFarm
 	var scheIdList []string
 
-	sqlIn := utility.ConvertListToStringIn(farmAreaIdList)
+	sqlIn := obsolete_utility.ConvertListToStringIn(farmAreaIdList)
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND farm_area_id IN %s",
 		config.DB_TRANS_SCHEDULE_FARM, status, sqlIn)
 	fmt.Println(sql)
@@ -61,7 +61,7 @@ func (ln Ln) GetScheduleer(status string, scheIdList []string) ([]model_database
 	var freqTypeIdList []string
 	var inTypeIdList []string
 
-	sqlIn := utility.ConvertListToStringIn(scheIdList)
+	sqlIn := obsolete_utility.ConvertListToStringIn(scheIdList)
 	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.schedule_id = %s.schedule_id WHERE %s.status_id = '%s' AND %s.schedule_id IN %s",
 		config.DB_SCHEDULE, config.DB_TRANS_SCHEDULE_FARM, config.DB_SCHEDULE, config.DB_TRANS_SCHEDULE_FARM, config.DB_SCHEDULE, status, config.DB_TRANS_SCHEDULE_FARM, sqlIn)
 	fmt.Println(sql)
@@ -87,7 +87,7 @@ func (ln Ln) GetFrequencyTypeer(status string, freqTypeIdList []string) ([]model
 
 	mapFreqType := make(map[string]model_databases.FrequencyType)
 
-	sqlIn := utility.ConvertListToStringIn(freqTypeIdList)
+	sqlIn := obsolete_utility.ConvertListToStringIn(freqTypeIdList)
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND frequency_type_id IN %s",
 		config.DB_FREQUENCY_TYPE, status, sqlIn)
 	fmt.Println(sql)
@@ -108,7 +108,7 @@ func (ln Ln) GetIndicateTypeer(status string, inTypeIdList []string) ([]model_da
 
 	inTypeMap := make(map[string]model_databases.IndicateType)
 
-	sqlIn := utility.ConvertListToStringIn(inTypeIdList)
+	sqlIn := obsolete_utility.ConvertListToStringIn(inTypeIdList)
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND indicate_type_id IN %s",
 		config.DB_INDICATE_TYPE, status, sqlIn)
 	fmt.Println(sql)
@@ -136,7 +136,7 @@ func (ln Ln) GetScheReminder(status string, farmAreaId []string) model_services.
 
 	//_, scheIdList, _ := IntSchedule.GetScheduleIder(ln, status, farmAreaId)
 
-	sqlIn := utility.ConvertListToStringIn(farmAreaId)
+	sqlIn := obsolete_utility.ConvertListToStringIn(farmAreaId)
 	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.schedule_id = %s.schedule_id WHERE %s.status_id = '%s' AND %s.farm_area_id IN %s",
 		config.DB_SCHEDULE, config.DB_TRANS_SCHEDULE_FARM, config.DB_SCHEDULE, config.DB_TRANS_SCHEDULE_FARM, config.DB_SCHEDULE, status, config.DB_TRANS_SCHEDULE_FARM, sqlIn)
 	fmt.Println(sql)

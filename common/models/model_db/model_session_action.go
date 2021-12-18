@@ -10,14 +10,14 @@ import (
 //-------------------------------------------------------------------------------//
 //model session_action
 type SessionAction struct {
-	DBCommon
+	DBCommonGet
 	SessionActionId     uuid.UUID	 `json:"session_action_id"`
 	SessionAction     	string	 	 `json:"session_action"`
 }
 // New instance session_action
 func (u *SessionAction) New() *SessionAction {
 	return &SessionAction{
-		DBCommon:      		u.DBCommon ,
+		DBCommonGet:      		u.DBCommonGet ,
 		SessionActionId:	u.SessionActionId ,
 		SessionAction:		u.SessionAction ,
 	}

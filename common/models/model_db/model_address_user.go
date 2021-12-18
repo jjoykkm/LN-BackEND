@@ -10,7 +10,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model address_user
 type AddressUser struct {
-	DBCommon
+	DBCommonGet
 	AddressUserId	 	 uuid.UUID	 `json:"address_user_id"`
 	HouseNo				 string  	 `json:"house_no"`
 	Alley				 string  	 `json:"alley"`
@@ -27,7 +27,7 @@ type AddressUser struct {
 // New instance address_user
 func (u *AddressUser) New() *AddressUser {
 	return &AddressUser{
-		DBCommon:      		u.DBCommon ,
+		DBCommonGet:      		u.DBCommonGet ,
 		AddressUserId:      u.AddressUserId ,
 		HouseNo:            u.HouseNo ,
 		Alley:              u.Alley ,

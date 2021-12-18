@@ -10,7 +10,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model socket
 type Socket struct {
-	DBCommon
+	DBCommonGet
 	SocketId      	uuid.UUID	 `json:"socket_id gorm:"default:uuid_generate_v4()"`
 	SensorId      	uuid.UUID	 `json:"sensor_id"`
 	SocketName      string	 	 `json:"socket_name"`
@@ -22,7 +22,7 @@ type Socket struct {
 // New instance socket
 func (u *Socket) New() *Socket {
 	return &Socket{
-		DBCommon:      		u.DBCommon ,
+		DBCommonGet:      		u.DBCommonGet ,
 		SocketId:			u.SocketId ,
 		SensorId:			u.SensorId ,
 		SocketName:			u.SocketName ,

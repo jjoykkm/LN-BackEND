@@ -12,7 +12,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model users
 type Users struct {
-	DBCommon
+	DBCommonGet
 	Uid      		uuid.UUID	 	`json:"uid"`
 	Username     	string	 	 	`json:"username"`
 	Password      	string	 	 	`json:"password"`
@@ -30,7 +30,7 @@ type Users struct {
 // New instance users
 func (u *Users) New() *Users {
 	return &Users{
-		DBCommon:      	u.DBCommon ,
+		DBCommonGet:      	u.DBCommonGet ,
 		Uid:       		u.Uid ,
 		Username:       u.Username ,
 		Password:       u.Password ,

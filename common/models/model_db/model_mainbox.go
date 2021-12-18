@@ -1,8 +1,10 @@
 package model_db
 
 import (
+	"fmt"
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -11,7 +13,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model mainbox
 type Mainbox struct {
-	DBCommon
+	DBCommonGet
 	MainboxId      		uuid.UUID	 `json:"mainbox_id"`
 	MainboxName     	string		 `json:"mainbox_name"`
 	MainboxModel    	string		 `json:"mainbox_model"`
@@ -24,7 +26,7 @@ type Mainbox struct {
 // New instance mainbox
 func (u *Mainbox) New() *Mainbox {
 	return &Mainbox{
-		DBCommon:      		u.DBCommon ,
+		DBCommonGet:      		u.DBCommonGet ,
 		MainboxId:			u.MainboxId ,
 		MainboxName:		u.MainboxName ,
 		MainboxModel:		u.MainboxModel ,
@@ -47,6 +49,7 @@ func (Mainbox) TableName() string {
 type MainboxSerialUS struct {
 	MainboxName     	string		 `json:"mainbox_name"`
 	MainboxSerialNo		string		 `json:"serial_no"`
+	DBCommonCreateUpdate
 }
 func (MainboxSerialUS) TableName() string {
 	return config.DB_MAINBOX
@@ -56,11 +59,28 @@ type MainboxUS struct {
 	MainboxId		string	 `json:"mainbox_id"`
 	MainboxName     string	 `json:"mainbox_name"`
 	StatusId		string	 `json:"status_id"`
+	DBCommonCreateUpdate
 }
 func (MainboxUS) TableName() string {
 	return config.DB_MAINBOX
 }
-
+func (u *MainboxSerialUS) BeforeUpdate(tx *gorm.DB) (err error) {
+	fmt.Println("BeforeUpdate")
+	u.CreateBy = nil
+	//u.CreateBy = sf_my_farm.Handler{}.Username
+	//u.ChangeBy = *sf_my_farm.Handler{}.Username
+	jj := "test"
+	//u.CreateBy = &jj
+	//u.ChangeDate = dataValue.Interface().(time.Time)
+	u.ChangeBy = jj
+	fmt.Printf("%+v\n", u)
+	//u.UUID = uuid.New()
+	//
+	//if !u.IsValid() {
+	//	err = errors.New("can't save invalid data")
+	//}
+	return
+}
 
 //func (u *MainboxUS) BeforeUpdate(tx *gorm.DB) (err error) {
 //	fmt.Println("BeforeUpdate")

@@ -10,7 +10,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model sensor_type
 type SensorType struct {
-	DBCommon
+	DBCommonGet
 	SensorTypeId      	uuid.UUID	 `json:"sensor_type_id"`
 	SensorTypeNameEN    string	 	 `json:"sensor_type_name_en"`
 	SensorTypeNameTH    string	 	 `json:"sensor_type_name_th"`
@@ -18,7 +18,7 @@ type SensorType struct {
 // New instance sensor_type
 func (u *SensorType) New() *SensorType {
 	return &SensorType{
-		DBCommon:      		u.DBCommon ,
+		DBCommonGet:      		u.DBCommonGet ,
 		SensorTypeId:		u.SensorTypeId ,
 		SensorTypeNameEN:	u.SensorTypeNameEN ,
 		SensorTypeNameTH:	u.SensorTypeNameTH ,

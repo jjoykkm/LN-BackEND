@@ -10,7 +10,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model sub_district
 type SubDistrict struct {
-	DBCommon
+	DBCommonGet
 	SubDistrictId      uuid.UUID	 `json:"sub_district_id"`
 	SubDistrictEN      string		 `json:"sub_district_name_en"`
 	SubDistrictTH      string		 `json:"sub_district_name_th"`
@@ -18,7 +18,7 @@ type SubDistrict struct {
 // New instance sub_district
 func (u *SubDistrict) New() *SubDistrict {
 	return &SubDistrict{
-		DBCommon:      		u.DBCommon ,
+		DBCommonGet:      		u.DBCommonGet ,
 		SubDistrictId:		u.SubDistrictId ,
 		SubDistrictEN:		u.SubDistrictEN ,
 		SubDistrictTH:		u.SubDistrictTH ,

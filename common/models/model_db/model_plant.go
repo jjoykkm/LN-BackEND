@@ -10,7 +10,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model plant
 type Plant struct {
-	DBCommon
+	DBCommonGet
 	PlantId          uuid.UUID	 `json:"plant_id"`
 	PlantNameEN      string		 `json:"plant_name_en"`
 	PlantNameTH      string		 `json:"plant_name_th"`
@@ -22,7 +22,7 @@ type Plant struct {
 // New instance plant
 func (u *Plant) New() *Plant {
 	return &Plant{
-		DBCommon:      	u.DBCommon ,
+		DBCommonGet:      	u.DBCommonGet ,
 		PlantId:		u.PlantId ,
 		PlantNameEN:	u.PlantNameEN ,
 		PlantNameTH:	u.PlantNameTH ,

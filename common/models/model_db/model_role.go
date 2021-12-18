@@ -10,7 +10,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model role
 type Role struct {
-	DBCommon
+	DBCommonGet
 	RoleId      	uuid.UUID	 `json:"role_id"`
 	RoleNameEN      string		 `json:"role_name_en"`
 	RoleDescEN      string		 `json:"role_desc_en"`
@@ -20,7 +20,7 @@ type Role struct {
 // New instance role
 func (u *Role) New() *Role {
 	return &Role{
-		DBCommon:      	u.DBCommon ,
+		DBCommonGet:      	u.DBCommonGet ,
 		RoleId:			u.RoleId ,
 		RoleNameEN:		u.RoleNameEN ,
 		RoleDescEN:		u.RoleDescEN ,

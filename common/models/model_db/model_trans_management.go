@@ -10,7 +10,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model trans_management
 type TransManagement struct {
-	DBCommon
+	DBCommonGet
 	Uid      		uuid.UUID	 `json:"uid"`
 	FarmId     		uuid.UUID	 `json:"farm_id"`
 	RoleId      	uuid.UUID	 `json:"role_id"`
@@ -18,7 +18,7 @@ type TransManagement struct {
 // New instance trans_management
 func (u *TransManagement) New() *TransManagement {
 	return &TransManagement{
-		DBCommon:      		u.DBCommon ,
+		DBCommonGet:      		u.DBCommonGet ,
 		Uid:			u.Uid ,
 		FarmId:			u.FarmId ,
 		RoleId:			u.RoleId ,

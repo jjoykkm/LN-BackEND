@@ -10,14 +10,14 @@ import (
 //-------------------------------------------------------------------------------//
 //model favorite_plant
 type FavoritePlant struct {
-	DBCommon
+	DBCommonGet
 	Uid          	 uuid.UUID	 `json:"uid"`
 	FormulaPlantId   uuid.UUID	 `json:"formula_plant_id"`
 }
 // New instance favorite_plant
 func (u *FavoritePlant) New() *FavoritePlant {
 	return &FavoritePlant{
-		DBCommon:      		u.DBCommon ,
+		DBCommonGet:      		u.DBCommonGet ,
 		Uid:				u.Uid ,
 		FormulaPlantId:		u.FormulaPlantId ,
 	}

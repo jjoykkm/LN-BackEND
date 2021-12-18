@@ -5,7 +5,7 @@ import (
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
 	"github.com/jjoykkm/ln-backend/modelsOld/model_services"
-	"github.com/jjoykkm/ln-backend/utility"
+	"github.com/jjoykkm/ln-backend/obsolete_utility"
 	"github.com/mitchellh/mapstructure"
 	"log"
 )
@@ -94,7 +94,7 @@ func (ln Ln) GetSensorByIder(status string, sensorIdList []string) ([]model_data
 
 	sensorMap = make(map[string]model_databases.Sensor)
 
-	sqlIn := utility.ConvertListToStringIn(sensorIdList)
+	sqlIn := obsolete_utility.ConvertListToStringIn(sensorIdList)
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND sensor_id IN %s",
 		config.DB_SENSOR, status, sqlIn)
 	fmt.Println(sql)
@@ -115,7 +115,7 @@ func (ln Ln) GetMainboxByIder(status string, mainboxIdList []string) ([]model_da
 
 	mainboxMap = make(map[string]model_databases.Mainbox)
 
-	sqlIn := utility.ConvertListToStringIn(mainboxIdList)
+	sqlIn := obsolete_utility.ConvertListToStringIn(mainboxIdList)
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND mainbox_id IN %s",
 		config.DB_MAINBOX, status, sqlIn)
 	fmt.Println(sql)

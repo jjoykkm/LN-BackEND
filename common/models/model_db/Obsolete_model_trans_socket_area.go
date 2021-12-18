@@ -10,14 +10,14 @@ import (
 //-------------------------------------------------------------------------------//
 //model trans_socket_area
 type TransSocketArea struct {
-	DBCommon
+	DBCommonGet
 	FarmAreaId      uuid.UUID	 `json:"farm_area_id"`
 	SocketId     	uuid.UUID	 `json:"socket_id"`
 }
 // New instance trans_socket_area
 func (u *TransSocketArea) New() *TransSocketArea {
 	return &TransSocketArea{
-		DBCommon:      	u.DBCommon ,
+		DBCommonGet:      	u.DBCommonGet ,
 		FarmAreaId:		u.FarmAreaId ,
 		SocketId:		u.SocketId ,
 	}

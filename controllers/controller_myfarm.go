@@ -5,7 +5,7 @@ import (
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
 	"github.com/jjoykkm/ln-backend/modelsOld/model_services"
-	"github.com/jjoykkm/ln-backend/utility"
+	"github.com/jjoykkm/ln-backend/obsolete_utility"
 	"github.com/mitchellh/mapstructure"
 	"log"
 )
@@ -62,7 +62,7 @@ func (ln Ln) GetOverviewFarmer(status, farmId string) model_services.MyFarmOverv
 
 	//Get Farm Area detail
 	_, farmAreaIdList, _ := IntCommon.GetFarmAreaByFarmId(ln, config.GetStatus().Active, farmId)
-	sqlIn := utility.ConvertListToStringIn(farmAreaIdList)
+	sqlIn := obsolete_utility.ConvertListToStringIn(farmAreaIdList)
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND farm_area_id IN %s ",
 		config.DB_TRANS_SOCKET_AREA, status, sqlIn)
 	fmt.Println(sql)
@@ -121,7 +121,7 @@ func (ln Ln) GetSocketByIder(status string, socketIdList []string) ([]model_data
 
 	socketMap = make(map[string]model_databases.Socket)
 
-	sqlIn := utility.ConvertListToStringIn(socketIdList)
+	sqlIn := obsolete_utility.ConvertListToStringIn(socketIdList)
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND socket_id IN %s",
 		config.DB_SOCKET, status, sqlIn)
 	fmt.Println(sql)
@@ -145,7 +145,7 @@ func (ln Ln) GetSocketWithSensorer(status, language string, socketIdList []strin
 	statusSensorMap := make(map[string]string)
 	socSenMap := make(map[string]model_services.MyFarmSenSocDetail)
 
-	sqlIn := utility.ConvertListToStringIn(socketIdList)
+	sqlIn := obsolete_utility.ConvertListToStringIn(socketIdList)
 	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.sensor_id = %s.sensor_id WHERE %s.status_id = '%s' AND %s.socket_id IN %s",
 		config.DB_SOCKET, config.DB_SENSOR, config.DB_SOCKET, config.DB_SENSOR, config.DB_SOCKET, status, config.DB_SOCKET, sqlIn)
 	fmt.Println(sql)
@@ -232,7 +232,7 @@ func (ln Ln) GetFarmAreaByIder(status string, farmAreaIdList []string) ([]model_
 
 	farmAreaMap = make(map[string]model_databases.FarmArea)
 
-	sqlIn := utility.ConvertListToStringIn(farmAreaIdList)
+	sqlIn := obsolete_utility.ConvertListToStringIn(farmAreaIdList)
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE status_id = '%s' AND farm_area_id IN %s",
 		config.DB_FARM_AREA, status, sqlIn)
 	fmt.Println(sql)

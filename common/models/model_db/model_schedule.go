@@ -11,7 +11,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model schedule
 type Schedule struct {
-	DBCommon
+	DBCommonGet
 	ScheduleId     		uuid.UUID	 `json:"schedule_id"`
 	ScheduleName      	string	 	 `json:"schedule_name"`
 	ScheduleDesc      	string	 	 `json:"schedule_desc"`
@@ -27,7 +27,7 @@ type Schedule struct {
 // New instance schedule
 func (u *Schedule) New() *Schedule {
 	return &Schedule{
-		DBCommon:      		u.DBCommon ,
+		DBCommonGet:      		u.DBCommonGet ,
 		ScheduleId:			u.ScheduleId ,
 		ScheduleName:		u.ScheduleName ,
 		ScheduleDesc:		u.ScheduleDesc ,

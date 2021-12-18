@@ -10,14 +10,14 @@ import (
 //-------------------------------------------------------------------------------//
 //model trans_schedule_farm
 type TransScheduleFarm struct {
-	DBCommon
+	DBCommonGet
 	FarmAreaId      uuid.UUID	 `json:"farm_area_id"`
 	ScheduleId      uuid.UUID	 `json:"schedule_id"`
 }
 // New instance trans_schedule_farm
 func (u *TransScheduleFarm) New() *TransScheduleFarm {
 	return &TransScheduleFarm{
-		DBCommon:      		u.DBCommon ,
+		DBCommonGet:      		u.DBCommonGet ,
 		FarmAreaId:		u.FarmAreaId ,
 		ScheduleId:		u.ScheduleId ,
 	}

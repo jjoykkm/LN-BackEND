@@ -1,4 +1,4 @@
-package utility
+package obsolete_utility
 
 import (
 	"database/sql"

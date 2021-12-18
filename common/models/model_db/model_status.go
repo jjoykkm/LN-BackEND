@@ -9,13 +9,13 @@ import (
 //-------------------------------------------------------------------------------//
 //model status
 type Status struct {
-	DBCommon
+	DBCommonGet
 	StatusName      string		 `json:"status_name"`
 }
 // New instance status
 func (u *Status) New() *Status {
 	return &Status{
-		DBCommon:      		u.DBCommon ,
+		DBCommonGet:      		u.DBCommonGet ,
 		StatusName:			u.StatusName ,
 	}
 }

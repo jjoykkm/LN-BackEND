@@ -12,7 +12,7 @@ import (
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_dashboard"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_formula_plant"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_my_farm"
-	"github.com/jjoykkm/ln-backend/utility"
+	"github.com/jjoykkm/ln-backend/obsolete_utility"
 	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -156,7 +156,7 @@ func main() {
 
 func GetFarmAreaDetailSensor(c *gin.Context) {
 	var bodyModel model_other.PostBody
-	bodyModel = utility.GetModelFromBody(c)
+	bodyModel = obsolete_utility.GetModelFromBody(c)
 	//GetFarmAreaDetailSensorer(status, farmId, language string) ([]model_services.SenSocMainList, int)
 	senSocMainList, total := me.Ctrl.GetFarmAreaDetailSensorer(config.GetStatus().Active, bodyModel.FarmAreaId, bodyModel.Language)
 	if total == 0 {
@@ -171,7 +171,7 @@ func GetFarmAreaDetailSensor(c *gin.Context) {
 
 func GetScheRemind(c *gin.Context) {
 	var bodyModel model_other.PostBody
-	bodyModel = utility.GetModelFromBody(c)
+	bodyModel = obsolete_utility.GetModelFromBody(c)
 	// GetScheReminder(status string, farmAreaId []string) model_services.ScheduleScheRemind
 	scheRemind := me.Ctrl.GetScheReminder(config.GetStatus().Active, bodyModel.FarmAreaIdList)
 

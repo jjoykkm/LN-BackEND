@@ -10,7 +10,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model trans_sensor_value_rec
 type TransSensorValueRec struct {
-	DBCommon
+	DBCommonGet
 	FormulaPlantId 		uuid.UUID	 `json:"formula_plant_id"`
 	SensorTypeId   		uuid.UUID	 `json:"sensor_type_id"`
 	ValueRec      		float64		 `json:"value_rec"`
@@ -18,7 +18,7 @@ type TransSensorValueRec struct {
 // New instance trans_sensor_value_rec
 func (u *TransSensorValueRec) New() *TransSensorValueRec {
 	return &TransSensorValueRec{
-		DBCommon:      		u.DBCommon ,
+		DBCommonGet:      		u.DBCommonGet ,
 		FormulaPlantId:		u.FormulaPlantId ,
 		SensorTypeId:		u.SensorTypeId ,
 		ValueRec:			u.ValueRec ,

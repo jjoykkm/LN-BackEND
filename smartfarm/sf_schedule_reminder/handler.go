@@ -3,7 +3,7 @@ package sf_schedule_reminder
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/common/config"
-	"github.com/jjoykkm/ln-backend/utility"
+	"github.com/jjoykkm/ln-backend/obsolete_utility"
 	"net/http"
 )
 
@@ -16,7 +16,7 @@ func NewHandler(service Servicer) *Handler {
 }
 
 func (h *Handler) GetPlantCategoryList(c *gin.Context) {
-	bodyModel := utility.GetModelFromBody(c)
+	bodyModel := obsolete_utility.GetModelFromBody(c)
 	// GetPlantCategoryList(status, language string) ([]model_services.ForPlantCatList, int)
 	plantCategoryList, total := h.service.GetPlantCategoryList(config.GetStatus().Active, bodyModel.Language)
 	if total == 0 {

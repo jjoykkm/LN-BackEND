@@ -74,15 +74,11 @@ func (r *Repository) FindOneMainboxBySerialNo (serialNo string) (*model_db.Mainb
 }
 
 func (r *Repository) GetCountMainbox(status, farmId string) (int64, error) {
-	var trans []model_db.TransSocketArea
+	var mainbox []model_db.Mainbox
 	var count int64
 
-	// Get farm_area_id
-	farmAreaId := r.db.Debug().Distinct("farm_area_id").Where("status_id = ? AND farm_id = ?",
-		config.GetStatus().Active, farmId).Table(config.DB_FARM_AREA)
-
-	resp := r.db.Debug().Model(&trans).Distinct("mainbox_id").Where("status_id = ? AND farm_area_id IN (?)",
-		status, farmAreaId).Count(&count)
+	resp := r.db.Debug().Model(&mainbox).Distinct("mainbox_id").Where("status_id = ? AND farm_id = ?",
+		status, farmId).Count(&count)
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return 0, resp.Error
 	}

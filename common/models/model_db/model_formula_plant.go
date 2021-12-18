@@ -31,7 +31,7 @@ func (u *Recommend) New() *Recommend {
 //-------------------------------------------------------------------------------//
 //model formula_plant
 type FormulaPlant struct {
-	DBCommon
+	DBCommonGet
 	FormulaPlantId 	 uuid.UUID	 `json:"formula_plant_id"`
 	FormulaName		 string		 `json:"formula_plant_name"`
 	FormulaDesc		 string		 `json:"formula_plant_desc"`
@@ -46,7 +46,7 @@ type FormulaPlant struct {
 // New instance formula_plant
 func (u *FormulaPlant) New() *FormulaPlant {
 	return &FormulaPlant{
-		DBCommon:      		u.DBCommon ,
+		DBCommonGet:      		u.DBCommonGet ,
 		FormulaPlantId:		u.FormulaPlantId ,
 		FormulaName:		u.FormulaName ,
 		FormulaDesc:		u.FormulaDesc ,

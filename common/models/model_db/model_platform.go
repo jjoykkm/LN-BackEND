@@ -10,14 +10,14 @@ import (
 //-------------------------------------------------------------------------------//
 //model platform
 type Platform struct {
-	DBCommon
+	DBCommonGet
 	PlatformId      uuid.UUID	 `json:"platform_id"`
 	PlatformName    string		 `json:"platform_name"`
 }
 // New instance platform
 func (u *Platform) New() *Platform {
 	return &Platform{
-		DBCommon:      	u.DBCommon ,
+		DBCommonGet:      	u.DBCommonGet ,
 		PlatformId:		u.PlatformId ,
 		PlatformName:	u.PlatformName ,
 	}

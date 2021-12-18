@@ -10,7 +10,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model session_time
 type SessionTime struct {
-	DBCommon
+	DBCommonGet
 	SessionTimeId      uuid.UUID	 `json:"session_time_id"`
 	PublicToken        string	 	 `json:"public_token"`
 	PrivateToken       string	 	 `json:"private_token"`
@@ -22,7 +22,7 @@ type SessionTime struct {
 // New instance session_time
 func (u *SessionTime) New() *SessionTime {
 	return &SessionTime{
-		DBCommon:      		u.DBCommon ,
+		DBCommonGet:      		u.DBCommonGet ,
 		SessionTimeId:		u.SessionTimeId ,
 		PublicToken:		u.PublicToken ,
 		PrivateToken:		u.PrivateToken ,

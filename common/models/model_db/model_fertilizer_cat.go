@@ -10,7 +10,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model fertilizer_cat
 type FertilizerCat struct {
-	DBCommon
+	DBCommonGet
 	FertCatId      uuid.UUID	 `json:"fert_cat_id" gorm:"column:fertilizer_cat_id"`
 	FertCatEN      string		 `json:"fert_cat_en" gorm:"column:fertilizer_cat_en"`
 	FertCatTH      string		 `json:"fert_cat_th" gorm:"column:fertilizer_cat_th"`
@@ -18,7 +18,7 @@ type FertilizerCat struct {
 // New instance fertilizer_cat
 func (u *FertilizerCat) New() *FertilizerCat {
 	return &FertilizerCat{
-		DBCommon:      	u.DBCommon ,
+		DBCommonGet:      	u.DBCommonGet ,
 		FertCatId:		u.FertCatId ,
 		FertCatEN:		u.FertCatEN ,
 		FertCatTH:		u.FertCatTH ,

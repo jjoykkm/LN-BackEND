@@ -10,14 +10,14 @@ import (
 //-------------------------------------------------------------------------------//
 //model status_sensor
 type StatusSensor struct {
-	DBCommon
+	DBCommonGet
 	StatusSensorId      uuid.UUID	 `json:"status_sensor_id"`
 	StatusName      	string		 `json:"status_name"`
 }
 // New instance status_sensor
 func (u *StatusSensor) New() *StatusSensor {
 	return &StatusSensor{
-		DBCommon:      		u.DBCommon ,
+		DBCommonGet:      		u.DBCommonGet ,
 		StatusSensorId:		u.StatusSensorId ,
 		StatusName:			u.StatusName ,
 	}

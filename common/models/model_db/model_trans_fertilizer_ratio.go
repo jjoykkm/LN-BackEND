@@ -10,7 +10,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model trans_fertilizer_Ratio
 type TransFertRatio struct {
-	DBCommon
+	DBCommonGet
 	FertId       		uuid.UUID	 `json:"fert_id" gorm:"column:fertilizer_id"`
 	FormulaPlantId		uuid.UUID	 `json:"formula_plant_id"`
 	Ratio		     	float64		 `json:"ratio"`
@@ -18,7 +18,7 @@ type TransFertRatio struct {
 // New instance trans_fertilizer_Ratio
 func (u *TransFertRatio) New() *TransFertRatio {
 	return &TransFertRatio{
-		DBCommon:      		u.DBCommon ,
+		DBCommonGet:      		u.DBCommonGet ,
 		FertId:				u.FertId ,
 		FormulaPlantId:		u.FormulaPlantId ,
 		Ratio:				u.Ratio ,

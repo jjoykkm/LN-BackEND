@@ -10,7 +10,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model farm
 type Farm struct {
-	DBCommon
+	DBCommonGet
 	FarmId      	uuid.UUID	 `json:"farm_id"`
 	FarmName    	string		 `json:"farm_name"`
 	FarmDesc    	string		 `json:"farm_desc"`
@@ -18,7 +18,7 @@ type Farm struct {
 // New instance farm
 func (u *Farm) New() *Farm {
 	return &Farm{
-		DBCommon:      	u.DBCommon ,
+		DBCommonGet:      	u.DBCommonGet ,
 		FarmId:			u.FarmId ,
 		FarmName:		u.FarmName ,
 		FarmDesc:		u.FarmDesc ,

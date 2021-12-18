@@ -10,7 +10,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model province
 type Province struct {
-	DBCommon
+	DBCommonGet
 	ProvinceId      uuid.UUID	 `json:"province_id"`
 	ProvinceEN      string		 `json:"province_name_en"`
 	ProvinceTH      string		 `json:"province_name_th"`
@@ -19,7 +19,7 @@ type Province struct {
 // New instance province
 func (u *Province) New() *Province {
 	return &Province{
-		DBCommon:      	u.DBCommon ,
+		DBCommonGet:      	u.DBCommonGet ,
 		ProvinceId:		u.ProvinceId ,
 		ProvinceEN:		u.ProvinceEN ,
 		ProvinceTH:		u.ProvinceTH ,

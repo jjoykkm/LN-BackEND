@@ -10,7 +10,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model socket_action
 type SocketAction struct {
-	DBCommon
+	DBCommonGet
 	ScheduleId      uuid.UUID	 `json:"schedule_id"`
 	SocketId      	uuid.UUID	 `json:"socket_id"`
 	Uid	      		uuid.UUID	 `json:"uid"`
@@ -20,7 +20,7 @@ type SocketAction struct {
 // New instance socket_action
 func (u *SocketAction) New() *SocketAction {
 	return &SocketAction{
-		DBCommon:      		u.DBCommon ,
+		DBCommonGet:      		u.DBCommonGet ,
 		ScheduleId:			u.ScheduleId ,
 		SocketId:			u.SocketId ,
 		Uid:				u.Uid ,

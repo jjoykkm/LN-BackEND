@@ -10,14 +10,14 @@ import (
 //-------------------------------------------------------------------------------//
 //model gender
 type Gender struct {
-	DBCommon
+	DBCommonGet
 	GenderId      	uuid.UUID	 `json:"gender_id"`
 	GenderName      string		 `json:"gender_name"`
 }
 // New instance gender
 func (u *Gender) New() *Gender {
 	return &Gender{
-		DBCommon:      	u.DBCommon ,
+		DBCommonGet:      	u.DBCommonGet ,
 		GenderId:		u.GenderId ,
 		GenderName:		u.GenderName ,
 	}

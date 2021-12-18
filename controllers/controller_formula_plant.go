@@ -5,7 +5,7 @@ import (
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
 	"github.com/jjoykkm/ln-backend/modelsOld/model_services"
-	"github.com/jjoykkm/ln-backend/utility"
+	"github.com/jjoykkm/ln-backend/obsolete_utility"
 	"github.com/mitchellh/mapstructure"
 	"log"
 )
@@ -91,7 +91,7 @@ func (ln Ln) GetPlantCategoryItemer(status, plantTypeId, language string, offset
 			plantCat.PlantDesc = joinPlantAndPlantType.PlantDescTH
 		}
 		cond := fmt.Sprintf("plant_id = '%s'", joinPlantAndPlantType.PlantId.UUID.String())
-		plantCat.TotalItem = utility.GetCountTable(ln.Db, config.GetStatus().Active, config.DB_FORMULA_PLANT, "formula_plant_id", cond)
+		plantCat.TotalItem = obsolete_utility.GetCountTable(ln.Db, config.GetStatus().Active, config.DB_FORMULA_PLANT, "formula_plant_id", cond)
 		plantCatArray = append(plantCatArray, plantCat)
 	}
 	total = len(plantCatArray)
@@ -160,7 +160,7 @@ func (ln Ln) GetPlantOverviewFavoriteer(status, uid, language string, offset int
 	userMap := make(map[string]string)
 
 	_, formulaPlantList, _ := IntFormulaPlant.GetFavoriteFormulaPlanter(ln, config.GetStatus().Active, uid)
-	sqlIn := utility.ConvertListToStringIn(formulaPlantList)
+	sqlIn := obsolete_utility.ConvertListToStringIn(formulaPlantList)
 	sql := fmt.Sprintf("SELECT * FROM %s INNER JOIN %s ON %s.plant_id = %s.plant_id WHERE %s.status_id = '%s' AND %s.formula_plant_id IN %s OFFSET %d LIMIT 100",
 		config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, config.DB_PLANT, config.DB_FORMULA_PLANT, status, config.DB_FORMULA_PLANT, sqlIn, offset)
 	fmt.Println(sql)

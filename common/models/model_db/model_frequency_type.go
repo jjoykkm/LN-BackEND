@@ -10,7 +10,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model frequency_type
 type FrequencyType struct {
-	DBCommon
+	DBCommonGet
 	FrequencyTypeId		uuid.UUID	 `json:"frequency_type_id"`
 	FrequencyName   	string		 `json:"frequency_name"`
 	IntervalRange   	string		 `json:"interval_range"`
@@ -19,7 +19,7 @@ type FrequencyType struct {
 // New instance frequency_type
 func (u *FrequencyType) New() *FrequencyType {
 	return &FrequencyType{
-		DBCommon:      	  u.DBCommon ,
+		DBCommonGet:      	  u.DBCommonGet ,
 		FrequencyTypeId:  u.FrequencyTypeId ,
 		FrequencyName:	  u.FrequencyName ,
 		IntervalRange:	  u.IntervalRange ,

@@ -28,7 +28,7 @@ func (u *ColorRGB) New() *ColorRGB {
 //-------------------------------------------------------------------------------//
 //model indicate_type
 type IndicateType struct {
-	DBCommon
+	DBCommonGet
 	IndicateTypeId      uuid.UUID	 `json:"indicate_type_id"`
 	IndicateName      	string	 	 `json:"indicate_name"`
 	IndicateDesc      	string	 	 `json:"indicate_desc"`
@@ -40,7 +40,7 @@ type IndicateType struct {
 // New instance indicate_type
 func (u *IndicateType) New() *IndicateType {
 	return &IndicateType{
-		DBCommon:      		u.DBCommon ,
+		DBCommonGet:      		u.DBCommonGet ,
 		IndicateTypeId:		u.IndicateTypeId ,
 		IndicateName:		u.IndicateName ,
 		IndicateDesc:		u.IndicateDesc ,

@@ -11,7 +11,7 @@ import (
 //-------------------------------------------------------------------------------//
 //model sensor
 type Sensor struct {
-	DBCommon
+	DBCommonGet
 	SensorId      	uuid.UUID	 `json:"sensor_id"`
 	SensorModel     string	 	 `json:"sensor_model"`
 	SensorLots      string	 	 `json:"sensor_lots"`
@@ -21,7 +21,7 @@ type Sensor struct {
 // New instance sensor
 func (u *Sensor) New() *Sensor {
 	return &Sensor{
-		DBCommon:      	u.DBCommon ,
+		DBCommonGet:      	u.DBCommonGet ,
 		SensorId:		u.SensorId ,
 		SensorModel:	u.SensorModel ,
 		SensorLots:		u.SensorLots ,
