@@ -4,6 +4,7 @@ import (
 	"fmt"
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
+	"github.com/jjoykkm/ln-backend/common/models/model_controllers"
 	"gorm.io/gorm"
 	"time"
 )
@@ -54,6 +55,12 @@ type MainboxSerialUS struct {
 func (MainboxSerialUS) TableName() string {
 	return config.DB_MAINBOX
 }
+func (u *MainboxSerialUS) BeforeUpdate(tx *gorm.DB) (err error) {
+	fmt.Printf("%+v\n", u.DBCommonCreateUpdate)
+	model_controllers.Greeting("jjoyy")
+	//model_controllers.BeforeUpdate(u.DBCommonCreateUpdate, "jjoy")
+	return
+}
 
 type MainboxUS struct {
 	MainboxId		string	 `json:"mainbox_id"`
@@ -64,21 +71,12 @@ type MainboxUS struct {
 func (MainboxUS) TableName() string {
 	return config.DB_MAINBOX
 }
-func (u *MainboxSerialUS) BeforeUpdate(tx *gorm.DB) (err error) {
-	fmt.Println("BeforeUpdate")
-	u.CreateBy = nil
-	//u.CreateBy = sf_my_farm.Handler{}.Username
-	//u.ChangeBy = *sf_my_farm.Handler{}.Username
-	jj := "test"
-	//u.CreateBy = &jj
-	//u.ChangeDate = dataValue.Interface().(time.Time)
-	u.ChangeBy = jj
-	fmt.Printf("%+v\n", u)
-	//u.UUID = uuid.New()
-	//
-	//if !u.IsValid() {
-	//	err = errors.New("can't save invalid data")
-	//}
+func (u *MainboxUS) BeforeCreate(tx *gorm.DB) (err error) {
+	//model_controllers.BeforeCreate(u.DBCommonCreateUpdate, "jjoy")
+	return
+}
+func (u *MainboxUS) BeforeUpdate(tx *gorm.DB) (err error) {
+	//model_controllers.BeforeUpdate(u.DBCommonCreateUpdate, "jjoy")
 	return
 }
 
