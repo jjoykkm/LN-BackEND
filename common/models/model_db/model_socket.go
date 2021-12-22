@@ -22,7 +22,7 @@ type Socket struct {
 // New instance socket
 func (u *Socket) New() *Socket {
 	return &Socket{
-		DBCommonGet:      		u.DBCommonGet ,
+		DBCommonGet:      	u.DBCommonGet ,
 		SocketId:			u.SocketId ,
 		SensorId:			u.SensorId ,
 		SocketName:			u.SocketName ,

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
-	"github.com/jjoykkm/ln-backend/common/models/model_controllers"
 	"gorm.io/gorm"
 	"time"
 )
@@ -27,7 +26,7 @@ type Mainbox struct {
 // New instance mainbox
 func (u *Mainbox) New() *Mainbox {
 	return &Mainbox{
-		DBCommonGet:      		u.DBCommonGet ,
+		DBCommonGet:      	u.DBCommonGet ,
 		MainboxId:			u.MainboxId ,
 		MainboxName:		u.MainboxName ,
 		MainboxModel:		u.MainboxModel ,
@@ -48,16 +47,16 @@ func (Mainbox) TableName() string {
 //							Upsert Mainbox
 //-------------------------------------------------------------------------------//
 type MainboxSerialUS struct {
+	DBCommonCreateUpdate
 	MainboxName     	string		 `json:"mainbox_name"`
 	MainboxSerialNo		string		 `json:"serial_no"`
-	DBCommonCreateUpdate
 }
 func (MainboxSerialUS) TableName() string {
 	return config.DB_MAINBOX
 }
 func (u *MainboxSerialUS) BeforeUpdate(tx *gorm.DB) (err error) {
 	fmt.Printf("%+v\n", u.DBCommonCreateUpdate)
-	model_controllers.Greeting("jjoyy")
+	//model_controllers.Greeting("jjoyy")
 	//model_controllers.BeforeUpdate(u.DBCommonCreateUpdate, "jjoy")
 	return
 }

@@ -3,6 +3,7 @@ package sf_my_farm
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"gorm.io/gorm"
@@ -165,23 +166,12 @@ func (r *Repository) FindAllManageMainbox(status, farmId string) ([]ManageMainbo
 		func(db *gorm.DB) *gorm.DB {
 			return sensorDet
 		})
-	// Get Sensor, Socket
-	senSoc := r.db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("Socket",
+	resp := r.db.Debug().Where("status_id = ? AND farm_id = ?",
+	status, farmId).Preload("SocSenDetail",
 		func(db *gorm.DB) *gorm.DB {
 			return socketDet
-		})
-	// Get Farm Area
-	farmAreaId := r.db.Debug().Distinct("farm_area_id").Where("status_id = ? AND farm_id = ?",
-		config.GetStatus().Active, farmId).Table(config.DB_FARM_AREA)
-	// Get Mainbox
-	mainboxId := r.db.Debug().Distinct("mainbox_id").Where("status_id = ? AND farm_area_id IN (?)",
-		config.GetStatus().Active, farmAreaId).Table(config.DB_TRANS_SOCKET_AREA)
-
-	resp := r.db.Debug().Where("status_id = ? AND mainbox_id IN (?)",
-		config.GetStatus().Active, mainboxId).Preload("SenSocDetail",
-		func(db *gorm.DB) *gorm.DB {
-			return senSoc
 		}).Find(&result)
+	fmt.Printf("%+v\n", result)
 
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error

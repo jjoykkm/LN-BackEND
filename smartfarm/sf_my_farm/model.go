@@ -25,18 +25,6 @@ func (u *FarmOverview) New() *FarmOverview {
 func (FarmOverview) TableName() string {
 	return config.DB_FARM
 }
-//-------------------------------------------------------------------------------//
-//				 	    	Socket Detail
-//-------------------------------------------------------------------------------//
-//Model
-type SocketDetail struct {
-	Socket        	model_db.Socket	 	 	`json:"socket" gorm:"embedded"`
-	StatusSensor    model_db.StatusSensor	`json:"status_sensor" gorm:"foreignkey:StatusSensorId; references:StatusSensorId"`
-	Sensor         	[]SensorDetail			`json:"sensor" gorm:"foreignkey:SensorId; references:SensorId"`
-}
-func (SocketDetail) TableName() string {
-	return config.DB_SOCKET
-}
 
 //-------------------------------------------------------------------------------//
 //				 	    	Sensor Detail
@@ -51,16 +39,30 @@ func (SensorDetail) TableName() string {
 }
 
 //-------------------------------------------------------------------------------//
-//				 	    	Sensor List
+//				 	    	Socket Sensor Detail
 //-------------------------------------------------------------------------------//
 //Model
-type SenSocMainList struct {
-	SocketArea		model_db.TransSocketArea	`json:"socket_area" gorm:"embedded"`
-	Socket         	[]SocketDetail				`json:"socket_detail" gorm:"foreignkey:SocketId; references:SocketId"`
+type SocSenDetail struct {
+	Socket        	model_db.Socket	 	 	`json:"socket" gorm:"embedded"`
+	StatusSensor    model_db.StatusSensor	`json:"status_sensor" gorm:"foreignkey:StatusSensorId; references:StatusSensorId"`
+	Sensor         	SensorDetail			`json:"sensor" gorm:"foreignkey:SensorId; references:SensorId"`
 }
-func (SenSocMainList) TableName() string {
-	return config.DB_TRANS_SOCKET_AREA
+func (SocSenDetail) TableName() string {
+	return config.DB_SOCKET
 }
+
+
+////-------------------------------------------------------------------------------//
+////				 	    	Sensor List
+////-------------------------------------------------------------------------------//
+////Model
+//type SenSocMainList struct {
+//	SocketArea		model_db.TransSocketArea	`json:"socket_area" gorm:"embedded"`
+//	Socket         	[]SocSenDetail				`json:"socket_detail" gorm:"foreignkey:SocketId; references:SocketId"`
+//}
+//func (SenSocMainList) TableName() string {
+//	return config.DB_TRANS_SOCKET_AREA
+//}
 
 //-------------------------------------------------------------------------------//
 //				 	    Manage FarmArea
@@ -68,7 +70,7 @@ func (SenSocMainList) TableName() string {
 //Model
 type ManageFarmArea struct {
 	FarmArea    	model_db.FarmArea		`json:"farm_area" gorm:"embedded"`
-	SensorDetail	[]SenSocMainList		`json:"sensor_detail" gorm:"foreignkey:FarmAreaId; references:FarmAreaId"`
+	SenSocDetail	[]SocSenDetail			`json:"socket_detail" gorm:"foreignkey:FarmAreaId; references:FarmAreaId"`
 }
 func (ManageFarmArea) TableName() string {
 	return config.DB_FARM_AREA
@@ -80,13 +82,13 @@ func (ManageFarmArea) TableName() string {
 //Model
 type ManageMainbox struct {
 	Mainbox			model_db.Mainbox	`json:"mainbox" gorm:"embedded"`
-	SenSocDetail	[]SenSocMainList	`json:"socket_detail" gorm:"foreignkey:MainboxId; references:MainboxId"`
+	SocSenDetail	[]SocSenDetail		`json:"socket_sensor_detail" gorm:"foreignkey:MainboxId; references:MainboxId"`
 }
 // New instance
 func (u *ManageMainbox) New() *ManageMainbox {
 	return &ManageMainbox{
 		Mainbox:		u.Mainbox ,
-		SenSocDetail:	u.SenSocDetail ,
+		SocSenDetail:	u.SocSenDetail ,
 	}
 }
 func (ManageMainbox) TableName() string {
