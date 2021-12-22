@@ -28,7 +28,7 @@ type AddressFarm struct {
 // New instance address_farm
 func (u *AddressFarm) New() *AddressFarm {
 	return &AddressFarm{
-		DBCommonGet:      		u.DBCommonGet ,
+		DBCommonGet:      	u.DBCommonGet ,
 		AddressFarmId:      u.AddressFarmId ,
 		HouseNo:            u.HouseNo ,
 		Alley:              u.Alley ,

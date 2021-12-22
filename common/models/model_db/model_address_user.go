@@ -27,7 +27,7 @@ type AddressUser struct {
 // New instance address_user
 func (u *AddressUser) New() *AddressUser {
 	return &AddressUser{
-		DBCommonGet:      		u.DBCommonGet ,
+		DBCommonGet:      	u.DBCommonGet ,
 		AddressUserId:      u.AddressUserId ,
 		HouseNo:            u.HouseNo ,
 		Alley:              u.Alley ,

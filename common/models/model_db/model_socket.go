@@ -17,7 +17,7 @@ type Socket struct {
 	SocketNumber	int64		 `json:"socket_number"`
 	StatusSensorId	uuid.UUID	 `json:"status_sensor_id"`
 	MainboxId     	uuid.UUID	 `json:"mainbox_id"`
-	FarmAreaId      uuid.UUID	 `json:"farm_area_id"`
+	FarmAreaId      *uuid.UUID	 `json:"farm_area_id,omitempty"`
 }
 // New instance socket
 func (u *Socket) New() *Socket {
@@ -48,8 +48,8 @@ type SocketUS struct {
 	SocketName      string	 	 `json:"socket_name"`
 	SocketNumber	int64	 	 `json:"socket_number"`
 	StatusSensorId	string	 	 `json:"status_sensor_id"`
-	MainboxId     	string	 	 `json:"mainbox_id"`
-	FarmAreaId      uuid.UUID	 `json:"farm_area_id"`
+	MainboxId     	string	 	 `json:"mainbox_id,omitempty"`
+	FarmAreaId      uuid.UUID	 `json:"farm_area_id,omitempty"`
 }
 func (SocketUS) TableName() string {
 	return config.DB_SOCKET
