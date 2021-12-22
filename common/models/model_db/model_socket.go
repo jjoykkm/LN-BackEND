@@ -12,11 +12,11 @@ import (
 type Socket struct {
 	DBCommonGet
 	SocketId      	uuid.UUID	 `json:"socket_id gorm:"default:uuid_generate_v4()"`
-	SensorId      	uuid.UUID	 `json:"sensor_id"`
+	SensorId      	*uuid.UUID	 `json:"sensor_id,omitempty"`
 	SocketName      string	 	 `json:"socket_name"`
 	SocketNumber	int64		 `json:"socket_number"`
-	StatusSensorId	uuid.UUID	 `json:"status_sensor_id"`
-	MainboxId     	uuid.UUID	 `json:"mainbox_id"`
+	StatusSensorId	*uuid.UUID	 `json:"status_sensor_id,omitempty"`
+	MainboxId     	*uuid.UUID	 `json:"mainbox_id,omitempty"`
 	FarmAreaId      *uuid.UUID	 `json:"farm_area_id,omitempty"`
 }
 // New instance socket

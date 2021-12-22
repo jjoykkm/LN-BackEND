@@ -3,7 +3,6 @@ package sf_my_farm
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"gorm.io/gorm"
@@ -152,7 +151,6 @@ func (r *Repository) FindAllManageMainbox(status, farmId string) ([]ManageMainbo
 		func(db *gorm.DB) *gorm.DB {
 			return socketDet
 		}).Find(&result)
-	fmt.Printf("%+v\n", result)
 
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error
