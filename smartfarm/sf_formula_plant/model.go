@@ -83,3 +83,21 @@ type ForPlantFormula struct {
 func (ForPlantFormula) TableName() string {
 	return config.DB_FORMULA_PLANT
 }
+
+//-------------------------------------------------------------------------------//
+//				 	   				Upsert
+//-------------------------------------------------------------------------------//
+type FormulaPlantUS struct {
+	model_db.DBCommonCreateUpdate
+	FormulaPlantId 	 string	 	 `json:"formula_plant_id"`
+	FormulaName		 string		 `json:"formula_plant_name"`
+	FormulaDesc		 string		 `json:"formula_plant_desc"`
+	PlantId		 	 string	 	 `json:"plant_id"`
+	ProvinceId		 string	 	 `json:"province_id"`
+	CountryId		 string	 	 `json:"country_id"`
+	IsPublic		 bool	 	 `json:"is_public"`
+	Uid				 string		 `json:"user_id,omitempty"`
+}
+func (FormulaPlantUS) TableName() string {
+	return config.DB_FORMULA_PLANT
+}

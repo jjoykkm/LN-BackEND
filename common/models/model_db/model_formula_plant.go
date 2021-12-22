@@ -9,11 +9,11 @@ import (
 //-------------------------------------------------------------------------------//
 //model formula_plant
 type Recommend struct {
-	Recommend1 		int		`json:"star_1,"`
-	Recommend2		int		`json:"star_2,"`
-	Recommend3		int		`json:"star_3,"`
-	Recommend4		int		`json:"star_4,"`
-	Recommend5		int		`json:"star_5,"`
+	Recommend1 		int		`json:"star_1"`
+	Recommend2		int		`json:"star_2"`
+	Recommend3		int		`json:"star_3"`
+	Recommend4		int		`json:"star_4"`
+	Recommend5		int		`json:"star_5"`
 }
 // New instance formula_plant
 func (u *Recommend) New() *Recommend {
