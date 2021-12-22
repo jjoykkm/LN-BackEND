@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	"fmt"
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 	"gorm.io/gorm"
@@ -55,7 +54,7 @@ func (MainboxSerialUS) TableName() string {
 	return config.DB_MAINBOX
 }
 func (u *MainboxSerialUS) BeforeUpdate(tx *gorm.DB) (err error) {
-	fmt.Printf("%+v\n", u.DBCommonCreateUpdate)
+	//helper_gorm.BeforeUpdate(&u.DBCommonCreateUpdate, "fern")
 	//model_controllers.Greeting("jjoyy")
 	//model_controllers.BeforeUpdate(u.DBCommonCreateUpdate, "jjoy")
 	return
@@ -71,11 +70,11 @@ func (MainboxUS) TableName() string {
 	return config.DB_MAINBOX
 }
 func (u *MainboxUS) BeforeCreate(tx *gorm.DB) (err error) {
-	//model_controllers.BeforeCreate(u.DBCommonCreateUpdate, "jjoy")
+	//helper_gorm.BeforeCreate(u.DBCommonCreateUpdate, "jjoy")
 	return
 }
 func (u *MainboxUS) BeforeUpdate(tx *gorm.DB) (err error) {
-	//model_controllers.BeforeUpdate(u.DBCommonCreateUpdate, "jjoy")
+	//helper_gorm.BeforeUpdate(u.DBCommonCreateUpdate, "jjoy")
 	return
 }
 

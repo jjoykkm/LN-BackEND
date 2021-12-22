@@ -1,12 +1,12 @@
 package helper_gorm
 
 import (
-	"github.com/jjoykkm/ln-backend/common/config"
-	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
+	"fmt"
+	"github.com/jjoykkm/ln-backend/common/models/model_db"
 )
 
 type Servicer interface {
-	GetFarmAreaByFarm(status, farmId, resultType string) ([]model_databases.FarmArea, []string)
+	//GetFarmAreaByFarm(status, farmId, resultType string) ([]model_databases.FarmArea, []string)
 }
 
 type Service struct {
@@ -18,16 +18,31 @@ func NewService(repo Repositorier) Servicer {
 		repo:  repo,
 	}
 }
-func (s *Service) GetFarmAreaByFarm(status, farmId, resultType string) ([]model_databases.FarmArea, []string) {
-	var farmAreaIdList []string
-	farmModel, err := s.repo.FindAllFarmAreaByFarm(status, farmId)
-	if err != nil {
-		return nil, nil
-	}
-	if resultType != config.GetResType().Struct {
-		for _, array := range farmModel {
-			farmAreaIdList = append(farmAreaIdList, array.FarmAreaId.UUID.String())
-		}
-	}
-	return farmModel, farmAreaIdList
+//-------------------------------------------------------------------------------//
+//						Function Common Database (Create)
+//-------------------------------------------------------------------------------//
+func BeforeCreate(u *model_db.DBCommonCreateUpdate, userNo string) {
+	fmt.Println("BeforeCreate")
+	u.CreateBy = nil
+	u.ChangeBy = userNo
+	fmt.Printf("%+v\n", u)
+	//u.UUID = uuid.New()
+	//
+}
+
+//-------------------------------------------------------------------------------//
+//						Function Common Database (Update)
+//-------------------------------------------------------------------------------//
+func BeforeUpdate(u *model_db.DBCommonCreateUpdate, userNo string) {
+	fmt.Println("BeforeUpdate")
+	u.CreateBy = &userNo
+	u.ChangeBy = userNo
+	fmt.Printf("%+v\n", u)
+	//u.UUID = uuid.New()
+	//
+	//if !u.IsValid() {
+	//	err := errors.New("can't save invalid data")
+	//	return err
+	//}
+	//return
 }
