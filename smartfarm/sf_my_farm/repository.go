@@ -33,17 +33,6 @@ type Repositorier interface {
 	UpsertFarmArea (req *model_db.FarmAreaUS) (error, *string)
 	UpsertTransSocketArea (req []model_db.TransSocketAreaUS) error
 	UpdateAllSocketNullFarmArea (req []string) error
-	//FindAllPlantType(status string) ([]model_db.PlantType, error)
-	//GetFarmListWithRoleer(status, uid, roleId string) ([]model_services.DashboardFarmList, int)
-	//GetOverviewFarmer(status, farmId string) model_services.MyFarmOverviewFarm
-	//GetTransSocketAreaer(status, farmId string) ([]model_databases.TransSocketArea, []string, []string, []string, int)
-	//GetSocketByIder(status string, socketIdList []string) ([]model_databases.Socket, map[string]model_databases.Socket)
-	//GetSocketWithSensorer(status, language string, socketIdList []string) ([]model_services.MyFarmSenSocDetail, map[string]model_services.MyFarmSenSocDetail, int)
-	//GetSocSenByKeyer(mainboxId, farmAreaId string, tranSoc []model_databases.TransSocketArea, socSenMap map[string]model_services.MyFarmSenSocDetail) ([]model_services.MyFarmSenSocDetail, int)
-	//GetManageMainboxer(status, language, farmId string) ([]model_services.MyFarmManageMainbox, int)
-	//GetFarmAreaByIder(status string, farmAreaIdList []string) ([]model_databases.FarmArea, map[string]model_databases.FarmArea)
-	//GetManageFarmAreaer(status, language, farmId string) ([]model_services.MyFarmManageFarmArea, int)
-	//GetManageRoleer(status, language, farmId string) ([]model_services.MyFarmManageRole, int)
 }
 
 type Repository struct {
@@ -110,16 +99,13 @@ func (r *Repository) FindOneTransManagement(uid, farmId string) (*model_db.Trans
 
 func (r *Repository) FindAllManageRole(status, farmId string) ([]ManageRole, error) {
 	var result []ManageRole
+
 	checkStatus := r.db.Debug().Where("status_id = ?", config.GetStatus().Active)
 	resp := r.db.Debug().Where("status_id = ? AND farm_id = ?",
 		status, farmId).Preload("User").Preload("Role",
 			func(db *gorm.DB) *gorm.DB {
 				return checkStatus
 			}).Find(&result)
-	//,
-	//func(db *gorm.DB) *gorm.DB {
-	//	return checkStatus
-	//})
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error
 	}
@@ -129,6 +115,7 @@ func (r *Repository) FindAllManageRole(status, farmId string) ([]ManageRole, err
 
 func (r *Repository) FindAllManageFarmArea(status, farmId string) ([]ManageFarmArea, error) {
 	var result []ManageFarmArea
+
 	//Get Sensor Detail
 	sensorDet := r.db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("SensorType",
 		"status_id = ?", config.GetStatus().Active)
@@ -138,15 +125,9 @@ func (r *Repository) FindAllManageFarmArea(status, farmId string) ([]ManageFarmA
 		func(db *gorm.DB) *gorm.DB {
 			return sensorDet
 		})
-	// Get Sensor, Socket
-	senSocMain := r.db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("Socket",
+	resp := r.db.Debug().Where("status_id = ? AND farm_id = ?", status, farmId).Preload("SocSenDetail",
 		func(db *gorm.DB) *gorm.DB {
 			return socketDet
-		})
-
-	resp := r.db.Debug().Where("status_id = ? AND farm_id = ?", status, farmId).Preload("SensorDetail",
-		func(db *gorm.DB) *gorm.DB {
-			return senSocMain
 		}).Find(&result)
 
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {

@@ -70,7 +70,7 @@ func (SocSenDetail) TableName() string {
 //Model
 type ManageFarmArea struct {
 	FarmArea    	model_db.FarmArea		`json:"farm_area" gorm:"embedded"`
-	SenSocDetail	[]SocSenDetail			`json:"socket_detail" gorm:"foreignkey:FarmAreaId; references:FarmAreaId"`
+	SocSenDetail	[]SocSenDetail			`json:"socket_sensor_detail" gorm:"foreignkey:FarmAreaId; references:FarmAreaId"`
 }
 func (ManageFarmArea) TableName() string {
 	return config.DB_FARM_AREA
