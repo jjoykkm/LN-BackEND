@@ -2,6 +2,7 @@ package sf_formula_plant
 
 import (
 	"github.com/jjoykkm/ln-backend/common/config"
+	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"github.com/jjoykkm/ln-backend/common/models/model_other"
 	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
 )
@@ -23,6 +24,15 @@ type Servicer interface {
 
 	// Function
 	GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlant) (float32, int)
+
+	//Upsert
+	AddChangeFormulaPlant(reqModel *ForPlantUS) error
+
+	//Update
+	AddFavoriteForPlant(reqModel *model_db.FavForPlantUS) error
+
+	//Delete
+	RemoveFavoriteForPlant(reqModel *model_db.FavForPlantUS) error
 }
 
 type Service struct {
@@ -189,4 +199,115 @@ func (s *Service) GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlan
 	rateScore = rateScore / float32(ratePeople)
 
 	return rateScore, ratePeople
+}
+
+//-------------------------------------------------------------------------------//
+//				 	   				Upsert
+//-------------------------------------------------------------------------------//
+func (s *Service) AddChangeFormulaPlant(reqModel *ForPlantUS) error {
+	//if (model_db.FormulaPlantUS{}) != reqModel.FormulaPlant {
+	//	err, forPlantId := s.repo.UpsertFormulaPlant(&reqModel.FormulaPlant)
+	//	if err != nil{
+	//		return err
+	//	}
+	//}
+	//fmt.Println(forPlantId)
+	//if len(reqModel.SensorValue) > 0 {
+	//	if forPlantId != "" {
+	//		//Assign FormulaPlantId
+	//		for idx, wa := range reqModel.SensorValue {
+	//			wa.FormulaPlantId = reqModel.FormulaPlant.FormulaPlantId
+	//			wa.StatusId = config.GetStatus().Active
+	//			reqModel.SensorValue[idx] = wa
+	//		}
+	//		err := s.repo.UpsertForPlantSensor(reqModel.SensorValue)
+	//		if err != nil{
+	//			return err
+	//		}
+	//	}
+	//}
+	//err := s.repo.Test(reqModel)
+	//if err != nil{
+	//	return err
+	//}
+
+	var (
+		forPlantId *string
+		err	error
+	)
+
+	//Prepare data before process
+	reqModel.FormulaPlant.StatusId = config.GetStatus().Active
+	tx := s.repo.Begin()
+	//Upsert Formula Plant
+	if (model_db.FormulaPlantUS{}) != reqModel.FormulaPlant {
+		err, forPlantId = tx.UpsertFormulaPlant(&reqModel.FormulaPlant)
+		if err != nil{
+			tx.Rollback()
+			return err
+		}
+	}
+	//Upsert Sensor Value
+	if len(reqModel.SensorValue) > 0 {
+		if *forPlantId != "" {
+			//Assign FormulaPlantId
+			for idx, wa := range reqModel.SensorValue {
+				wa.FormulaPlantId = reqModel.FormulaPlant.FormulaPlantId
+				wa.StatusId = config.GetStatus().Active
+				reqModel.SensorValue[idx] = wa
+			}
+			err := tx.UpsertForPlantSensor(reqModel.SensorValue)
+			if err != nil{
+				tx.Rollback()
+				return err
+			}
+		}
+	}
+	//Upsert Fertilizer Ratio
+	if len(reqModel.FertRatio) > 0 {
+		if *forPlantId != "" {
+			//Assign FormulaPlantId
+			for idx, wa := range reqModel.FertRatio {
+				wa.FormulaPlantId = reqModel.FormulaPlant.FormulaPlantId
+				wa.StatusId = config.GetStatus().Active
+				reqModel.FertRatio[idx] = wa
+			}
+			err := tx.UpsertForPlantFert(reqModel.FertRatio)
+			if err != nil{
+				tx.Rollback()
+				return err
+			}
+		}
+	}
+	tx.Commit()
+
+	return nil
+}
+
+//-------------------------------------------------------------------------------//
+//									Create
+//-------------------------------------------------------------------------------//
+func (s *Service) AddFavoriteForPlant(reqModel *model_db.FavForPlantUS) error {
+	if (model_db.FavForPlantUS{}) == *reqModel  {
+		//return err.ErrContext
+	}
+	err := s.repo.CreateFavFormulaPlant(reqModel)
+	if err != nil{
+		return err
+	}
+	return nil
+}
+
+//-------------------------------------------------------------------------------//
+//									Delete
+//-------------------------------------------------------------------------------//
+func (s *Service) RemoveFavoriteForPlant(reqModel *model_db.FavForPlantUS) error {
+	if (model_db.FavForPlantUS{}) == *reqModel  {
+		//return err.ErrContext
+	}
+	err := s.repo.DeleteFavFormulaPlant(reqModel)
+	if err != nil{
+		return err
+	}
+	return nil
 }

@@ -11,9 +11,9 @@ import (
 //model Common Database (Get)
 type DBCommonGet struct {
 	CreateDate		time.Time	 `json:"create_date"`
-	CreateBy		string	 	 `json:"create_by"`
+	//CreateBy		string	 	 `json:"create_by"`
 	ChangeDate	   	time.Time	 `json:"change_date"`
-	ChangeBy	    string	 	 `json:"change_by"`
+	//ChangeBy	    string	 	 `json:"change_by"`
 	StatusId		uuid.UUID	 `json:"status_id"`
 }
 // New instance Common Database
@@ -33,8 +33,8 @@ func (u *DBCommonGet) New() *DBCommonGet {
 //model Common Database (Create, Update)
 type DBCommonCreateUpdate struct {
 	CreateDate		time.Time	 `json:"create_date" gorm:"autoCreateTime"`
-	CreateBy		*string	 	 `json:"create_by"`
+	//CreateBy		*string	 	 `json:"create_by"`
 	ChangeDate	   	time.Time	 `json:"change_date" gorm:"autoUpdateTime"`
-	ChangeBy	    string	 	 `json:"change_by"`
-	//StatusId		*uuid.UUID	 `json:"status_id"`
+	//ChangeBy	    string	 	 `json:"change_by"`
+	//StatusId		string		 `json:"status_id"`
 }

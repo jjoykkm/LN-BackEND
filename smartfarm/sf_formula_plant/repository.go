@@ -8,9 +8,13 @@ import (
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"github.com/jjoykkm/ln-backend/helper"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type Repositorier interface {
+	Begin() *Repository
+	Commit()
+	Rollback()
 	FindAllPlantType(status string) ([]model_db.PlantType, error)
 	FindAllPlantWithPlantType(status, plantTypeId string, offset int) ([]PlantAndPlantType, error)
 	GetCountFormulaPlant(status, plantId string) (int64, error)
@@ -20,6 +24,12 @@ type Repositorier interface {
 	FindAllFormulaPlantFavorite(status, uid string, offset int) ([]FormulaPlantItem, error)
 	FindAllMyFormulaPlant(status, uid string, offset int) ([]FormulaPlantItem, error)
 	FindAllFormulaPlantDetail(status, forPlantId string) ([]ForPlantFormula, error)
+	UpsertFormulaPlant (req *model_db.FormulaPlantUS) (error, *string)
+	UpsertForPlantSensor (req []model_db.TransSenValueRecUS) error
+	UpsertForPlantFert (req []model_db.TransFertRatioUS) error
+	CreateFavFormulaPlant (req *model_db.FavForPlantUS) error
+	DeleteFavFormulaPlant (req *model_db.FavForPlantUS) error
+	Test (req *ForPlantUS) error
 }
 
 type Repository struct {
@@ -28,6 +38,18 @@ type Repository struct {
 
 func NewRepository(db *gorm.DB) Repositorier {
 	return &Repository{db: db}
+}
+
+func (r *Repository) Begin() *Repository {
+	return &Repository{
+		db:	r.db.Debug().Begin(),
+	}
+}
+func (r *Repository) Commit() {
+	r.db.Debug().Commit()
+}
+func (r *Repository) Rollback() {
+	r.db.Debug().Rollback()
 }
 
 func (r *Repository) FindAllPlantType(status string) ([]model_db.PlantType, error) {
@@ -200,4 +222,93 @@ func (r *Repository) FindAllFormulaPlantDetail(status, forPlantId string) ([]For
 		return nil, resp.Error
 	}
 	return result, nil
+}
+
+//-------------------------------------------------------------------------------//
+//									Upsert
+//-------------------------------------------------------------------------------//
+func (r *Repository) UpsertFormulaPlant (req *model_db.FormulaPlantUS) (error, *string) {
+		resp := r.db.Debug().Model(model_db.FormulaPlantUS{}).Clauses(clause.OnConflict{
+			Columns: []clause.Column{
+				{Name: "formula_plant_id"},
+			},
+			UpdateAll: true,
+		}).Create(&req)
+		if resp.Error != nil {
+			return resp.Error, nil
+		}
+	return nil, &req.FormulaPlantId
+}
+
+func (r *Repository) UpsertForPlantSensor (req []model_db.TransSenValueRecUS) error {
+	resp := r.db.Debug().Model(model_db.TransSenValueRecUS{}).Clauses(clause.OnConflict{
+		Columns: []clause.Column{
+			{Name: "formula_plant_id"},
+			{Name: "sensor_type_id"},
+		},
+		UpdateAll: true,
+	}).Create(&req)
+	if resp.Error != nil {
+		return resp.Error
+	}
+	return nil
+}
+
+func (r *Repository) UpsertForPlantFert (req []model_db.TransFertRatioUS) error {
+	resp := r.db.Debug().Model(model_db.TransFertRatioUS{}).Clauses(clause.OnConflict{
+		Columns: []clause.Column{
+			{Name: "formula_plant_id"},
+			{Name: "fertilizer_id"},
+		},
+		UpdateAll: true,
+	}).Create(&req)
+	if resp.Error != nil {
+		return resp.Error
+	}
+	return nil
+}
+
+func (r *Repository) Test (req *ForPlantUS) error {
+	req.FormulaPlant.StatusId = config.GetStatus().Active
+	for idx, wa := range req.SensorValue {
+		wa.FormulaPlantId = req.FormulaPlant.FormulaPlantId
+		wa.StatusId = config.GetStatus().Active
+		req.SensorValue[idx] = wa
+	}
+	fmt.Printf("%+v\n", req)
+	//resp := r.db.Debug().Model(ForPlantUS{}).Clauses(clause.OnConflict{
+	//	Columns: []clause.Column{
+	//		{Name: "formula_plant_id"},
+	//	},
+	//	UpdateAll: true,
+	//}).Create(&req)
+	//if resp.Error != nil {
+	//	return resp.Error
+	//}
+
+
+	return nil
+}
+
+//-------------------------------------------------------------------------------//
+//									Create
+//-------------------------------------------------------------------------------//
+func (r *Repository) CreateFavFormulaPlant (req *model_db.FavForPlantUS) error {
+	req.StatusId = config.GetStatus().Active
+	resp := r.db.Debug().Create(&req)
+	if resp.Error != nil {
+		return resp.Error
+	}
+	return nil
+}
+
+//-------------------------------------------------------------------------------//
+//									Delete
+//-------------------------------------------------------------------------------//
+func (r *Repository) DeleteFavFormulaPlant (req *model_db.FavForPlantUS) error {
+	resp := r.db.Debug().Where("uid = ? AND formula_plant_id = ?", req.Uid, req.FormulaPlantId).Delete(&req)
+	if resp.Error != nil {
+		return resp.Error
+	}
+	return nil
 }

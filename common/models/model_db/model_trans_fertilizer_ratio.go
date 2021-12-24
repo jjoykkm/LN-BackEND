@@ -29,3 +29,17 @@ func (u *TransFertRatio) New() *TransFertRatio {
 func (TransFertRatio) TableName() string {
 	return config.DB_TRANS_FERTILIZER_RATIO
 }
+
+//-------------------------------------------------------------------------------//
+//									Upsert
+//-------------------------------------------------------------------------------//
+type TransFertRatioUS struct {
+	DBCommonCreateUpdate
+	FertId       		string	 	`json:"fert_id" gorm:"column:fertilizer_id"`
+	FormulaPlantId		string	 	`json:"formula_plant_id"`
+	Ratio		     	float64		`json:"ratio"`
+	StatusId		 	string		`json:"status_id"`
+}
+func (TransFertRatioUS) TableName() string {
+	return config.DB_TRANS_FERTILIZER_RATIO
+}

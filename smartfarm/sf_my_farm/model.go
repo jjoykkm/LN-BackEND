@@ -51,19 +51,6 @@ func (SocSenDetail) TableName() string {
 	return config.DB_SOCKET
 }
 
-
-////-------------------------------------------------------------------------------//
-////				 	    	Sensor List
-////-------------------------------------------------------------------------------//
-////Model
-//type SenSocMainList struct {
-//	SocketArea		model_db.TransSocketArea	`json:"socket_area" gorm:"embedded"`
-//	Socket         	[]SocSenDetail				`json:"socket_detail" gorm:"foreignkey:SocketId; references:SocketId"`
-//}
-//func (SenSocMainList) TableName() string {
-//	return config.DB_TRANS_SOCKET_AREA
-//}
-
 //-------------------------------------------------------------------------------//
 //				 	    Manage FarmArea
 //-------------------------------------------------------------------------------//

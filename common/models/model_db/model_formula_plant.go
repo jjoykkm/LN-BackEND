@@ -3,6 +3,7 @@ package model_db
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
+	"gorm.io/gorm"
 )
 //-------------------------------------------------------------------------------//
 //							Table Recommend
@@ -38,15 +39,15 @@ type FormulaPlant struct {
 	PeopleUsed 		 int		 `json:"people_used"`
 	Recommend		 Recommend	 `json:"recommend" gorm:"embedded"`
 	PlantId		 	 uuid.UUID	 `json:"plant_id"`
-	ProvinceId		 uuid.UUID	 `json:"province_id"`
-	CountryId		 uuid.UUID	 `json:"country_id"`
+	ProvinceId		 *uuid.UUID	 `json:"province_id,omitempty"`
+	CountryId		 *uuid.UUID	 `json:"country_id,omitempty"`
 	IsPublic		 bool	 	 `json:"is_public"`
 	Uid				 uuid.UUID	 `json:"-"`
 }
 // New instance formula_plant
 func (u *FormulaPlant) New() *FormulaPlant {
 	return &FormulaPlant{
-		DBCommonGet:      		u.DBCommonGet ,
+		DBCommonGet:      	u.DBCommonGet ,
 		FormulaPlantId:		u.FormulaPlantId ,
 		FormulaName:		u.FormulaName ,
 		FormulaDesc:		u.FormulaDesc ,
@@ -59,13 +60,46 @@ func (u *FormulaPlant) New() *FormulaPlant {
 		Uid:				u.Uid ,
 	}
 }
-
 // Custom table name for GORM
 func (FormulaPlant) TableName() string {
 	return config.DB_FORMULA_PLANT
 }
 
-
+//-------------------------------------------------------------------------------//
+//				 	   				Upsert
+//-------------------------------------------------------------------------------//
+type FormulaPlantUS struct {
+	DBCommonCreateUpdate
+	FormulaPlantId 	 string	 	 			`json:"formula_plant_id" gorm:"default:uuid_generate_v4()"`
+	FormulaName		 string		 			`json:"formula_plant_name"`
+	FormulaDesc		 string		 			`json:"formula_plant_desc"`
+	//PeopleUsed 		 int					 `json:"people_used"`
+	//Recommend		 Recommend	 			`json:"recommend" gorm:"embedded"`
+	PlantId		 	 string	 	 			`json:"plant_id"`
+	ProvinceId		 string	 	 			`json:"province_id"`
+	CountryId		 string	 	 			`json:"country_id"`
+	IsPublic		 bool	 	 			`json:"is_public" gorm:"default:false"`
+	Uid				 string		 			`json:"uid"`//`json:"user_id`
+	StatusId		 string		 			`json:"status_id"`
+}
+func (FormulaPlantUS) TableName() string {
+	return config.DB_FORMULA_PLANT
+}
+func (u *FormulaPlantUS) BeforeCreate(tx *gorm.DB) (err error) {
+	//Default value
+	//u.PeopleUsed = 0
+	//u.Recommend.Recommend1 = 0
+	//u.Recommend.Recommend2 = 0
+	//u.Recommend.Recommend3 = 0
+	//u.Recommend.Recommend4 = 0
+	//u.Recommend.Recommend5 = 0
+	//helper_gorm.BeforeCreate(u.DBCommonCreateUpdate, "jjoy")
+	return
+}
+func (u *FormulaPlantUS) BeforeUpdate(tx *gorm.DB) (err error) {
+	//helper_gorm.BeforeUpdate(u.DBCommonCreateUpdate, "jjoy")
+	return
+}
 
 
 

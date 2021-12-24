@@ -264,6 +264,7 @@ func (h *Handler) ConfigCustomSensor(c *gin.Context) {
 	})
 }
 
+
 func (h *Handler) ConfigDeleteSocket(c *gin.Context) {
 	var reqModel ReqDeleteConfig
 	//reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)

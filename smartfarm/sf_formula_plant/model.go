@@ -85,19 +85,13 @@ func (ForPlantFormula) TableName() string {
 }
 
 //-------------------------------------------------------------------------------//
-//				 	   				Upsert
+//									Upsert
 //-------------------------------------------------------------------------------//
-type FormulaPlantUS struct {
-	model_db.DBCommonCreateUpdate
-	FormulaPlantId 	 string	 	 `json:"formula_plant_id"`
-	FormulaName		 string		 `json:"formula_plant_name"`
-	FormulaDesc		 string		 `json:"formula_plant_desc"`
-	PlantId		 	 string	 	 `json:"plant_id"`
-	ProvinceId		 string	 	 `json:"province_id"`
-	CountryId		 string	 	 `json:"country_id"`
-	IsPublic		 bool	 	 `json:"is_public"`
-	Uid				 string		 `json:"user_id,omitempty"`
+type ForPlantUS struct {
+	FormulaPlant	model_db.FormulaPlantUS 		`json:"formula_plant" gorm:"embedded"`
+	SensorValue		[]model_db.TransSenValueRecUS	`json:"sensor_value"`
+	FertRatio		[]model_db.TransFertRatioUS		`json:"fertilizer_ratio"`
 }
-func (FormulaPlantUS) TableName() string {
+func (ForPlantUS) TableName() string {
 	return config.DB_FORMULA_PLANT
 }
