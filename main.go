@@ -72,6 +72,10 @@ func main() {
 	//repoScheRem := sf_my_farm.NewRepository(db)
 	//serviceScheRem := sf_my_farm.NewService(repoScheRem)
 	//handlerScheRem := sf_my_farm.NewHandler(serviceScheRem)
+	//RemoteSwitch
+	//repoRemoteSwitch := sf_my_farm.NewRepository(db)
+	//serviceRemoteSwitch := sf_my_farm.NewService(repoRemoteSwitch)
+	//handlerRemoteSwitch := sf_my_farm.NewHandler(serviceRemoteSwitch)
 
 	v1 := http.Group("/v1")
 	{
@@ -125,6 +129,11 @@ func main() {
 			//{
 			//	//scheRem.GET("/farmAreaDashboardList", handlerScheRem.GetFarmAreaDashboardList)
 			//}
+
+			//remoteSwitch := app.Group("/remoteSwitch")
+			//{
+			//	//remoteSwitch.GET("/farmAreaDashboardList", handlerremoteSwitch.GetFarmAreaDashboardList)
+			//}
 		}
 
 		get := v1.Group("/get")
@@ -143,6 +152,7 @@ func main() {
 				{
 					plant.GET("/fertAndCatList", handlerCommonPlant.GetFertAndCatList)
 					plant.GET("/sensorTypeList", handlerCommonPlant.GetSensorTypeList)
+					plant.GET("/fertCatList", handlerCommonPlant.GetFertCatList)
 				}
 			}
 		}

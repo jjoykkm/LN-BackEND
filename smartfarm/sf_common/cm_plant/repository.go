@@ -10,6 +10,7 @@ import (
 type Repositorier interface {
 	FindAllFertAndCat(status string) ([]FertilizerAndCat, error)
 	FindAllSensorType(status string) ([]model_db.SensorType, error)
+	FindAllFertCatList(status string) ([]model_db.FertilizerCat, error)
 }
 
 type Repository struct {
@@ -38,6 +39,16 @@ func (r *Repository) FindAllFertAndCat(status string) ([]FertilizerAndCat, error
 }
 func (r *Repository) FindAllSensorType(status string) ([]model_db.SensorType, error) {
 	var result []model_db.SensorType
+	resp := r.db.Debug().Where("status_id = ?", status).Find(&result)
+
+	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
+		return nil, resp.Error
+	}
+	return result, nil
+}
+
+func (r *Repository) FindAllFertCatList(status string) ([]model_db.FertilizerCat, error) {
+	var result []model_db.FertilizerCat
 	resp := r.db.Debug().Where("status_id = ?", status).Find(&result)
 
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
