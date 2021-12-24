@@ -5,12 +5,14 @@ import (
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type Repositorier interface {
 	FindAllFertAndCat(status string) ([]FertilizerAndCat, error)
 	FindAllSensorType(status string) ([]model_db.SensorType, error)
 	FindAllFertCatList(status string) ([]model_db.FertilizerCat, error)
+	UpsertFertCat (req []model_db.FertilizerCatUS) error
 }
 
 type Repository struct {
@@ -55,4 +57,20 @@ func (r *Repository) FindAllFertCatList(status string) ([]model_db.FertilizerCat
 		return nil, resp.Error
 	}
 	return result, nil
+}
+
+//-------------------------------------------------------------------------------//
+//									Upsert
+//-------------------------------------------------------------------------------//
+func (r *Repository) UpsertFertCat (req []model_db.FertilizerCatUS) error {
+	resp := r.db.Debug().Model(model_db.FertilizerCatUS{}).Clauses(clause.OnConflict{
+		Columns: []clause.Column{
+			{Name: "fertilizer_cat_id"},
+		},
+		UpdateAll: true,
+	}).Create(&req)
+	if resp.Error != nil {
+		return resp.Error
+	}
+	return nil
 }

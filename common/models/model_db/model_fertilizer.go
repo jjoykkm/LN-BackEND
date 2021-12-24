@@ -43,7 +43,7 @@ func (Fertilizer) TableName() string {
 //-------------------------------------------------------------------------------//
 type FertilizerUS struct {
 	DBCommonCreateUpdate
-	FertId     	 		 string	 	 `json:"fert_id" gorm:"column:fertilizer_id"`
+	FertId     	 		 string	 	 `json:"fert_id" gorm:"column:fertilizer_id;default:uuid_generate_v4()"`
 	FertEN     	 		 string		 `json:"fert_name_en" gorm:"column:fertilizer_en"`
 	FertTH     	 		 string		 `json:"fert_name_th" gorm:"column:fertilizer_th"`
 	Nitrogen       	 	 float64	 `json:"nitrogen"`

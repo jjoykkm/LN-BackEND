@@ -90,7 +90,7 @@ func main() {
 				}
 				plant := common.Group("/plant")
 				{
-					plant.POST("/testttt", handlerCommonPlant.GetFertAndCatList)
+					plant.POST("/addChangeFertCat", handlerCommonPlant.AddChangeFertCat)
 				}
 			}
 			forPlant := api.Group("/formulaPlant")
@@ -134,6 +134,7 @@ func main() {
 			//{
 			//	//remoteSwitch.GET("/farmAreaDashboardList", handlerremoteSwitch.GetFarmAreaDashboardList)
 			//}
+
 		}
 
 		get := v1.Group("/get")

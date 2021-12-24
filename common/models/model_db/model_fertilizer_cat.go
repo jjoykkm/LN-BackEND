@@ -30,3 +30,17 @@ func (FertilizerCat) TableName() string {
 	return config.DB_FERTILIZER_CAT
 }
 
+//-------------------------------------------------------------------------------//
+//									Upsert
+//-------------------------------------------------------------------------------//
+type FertilizerCatUS struct {
+	DBCommonCreateUpdate
+	FertCatId      string	 `json:"fert_cat_id" gorm:"column:fertilizer_cat_id;default:uuid_generate_v4()"`
+	FertCatEN      string	 `json:"fert_cat_en" gorm:"column:fertilizer_cat_en"`
+	FertCatTH      string	 `json:"fert_cat_th" gorm:"column:fertilizer_cat_th"`
+	StatusId	   string	 `json:"status_id"`
+}
+func (FertilizerCatUS) TableName() string {
+	return config.DB_FERTILIZER_CAT
+}
+
