@@ -10,6 +10,9 @@ import (
 )
 
 type Repositorier interface {
+	Begin() *Repository
+	Commit()
+	Rollback()
 	FindOneFarm(status, farmId string) (*FarmOverview, error)
 	FindOneMainboxBySerialNo (serialNo string) (*model_db.Mainbox, error)
 	GetCountMainbox(status, farmId string) (int64, error)
@@ -40,6 +43,20 @@ type Repository struct {
 
 func NewRepository(db *gorm.DB) Repositorier {
 	return &Repository{db: db}
+}
+
+func (r *Repository) Begin() *Repository {
+	return &Repository{
+		db:	r.db.Debug().Begin(),
+	}
+}
+
+func (r *Repository) Commit() {
+	r.db.Debug().Commit()
+}
+
+func (r *Repository) Rollback() {
+	r.db.Debug().Rollback()
 }
 
 func (r *Repository) FindOneFarm(status, farmId string) (*FarmOverview, error) {
@@ -220,29 +237,9 @@ func (r *Repository) UpdateAllSocketNullFarmArea (req []string) error {
 	return nil
 }
 
-
 //-------------------------------------------------------------------------------//
 //							Upsert Data
 //-------------------------------------------------------------------------------//
-//func (r *Repository) UpsertOneMainbox (req *model_db.MainboxUS) error {
-//	//resp := r.db.Debug().Model(&model_db.Mainbox{}).Where("mainbox_id = ?",
-//	//	req.MainboxId).Updates(&req)
-//	//resp := r.db.Debug().Clauses(clause.OnConflict{
-//	//	Columns:   []clause.Column{{Name: "id"}},
-//	//	DoUpdates: clause.AssignmentColumns([]{"name"}),
-//	//}).Create(&req)
-//	resp := r.db.Debug().Clauses(clause.OnConflict{
-//		Columns:   []clause.Column{{Name: "id"}},
-//		UpdateAll: true,
-//	}).Create(&req)
-//	if resp.Error != nil {
-//		return resp.Error
-//	}
-//	if resp.RowsAffected == 0 {
-//		return gorm.ErrRecordNotFound
-//	}
-//	return nil
-//}
 func (r *Repository) UpsertFarm (req *model_db.FarmUS) error {
 	resp := r.db.Debug().Model(model_db.FarmUS{}).Clauses(clause.OnConflict{
 		Columns: []clause.Column{

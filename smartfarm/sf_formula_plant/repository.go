@@ -46,9 +46,11 @@ func (r *Repository) Begin() *Repository {
 		db:	r.db.Debug().Begin(),
 	}
 }
+
 func (r *Repository) Commit() {
 	r.db.Debug().Commit()
 }
+
 func (r *Repository) Rollback() {
 	r.db.Debug().Rollback()
 }

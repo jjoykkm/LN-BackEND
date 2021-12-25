@@ -178,23 +178,26 @@ func (s *Service) ActivateMainbox(reqModel *model_db.MainboxSerialUS) error {
 
 func (s *Service) ConfigMainbox(reqModel *ReqConfMainbox) error {
 	// Update Mainbox detail
+	tx := s.repo.Begin()
 	if !((model_db.MainboxUS{}) == *reqModel.Mainbox) {	// Check model has value
-		err := s.repo.UpdateOneMainbox(reqModel.Mainbox)
+		err := tx.UpdateOneMainbox(reqModel.Mainbox)
 		if err != nil{
+			tx.Rollback()
 			return err
 		}
 	}
-
 	// Prepare model before upsert data
 	for idx, _ := range reqModel.Socket {
 		// Assign status active
 		reqModel.Socket[idx].StatusId = config.GetStatus().Active
 	}
 	// Upsert Socket
-	err := s.repo.UpsertSocket(reqModel.Socket)
+	err := tx.UpsertSocket(reqModel.Socket)
 	if err != nil{
+		tx.Rollback()
 		return err
 	}
+	tx.Commit()
 	return nil
 }
 
@@ -213,10 +216,13 @@ func (s *Service) ConfigAddSensor(reqModel *ReqConfMainbox) error {
 func (s *Service) ConfigFarmArea(reqModel *ReqConfFarmArea) error {
 	// Prepare model before upsert data
 	reqModel.FarmArea.StatusId = config.GetStatus().Active //Assign status active
+
+	tx := s.repo.Begin()
 	// Upsert FarmArea detail
-	err, farmAreaId := s.repo.UpsertFarmArea(reqModel.FarmArea)
+	err, farmAreaId := tx.UpsertFarmArea(reqModel.FarmArea)
 	if err != nil{
 		return err
+		tx.Rollback()
 	}
 
 	// Check array is not empty
@@ -224,20 +230,13 @@ func (s *Service) ConfigFarmArea(reqModel *ReqConfFarmArea) error {
 		// Assign FarmAreaId before update data
 		reqModel.LinkedSocFarmArea.FarmAreaId = *farmAreaId
 		// Update Socket
-		err = s.repo.UpdateAllSocket(reqModel.LinkedSocFarmArea)
-		//// Prepare model before upsert data
-		//for idx, _ := range reqModel.TransSocketArea {
-		//	// Assign FarmAreaId
-		//	reqModel.TransSocketArea[idx].FarmAreaId = *farmAreaId
-		//	// Assign status active
-		//	reqModel.TransSocketArea[idx].StatusId 	 = config.GetStatus().Active
-		//}
-		//// Upsert Socket
-		//err = s.repo.UpsertTransSocketArea(reqModel.TransSocketArea)
+		err = tx.UpdateAllSocket(reqModel.LinkedSocFarmArea)
 		if err != nil{
 			return err
+			tx.Rollback()
 		}
 	}
+	tx.Commit()
 	return nil
 }
 
