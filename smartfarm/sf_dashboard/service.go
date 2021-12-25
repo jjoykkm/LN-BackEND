@@ -20,7 +20,7 @@ func NewService(repo Repositorier) Servicer {
 }
 
 func (s *Service) GetFarmAreaDashboardList(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error) {
-	dashboardList, err := s.repo.FindAllFarmAreaDashboard(status, reqModel.FarmId)
+	dashboardList, err := s.repo.GetFarmAreaDashboardList(status, reqModel.FarmId)
 	if err != nil{
 		return nil, err
 	}

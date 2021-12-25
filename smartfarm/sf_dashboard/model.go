@@ -3,20 +3,60 @@ package sf_dashboard
 import (
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
+	"gorm.io/gorm"
 )
-//-------------------------------------------------------------------------------//
-//				 	    	Socket Detail
-//-------------------------------------------------------------------------------//
-//Model
-type SocketDetail struct {
-	Socket        	model_db.Socket	 	 	`json:"socket" gorm:"embedded"`
-	StatusSensor    model_db.StatusSensor	`json:"status_sensor" gorm:"foreignkey:StatusSensorId; references:StatusSensorId"`
-	Sensor         	[]SensorDetail			`json:"sensor" gorm:"foreignkey:SensorId; references:SensorId"`
-	//SocketAction    model_db.SocketAction	`json:"socket_action" gorm:"foreignkey:StatusSensorId; references:StatusSensorId"`
-}
-func (SocketDetail) TableName() string {
-	return config.DB_SOCKET
-}
+
+////-------------------------------------------------------------------------------//
+////				 	    	Socket Detail
+////-------------------------------------------------------------------------------//
+////Model
+//type SocketDetail struct {
+//	Socket        	model_db.Socket	 	 	`json:"socket" gorm:"embedded"`
+//	StatusSensor    model_db.StatusSensor	`json:"status_sensor" gorm:"foreignkey:StatusSensorId; references:StatusSensorId"`
+//	Sensor         	[]SensorDetail			`json:"sensor" gorm:"foreignkey:SensorId; references:SensorId"`
+//	//SocketAction    model_db.SocketAction	`json:"socket_action" gorm:"foreignkey:StatusSensorId; references:StatusSensorId"`
+//}
+//func (SocketDetail) TableName() string {
+//	return config.DB_SOCKET
+//}
+//
+////-------------------------------------------------------------------------------//
+////				 	    	Sensor Detail
+////-------------------------------------------------------------------------------//
+////Model
+//type SensorDetail struct {
+//	Sensor        model_db.Sensor	 	 `json:"sensor" gorm:"embedded"`
+//	SensorType    model_db.SensorType	 `json:"sensor_type" gorm:"foreignkey:SensorTypeId; references:SensorTypeId"`
+//}
+//func (SensorDetail) TableName() string {
+//	return config.DB_SENSOR
+//}
+//
+////-------------------------------------------------------------------------------//
+////				 	    	Sensor List
+////-------------------------------------------------------------------------------//
+////Model
+//type SenSocMainList struct {
+//	SocketArea		model_db.TransSocketArea	`json:"socket_area" gorm:"embedded"`
+//	Socket         	[]SocketDetail				`json:"socket_detail" gorm:"foreignkey:SocketId; references:SocketId"`
+//	Mainbox        	[]model_db.Mainbox			`json:"mainbox_detail" gorm:"foreignkey:MainboxId; references:MainboxId"`
+//}
+//func (SenSocMainList) TableName() string {
+//	return config.DB_TRANS_SOCKET_AREA
+//}
+//
+////-------------------------------------------------------------------------------//
+////				 	    Plant And PlantType
+////-------------------------------------------------------------------------------//
+////Model
+//type FarmSensorDetail struct {
+//	FarmArea    	model_db.FarmArea		`json:"farm_area" gorm:"embedded"`
+//	FormulaPlant	model_db.FormulaPlant	`json:"formula_plant" gorm:"foreignkey:FormulaPlantId; references:FormulaPlantId"`
+//	SensorDetail	[]SenSocMainList		`json:"sensor_detail" gorm:"foreignkey:FarmAreaId; references:FarmAreaId"`
+//}
+//func (FarmSensorDetail) TableName() string {
+//	return config.DB_FARM_AREA
+//}
 
 //-------------------------------------------------------------------------------//
 //				 	    	Sensor Detail
@@ -31,28 +71,36 @@ func (SensorDetail) TableName() string {
 }
 
 //-------------------------------------------------------------------------------//
-//				 	    	Sensor List
+//				 	    	Socket Sensor Detail
 //-------------------------------------------------------------------------------//
 //Model
-type SenSocMainList struct {
-	SocketArea		model_db.TransSocketArea	`json:"socket_area" gorm:"embedded"`
-	Socket         	[]SocketDetail				`json:"socket_detail" gorm:"foreignkey:SocketId; references:SocketId"`
-	Mainbox        	[]model_db.Mainbox			`json:"mainbox_detail" gorm:"foreignkey:MainboxId; references:MainboxId"`
+type SocSenDetail struct {
+	Socket        	model_db.Socket	 	 	`json:"socket" gorm:"embedded"`
+	Mainbox			model_db.Mainbox		`json:"mainbox" gorm:"foreignkey:MainboxId; references:MainboxId"`
+	StatusSensor    model_db.StatusSensor	`json:"status_sensor" gorm:"foreignkey:StatusSensorId; references:StatusSensorId"`
+	Sensor         	SensorDetail			`json:"sensor" gorm:"foreignkey:SensorId; references:SensorId"`
 }
-func (SenSocMainList) TableName() string {
-	return config.DB_TRANS_SOCKET_AREA
+func (SocSenDetail) TableName() string {
+	return config.DB_SOCKET
 }
 
 //-------------------------------------------------------------------------------//
-//				 	    Plant And PlantType
+//				 	    		Overview Farm
 //-------------------------------------------------------------------------------//
 //Model
-type FarmSensorDetail struct {
+type FarmDashboard struct {
 	FarmArea    	model_db.FarmArea		`json:"farm_area" gorm:"embedded"`
 	FormulaPlant	model_db.FormulaPlant	`json:"formula_plant" gorm:"foreignkey:FormulaPlantId; references:FormulaPlantId"`
-	SensorDetail	[]SenSocMainList		`json:"sensor_detail" gorm:"foreignkey:FarmAreaId; references:FarmAreaId"`
+	SocSenDetail	[]SocSenDetail			`json:"socket_sensor_detail" gorm:"foreignkey:FarmAreaId; references:FarmAreaId"`
 }
-func (FarmSensorDetail) TableName() string {
+func (FarmDashboard) TableName() string {
 	return config.DB_FARM_AREA
+}
+func (u *FarmDashboard) AfterFind(tx *gorm.DB) (err error) {
+	//for idx, wa := range u.SocSenDetail {
+	//	wa.Test = "jjoy eiei"
+	//	u.SocSenDetail[idx] = wa
+	//}
+	return
 }
 
