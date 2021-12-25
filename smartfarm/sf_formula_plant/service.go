@@ -27,6 +27,7 @@ type Servicer interface {
 
 	//Upsert
 	AddChangeFormulaPlant(reqModel *ForPlantUS) error
+	AddChangeFertilizer(req *model_db.FertilizerUS) error
 
 	//Update
 	AddFavoriteForPlant(reqModel *model_db.FavForPlantUS) error
@@ -205,32 +206,6 @@ func (s *Service) GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlan
 //				 	   				Upsert
 //-------------------------------------------------------------------------------//
 func (s *Service) AddChangeFormulaPlant(reqModel *ForPlantUS) error {
-	//if (model_db.FormulaPlantUS{}) != reqModel.FormulaPlant {
-	//	err, forPlantId := s.repo.UpsertFormulaPlant(&reqModel.FormulaPlant)
-	//	if err != nil{
-	//		return err
-	//	}
-	//}
-	//fmt.Println(forPlantId)
-	//if len(reqModel.SensorValue) > 0 {
-	//	if forPlantId != "" {
-	//		//Assign FormulaPlantId
-	//		for idx, wa := range reqModel.SensorValue {
-	//			wa.FormulaPlantId = reqModel.FormulaPlant.FormulaPlantId
-	//			wa.StatusId = config.GetStatus().Active
-	//			reqModel.SensorValue[idx] = wa
-	//		}
-	//		err := s.repo.UpsertForPlantSensor(reqModel.SensorValue)
-	//		if err != nil{
-	//			return err
-	//		}
-	//	}
-	//}
-	//err := s.repo.Test(reqModel)
-	//if err != nil{
-	//	return err
-	//}
-
 	var (
 		forPlantId *string
 		err	error
@@ -284,6 +259,14 @@ func (s *Service) AddChangeFormulaPlant(reqModel *ForPlantUS) error {
 	return nil
 }
 
+func (s *Service) AddChangeFertilizer(req *model_db.FertilizerUS) error {
+	req.StatusId = config.GetStatus().Active
+	err := s.repo.UpsertFertilizer(req)
+	if err != nil{
+		return err
+	}
+	return nil
+}
 //-------------------------------------------------------------------------------//
 //									Create
 //-------------------------------------------------------------------------------//

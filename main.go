@@ -103,6 +103,7 @@ func main() {
 				forPlant.POST("/addChangeFormulaPlant", handlerFormulaPlant.AddChangeFormulaPlant)
 				forPlant.POST("/addFavoriteForPlant", handlerFormulaPlant.AddFavoriteForPlant)
 				forPlant.POST("/removeFavoriteForPlant", handlerFormulaPlant.RemoveFavoriteForPlant)
+				forPlant.POST("/addChangeFertilizer", handlerFormulaPlant.AddChangeFertilizer)
 			}
 			dashboard := api.Group("/dashboard")
 			{

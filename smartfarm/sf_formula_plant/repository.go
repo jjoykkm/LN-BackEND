@@ -27,6 +27,7 @@ type Repositorier interface {
 	UpsertFormulaPlant (req *model_db.FormulaPlantUS) (error, *string)
 	UpsertForPlantSensor (req []model_db.TransSenValueRecUS) error
 	UpsertForPlantFert (req []model_db.TransFertRatioUS) error
+	UpsertFertilizer (req *model_db.FertilizerUS) error
 	CreateFavFormulaPlant (req *model_db.FavForPlantUS) error
 	DeleteFavFormulaPlant (req *model_db.FavForPlantUS) error
 	Test (req *ForPlantUS) error
@@ -258,6 +259,19 @@ func (r *Repository) UpsertForPlantFert (req []model_db.TransFertRatioUS) error 
 	resp := r.db.Debug().Model(model_db.TransFertRatioUS{}).Clauses(clause.OnConflict{
 		Columns: []clause.Column{
 			{Name: "formula_plant_id"},
+			{Name: "fertilizer_id"},
+		},
+		UpdateAll: true,
+	}).Create(&req)
+	if resp.Error != nil {
+		return resp.Error
+	}
+	return nil
+}
+
+func (r *Repository) UpsertFertilizer (req *model_db.FertilizerUS) error {
+	resp := r.db.Debug().Model(model_db.FertilizerUS{}).Clauses(clause.OnConflict{
+		Columns: []clause.Column{
 			{Name: "fertilizer_id"},
 		},
 		UpdateAll: true,
