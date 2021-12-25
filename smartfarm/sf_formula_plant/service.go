@@ -210,10 +210,15 @@ func (s *Service) AddChangeFormulaPlant(reqModel *ForPlantUS) error {
 		forPlantId *string
 		err	error
 	)
-
 	//Prepare data before process
 	reqModel.FormulaPlant.StatusId = config.GetStatus().Active
 	tx := s.repo.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
 	//Upsert Formula Plant
 	if (model_db.FormulaPlantUS{}) != reqModel.FormulaPlant {
 		err, forPlantId = tx.UpsertFormulaPlant(&reqModel.FormulaPlant)
@@ -254,9 +259,8 @@ func (s *Service) AddChangeFormulaPlant(reqModel *ForPlantUS) error {
 			}
 		}
 	}
-	tx.Commit()
 
-	return nil
+	return tx.db.Commit().Error
 }
 
 func (s *Service) AddChangeFertilizer(req *model_db.FertilizerUS) error {

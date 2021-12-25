@@ -30,7 +30,6 @@ type Repositorier interface {
 	UpsertFertilizer (req *model_db.FertilizerUS) error
 	CreateFavFormulaPlant (req *model_db.FavForPlantUS) error
 	DeleteFavFormulaPlant (req *model_db.FavForPlantUS) error
-	Test (req *ForPlantUS) error
 }
 
 type Repository struct {
@@ -281,28 +280,6 @@ func (r *Repository) UpsertFertilizer (req *model_db.FertilizerUS) error {
 	if resp.Error != nil {
 		return resp.Error
 	}
-	return nil
-}
-
-func (r *Repository) Test (req *ForPlantUS) error {
-	req.FormulaPlant.StatusId = config.GetStatus().Active
-	for idx, wa := range req.SensorValue {
-		wa.FormulaPlantId = req.FormulaPlant.FormulaPlantId
-		wa.StatusId = config.GetStatus().Active
-		req.SensorValue[idx] = wa
-	}
-	fmt.Printf("%+v\n", req)
-	//resp := r.db.Debug().Model(ForPlantUS{}).Clauses(clause.OnConflict{
-	//	Columns: []clause.Column{
-	//		{Name: "formula_plant_id"},
-	//	},
-	//	UpdateAll: true,
-	//}).Create(&req)
-	//if resp.Error != nil {
-	//	return resp.Error
-	//}
-
-
 	return nil
 }
 

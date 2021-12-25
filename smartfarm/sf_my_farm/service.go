@@ -179,6 +179,11 @@ func (s *Service) ActivateMainbox(reqModel *model_db.MainboxSerialUS) error {
 func (s *Service) ConfigMainbox(reqModel *ReqConfMainbox) error {
 	// Update Mainbox detail
 	tx := s.repo.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
 	if !((model_db.MainboxUS{}) == *reqModel.Mainbox) {	// Check model has value
 		err := tx.UpdateOneMainbox(reqModel.Mainbox)
 		if err != nil{
@@ -197,8 +202,7 @@ func (s *Service) ConfigMainbox(reqModel *ReqConfMainbox) error {
 		tx.Rollback()
 		return err
 	}
-	tx.Commit()
-	return nil
+	return tx.db.Commit().Error
 }
 
 func (s *Service) ConfigAddSensor(reqModel *ReqConfMainbox) error {
@@ -218,6 +222,11 @@ func (s *Service) ConfigFarmArea(reqModel *ReqConfFarmArea) error {
 	reqModel.FarmArea.StatusId = config.GetStatus().Active //Assign status active
 
 	tx := s.repo.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
 	// Upsert FarmArea detail
 	err, farmAreaId := tx.UpsertFarmArea(reqModel.FarmArea)
 	if err != nil{
@@ -236,8 +245,7 @@ func (s *Service) ConfigFarmArea(reqModel *ReqConfFarmArea) error {
 			tx.Rollback()
 		}
 	}
-	tx.Commit()
-	return nil
+	return tx.db.Commit().Error
 }
 
 //-------------------------------------------------------------------------------//
