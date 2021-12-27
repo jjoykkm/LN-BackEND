@@ -1,22 +1,28 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/common/config"
+	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"github.com/jjoykkm/ln-backend/controllers"
 	"github.com/jjoykkm/ln-backend/modelsOld/model_other"
+	"github.com/jjoykkm/ln-backend/obsolete_utility"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_common/cm_address"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_common/cm_farm"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_common/cm_plant"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_dashboard"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_formula_plant"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_my_farm"
-	"github.com/jjoykkm/ln-backend/obsolete_utility"
 	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+	"log"
 	"net/http"
+	"os"
+	"time"
 )
 
 type Ln struct {
@@ -27,13 +33,31 @@ type Ln struct {
 var me Ln
 
 func main() {
+	newLogger := logger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+		logger.Config{
+			SlowThreshold:             time.Second,   // Slow SQL threshold
+			LogLevel:                  logger.Info, // Log level
+			IgnoreRecordNotFoundError: true,           // Ignore ErrRecordNotFound error for logger
+			Colorful:                  true,          // Disable color
+		},
+	)
+
 	db, err := gorm.Open(postgres.New(postgres.Config{
 		DSN:                  config.DSN,
 		PreferSimpleProtocol: false, // disables implicit prepared statement usage
-	}), &gorm.Config{})
+	//}), &gorm.Config{})
+	}),  &gorm.Config{
+		Logger: newLogger,
+	})
 	if err != nil {
 		panic(err.Error())
 	}
+
+	var farm model_db.Farm
+	db.Debug().First(&farm)
+	fmt.Printf("%+v\n", farm)
+
 
 	controller := controllers.Ln{db}
 	me = Ln{db, controller}

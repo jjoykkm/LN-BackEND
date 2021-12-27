@@ -6,7 +6,10 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/common/config"
+	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"github.com/jjoykkm/ln-backend/errs"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 
 	//"gorm.io/gorm/clause"
 
@@ -51,17 +54,20 @@ func doRequest() error {
 	}
 }
 //fmt.Printf("%+v\n", req)
-func hh()  {
+func main()  {
 	//var fm Farm
-	//db, err := gorm.Open(postgres.New(postgres.Config{
-	//	DSN:                  config.DSN,
-	//	PreferSimpleProtocol: false, // disables implicit prepared statement usage
-	//}), &gorm.Config{})
-	//if err != nil {
-	//	panic(err.Error())
-	//}
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		DSN:                  config.DSN,
+		PreferSimpleProtocol: false, // disables implicit prepared statement usage
+	}), &gorm.Config{})
+	if err != nil {
+		panic(err.Error())
+	}
 	http := gin.Default()
 	http.Use(cors.Default())
+
+
+
 	http.POST("/test", func(c *gin.Context) {
 		var reqModel Joy
 		if err := c.Bind(&reqModel); err != nil {
@@ -134,7 +140,13 @@ func hh()  {
 	//	//DoUpdates: clause.AssignmentColumns([]string{"jjoy","eiei"}),
 	//}).Create(&data)
 	//fmt.Printf("%+v,\n", data)
-	//db.Debug().Create(&data)
+	data := JJ{"22222","sss","sss","sss"}
+	db.Debug().Create(&data)
+	ss:=model_db.Farm{}
+
+	fmt.Printf("%+v\n", ss)
+	db.Debug().First(&ss)
+	fmt.Printf("%+v\n", ss)
 	//db.Debug().Where("jjoy = ?", "333").Updates(&data)
 	//db.Debug().Create(&data)
 	//mb := sf_my_farm.model_db.MainboxUS{""}
