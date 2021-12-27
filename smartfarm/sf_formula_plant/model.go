@@ -5,17 +5,17 @@ import (
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
 )
 
-//-------------------------------------------------------------------------------//
-//				 	    Plant And PlantType
-//-------------------------------------------------------------------------------//
-//Model
-type PlantAndPlantType struct {
-	PlantType   model_db.PlantType	`json:"plant_type" gorm:"foreignkey:PlantTypeId; references:PlantTypeId"`
-	Plant     	model_db.Plant	 	`json:"plant" gorm:"embedded"`
-}
-func (PlantAndPlantType) TableName() string {
-	return config.DB_PLANT
-}
+////-------------------------------------------------------------------------------//
+////				 	    Plant And PlantType
+////-------------------------------------------------------------------------------//
+////Model
+//type PlantAndPlantType struct {
+//	PlantType   model_db.PlantType	`json:"plant_type" gorm:"foreignkey:PlantTypeId; references:PlantTypeId"`
+//	Plant     	model_db.Plant	 	`json:"plant" gorm:"embedded"`
+//}
+//func (PlantAndPlantType) TableName() string {
+//	return config.DB_PLANT
+//}
 
 //-------------------------------------------------------------------------------//
 //				 	   	Formula Plant Item
@@ -82,6 +82,19 @@ type ForPlantFormula struct {
 }
 func (ForPlantFormula) TableName() string {
 	return config.DB_FORMULA_PLANT
+}
+
+
+//-------------------------------------------------------------------------------//
+//				 	    Plant And PlantType
+//-------------------------------------------------------------------------------//
+//Model
+type PlantAndPlantType struct {
+	PlantType   model_db.PlantType	 `json:"plant_type" gorm:"embedded"`
+	Plant     	[]model_db.Plant	 `json:"plant" gorm:"foreignkey:PlantTypeId; references:PlantTypeId"`
+}
+func (PlantAndPlantType) TableName() string {
+	return config.DB_PLANT_TYPE
 }
 
 //-------------------------------------------------------------------------------//

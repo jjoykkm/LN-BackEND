@@ -65,16 +65,23 @@ func (r *Repository) FindAllPlantType(status string) ([]model_db.PlantType, erro
 }
 
 func (r *Repository) FindAllPlantWithPlantType(status, plantTypeId string, offset int) ([]PlantAndPlantType, error) {
-	var result []PlantAndPlantType
-	var sqlWhere string
-	// Generate condition when get plant
-	sqlWhere = fmt.Sprintf("%s.status_id = ?", config.DB_PLANT)
+	var (
+		result []PlantAndPlantType
+		resp *gorm.DB
+	)
+
 	if plantTypeId == config.PLANT_TYPE_ALL || plantTypeId == "" {
-		sqlWhere = sqlWhere + fmt.Sprintf(" AND %s.plant_type_id = ?", config.DB_PLANT)
-	}
-	resp := r.db.Debug().Where(sqlWhere, status, plantTypeId).Preload("PlantType",
-		"status_id = ?", config.GetStatus().Active).Limit(LIMIT_GET_DATA).Offset(offset).Order(
+		resp = r.db.Debug().Where("status_id = ? AND plant_type_id != ?",
+			config.GetStatus().Active,config.PLANT_TYPE_ALL).Preload("Plant",
+			"status_id = ?", status).Limit(LIMIT_GET_DATA).Offset(offset).Order(
 			"change_date desc").Find(&result)
+	}else {
+		resp = r.db.Debug().Where("status_id = ? AND plant_type_id = ?",
+			config.GetStatus().Active, plantTypeId).Preload("Plant", "status_id = ?",
+			status).Limit(LIMIT_GET_DATA).Offset(offset).Order("change_date desc").Find(&result)
+	}
+
+
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error
 	}
