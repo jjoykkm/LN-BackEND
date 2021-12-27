@@ -6,9 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
-	"github.com/jjoykkm/ln-backend/controllers"
-	"github.com/jjoykkm/ln-backend/modelsOld/model_other"
-	"github.com/jjoykkm/ln-backend/obsolete_utility"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_common/cm_address"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_common/cm_farm"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_common/cm_plant"
@@ -20,14 +17,12 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"log"
-	"net/http"
 	"os"
 	"time"
 )
 
 type Ln struct {
 	Db   *gorm.DB
-	Ctrl controllers.Ln
 }
 
 var me Ln
@@ -59,8 +54,7 @@ func main() {
 	fmt.Printf("%+v\n", farm)
 
 
-	controller := controllers.Ln{db}
-	me = Ln{db, controller}
+	me = Ln{db}
 
 	http := gin.Default()
 	http.Use(cors.Default())
@@ -184,38 +178,6 @@ func main() {
 		}
 	}
 
-	// Dashboard
-	http.POST("/farmAreaDetailSensor", GetFarmAreaDetailSensor)
-	// Schedule + Reminder
-	http.POST("/scheRemind", GetScheRemind)
-
 	http.Run(config.SERVER_HOST)
 
-}
-
-func GetFarmAreaDetailSensor(c *gin.Context) {
-	var bodyModel model_other.PostBody
-	bodyModel = obsolete_utility.GetModelFromBody(c)
-	//GetFarmAreaDetailSensorer(status, farmId, language string) ([]model_services.SenSocMainList, int)
-	senSocMainList, total := me.Ctrl.GetFarmAreaDetailSensorer(config.GetStatus().Active, bodyModel.FarmAreaId, bodyModel.Language)
-	if total == 0 {
-		c.JSON(http.StatusNoContent, gin.H{})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"item":  senSocMainList,
-			"total": total,
-		})
-	}
-}
-
-func GetScheRemind(c *gin.Context) {
-	var bodyModel model_other.PostBody
-	bodyModel = obsolete_utility.GetModelFromBody(c)
-	// GetScheReminder(status string, farmAreaId []string) model_services.ScheduleScheRemind
-	scheRemind := me.Ctrl.GetScheReminder(config.GetStatus().Active, bodyModel.FarmAreaIdList)
-
-	//fmt.Printf("%+v\n", scheRemind)
-	c.JSON(http.StatusOK, gin.H{
-		"item": scheRemind,
-	})
 }

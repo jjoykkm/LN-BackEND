@@ -4,7 +4,6 @@ import (
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"github.com/jjoykkm/ln-backend/common/models/model_other"
-	"github.com/jjoykkm/ln-backend/modelsOld/model_databases"
 )
 
 type Servicer interface {
@@ -21,9 +20,6 @@ type Servicer interface {
 	GetPlantOfMine(status string, reqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error)
 	// status, formulaPlasntId, language string
 	GetFormulaPlantDetail(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error)
-
-	// Function
-	GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlant) (float32, int)
 
 	//Upsert
 	AddChangeFormulaPlant(reqModel *ForPlantUS) error
@@ -184,22 +180,6 @@ func (s *Service) GetFormulaPlantDetail(status string, reqModel *model_other.Req
 		Item: forPlantDetail,
 		Total: len(forPlantDetail),
 	}, nil
-}
-
-func (s *Service) GetRateScoreAndPeople(formulaPlant model_databases.FormulaPlant) (float32, int) {
-	var rateScore float32
-	var ratePeople int
-
-	ratePeople = formulaPlant.Recommend1 + formulaPlant.Recommend2 + formulaPlant.Recommend3 + formulaPlant.Recommend4 + formulaPlant.Recommend5
-
-	rateScore += float32(formulaPlant.Recommend1)
-	rateScore += (float32(formulaPlant.Recommend2) * 2)
-	rateScore += (float32(formulaPlant.Recommend3) * 3)
-	rateScore += (float32(formulaPlant.Recommend4) * 4)
-	rateScore += (float32(formulaPlant.Recommend5) * 5)
-	rateScore = rateScore / float32(ratePeople)
-
-	return rateScore, ratePeople
 }
 
 //-------------------------------------------------------------------------------//

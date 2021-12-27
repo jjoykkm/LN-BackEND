@@ -6,7 +6,7 @@ import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
-	"github.com/jjoykkm/ln-backend/helper"
+	"github.com/jjoykkm/ln-backend/smartfarm/sf_common/cm_other"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -128,7 +128,7 @@ func (r *Repository) FindAllFavForPlantId(status, resultType, uid string) ([]uui
 		return nil, nil, resp.Error
 	}
 	if resultType == config.GetResType().Map {
-		resultMap = helper.ConvertUUIDtoStringMap(result)
+		resultMap = cm_other.ConvertUUIDtoStringMap(result)
 	}
 	return result, resultMap, nil
 }
@@ -147,7 +147,7 @@ func (r *Repository) FindAllPlantedForPlantId(status, resultType, uid string) ([
 		return nil, nil, resp.Error
 	}
 	if resultType == config.GetResType().Map {
-		resultMap = helper.ConvertUUIDtoStringMap(result)
+		resultMap = cm_other.ConvertUUIDtoStringMap(result)
 	}
 	return result, resultMap, nil
 }
