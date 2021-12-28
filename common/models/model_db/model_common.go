@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"time"
 )
 
@@ -14,7 +13,7 @@ type DBCommonGet struct {
 	//CreateBy		string	 	 `json:"create_by"`
 	ChangeDate	   	time.Time	 `json:"change_date"`
 	//ChangeBy	    string	 	 `json:"change_by"`
-	StatusId		uuid.UUID	 `json:"status_id"`
+	StatusId		string	 	 `json:"status_id"`
 }
 // New instance Common Database
 func (u *DBCommonGet) New() *DBCommonGet {
