@@ -54,7 +54,7 @@ func doRequest() error {
 	}
 }
 //fmt.Printf("%+v\n", req)
-func main()  {
+func www()  {
 	//var fm Farm
 	db, err := gorm.Open(postgres.New(postgres.Config{
 		DSN:                  config.DSN,
