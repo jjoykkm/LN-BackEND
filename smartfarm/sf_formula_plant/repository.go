@@ -2,7 +2,6 @@ package sf_formula_plant
 
 import (
 	"errors"
-	"fmt"
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
@@ -16,14 +15,14 @@ type Repositorier interface {
 	Commit()
 	Rollback()
 	FindAllPlantType(status string) ([]model_db.PlantType, error)
-	FindAllPlantWithPlantType(status, plantTypeId string, offset int) ([]PlantAndPlantType, error)
+	FindAllPlantWithPlantType(status, plantTypeId string, offset int) ([]PlantTypeAndPlantList, error)
 	GetCountFormulaPlant(status, plantId string) (int64, error)
-	FindAllFormulaPlantByPlant(status, plantId string, offset int) ([]FormulaPlantItem, error)
-	FindAllFavForPlantId(status, resultType, uid string) ([]uuid.UUID, map[string]bool, error)
-	FindAllPlantedForPlantId(status, resultType, uid string) ([]uuid.UUID, map[string]bool, error)
+	FindAllFormulaPlantByPlant(status, plantId string, offset int) (*ForPlantlist, error)
+	FindAllFavForPlantId(status, uid string) (map[string]bool, error)
+	FindAllPlantedForPlantId(status, uid string) (map[string]bool, error)
 	FindAllFormulaPlantFavorite(status, uid string, offset int) ([]FormulaPlantItem, error)
 	FindAllMyFormulaPlant(status, uid string, offset int) ([]FormulaPlantItem, error)
-	FindAllFormulaPlantDetail(status, forPlantId string) ([]ForPlantFormula, error)
+	FindAllFormulaPlantDetail(status, forPlantId string) (*ForPlantFormula, error)
 	UpsertFormulaPlant (req *model_db.FormulaPlantUS) (error, *string)
 	UpsertForPlantSensor (req []model_db.TransSenValueRecUS) error
 	UpsertForPlantFert (req []model_db.TransFertRatioUS) error
@@ -64,23 +63,24 @@ func (r *Repository) FindAllPlantType(status string) ([]model_db.PlantType, erro
 	return result, nil
 }
 
-func (r *Repository) FindAllPlantWithPlantType(status, plantTypeId string, offset int) ([]PlantAndPlantType, error) {
+func (r *Repository) FindAllPlantWithPlantType(status, plantTypeId string, offset int) ([]PlantTypeAndPlantList, error) {
 	var (
-		result []PlantAndPlantType
+		result []PlantTypeAndPlantList
 		resp *gorm.DB
 	)
 
 	if plantTypeId == config.PLANT_TYPE_ALL || plantTypeId == "" {
+		// Get data exclude type all
 		resp = r.db.Debug().Where("status_id = ? AND plant_type_id != ?",
 			config.GetStatus().Active,config.PLANT_TYPE_ALL).Preload("Plant",
 			"status_id = ?", status).Limit(LIMIT_GET_DATA).Offset(offset).Order(
 			"change_date desc").Find(&result)
 	}else {
+		// Get data specific type
 		resp = r.db.Debug().Where("status_id = ? AND plant_type_id = ?",
 			config.GetStatus().Active, plantTypeId).Preload("Plant", "status_id = ?",
 			status).Limit(LIMIT_GET_DATA).Offset(offset).Order("change_date desc").Find(&result)
 	}
-
 
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error
@@ -99,25 +99,36 @@ func (r *Repository) GetCountFormulaPlant(status, plantId string) (int64, error)
 	return count, nil
 }
 
-func (r *Repository) FindAllFormulaPlantByPlant(status, plantId string, offset int) ([]FormulaPlantItem, error) {
-	var result []FormulaPlantItem
-	var sqlWhere string
-
-	sqlWhere = fmt.Sprintf("status_id = '%s'",status)
-	// Generate condition when get plant
-	if plantId != "" {
-		sqlWhere = sqlWhere + fmt.Sprintf(" AND plant_id = '%s'", plantId)
-	}
-	// Get PlantType
-	plantTypeId := r.db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("PlantType",
-		"status_id = ?", config.GetStatus().Active)
-
-	resp := r.db.Debug().Order("change_date desc, formula_name").Limit(LIMIT_GET_DATA).Offset(offset).Where(sqlWhere).Preload("Plant",
+func (r *Repository) FindAllFormulaPlantByPlant(status, plantId string, offset int) (*ForPlantlist, error) {
+	var result *ForPlantlist
+	// Get Province
+	province := r.db.Debug().Where("status_id = ?", config.GetStatus().Active)
+	// Get Country
+	country := r.db.Debug().Where("status_id = ?", config.GetStatus().Active)
+	// Get Owner
+	//owner := r.db.Debug().Where("status_id = ?", config.GetStatus().Active)
+	// Get Formula Plant
+	forPlant := r.db.Debug().Where("status_id = ?",
+		status).Order("change_date desc").Limit(LIMIT_GET_DATA).Offset(offset).Preload("Province",
 		func(db *gorm.DB) *gorm.DB {
-			return plantTypeId
-		}).Preload("Province", "status_id = ?", config.GetStatus().Active).Preload("Country",
-			"status_id = ?", config.GetStatus().Active).Preload("Owner").Find(&result)
-	//.Preload("Owner", "status_id = ?", config.GetStatus().Active)
+			return province
+		}).Preload("Country",
+		func(db *gorm.DB) *gorm.DB {
+			return country
+		}).Preload("Owner")
+		//func(db *gorm.DB) *gorm.DB {
+		//	return owner
+		//})
+	// Get PlantType
+	plantType := r.db.Debug().Where("status_id = ?", config.GetStatus().Active)
+	resp := r.db.Debug().Where("status_id = ? AND plant_id = ?",
+		config.GetStatus().Active, plantId).Preload("PlantType",
+			func(db *gorm.DB) *gorm.DB {
+				return plantType
+			}).Preload("ForPlantDetail",
+			func(db *gorm.DB) *gorm.DB {
+				return forPlant
+			}).Find(&result)
 
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error
@@ -125,23 +136,25 @@ func (r *Repository) FindAllFormulaPlantByPlant(status, plantId string, offset i
 	return result, nil
 }
 
-func (r *Repository) FindAllFavForPlantId(status, resultType, uid string) ([]uuid.UUID, map[string]bool, error) {
+func (r *Repository) FindAllFavForPlantId(status, uid string) (map[string]bool, error) {
 	resultMap := make(map[string]bool)
 	result:= []uuid.UUID{}
 
 	resp := r.db.Debug().Table(config.DB_FAVORITE_PLANT).Select("formula_plant_id").Find(&result,
 		"status_id = ? AND uid = ?", status, uid)
+
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
-		return nil, nil, resp.Error
+		return nil, resp.Error
 	}
-	if resultType == config.GetResType().Map {
-		resultMap = cm_other.ConvertUUIDtoStringMap(result)
-	}
-	return result, resultMap, nil
+	//Convert UUID to String Map
+	resultMap = cm_other.ConvertUUIDtoStringMap(result)
+
+	return resultMap, nil
 }
 
-func (r *Repository) FindAllPlantedForPlantId(status, resultType, uid string) ([]uuid.UUID, map[string]bool, error) {
-	var resultMap map[string]bool
+func (r *Repository) FindAllPlantedForPlantId(status, uid string) (map[string]bool, error) {
+	resultMap := make(map[string]bool)
+
 	result:= []uuid.UUID{}
 	// Get farm_id filter by uid
 	subQuery := r.db.Debug().Table(config.DB_TRANS_MANAGEMENT).Select("farm_id").Where(
@@ -151,32 +164,44 @@ func (r *Repository) FindAllPlantedForPlantId(status, resultType, uid string) ([
 	resp := r.db.Debug().Table(config.DB_FARM_AREA).Where(
 		"status_id = ? AND farm_id IN (?)", status, subQuery).Select("formula_plant_id").Find(&result)
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
-		return nil, nil, resp.Error
+		return nil, resp.Error
 	}
-	if resultType == config.GetResType().Map {
-		resultMap = cm_other.ConvertUUIDtoStringMap(result)
-	}
-	return result, resultMap, nil
+	//Convert UUID to String Map
+	resultMap = cm_other.ConvertUUIDtoStringMap(result)
+
+	return resultMap, nil
 }
 
 func (r *Repository) FindAllFormulaPlantFavorite(status, uid string, offset int) ([]FormulaPlantItem, error) {
 	var result []FormulaPlantItem
+	// Get Province
+	province := r.db.Debug().Where("status_id = ?", config.GetStatus().Active)
+	// Get Country
+	country := r.db.Debug().Where("status_id = ?", config.GetStatus().Active)
+	// Get Owner
+	//owner := r.db.Debug().Where("status_id = ?", config.GetStatus().Active)
 	// Get formula_plant_id filter by uid
 	forPlantId := r.db.Debug().Table(config.DB_FAVORITE_PLANT).Select("formula_plant_id").Find(&result,
 		"status_id = ? AND uid = ?", status, uid)
-
 	// Get PlantType
-	plantCond := r.db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("PlantType",
+	plantType := r.db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("PlantType",
 		"status_id = ?", config.GetStatus().Active)
 
-	resp := r.db.Debug().Order("change_date desc, formula_name").Limit(LIMIT_GET_DATA).Offset(offset).Where(
-		"status_id = ? AND formula_plant_id IN (?)", config.GetStatus().Active, forPlantId).Preload("Plant",
+	resp := r.db.Debug().Order("change_date desc").Limit(LIMIT_GET_DATA).Offset(offset).Where(
+		"status_id = ? AND formula_plant_id IN (?)",
+		config.GetStatus().Active, forPlantId).Preload("Plant",
 			func(db *gorm.DB) *gorm.DB {
-				return plantCond
-			}).Preload("Province", "status_id = ?", config.GetStatus().Active).Preload("Country",
-				"status_id = ?", config.GetStatus().Active).Preload("Owner").Find(&result)
-	//.Preload("Owner", "status_id = ?", config.GetStatus().Active)
-
+				return plantType
+			}).Preload("Province",
+			func(db *gorm.DB) *gorm.DB {
+				return province
+			}).Preload("Country",
+			func(db *gorm.DB) *gorm.DB {
+				return country
+			}).Preload("Owner").Find(&result)
+		//func(db *gorm.DB) *gorm.DB {
+		//	return owner
+		//})
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error
 	}
@@ -185,17 +210,30 @@ func (r *Repository) FindAllFormulaPlantFavorite(status, uid string, offset int)
 
 func (r *Repository) FindAllMyFormulaPlant(status, uid string, offset int) ([]FormulaPlantItem, error) {
 	var result []FormulaPlantItem
+	// Get Province
+	province := r.db.Debug().Where("status_id = ?", config.GetStatus().Active)
+	// Get Country
+	country := r.db.Debug().Where("status_id = ?", config.GetStatus().Active)
+	// Get Owner
+	//owner := r.db.Debug().Where("status_id = ?", config.GetStatus().Active)
 	// Get PlantType
 	plantCond := r.db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("PlantType",
 		"status_id = ?", config.GetStatus().Active)
 
-	resp := r.db.Debug().Order("change_date desc, formula_name").Limit(LIMIT_GET_DATA).Offset(offset).Where(
+	resp := r.db.Debug().Order("change_date desc").Limit(LIMIT_GET_DATA).Offset(offset).Where(
 		"status_id = ? AND uid = ?", status, uid).Preload("Plant",
 			func(db *gorm.DB) *gorm.DB {
 				return plantCond
-			}).Preload("Province", "status_id = ?", config.GetStatus().Active).Preload("Country",
-				"status_id = ?", config.GetStatus().Active).Preload("Owner").Find(&result)
-	//.Preload("Owner", "status_id = ?", config.GetStatus().Active)
+			}).Preload("Province",
+			func(db *gorm.DB) *gorm.DB {
+				return province
+			}).Preload("Country",
+			func(db *gorm.DB) *gorm.DB {
+				return country
+			}).Preload("Owner").Find(&result)
+		//func(db *gorm.DB) *gorm.DB {
+		//	return owner
+		//})
 
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error
@@ -203,30 +241,45 @@ func (r *Repository) FindAllMyFormulaPlant(status, uid string, offset int) ([]Fo
 	return result, nil
 }
 
-func (r *Repository) FindAllFormulaPlantDetail(status, forPlantId string) ([]ForPlantFormula, error) {
-	var result []ForPlantFormula
+func (r *Repository) FindAllFormulaPlantDetail(status, forPlantId string) (*ForPlantFormula, error) {
+	var result *ForPlantFormula
 	// Get FertilizerCat
 	FertCatId := r.db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("FertilizerCat",
 		"status_id = ?", config.GetStatus().Active)
-
 	// Get Fertilizer
 	FertId := r.db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("Fertilizer",
 		func(db *gorm.DB) *gorm.DB {
 			return FertCatId
 		})
-
 	// Get SensorType
 	SensorTypeId := r.db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload(
 		"SensorType","status_id = ?", config.GetStatus().Active)
-
-	resp := r.db.Debug().Where("status_id = ? AND formula_plant_id = ?", status, forPlantId).Preload("ForPlantFert",
-			func(db *gorm.DB) *gorm.DB {
-				return FertId
-			}).Preload("ForPlantSensor",
-			func(db *gorm.DB) *gorm.DB {
-				return SensorTypeId
-			}).Preload("Owner").Find(&result)
-	//.Preload("Owner", "status_id = ?", config.GetStatus().Active)
+	// Get Province
+	province := r.db.Debug().Where("status_id = ?", config.GetStatus().Active)
+	// Get Country
+	country := r.db.Debug().Where("status_id = ?", config.GetStatus().Active)
+	// Get Owner
+	//owner := r.db.Debug().Where("status_id = ?", config.GetStatus().Active)
+	// Get PlantType
+	plantType := r.db.Debug().Where("status_id = ?", config.GetStatus().Active).Preload("PlantType",
+		"status_id = ?", config.GetStatus().Active)
+	resp := r.db.Debug().Where("status_id = ? AND formula_plant_id = ?",
+		status, forPlantId).Preload("Plant",
+		func(db *gorm.DB) *gorm.DB {
+			return plantType
+		}).Preload("Province",
+		func(db *gorm.DB) *gorm.DB {
+			return province
+		}).Preload("Country",
+		func(db *gorm.DB) *gorm.DB {
+			return country
+		}).Preload("Owner").Preload("ForPlantFert",
+		func(db *gorm.DB) *gorm.DB {
+			return FertId
+		}).Preload("ForPlantSensor",
+		func(db *gorm.DB) *gorm.DB {
+			return SensorTypeId
+		}).Find(&result)
 	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
 		return nil, resp.Error
 	}

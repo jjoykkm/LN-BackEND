@@ -9,7 +9,7 @@ import (
 type Servicer interface {
 	// Service for API
 	// status, language string
-	GetPlantCategoryList(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error)
+	GetPlantCategoryList(status string) (*model_other.RespModel, error)
 	// status, plantTypeId, language string, reqModel.Offset int
 	GetPlantCategoryItem(status string, reqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error)
 	// status, reqModel.Uid, plantId string, reqModel.Offset int
@@ -42,7 +42,7 @@ func NewService(repo Repositorier) Servicer {
 	}
 }
 
-func (s *Service) GetPlantCategoryList(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error) {
+func (s *Service) GetPlantCategoryList(status string) (*model_other.RespModel, error) {
 	plantTypeList, err := s.repo.FindAllPlantType(status)
 	if err != nil{
 		return nil, err
@@ -55,56 +55,41 @@ func (s *Service) GetPlantCategoryList(status string, reqModel *model_other.ReqM
 }
 
 func (s *Service) GetPlantCategoryItem(status string, reqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error) {
-	joinList, err := s.repo.FindAllPlantWithPlantType(status, reqModel.PlantTypeId, reqModel.Offset)
+	result, err := s.repo.FindAllPlantWithPlantType(status, reqModel.PlantTypeId, reqModel.Offset)
 	if err != nil{
 		return nil, err
 	}
 
-	//for idx, join := range joinList {
-	//	switch reqModel.Language {
-	//	case config.GetLanguage().En:
-	//		join.PlantType.PlantTypeTH = ""
-	//		join.Plant.PlantNameTH = ""
-	//		join.Plant.PlantDescTH = ""
-	//	case config.GetLanguage().Th:
-	//		join.PlantType.PlantTypeEN = ""
-	//		join.Plant.PlantNameEN = ""
-	//		join.Plant.PlantDescEN = ""
-	//	}
-	//	join.Plant.TotalItem = int(s.repo.GetCountFormulaPlant(config.GetStatus().Active, join.Plant.PlantId.UUID.String()))
-	//	// Delete PlantTypeId in struct Plant
-	//	join.Plant.PlantTypeId = nil
-	//	// Modify list
-	//	joinList[idx] = join
-	//}
-	//
-	total := len(joinList)
+	total := len(result)
 	currentOffset := reqModel.Offset + total
 
 	return &model_other.RespOffsetModel{
-		Item: joinList,
+		Item: result,
 		Offset: currentOffset,
 		Total: total,
 	}, nil
 }
 
 func (s *Service) GetPlantOverviewByPlant(status string, reqModel *model_other.ReqModel) (*model_other.RespOffsetModel, error) {
+
 	forPlant, err := s.repo.FindAllFormulaPlantByPlant(status, reqModel.PlantId, reqModel.Offset)
 	if err != nil{
 		return nil, err
 	}
 	// Get favorite formula plant
-	_, favMap, _ := s.repo.FindAllFavForPlantId(status, config.GetResType().Map, reqModel.Uid)
+	favMap, _ := s.repo.FindAllFavForPlantId(status, reqModel.Uid)
 	// Get planted formula plant
-	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, reqModel.Uid)
-	for idx, wa := range forPlant {
+	plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, reqModel.Uid)
+	// Fill data
+	for idx, wa := range forPlant.ForPlantDetail {
+		forPlantId := wa.FormulaPlant.FormulaPlantId.UUID.String()
 		// Check is favorite
-		wa.IsFavorite = favMap[wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()]
+		wa.IsFavorite = favMap[forPlantId]
 		// Check planted
-		wa.IsPlanted = plantedMap[wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()]
-		forPlant[idx] = wa
+		wa.IsPlanted = plantedMap[forPlantId]
+		forPlant.ForPlantDetail[idx] = wa
 	}
-	total := len(forPlant)
+	total := len(forPlant.ForPlantDetail)
 	currentOffset := reqModel.Offset + total
 	return &model_other.RespOffsetModel{
 		Item: forPlant,
@@ -119,11 +104,12 @@ func (s *Service) GetPlantOverviewFavorite(status string, reqModel *model_other.
 		return nil, err
 	}
 	// Get planted formula plant
-	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, reqModel.Uid)
+	plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, reqModel.Uid)
 	for idx, wa := range forPlant {
+		forPlantId := wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()
 		wa.IsFavorite = true
 		// Check planted
-		wa.IsPlanted = plantedMap[wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()]
+		wa.IsPlanted = plantedMap[forPlantId]
 		forPlant[idx] = wa
 	}
 	total := len(forPlant)
@@ -141,14 +127,15 @@ func (s *Service) GetPlantOfMine(status string, reqModel *model_other.ReqModel) 
 		return nil, err
 	}
 	// Get favorite formula plant
-	_, favMap, _ := s.repo.FindAllFavForPlantId(status, config.GetResType().Map, reqModel.Uid)
+	favMap, _ := s.repo.FindAllFavForPlantId(status, reqModel.Uid)
 	// Get planted formula plant
-	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, reqModel.Uid)
+	plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, reqModel.Uid)
 	for idx, wa := range forPlant {
+		forPlantId := wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()
 		// Check is favorite
-		wa.IsFavorite = favMap[wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()]
+		wa.IsFavorite = favMap[forPlantId]
 		// Check planted
-		wa.IsPlanted = plantedMap[wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()]
+		wa.IsPlanted = plantedMap[forPlantId]
 		forPlant[idx] = wa
 	}
 	total := len(forPlant)
@@ -166,19 +153,19 @@ func (s *Service) GetFormulaPlantDetail(status string, reqModel *model_other.Req
 		return nil, err
 	}
 	// Get favorite formula plant
-	_, favMap, _ := s.repo.FindAllFavForPlantId(status, config.GetResType().Map, reqModel.Uid)
+	favMap, _ := s.repo.FindAllFavForPlantId(status, reqModel.Uid)
 	// Get planted formula plant
-	_, plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, config.GetResType().Map, reqModel.Uid)
-	for idx, wa := range forPlantDetail {
-		// Check is favorite
-		wa.IsFavorite = favMap[wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()]
-		// Check planted
-		wa.IsPlanted = plantedMap[wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()]
-		forPlantDetail[idx] = wa
-	}
+	plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, reqModel.Uid)
+	// Fill data
+	forPlantId := forPlantDetail.FormulaPlant.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()
+	// Check is favorite
+	forPlantDetail.FormulaPlant.IsFavorite = favMap[forPlantId]
+	// Check planted
+	forPlantDetail.FormulaPlant.IsPlanted = plantedMap[forPlantId]
+
 	return &model_other.RespModel{
 		Item: forPlantDetail,
-		Total: len(forPlantDetail),
+		Total: 1,
 	}, nil
 }
 

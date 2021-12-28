@@ -5,41 +5,64 @@ import (
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
 )
 
-////-------------------------------------------------------------------------------//
-////				 	    Plant And PlantType
-////-------------------------------------------------------------------------------//
-////Model
-//type PlantAndPlantType struct {
-//	PlantType   model_db.PlantType	`json:"plant_type" gorm:"foreignkey:PlantTypeId; references:PlantTypeId"`
-//	Plant     	model_db.Plant	 	`json:"plant" gorm:"embedded"`
-//}
-//func (PlantAndPlantType) TableName() string {
-//	return config.DB_PLANT
-//}
-
 //-------------------------------------------------------------------------------//
 //				 	   	Formula Plant Item
 //-------------------------------------------------------------------------------//
+type ForPlantDetail struct {
+	FormulaPlant    model_db.FormulaPlant	`json:"formula_plant" gorm:"embedded"`
+	Owner     		model_db.UsersShort		`json:"owner" gorm:"foreignkey:Uid; references:Uid;"`
+	Province   		model_db.Province		`json:"province" gorm:"foreignkey:ProvinceId; references:ProvinceId"`
+	Country   		model_db.Country		`json:"country" gorm:"foreignkey:CountryId; references:CountryId"`
+	IsPlanted		bool					`json:"is_planted"`
+	IsFavorite		bool					`json:"is_favorite"`
+}
+func (ForPlantDetail) TableName() string {
+	return config.DB_FORMULA_PLANT
+}
+
+type PlantDetail struct {
+	Plant     	model_db.Plant	 	`json:"plant" gorm:"embedded"`
+	PlantType   model_db.PlantType	`json:"plant_type" gorm:"foreignkey:PlantTypeId; references:PlantTypeId"`
+}
+func (PlantDetail) TableName() string {
+	return config.DB_PLANT
+}
+
 type FormulaPlant struct {
 	FormulaPlant    model_db.FormulaPlant	`json:"formula_plant" gorm:"embedded"`
 	Owner     		model_db.UsersShort		`json:"owner" gorm:"foreignkey:Uid; references:Uid;"`
+	Province   		model_db.Province		`json:"province" gorm:"foreignkey:ProvinceId; references:ProvinceId"`
+	Country   		model_db.Country		`json:"country" gorm:"foreignkey:CountryId; references:CountryId"`
 }
 func (FormulaPlant) TableName() string {
 	return config.DB_FORMULA_PLANT
 }
 
+type PlantTypeAndPlantList struct {
+	PlantType   model_db.PlantType	 `json:"plant_type" gorm:"embedded"`
+	Plant     	[]model_db.Plant	 `json:"plant" gorm:"foreignkey:PlantTypeId; references:PlantTypeId"`
+}
+func (PlantTypeAndPlantList) TableName() string {
+	return config.DB_PLANT_TYPE
+}
+
+type ForPlantlist struct {
+	Plant     		PlantDetail			`json:"plant" gorm:"embedded"`
+	ForPlantDetail  []ForPlantDetail	`json:"formula_plant_detail" gorm:"foreignkey:PlantId; references:PlantId;"`
+}
+func (ForPlantlist) TableName() string {
+	return config.DB_PLANT
+}
+
 type FormulaPlantItem struct {
+	Plant     		PlantDetail			`json:"plant" gorm:"foreignkey:PlantId; references:PlantId;"`
 	FormulaPlant    FormulaPlant		`json:"formula_plant" gorm:"embedded"`
-	Plant     		PlantAndPlantType	`json:"plant" gorm:"foreignkey:PlantId; references:PlantId;"`
-	Province   		model_db.Province	`json:"province" gorm:"foreignkey:ProvinceId; references:ProvinceId"`
-	Country   		model_db.Country	`json:"country" gorm:"foreignkey:CountryId; references:CountryId"`
 	IsPlanted		bool				`json:"is_planted"`
 	IsFavorite		bool				`json:"is_favorite"`
 }
 func (FormulaPlantItem) TableName() string {
 	return config.DB_FORMULA_PLANT
 }
-
 //-------------------------------------------------------------------------------//
 //				 	    	Sensor
 //-------------------------------------------------------------------------------//
@@ -74,27 +97,12 @@ func (ForPlantFert) TableName() string {
 //				 	   	Formula Plant Detail
 //-------------------------------------------------------------------------------//
 type ForPlantFormula struct {
-	FormulaPlant 	 	 FormulaPlant		`json:"formula_plant" gorm:"embedded"`
+	FormulaPlant 	 	 FormulaPlantItem	`json:"formula_plant" gorm:"embedded"`
 	ForPlantSensor	 	 []ForPlantSensor	`json:"sensor_list" gorm:"foreignkey:FormulaPlantId; references:FormulaPlantId"`
 	ForPlantFert		 []ForPlantFert		`json:"fert_list" gorm:"foreignkey:FormulaPlantId; references:FormulaPlantId"`
-	IsPlanted			 bool				`json:"is_planted"`
-	IsFavorite			 bool				`json:"is_favorite"`
 }
 func (ForPlantFormula) TableName() string {
 	return config.DB_FORMULA_PLANT
-}
-
-
-//-------------------------------------------------------------------------------//
-//				 	    Plant And PlantType
-//-------------------------------------------------------------------------------//
-//Model
-type PlantAndPlantType struct {
-	PlantType   model_db.PlantType	 `json:"plant_type" gorm:"embedded"`
-	Plant     	[]model_db.Plant	 `json:"plant" gorm:"foreignkey:PlantTypeId; references:PlantTypeId"`
-}
-func (PlantAndPlantType) TableName() string {
-	return config.DB_PLANT_TYPE
 }
 
 //-------------------------------------------------------------------------------//

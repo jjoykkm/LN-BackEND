@@ -28,7 +28,7 @@ func (h *Handler) GetPlantCategoryList(c *gin.Context) {
 		})
 		return
 	}
-	respModel,err := h.service.GetPlantCategoryList(config.GetStatus().Active, &reqModel)
+	respModel,err := h.service.GetPlantCategoryList(config.GetStatus().Active)
 	if err != nil {
 		if errx, ok := err.(*errs.ErrContext); ok {
 			if httpCode, ok := mapErrorCode[errx.Code]; ok {
