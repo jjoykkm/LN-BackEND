@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -37,34 +36,4 @@ type DBCommonCreateUpdate struct {
 	ChangeDate	   	time.Time	 `json:"change_date" gorm:"autoUpdateTime"`
 	ChangeBy	    string	 	 `json:"change_by"`
 	//StatusId		string	 `json:"status_id"`
-}
-//-------------------------------------------------------------------------------//
-//						Function Common Database (Create)
-//-------------------------------------------------------------------------------//
-func BeforeCreate(u DBCommonCreateUpdate) {
-	fmt.Println("BeforeCreate")
-	user := "jjoy"
-	u.CreateBy = nil
-	u.ChangeBy = user
-	fmt.Printf("%+v\n", u)
-	//u.UUID = uuid.New()
-	//
-}
-
-//-------------------------------------------------------------------------------//
-//						Function Common Database (Update)
-//-------------------------------------------------------------------------------//
-func BeforeUpdate(u DBCommonCreateUpdate) {
-	fmt.Println("BeforeUpdate")
-	user := "jjoy"
-	u.CreateBy = &user
-	u.ChangeBy = user
-	fmt.Printf("%+v\n", u)
-	//u.UUID = uuid.New()
-	//
-	//if !u.IsValid() {
-	//	err := errors.New("can't save invalid data")
-	//	return err
-	//}
-	//return
 }

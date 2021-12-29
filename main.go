@@ -152,6 +152,7 @@ func main() {
 
 			remoteSwitch := api.Group("/remoteSwitch")
 			{
+				remoteSwitch.POST("/getRemoteSwitch", handlerRemoteSwitch.GetRemoteSwitch)
 				remoteSwitch.POST("/configRemoteSwitch", handlerRemoteSwitch.ConfigRemoteSwitch)
 				remoteSwitch.POST("/unlinkSocketRemote", handlerRemoteSwitch.UnlinkSocketRemote)
 				remoteSwitch.POST("/removeRemoteSwitch", handlerRemoteSwitch.RemoveRemoteSwitch)

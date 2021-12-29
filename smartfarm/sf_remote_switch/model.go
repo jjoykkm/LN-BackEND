@@ -6,6 +6,38 @@ import (
 )
 
 //-------------------------------------------------------------------------------//
+//									Get
+//-------------------------------------------------------------------------------//
+type SensorDetail struct {
+	Sensor        model_db.Sensor	 	 `json:"sensor" gorm:"embedded"`
+	SensorType    model_db.SensorType	 `json:"sensor_type" gorm:"foreignkey:SensorTypeId; references:SensorTypeId"`
+}
+func (SensorDetail) TableName() string {
+	return config.DB_SENSOR
+}
+
+//-------------------------------------------------------------------------------//
+//				 	    	Socket Sensor Detail
+//-------------------------------------------------------------------------------//
+//Model
+type SocSenDetail struct {
+	Socket        	model_db.Socket	 	 	`json:"socket" gorm:"embedded"`
+	StatusSensor    model_db.StatusSensor	`json:"status_sensor" gorm:"foreignkey:StatusSensorId; references:StatusSensorId"`
+	Sensor         	SensorDetail			`json:"sensor" gorm:"foreignkey:SensorId; references:SensorId"`
+}
+func (SocSenDetail) TableName() string {
+	return config.DB_SOCKET
+}
+
+type RemoteSwitch struct {
+	RemoteSwitch	model_db.RemoteSwitch 	`json:"remote_switch" gorm:"embedded"`
+	SocSenDetail	[]SocSenDetail			`json:"socket_sensor_detail" gorm:"foreignkey:RemoteId; references:RemoteId"`
+}
+func (RemoteSwitch) TableName() string {
+	return config.DB_REMOTE_SWITCH
+}
+
+//-------------------------------------------------------------------------------//
 //									Upsert
 //-------------------------------------------------------------------------------//
 type RemoteDetailUS struct {

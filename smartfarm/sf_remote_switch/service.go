@@ -2,12 +2,14 @@ package sf_remote_switch
 
 import (
 	"github.com/jjoykkm/ln-backend/common/config"
+	"github.com/jjoykkm/ln-backend/common/models/model_other"
 )
 
 type Servicer interface {
 	ConfigRemoteSwitch(reqModel *RemoteDetailUS) error
 	UnlinkSocketRemote(reqModel *RemoteDetailDel) error
 	RemoveRemoteSwitch(reqModel *RemoteDetailDel) error
+	GetRemoteSwitch(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error)
 }
 
 type Service struct {
@@ -18,6 +20,31 @@ func NewService(repo Repositorier) Servicer {
 	return &Service{
 		repo:  repo,
 	}
+}
+
+func (s *Service) GetRemoteSwitch(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error) {
+	// Check auth for edit
+	//isAuth, err := Servicer.GetAuthorizeCheckForManageFarm(s, reqModel.Uid, reqModel.FarmId)
+	//if err != nil{
+	//	return nil, err
+	//}
+	//// No Auth
+	//if isAuth != true {
+	//	return nil, &errs.ErrContext{
+	//		Code: ERROR_4002005,
+	//		Err:  err,
+	//		Msg:  MSG_NO_AUTH,
+	//	}
+	//}
+
+	remoteSwitch, err := s.repo.FindAllRemoteSwitch(status, reqModel.Uid)
+	if err != nil{
+		return nil, err
+	}
+	return &model_other.RespModel{
+		Item: remoteSwitch,
+		Total: len(remoteSwitch),
+	}, nil
 }
 
 func (s *Service) ConfigRemoteSwitch(reqModel *RemoteDetailUS) error {

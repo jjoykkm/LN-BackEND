@@ -1,6 +1,7 @@
 package model_db
 
 import (
+	"fmt"
 	"github.com/jjoykkm/ln-backend/common/config"
 )
 
@@ -38,4 +39,35 @@ type RemoteSwitchUS struct {
 }
 func (RemoteSwitchUS) TableName() string {
 	return config.DB_REMOTE_SWITCH
+}
+
+//-------------------------------------------------------------------------------//
+//						Function Common Database (Create)
+//-------------------------------------------------------------------------------//
+func BeforeCreate(u RemoteSwitchUS) {
+	fmt.Println("BeforeCreate")
+	user := "Create jjoy"
+	u.CreateBy = nil
+	u.ChangeBy = user
+	fmt.Printf("%+v\n", u)
+	//u.UUID = uuid.New()
+	//
+}
+
+//-------------------------------------------------------------------------------//
+//						Function Common Database (Update)
+//-------------------------------------------------------------------------------//
+func BeforeUpdate(u RemoteSwitchUS) {
+	fmt.Println("BeforeUpdate")
+	user := "Update jjoy"
+	u.CreateBy = &user
+	u.ChangeBy = user
+	fmt.Printf("%+v\n", u)
+	//u.UUID = uuid.New()
+	//
+	//if !u.IsValid() {
+	//	err := errors.New("can't save invalid data")
+	//	return err
+	//}
+	//return
 }
