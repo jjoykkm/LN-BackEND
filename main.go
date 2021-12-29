@@ -12,6 +12,7 @@ import (
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_dashboard"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_formula_plant"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_my_farm"
+	"github.com/jjoykkm/ln-backend/smartfarm/sf_remote_switch"
 	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -91,9 +92,9 @@ func main() {
 	//serviceScheRem := sf_my_farm.NewService(repoScheRem)
 	//handlerScheRem := sf_my_farm.NewHandler(serviceScheRem)
 	//RemoteSwitch
-	//repoRemoteSwitch := sf_my_farm.NewRepository(db)
-	//serviceRemoteSwitch := sf_my_farm.NewService(repoRemoteSwitch)
-	//handlerRemoteSwitch := sf_my_farm.NewHandler(serviceRemoteSwitch)
+	repoRemoteSwitch := sf_remote_switch.NewRepository(db)
+	serviceRemoteSwitch := sf_remote_switch.NewService(repoRemoteSwitch)
+	handlerRemoteSwitch := sf_remote_switch.NewHandler(serviceRemoteSwitch)
 
 	v1 := http.Group("/v1")
 	{
@@ -149,10 +150,12 @@ func main() {
 			//	//scheRem.GET("/farmAreaDashboardList", handlerScheRem.GetFarmAreaDashboardList)
 			//}
 
-			//remoteSwitch := app.Group("/remoteSwitch")
-			//{
-			//	//remoteSwitch.GET("/farmAreaDashboardList", handlerremoteSwitch.GetFarmAreaDashboardList)
-			//}
+			remoteSwitch := api.Group("/remoteSwitch")
+			{
+				remoteSwitch.POST("/configRemoteSwitch", handlerRemoteSwitch.ConfigRemoteSwitch)
+				remoteSwitch.POST("/unlinkSocketRemote", handlerRemoteSwitch.UnlinkSocketRemote)
+				remoteSwitch.POST("/removeRemoteSwitch", handlerRemoteSwitch.RemoveRemoteSwitch)
+			}
 
 		}
 

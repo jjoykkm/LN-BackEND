@@ -33,7 +33,6 @@ type Repositorier interface {
 	DeleteOneFarm (farmId string) error
 	DeleteOneFarmArea (farmAreaId string) error
 	UpsertFarmArea (req *model_db.FarmAreaUS) (error, *string)
-	UpsertTransSocketArea (req []model_db.TransSocketAreaUS) error
 	UpdateAllSocketNullFarmArea (req []string) error
 }
 
@@ -297,23 +296,6 @@ func (r *Repository) UpsertFarmArea (req *model_db.FarmAreaUS) (error, *string) 
 		return gorm.ErrRecordNotFound, nil
 	}
 	return nil, &req.FarmAreaId
-}
-
-func (r *Repository) UpsertTransSocketArea (req []model_db.TransSocketAreaUS) error {
-	resp := r.db.Debug().Model(model_db.TransSocketAreaUS{}).Clauses(clause.OnConflict{
-		Columns: []clause.Column{
-			{Name: "farm_area_id"},
-			{Name: "socket_id"},
-		},
-		UpdateAll: true,
-	}).Create(&req)
-	if resp.Error != nil {
-		return resp.Error
-	}
-	if resp.RowsAffected == 0 {
-		return gorm.ErrRecordNotFound
-	}
-	return nil
 }
 
 //-------------------------------------------------------------------------------//

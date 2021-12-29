@@ -1,9 +1,11 @@
 package sf_remote_switch
 
 import (
-	//"github.com/gin-gonic/gin"
-	//"github.com/jjoykkm/ln-backend/common/config"
-	//"net/http"
+	"github.com/gin-gonic/gin"
+	"github.com/jjoykkm/ln-backend/common/config"
+	"github.com/jjoykkm/ln-backend/common/models/model_other"
+	"github.com/jjoykkm/ln-backend/errs"
+	"net/http"
 )
 
 type Handler struct {
@@ -14,3 +16,104 @@ func NewHandler(service Servicer) *Handler {
 	return &Handler{service: service}
 }
 
+func (h *Handler) ConfigRemoteSwitch(c *gin.Context) {
+	var reqModel *RemoteDetailUS
+	//reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
+
+	if err := c.Bind(&reqModel); err != nil {
+		c.JSON(http.StatusBadRequest, &errs.ErrContext{
+			Code: "20000",
+			Err:  err,
+			Msg:  err.Error(),
+		})
+		return
+	}
+
+	err := h.service.ConfigRemoteSwitch(reqModel)
+	if err != nil {
+		if errx, ok := err.(*errs.ErrContext); ok {
+			if httpCode, ok := mapErrorCode[errx.Code]; ok {
+				c.JSON(httpCode, err)
+				return
+			}
+		}
+		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
+			Code: "80000",
+			Err:  err,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
+		MsgTh: config.MSG_SUC_TH,
+		MsgEn: config.MSG_SUC_EN,
+	})
+}
+
+func (h *Handler) UnlinkSocketRemote(c *gin.Context) {
+	var reqModel *RemoteDetailDel
+	//reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
+
+	if err := c.Bind(&reqModel); err != nil {
+		c.JSON(http.StatusBadRequest, &errs.ErrContext{
+			Code: "20000",
+			Err:  err,
+			Msg:  err.Error(),
+		})
+		return
+	}
+
+	err := h.service.UnlinkSocketRemote(reqModel)
+	if err != nil {
+		if errx, ok := err.(*errs.ErrContext); ok {
+			if httpCode, ok := mapErrorCode[errx.Code]; ok {
+				c.JSON(httpCode, err)
+				return
+			}
+		}
+		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
+			Code: "80000",
+			Err:  err,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
+		MsgTh: config.MSG_SUC_TH,
+		MsgEn: config.MSG_SUC_EN,
+	})
+}
+
+func (h *Handler) RemoveRemoteSwitch(c *gin.Context) {
+	var reqModel *RemoteDetailDel
+	//reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
+
+	if err := c.Bind(&reqModel); err != nil {
+		c.JSON(http.StatusBadRequest, &errs.ErrContext{
+			Code: "20000",
+			Err:  err,
+			Msg:  err.Error(),
+		})
+		return
+	}
+
+	err := h.service.RemoveRemoteSwitch(reqModel)
+	if err != nil {
+		if errx, ok := err.(*errs.ErrContext); ok {
+			if httpCode, ok := mapErrorCode[errx.Code]; ok {
+				c.JSON(httpCode, err)
+				return
+			}
+		}
+		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
+			Code: "80000",
+			Err:  err,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
+		MsgTh: config.MSG_SUC_TH,
+		MsgEn: config.MSG_SUC_EN,
+	})
+}
