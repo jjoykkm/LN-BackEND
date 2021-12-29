@@ -10,6 +10,7 @@ type Servicer interface {
 	UnlinkSocketRemote(reqModel *RemoteDetailDel) error
 	RemoveRemoteSwitch(reqModel *RemoteDetailDel) error
 	GetRemoteSwitch(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error)
+	ChangeStatusSensor(reqModel *ControlSwitch) (*model_other.RespModel, error)
 }
 
 type Service struct {
@@ -23,20 +24,6 @@ func NewService(repo Repositorier) Servicer {
 }
 
 func (s *Service) GetRemoteSwitch(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error) {
-	// Check auth for edit
-	//isAuth, err := Servicer.GetAuthorizeCheckForManageFarm(s, reqModel.Uid, reqModel.FarmId)
-	//if err != nil{
-	//	return nil, err
-	//}
-	//// No Auth
-	//if isAuth != true {
-	//	return nil, &errs.ErrContext{
-	//		Code: ERROR_4002005,
-	//		Err:  err,
-	//		Msg:  MSG_NO_AUTH,
-	//	}
-	//}
-
 	remoteSwitch, err := s.repo.FindAllRemoteSwitch(status, reqModel.Uid)
 	if err != nil{
 		return nil, err
@@ -96,4 +83,36 @@ func (s *Service) RemoveRemoteSwitch(reqModel *RemoteDetailDel) error {
 		}
 	}
 	return nil
+}
+
+func (s *Service) ChangeStatusSensor(reqModel *ControlSwitch) (*model_other.RespModel, error) {
+	var (
+		statusSensor string
+		socketDetail *SocketDetail
+	)
+
+	if reqModel.SocketId != "" {
+		socket, err := s.repo.FindOneSocket(reqModel.SocketId)
+		if err != nil{
+			return nil, err
+		}
+		if socket.StatusSensorId == config.GetSensorStatus().Opened {
+			statusSensor = config.GetSensorStatus().Closed
+		} else {
+			statusSensor = config.GetSensorStatus().Opened
+		}
+		err = s.repo.UpdateStatusSensor(reqModel, statusSensor)
+		if err != nil{
+			return nil, err
+		}
+		socketDetail, err = s.repo.FindOneSocketDetail(reqModel.SocketId)
+		if err != nil{
+			return nil, err
+		}
+	}
+
+	return &model_other.RespModel{
+		Item: socketDetail,
+		Total: 1,
+	}, nil
 }

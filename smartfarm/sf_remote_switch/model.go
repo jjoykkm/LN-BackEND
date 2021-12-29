@@ -15,6 +15,13 @@ type SensorDetail struct {
 func (SensorDetail) TableName() string {
 	return config.DB_SENSOR
 }
+type SocketDetail struct {
+	Socket        	model_db.Socket	 	 	`json:"socket" gorm:"embedded"`
+	StatusSensor    model_db.StatusSensor	`json:"status_sensor" gorm:"foreignkey:StatusSensorId; references:StatusSensorId"`
+}
+func (SocketDetail) TableName() string {
+	return config.DB_SOCKET
+}
 
 //-------------------------------------------------------------------------------//
 //				 	    	Socket Sensor Detail
@@ -46,6 +53,13 @@ type RemoteDetailUS struct {
 }
 func (RemoteDetailUS) TableName() string {
 	return config.DB_REMOTE_SWITCH
+}
+type ControlSwitch struct {
+	SocketId			string 		`json:"socket_id"`
+	StatusSensorId		string		`json:"status_sensor_id"`
+}
+func (ControlSwitch) TableName() string {
+	return config.DB_SOCKET
 }
 
 //-------------------------------------------------------------------------------//

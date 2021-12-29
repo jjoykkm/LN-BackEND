@@ -13,26 +13,20 @@ const PLANT_TYPE_ALL = "ab137f17-16fd-4214-b08d-3c43b238b542"
 //                                 Response Type
 /*-------------------------------------------------------------------------------------------*/
 const (
-	STRUCT	string = "struct"
-	MAP		string = "map"
-	KEY		string = "key"
-	ALL		string = "all"
-	LIST	string = "list"
+	OPENED		string = "081e9cf1-20c5-428b-9828-3fe8f4e40cd8"
+	CLOSED		string = "caee866d-1fa4-4eac-a15d-89cca9e73baa"
+	UNKNOWN		string = "f2531663-7cd5-4644-9ef0-44713a26a9bb"
 )
-type ResTypeConst struct {
-	Struct	string
-	Map		string
-	Key		string
-	All		string
-	List	string
+type SensorStatusConst struct {
+	Opened		string
+	Closed		string
+	Unknown		string
 }
-func GetResType() ResTypeConst {
-	return ResTypeConst{
-		Struct: STRUCT,
-		Map:    MAP,
-		Key:    KEY,
-		All:    ALL,
-		List:   LIST,
+func GetSensorStatus() SensorStatusConst {
+	return SensorStatusConst{
+		Opened: 	OPENED,
+		Closed:     CLOSED,
+		Unknown:    UNKNOWN,
 	}
 }
 

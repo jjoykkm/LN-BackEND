@@ -13,11 +13,14 @@ type Repositorier interface {
 	Begin() *Repository
 	Commit()
 	Rollback()
+	FindOneSocket(socketId string) (*model_db.Socket, error)
+	FindOneSocketDetail(socketId string) (*SocketDetail, error)
 	FindAllRemoteSwitch(status, uid string) ([]RemoteSwitch, error)
 	UpsertRemoteSwitch (req *model_db.RemoteSwitchUS) error
 	UpdateSocketFieldRemote (req *RemoteDetailUS) error
 	UpdateNullSocketFieldRemote (req []string) error
 	DeleteRemoteSwitch (req *string) error
+	UpdateStatusSensor (req *ControlSwitch, statusSensor string) error
 }
 
 type Repository struct {
@@ -76,6 +79,30 @@ func (r *Repository) FindAllRemoteSwitch(status, uid string) ([]RemoteSwitch, er
 	return result, nil
 }
 
+func (r *Repository) FindOneSocket(socketId string) (*model_db.Socket, error) {
+	var result *model_db.Socket
+	resp := r.db.Debug().Where("status_id = ? AND socket_id = ?",
+		config.GetStatus().Active, socketId).First(&result)
+	if resp.Error != nil {
+		return nil, resp.Error
+	}
+	return result, nil
+}
+
+func (r *Repository) FindOneSocketDetail(socketId string) (*SocketDetail, error) {
+	var result *SocketDetail
+	//Get StatusSensor
+	statusSensor := r.db.Debug().Where("status_id = ?", config.GetStatus().Active)
+	resp := r.db.Debug().Where("status_id = ? AND socket_id = ?",
+		config.GetStatus().Active, socketId).Preload("StatusSensor",
+		func(db *gorm.DB) *gorm.DB {
+			return statusSensor
+		}).First(&result)
+	if resp.Error != nil {
+		return nil, resp.Error
+	}
+	return result, nil
+}
 //-------------------------------------------------------------------------------//
 //									Upsert
 //-------------------------------------------------------------------------------//
@@ -103,9 +130,19 @@ func (r *Repository) UpdateSocketFieldRemote (req *RemoteDetailUS) error {
 	}
 	return nil
 }
+
 func (r *Repository) UpdateNullSocketFieldRemote (socketList []string) error {
 	resp := r.db.Debug().Table(config.DB_SOCKET).Where("status_id = ? AND socket_id IN (?)",
 		config.GetStatus().Active, socketList).Update("remote_id", sql.NullString{})
+	if resp.Error != nil {
+		return resp.Error
+	}
+	return nil
+}
+
+func (r *Repository) UpdateStatusSensor (req *ControlSwitch, statusSensor string) error {
+	resp := r.db.Debug().Table(config.DB_SOCKET).Where("status_id = ? AND socket_id = ?",
+		config.GetStatus().Active, req.SocketId).Update("status_sensor_id", statusSensor)
 	if resp.Error != nil {
 		return resp.Error
 	}

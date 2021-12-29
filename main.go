@@ -156,6 +156,7 @@ func main() {
 				remoteSwitch.POST("/configRemoteSwitch", handlerRemoteSwitch.ConfigRemoteSwitch)
 				remoteSwitch.POST("/unlinkSocketRemote", handlerRemoteSwitch.UnlinkSocketRemote)
 				remoteSwitch.POST("/removeRemoteSwitch", handlerRemoteSwitch.RemoveRemoteSwitch)
+				remoteSwitch.POST("/changeStatusSensor", handlerRemoteSwitch.ChangeStatusSensor)
 			}
 
 		}
