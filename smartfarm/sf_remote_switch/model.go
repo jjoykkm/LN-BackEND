@@ -56,7 +56,6 @@ func (RemoteDetailUS) TableName() string {
 }
 type ControlSwitch struct {
 	SocketId			string 		`json:"socket_id"`
-	StatusSensorId		string		`json:"status_sensor_id"`
 }
 func (ControlSwitch) TableName() string {
 	return config.DB_SOCKET
