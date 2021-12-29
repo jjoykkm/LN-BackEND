@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 )
 
@@ -11,7 +10,7 @@ import (
 //model sensor_type
 type SensorType struct {
 	DBCommonGet
-	SensorTypeId      	uuid.UUID	 `json:"sensor_type_id"`
+	SensorTypeId      	string	 	 `json:"sensor_type_id"`
 	SensorTypeNameEN    string	 	 `json:"sensor_type_name_en"`
 	SensorTypeNameTH    string	 	 `json:"sensor_type_name_th"`
 }

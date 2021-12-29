@@ -1,4 +1,4 @@
-package model_services
+package Obsolete_model_services
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
@@ -9,8 +9,8 @@ import (
 //-------------------------------------------------------------------------------//
 //Model
 type ForPlantCatList struct {
-	PlantTypeId     uuid.UUID	 `json:"plant_type_id"`
-	PlantTypeName   string		 `json:"plant_type_name"`
+	PlantTypeId     string	 `json:"plant_type_id"`
+	PlantTypeName   string	 `json:"plant_type_name"`
 }
 
 // New instance
@@ -26,11 +26,11 @@ func (u *ForPlantCatList) New() *ForPlantCatList {
 //-------------------------------------------------------------------------------//
 //Model
 type ForPlantCat struct {
-	PlantTypeId     uuid.UUID	 `json:"plant_type_id"`
-	PlantTypeName   string		 `json:"plant_type_name"`
-	PlantId     	uuid.UUID	 `json:"plant_id"`
-	PlantName       string		 `json:"plant_name"`
-	PlantDesc       string		 `json:"plant_desc"`
+	PlantTypeId     string	 `json:"plant_type_id"`
+	PlantTypeName   string	 `json:"plant_type_name"`
+	PlantId     	string	 `json:"plant_id"`
+	PlantName       string	 `json:"plant_name"`
+	PlantDesc       string	 `json:"plant_desc"`
 	TotalItem       int		 	 `json:"total_item"`
 }
 
@@ -52,22 +52,22 @@ func (u *ForPlantCat) New() *ForPlantCat {
 //-------------------------------------------------------------------------------//
 //Model
 type ForPlantItem struct {
-	PlantTypeId      uuid.UUID	 `json:"plant_type_id"`
-	PlantTypeName    string		 `json:"plant_type_name"`
-	FormulaPlantId 	 uuid.UUID	 `json:"formula_plant_id"`
-	FormulaName		 string		 `json:"formula_name"`
-	FormulaDesc		 string		 `json:"formula_desc"`
+	PlantTypeId      string	 `json:"plant_type_id"`
+	PlantTypeName    string	 `json:"plant_type_name"`
+	FormulaPlantId 	 string	 `json:"formula_plant_id"`
+	FormulaName		 string	 `json:"formula_name"`
+	FormulaDesc		 string	 `json:"formula_desc"`
 	PeopleUsed 		 int		 `json:"people_used"`
 	RateScore 		 float32	 `json:"rate_score"`
 	RatePeople 		 int		 `json:"rate_people"`
-	CountryId		 uuid.UUID	 `json:"country_id"`
-	CountryName      string		 `json:"country_name"`
-	ProvinceId		 uuid.UUID	 `json:"province_id"`
-	ProvinceName     string		 `json:"province_name"`
+	CountryId		 string	 `json:"country_id"`
+	CountryName      string	 `json:"country_name"`
+	ProvinceId		 string	 `json:"province_id"`
+	ProvinceName     string	 `json:"province_name"`
 	IsPublic		 bool	 	 `json:"is_public"`
 	IsPlanted		 bool	 	 `json:"is_planted"`
 	IsFavorite		 bool	 	 `json:"is_favorite"`
-	Uid				 uuid.UUID 	 `json:"uid"`
+	Uid				 string 	 `json:"uid"`
 	Username     	 string	 	 `json:"username"`
 }
 
@@ -99,10 +99,10 @@ func (u *ForPlantItem) New() *ForPlantItem {
 //-------------------------------------------------------------------------------//
 //Model
 type ForPlantCatItem struct {
-	PlantId     	uuid.UUID	 		`json:"plant_id"`
-	PlantName       string		 		`json:"plant_name"`
-	PlantDesc       string		 		`json:"plant_desc"`
-	TotalItem       string		 		`json:"total_item"`
+	PlantId     	string	 		`json:"plant_id"`
+	PlantName       string	 		`json:"plant_name"`
+	PlantDesc       string	 		`json:"plant_desc"`
+	TotalItem       string	 		`json:"total_item"`
 	PlantCatItem	[]ForPlantItem		`json:"plant_cat_item"`
 }
 
@@ -123,14 +123,14 @@ func (u *ForPlantCatItem) New() *ForPlantCatItem {
 //-------------------------------------------------------------------------------//
 //Model
 type ForPlantFert struct {
-	FertilizerId     uuid.UUID	 `json:"fertilizer_id"`
-	FertilizerName   string		 `json:"fertilizer_name"`
+	FertilizerId     string	 `json:"fertilizer_id"`
+	FertilizerName   string	 `json:"fertilizer_name"`
 	Nitrogen       	 float64	 `json:"nitrogen"`
 	Phosphorus    	 float64	 `json:"phosphorus"`
 	Potassium      	 float64	 `json:"potassium"`
 	Ratio	      	 float64	 `json:"ratio"`
-	FertCatId      	 uuid.UUID	 `json:"fertilizer_cat_id"`
-	FertCatName    	 string		 `json:"fertilizer_cat_name"`
+	FertCatId      	 string	 `json:"fertilizer_cat_id"`
+	FertCatName    	 string	 `json:"fertilizer_cat_name"`
 }
 // New instance
 func (u *ForPlantFert) New() *ForPlantFert {
@@ -151,7 +151,7 @@ func (u *ForPlantFert) New() *ForPlantFert {
 //-------------------------------------------------------------------------------//
 //Model
 type ForPlantSensor struct {
-	SensorTypeId      	uuid.UUID	 `json:"sensor_type_id"`
+	SensorTypeId      	string	 `json:"sensor_type_id"`
 	SensorTypeName      string	 	 `json:"sensor_type_name"`
 	ValueRec      		float64		 `json:"value_rec"`
 }
@@ -170,11 +170,11 @@ func (u *ForPlantSensor) New() *ForPlantSensor {
 
 //Model
 type ForPlantFormula struct {
-	FormulaPlantId 	 uuid.UUID	 			`json:"formula_plant_id"`
-	FormulaName		 string		 			`json:"formula_name"`
-	FormulaDesc		 string		 			`json:"formula_desc"`
-	Uid			 	 uuid.UUID	 			`json:"uid"`
-	Username		 string		 			`json:"username"`
+	FormulaPlantId 	 string	 			`json:"formula_plant_id"`
+	FormulaName		 string	 			`json:"formula_name"`
+	FormulaDesc		 string	 			`json:"formula_desc"`
+	Uid			 	 string	 			`json:"uid"`
+	Username		 string	 			`json:"username"`
 	SensorList	 	 []ForPlantSensor		`json:"sensor_list"`
 	FertList		 []ForPlantFert			`json:"fert_list"`
 }
@@ -198,18 +198,18 @@ func (u *ForPlantFormula) New() *ForPlantFormula {
 
 //Model
 type JoinPlantAndPlantType struct {
-	PlantId          uuid.UUID	 `json:"plant_id"`
-	PlantNameEN      string		 `json:"plant_name_en"`
-	PlantNameTH      string		 `json:"plant_name_th"`
-	PlantDescEN      string		 `json:"plant_desc_en"`
-	PlantDescTH      string		 `json:"plant_desc_th"`
+	PlantId          string	 `json:"plant_id"`
+	PlantNameEN      string	 `json:"plant_name_en"`
+	PlantNameTH      string	 `json:"plant_name_th"`
+	PlantDescEN      string	 `json:"plant_desc_en"`
+	PlantDescTH      string	 `json:"plant_desc_th"`
 	CreateDate		 time.Time	 `json:"create_date"`
 	ChangeDate	     time.Time	 `json:"change_date"`
-	StatusId		 uuid.UUID	 `json:"status_id"`
+	StatusId		 string	 `json:"status_id"`
 	TotalItem      	 int		 `json:"total_item"`
-	PlantTypeId      uuid.UUID	 `json:"plant_type_id"`
-	PlantTypeEN      string		 `json:"plant_type_en"`
-	PlantTypeTH      string		 `json:"plant_type_th"`
+	PlantTypeId      string	 `json:"plant_type_id"`
+	PlantTypeEN      string	 `json:"plant_type_en"`
+	PlantTypeTH      string	 `json:"plant_type_th"`
 }
 
 // New instance
@@ -236,9 +236,9 @@ func (u *JoinPlantAndPlantType) New() *JoinPlantAndPlantType {
 
 //Model
 type JoinFormulaPlantAndPlant struct {
-	FormulaPlantId 	 uuid.UUID	 `json:"formula_plant_id"`
-	FormulaName		 string		 `json:"formula_name"`
-	FormulaDesc		 string		 `json:"formula_desc"`
+	FormulaPlantId 	 string	 `json:"formula_plant_id"`
+	FormulaName		 string	 `json:"formula_name"`
+	FormulaDesc		 string	 `json:"formula_desc"`
 	PeopleUsed 		 int		 `json:"people_used"`
 	Recommend1 		 int		 `json:"recommend1"`
 	Recommend2		 int		 `json:"recommend2"`
@@ -247,17 +247,17 @@ type JoinFormulaPlantAndPlant struct {
 	Recommend5		 int		 `json:"recommend5"`
 	CreateDate		 time.Time	 `json:"create_date"`
 	ChangeDate		 time.Time	 `json:"change_date"`
-	StatusId		 uuid.UUID	 `json:"status_id"`
-	ProvinceId		 uuid.UUID	 `json:"province_id"`
-	CountryId		 uuid.UUID	 `json:"country_id"`
+	StatusId		 string	 `json:"status_id"`
+	ProvinceId		 string	 `json:"province_id"`
+	CountryId		 string	 `json:"country_id"`
 	IsPublic		 bool	 	 `json:"is_public"`
-	Uid				 uuid.UUID	 `json:"uid"`
-	PlantId          uuid.UUID	 `json:"plant_id"`
-	PlantNameEN      string		 `json:"plant_name_en"`
-	PlantNameTH      string		 `json:"plant_name_th"`
-	PlantDescEN      string		 `json:"plant_desc_en"`
-	PlantDescTH      string		 `json:"plant_desc_th"`
-	PlantTypeId      uuid.UUID	 `json:"plant_type_id"`
+	Uid				 string	 `json:"uid"`
+	PlantId          string	 `json:"plant_id"`
+	PlantNameEN      string	 `json:"plant_name_en"`
+	PlantNameTH      string	 `json:"plant_name_th"`
+	PlantDescEN      string	 `json:"plant_desc_en"`
+	PlantDescTH      string	 `json:"plant_desc_th"`
+	PlantTypeId      string	 `json:"plant_type_id"`
 	TotalItem      	 int		 `json:"total_item"`
 }
 
@@ -296,17 +296,17 @@ func (u *JoinFormulaPlantAndPlant) New() *JoinFormulaPlantAndPlant {
 
 //Model
 type JoinFertilizerAndPlant struct {
-	FertilizerId     uuid.UUID	 `json:"fertilizer_id"`
-	FertilizerEN     string		 `json:"fertilizer_en"`
-	FertilizerTH     string		 `json:"fertilizer_th"`
+	FertilizerId     string	 `json:"fertilizer_id"`
+	FertilizerEN     string	 `json:"fertilizer_en"`
+	FertilizerTH     string	 `json:"fertilizer_th"`
 	Nitrogen       	 float64	 `json:"nitrogen"`
 	Phosphorus    	 float64	 `json:"phosphorus"`
 	Potassium      	 float64	 `json:"potassium"`
 	CreateDate		 time.Time	 `json:"create_date"`
 	ChangeDate	     time.Time	 `json:"change_date"`
-	FertilizerCatId	 uuid.UUID	 `json:"fertilizer_cat_id"`
-	StatusId		 uuid.UUID	 `json:"status_id"`
-	FormulaPlantId   uuid.UUID	 `json:"formula_plant_id"`
+	FertilizerCatId	 string	 `json:"fertilizer_cat_id"`
+	StatusId		 string	 `json:"status_id"`
+	FormulaPlantId   string	 `json:"formula_plant_id"`
 	Ratio		     float64	 `json:"ratio"`
 }
 
@@ -334,13 +334,13 @@ func (u *JoinFertilizerAndPlant) New() *JoinFertilizerAndPlant {
 //-------------------------------------------------------------------------------//
 //Model
 type JoinSensorTypeAndTrans struct {
-	SensorTypeId      	uuid.UUID	 `json:"sensor_type_id"`
+	SensorTypeId      	string	 `json:"sensor_type_id"`
 	SensorTypeNameEN    string	 	 `json:"sensor_type_name_en"`
 	CreateDate			time.Time	 `json:"create_date"`
 	ChangeDate	    	time.Time	 `json:"change_date"`
-	StatusId			uuid.UUID	 `json:"status_id"`
+	StatusId			string	 `json:"status_id"`
 	SensorTypeNameTH    string	 	 `json:"sensor_type_name_th"`
-	FormulaPlantId 		uuid.UUID	 `json:"formula_plant_id"`
+	FormulaPlantId 		string	 `json:"formula_plant_id"`
 	ValueRec      		float64		 `json:"value_rec"`
 }
 

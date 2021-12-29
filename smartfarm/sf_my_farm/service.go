@@ -49,7 +49,7 @@ func (s *Service) GetAuthorizeCheckForManageFarm(uid, farmId string) (bool, erro
 	if err != nil{
 		return false, err
 	}
-	if trans.RoleId.UUID.String() != config.GetRole().View {
+	if trans.RoleId != config.GetRole().View {
 		authManage = true
 	}
 	return authManage, err
@@ -138,7 +138,7 @@ func (s *Service) CheckMainboxIsInactivated(serialNo string) (bool, error) {
 		}
 	}
 	// Check serial no is inactive
-	if mainbox.StatusId.UUID.String() == config.GetStatus().Inactive {
+	if mainbox.StatusId == config.GetStatus().Inactive {
 		return true, nil
 	}else {
 		return false, &errs.ErrContext{

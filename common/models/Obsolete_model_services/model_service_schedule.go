@@ -1,4 +1,4 @@
-package model_services
+package Obsolete_model_services
 
 import (
 	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
@@ -9,9 +9,9 @@ import (
 //-------------------------------------------------------------------------------//
 //Model
 type ScheduleFarmArea struct {
-	FarmId      	uuid.UUID	 			`json:"farm_id"`
-	FarmAreaId      uuid.UUID	 			`json:"farm_area_id"`
-	FarmAreaName    string		 			`json:"farm_area_name"`
+	FarmId      	string	 			`json:"farm_id"`
+	FarmAreaId      string	 			`json:"farm_area_id"`
+	FarmAreaName    string	 			`json:"farm_area_name"`
 }
 
 // New instance
@@ -28,10 +28,10 @@ func (u *ScheduleFarmArea) New() *ScheduleFarmArea {
 //-------------------------------------------------------------------------------//
 //model
 type ScheduleFreqType struct {
-	FrequencyTypeId 	uuid.UUID	 `json:"frequency_type_id"`
-	FrequencyName   	string		 `json:"frequency_name"`
-	IntervalRange   	string		 `json:"interval_range"`
-	IsForCustom     	string		 `json:"is_for_custom"`
+	FrequencyTypeId 	string	 `json:"frequency_type_id"`
+	FrequencyName   	string	 `json:"frequency_name"`
+	IntervalRange   	string	 `json:"interval_range"`
+	IsForCustom     	string	 `json:"is_for_custom"`
 }
 // New instance
 func (u *ScheduleFreqType) New() *ScheduleFreqType {
@@ -48,7 +48,7 @@ func (u *ScheduleFreqType) New() *ScheduleFreqType {
 //-------------------------------------------------------------------------------//
 // model
 type ScheduleInType struct {
-	IndicateTypeId      uuid.UUID	 `json:"indicate_type_id"`
+	IndicateTypeId      string	 `json:"indicate_type_id"`
 	IndicateName      	string	 	 `json:"indicate_name"`
 	IndicateDesc      	string	 	 `json:"indicate_desc"`
 	Important	      	int			 `json:"important"`
@@ -79,14 +79,14 @@ func (u *ScheduleInType) New() *ScheduleInType {
 //-------------------------------------------------------------------------------//
 //model socket_action
 type SocketAction struct {
-	ScheduleId      uuid.UUID	 `json:"schedule_id"`
-	SocketId      	uuid.UUID	 `json:"socket_id"`
-	Uid	      		uuid.UUID	 `json:"uid"`
-	StatusSensorId	uuid.UUID	 `json:"status_sensor_id"`
+	ScheduleId      string	 `json:"schedule_id"`
+	SocketId      	string	 `json:"socket_id"`
+	Uid	      		string	 `json:"uid"`
+	StatusSensorId	string	 `json:"status_sensor_id"`
 	IsManual    	bool		 `json:"is_manual"`
 	CreateDate		time.Time	 `json:"create_date"`
 	ChangeDate	    time.Time	 `json:"change_date"`
-	StatusId		uuid.UUID	 `json:"status_id"`
+	StatusId		string	 `json:"status_id"`
 }
 // New instance socket_action
 func (u *SocketAction) New() *SocketAction {
@@ -107,10 +107,10 @@ func (u *SocketAction) New() *SocketAction {
 //-------------------------------------------------------------------------------//
 //Model
 type ScheduleStruct struct {
-	FarmAreaId      	uuid.UUID	 		`json:"farm_area_id"`
-	FarmAreaName    	string		 		`json:"farm_area_name"`
+	FarmAreaId      	string	 		`json:"farm_area_id"`
+	FarmAreaName    	string	 		`json:"farm_area_name"`
 	ScheduleDesc      	string	 	 		`json:"schedule_desc"`
-	ScheduleId     		uuid.UUID	 		`json:"schedule_id"`
+	ScheduleId     		string	 		`json:"schedule_id"`
 	ScheduleName      	string	 	 		`json:"schedule_name"`
 	StartDateTime		time.Time	 		`json:"start_date_time"`
 	EndDateTime			time.Time	 		`json:"end_date_time"`

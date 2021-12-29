@@ -1,8 +1,7 @@
-package model_services
+package Obsolete_model_services
 
 import (
 	"github.com/jackc/pgtype"
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"time"
 )
 
@@ -11,9 +10,9 @@ import (
 //-------------------------------------------------------------------------------//
 //Model
 type MyFarmOverviewFarm struct {
-	FarmId      	uuid.UUID	 `json:"farm_id"`
-	FarmName    	string		 `json:"farm_name"`
-	FarmDesc    	string		 `json:"farm_desc"`
+	FarmId      	string	 `json:"farm_id"`
+	FarmName    	string	 `json:"farm_name"`
+	FarmDesc    	string	 `json:"farm_desc"`
 	MainboxCount	int			 `json:"mainbox_count"`
 	FarmAreaCount	int			 `json:"farm_area_count"`
 }
@@ -33,16 +32,16 @@ func (u *MyFarmOverviewFarm) New() *MyFarmOverviewFarm {
 //-------------------------------------------------------------------------------//
 //Model
 type MyFarmSenSocDetail struct {
-	SocketId       		uuid.UUID 		`json:"socket_id"`
+	SocketId       		string 		`json:"socket_id"`
 	SocketName     		string    		`json:"socket_name"`
 	SocketNumber		int64		 	`json:"socket_number"`
-	StatusSensorId 		uuid.UUID 		`json:"status_sensor_id"`
+	StatusSensorId 		string 		`json:"status_sensor_id"`
 	StatusSensorName 	string			`json:"status_sensor_name"`
-	SensorId      		uuid.UUID	 	`json:"sensor_id"`
+	SensorId      		string	 	`json:"sensor_id"`
 	SensorModel     	string	 	 	`json:"sensor_model"`
 	SensorLots      	string	 	 	`json:"sensor_lots"`
 	BitTransfer	    	pgtype.Bit	 	`json:"bit_transfer"`
-	SensorTypeId		uuid.UUID	 	`json:"sensor_type_id"`
+	SensorTypeId		string	 	`json:"sensor_type_id"`
 	SensorTypeName  	string	 	 	`json:"sensor_type_name"`
 }
 
@@ -68,10 +67,10 @@ func (u *MyFarmSenSocDetail) New() *MyFarmSenSocDetail {
 //-------------------------------------------------------------------------------//
 //Model
 type MyFarmManageMainbox struct {
-	MainboxId      		uuid.UUID	 			`json:"mainbox_id"`
-	MainboxName     	string		 			`json:"mainbox_name"`
-	MainboxModel    	string		 			`json:"mainbox_model"`
-	MainboxLots     	string		 			`json:"mainbox_lots"`
+	MainboxId      		string	 			`json:"mainbox_id"`
+	MainboxName     	string	 			`json:"mainbox_name"`
+	MainboxModel    	string	 			`json:"mainbox_model"`
+	MainboxLots     	string	 			`json:"mainbox_lots"`
 	StartWarranty		time.Time	 			`json:"start_warranty"`
 	EndWarranty			time.Time	 			`json:"end_warranty"`
 	SenSocDetail		[]MyFarmSenSocDetail	`json:"sen_soc_detail"`
@@ -95,8 +94,8 @@ func (u *MyFarmManageMainbox) New() *MyFarmManageMainbox {
 //-------------------------------------------------------------------------------//
 //Model
 type MyFarmManageFarmArea struct {
-	FarmAreaId      	uuid.UUID	 			`json:"farm_area_id"`
-	FarmAreaName    	string		 			`json:"farm_area_name"`
+	FarmAreaId      	string	 			`json:"farm_area_id"`
+	FarmAreaName    	string	 			`json:"farm_area_name"`
 	SenSocDetail		[]MyFarmSenSocDetail	`json:"sen_soc_detail"`
 }
 
@@ -115,15 +114,15 @@ func (u *MyFarmManageFarmArea) New() *MyFarmManageFarmArea {
 //-------------------------------------------------------------------------------//
 //Model
 type MyFarmManageRole struct {
-	Uid      		uuid.UUID	 `json:"uid"`
+	Uid      		string	 `json:"uid"`
 	Username     	string	 	 `json:"username"`
 	FullName      	string	 	 `json:"full_name"`
 	SurName      	string	 	 `json:"sur_name"`
 	NickName      	string	 	 `json:"nick_name"`
-	FarmId     		uuid.UUID	 `json:"farm_id"`
-	RoleId      	uuid.UUID	 `json:"role_id"`
-	RoleName      	string		 `json:"role_name"`
-	RoleDesc      	string		 `json:"role_desc"`
+	FarmId     		string	 `json:"farm_id"`
+	RoleId      	string	 `json:"role_id"`
+	RoleName      	string	 `json:"role_name"`
+	RoleDesc      	string	 `json:"role_desc"`
 	CreateDate		time.Time	 `json:"create_date"`
 	ChangeDate	    time.Time	 `json:"change_date"`
 }

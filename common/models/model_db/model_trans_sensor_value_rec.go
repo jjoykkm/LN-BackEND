@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 )
 
@@ -11,8 +10,8 @@ import (
 //model trans_sensor_value_rec
 type TransSensorValueRec struct {
 	DBCommonGet
-	FormulaPlantId 		uuid.UUID	 `json:"formula_plant_id"`
-	SensorTypeId   		uuid.UUID	 `json:"sensor_type_id"`
+	FormulaPlantId 		string	 	 `json:"formula_plant_id"`
+	SensorTypeId   		string	 	 `json:"sensor_type_id"`
 	ValueRec      		float64		 `json:"value_rec"`
 }
 // New instance trans_sensor_value_rec

@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 )
 
@@ -11,17 +10,17 @@ import (
 //model address_user
 type AddressUser struct {
 	DBCommonGet
-	AddressUserId	 	 uuid.UUID	 `json:"address_user_id"`
+	AddressUserId	 	 string	 	 `json:"address_user_id"`
 	HouseNo				 string  	 `json:"house_no"`
 	Alley				 string  	 `json:"alley"`
 	Road				 string  	 `json:"road"`
 	LocationX			 float64	 `json:"location_x"`
 	LocationY			 float64	 `json:"location_y"`
-	SubDistrictId		 uuid.UUID	 `json:"sub_district_id"`
-	DistrictId			 uuid.UUID	 `json:"district_id"`
-	ProvinceId			 uuid.UUID	 `json:"province_id"`
-	CountryId			 uuid.UUID	 `json:"country_id"`
-	Uid					 uuid.UUID	 `json:"uid"`
+	SubDistrictId		 string	 	 `json:"sub_district_id"`
+	DistrictId			 string	 	 `json:"district_id"`
+	ProvinceId			 string	 	 `json:"province_id"`
+	CountryId			 string	 	 `json:"country_id"`
+	Uid					 string	 	 `json:"uid"`
 	Moo					 string  	 `json:"moo"`
 }
 // New instance address_user

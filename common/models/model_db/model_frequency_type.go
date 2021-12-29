@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 )
 
@@ -11,10 +10,10 @@ import (
 //model frequency_type
 type FrequencyType struct {
 	DBCommonGet
-	FrequencyTypeId		uuid.UUID	 `json:"frequency_type_id"`
-	FrequencyName   	string		 `json:"frequency_name"`
-	IntervalRange   	string		 `json:"interval_range"`
-	IsForCustom     	string		 `json:"is_for_custom"`
+	FrequencyTypeId		string	 `json:"frequency_type_id"`
+	FrequencyName   	string	 `json:"frequency_name"`
+	IntervalRange   	string	 `json:"interval_range"`
+	IsForCustom     	string	 `json:"is_for_custom"`
 }
 // New instance frequency_type
 func (u *FrequencyType) New() *FrequencyType {

@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 )
 
@@ -29,7 +28,7 @@ func (u *ColorRGB) New() *ColorRGB {
 //model indicate_type
 type IndicateType struct {
 	DBCommonGet
-	IndicateTypeId      uuid.UUID	 `json:"indicate_type_id"`
+	IndicateTypeId      string	 `json:"indicate_type_id"`
 	IndicateName      	string	 	 `json:"indicate_name"`
 	IndicateDesc      	string	 	 `json:"indicate_desc"`
 	Important	      	int			 `json:"important"`

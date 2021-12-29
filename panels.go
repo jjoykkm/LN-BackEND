@@ -12,7 +12,7 @@ import (
 
 type Panels struct {
 	PanelId 			string `gorm:"primaryKey;foreignKey:panelListId;references:panelListId"`
-	PanelOwnId			uuid.UUID
+	PanelOwnId			string
 	PanelFilename 		string
 	PanelName 			string
 	PanelNameEn 		string
@@ -42,17 +42,17 @@ func (PanelsLists) TableName() string {
 
 type JoinPanels struct {
 	PanelId 			string 		 `json:"panel_id"`//`gorm:"primaryKey"`
-	PanelOwnId			uuid.UUID	 `json:"panel_own_id"`
-	PanelFilename 		string		 `json:"panel_filename"`
-	PanelName 			string		 `json:"panel_name"`
-	PanelNameEn 		string		 `json:"panel_name_en"`
-	PanelType 			string		 `json:"panel_type"`
-	PanelSide 			string		 `json:"panel_side"`
-	PanelAccess 		string		 `json:"panel_access"`
-	PanelDisplay 		string		 `json:"panel_display"`
-	PanelStatus 		string		 `json:"panel_status"`
-	PanelRestriction 	string		 `json:"panel_restriction"`
-	PanelLanguages 		string		 `json:"panel_languages"`
+	PanelOwnId			string	 `json:"panel_own_id"`
+	PanelFilename 		string	 `json:"panel_filename"`
+	PanelName 			string	 `json:"panel_name"`
+	PanelNameEn 		string	 `json:"panel_name_en"`
+	PanelType 			string	 `json:"panel_type"`
+	PanelSide 			string	 `json:"panel_side"`
+	PanelAccess 		string	 `json:"panel_access"`
+	PanelDisplay 		string	 `json:"panel_display"`
+	PanelStatus 		string	 `json:"panel_status"`
+	PanelRestriction 	string	 `json:"panel_restriction"`
+	PanelLanguages 		string	 `json:"panel_languages"`
 	PanelList			PanelsLists `gorm:"embedded"`//`gorm:"embedded;foreignKey:panelId;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 

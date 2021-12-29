@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 )
 
@@ -11,14 +10,14 @@ import (
 //model trans_management
 type TransManagement struct {
 	DBCommonGet
-	Uid      		uuid.UUID	 `json:"uid"`
-	FarmId     		uuid.UUID	 `json:"farm_id"`
-	RoleId      	uuid.UUID	 `json:"role_id"`
+	Uid      		string	 `json:"uid"`
+	FarmId     		string	 `json:"farm_id"`
+	RoleId      	string	 `json:"role_id"`
 }
 // New instance trans_management
 func (u *TransManagement) New() *TransManagement {
 	return &TransManagement{
-		DBCommonGet:      		u.DBCommonGet ,
+		DBCommonGet:    u.DBCommonGet ,
 		Uid:			u.Uid ,
 		FarmId:			u.FarmId ,
 		RoleId:			u.RoleId ,

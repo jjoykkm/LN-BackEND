@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 	"time"
 )
@@ -12,15 +11,15 @@ import (
 //model schedule
 type Schedule struct {
 	DBCommonGet
-	ScheduleId     		uuid.UUID	 `json:"schedule_id"`
+	ScheduleId     		string	 	 `json:"schedule_id"`
 	ScheduleName      	string	 	 `json:"schedule_name"`
 	ScheduleDesc      	string	 	 `json:"schedule_desc"`
 	StartDateTime		time.Time	 `json:"start_date_time"`
 	EndDateTime			time.Time	 `json:"end_date_time"`
 	FreqInterval      	int		 	 `json:"frequency_interval"`
 	IsAlarm		      	bool		 `json:"is_alarm"`
-	FrequencyTypeId		uuid.UUID	 `json:"frequency_type_id"`
-	IndicateTypeId		uuid.UUID	 `json:"indicate_type_id"`
+	FrequencyTypeId		string	 	 `json:"frequency_type_id"`
+	IndicateTypeId		string	 	 `json:"indicate_type_id"`
 	IsAllDay	      	bool		 `json:"is_all_day"`
 	IsReminder	      	bool		 `json:"is_reminder"`
 }

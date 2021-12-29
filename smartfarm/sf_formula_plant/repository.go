@@ -2,7 +2,6 @@ package sf_formula_plant
 
 import (
 	"errors"
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_common/cm_other"
@@ -138,7 +137,7 @@ func (r *Repository) FindAllFormulaPlantByPlant(status, plantId string, offset i
 
 func (r *Repository) FindAllFavForPlantId(status, uid string) (map[string]bool, error) {
 	resultMap := make(map[string]bool)
-	result:= []uuid.UUID{}
+	result:= []string{}
 
 	resp := r.db.Debug().Table(config.DB_FAVORITE_PLANT).Select("formula_plant_id").Find(&result,
 		"status_id = ? AND uid = ?", status, uid)
@@ -155,7 +154,7 @@ func (r *Repository) FindAllFavForPlantId(status, uid string) (map[string]bool, 
 func (r *Repository) FindAllPlantedForPlantId(status, uid string) (map[string]bool, error) {
 	resultMap := make(map[string]bool)
 
-	result:= []uuid.UUID{}
+	result:= []string{}
 	// Get farm_id filter by uid
 	subQuery := r.db.Debug().Table(config.DB_TRANS_MANAGEMENT).Select("farm_id").Where(
 		"status_id = ? AND uid = ?", config.GetStatus().Active, uid)

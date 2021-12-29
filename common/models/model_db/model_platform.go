@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 )
 
@@ -11,8 +10,8 @@ import (
 //model platform
 type Platform struct {
 	DBCommonGet
-	PlatformId      uuid.UUID	 `json:"platform_id"`
-	PlatformName    string		 `json:"platform_name"`
+	PlatformId      string	 `json:"platform_id"`
+	PlatformName    string	 `json:"platform_name"`
 }
 // New instance platform
 func (u *Platform) New() *Platform {

@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 	"image"
 	"time"
@@ -13,19 +12,19 @@ import (
 //model users
 type Users struct {
 	DBCommonGet
-	Uid      		uuid.UUID	 	`json:"uid"`
+	Uid      		string	 		 `json:"uid"`
 	Username     	string	 	 	`json:"username"`
 	Password      	string	 	 	`json:"password"`
 	FullName      	string	 	 	`json:"full_name"`
 	SurName      	string	 	 	`json:"sur_name"`
 	NickName      	string	 	 	`json:"nick_name"`
-	Gender			uuid.UUID	 	`json:"gender"`
+	Gender			string	 	`	 json:"gender"`
 	BirthDate		time.Time	 	`json:"birth_date"`
 	MobilePhone     string	 	 	`json:"mobile_phone"`
 	Telephone      	string	 	 	`json:"telephone"`
 	Mail      		string	 	 	`json:"mail"`
 	Image	      	image.Image	 	`json:"image"`
-	UserNo			string		 	`json:"user_no"`
+	UserNo			string	 		`json:"user_no"`
 }
 // New instance users
 func (u *Users) New() *Users {
@@ -58,14 +57,14 @@ func (Users) TableName() string {
 //-------------------------------------------------------------------------------//
 //model users
 type UsersShort struct {
-	Uid      		uuid.UUID	 	`json:"-"`
+	Uid      		string	 	`json:"-"`
 	Username     	string	 	 	`json:"username"`
 	NickName      	string	 	 	`json:"nick_name" gorm:"column:nickname"`
-	Image	      	string		 	`json:"image"`
+	Image	      	string	 	`json:"image"`
 	CreateDate		time.Time	 	`json:"create_date" gorm:"column:createdate"`
 	ChangeDate	    time.Time	 	`json:"change_date" gorm:"column:changedate"`
-	StatusId		uuid.UUID	 	`json:"status_id" gorm:"column:statusid"`
-	UserNo			string		 	`json:"user_no" gorm:"column:userno"`
+	StatusId		string	 	`json:"status_id" gorm:"column:statusid"`
+	UserNo			string	 	`json:"user_no" gorm:"column:userno"`
 }
 // New instance users
 func (u *UsersShort) New() *UsersShort {

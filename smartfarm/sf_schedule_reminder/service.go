@@ -12,7 +12,7 @@ type Servicer interface {
 	//GetScheduleer(status string, scheIdList []string) ([]model_databases.Schedule, []string, []string, int)
 	//GetFrequencyTypeer(status string, freqTypeIdList []string) ([]model_databases.FrequencyType, map[string]model_databases.FrequencyType, int)
 	//GetIndicateTypeer(status string, inTypeIdList []string) ([]model_databases.IndicateType, map[string]model_databases.IndicateType, int)
-	//GetScheReminder(status string, farmAreaId []string) model_services.ScheduleScheRemind
+	//GetScheReminder(status string, farmAreaId []string) Obsolete_model_services.ScheduleScheRemind
 }
 
 type Service struct {
@@ -72,7 +72,7 @@ func (s *Service) GetPlantCategoryList(status, language string) ([]model_service
 //
 //func (s *Service) GetScheduleer(status string, scheIdList []string) ([]model_databases.Schedule, []string, []string, int) {
 //	var schedule []model_databases.Schedule
-//	var structSR []model_services.ScheduleStruct
+//	var structSR []Obsolete_model_services.ScheduleStruct
 //	var freqTypeIdList []string
 //	var inTypeIdList []string
 //
@@ -139,10 +139,10 @@ func (s *Service) GetPlantCategoryList(status, language string) ([]model_service
 //	return inType, inTypeMap, total
 //}
 //
-//func (s *Service) GetScheReminder(status string, farmAreaId []string) model_services.ScheduleScheRemind {
-//	var sRList []model_services.ScheduleStruct
-//	var structSR model_services.ScheduleStruct
-//	var scheRemind model_services.ScheduleScheRemind
+//func (s *Service) GetScheReminder(status string, farmAreaId []string) Obsolete_model_services.ScheduleScheRemind {
+//	var sRList []Obsolete_model_services.ScheduleStruct
+//	var structSR Obsolete_model_services.ScheduleStruct
+//	var scheRemind Obsolete_model_services.ScheduleScheRemind
 //	var freqTypeIdList []string
 //	var inTypeIdList []string
 //	var found bool

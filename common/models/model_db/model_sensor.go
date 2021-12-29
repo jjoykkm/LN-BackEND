@@ -2,7 +2,6 @@ package model_db
 
 import (
 	"github.com/jackc/pgtype"
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 )
 
@@ -12,11 +11,11 @@ import (
 //model sensor
 type Sensor struct {
 	DBCommonGet
-	SensorId      	uuid.UUID	 `json:"sensor_id"`
+	SensorId      	string	 	 `json:"sensor_id"`
 	SensorModel     string	 	 `json:"sensor_model"`
 	SensorLots      string	 	 `json:"sensor_lots"`
 	BitTransfer	    pgtype.Bit	 `json:"bit_transfer"`
-	SensorTypeId	uuid.UUID	 `json:"sensor_type_id"`
+	SensorTypeId	string	 	 `json:"sensor_type_id"`
 }
 // New instance sensor
 func (u *Sensor) New() *Sensor {

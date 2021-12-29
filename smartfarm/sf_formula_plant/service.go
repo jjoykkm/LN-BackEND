@@ -82,7 +82,7 @@ func (s *Service) GetPlantOverviewByPlant(status string, reqModel *model_other.R
 	plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, reqModel.Uid)
 	// Fill data
 	for idx, wa := range forPlant.ForPlantDetail {
-		forPlantId := wa.FormulaPlant.FormulaPlantId.UUID.String()
+		forPlantId := wa.FormulaPlant.FormulaPlantId
 		// Check is favorite
 		wa.IsFavorite = favMap[forPlantId]
 		// Check planted
@@ -106,7 +106,7 @@ func (s *Service) GetPlantOverviewFavorite(status string, reqModel *model_other.
 	// Get planted formula plant
 	plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, reqModel.Uid)
 	for idx, wa := range forPlant {
-		forPlantId := wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()
+		forPlantId := wa.FormulaPlant.FormulaPlant.FormulaPlantId
 		wa.IsFavorite = true
 		// Check planted
 		wa.IsPlanted = plantedMap[forPlantId]
@@ -131,7 +131,7 @@ func (s *Service) GetPlantOfMine(status string, reqModel *model_other.ReqModel) 
 	// Get planted formula plant
 	plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, reqModel.Uid)
 	for idx, wa := range forPlant {
-		forPlantId := wa.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()
+		forPlantId := wa.FormulaPlant.FormulaPlant.FormulaPlantId
 		// Check is favorite
 		wa.IsFavorite = favMap[forPlantId]
 		// Check planted
@@ -157,7 +157,7 @@ func (s *Service) GetFormulaPlantDetail(status string, reqModel *model_other.Req
 	// Get planted formula plant
 	plantedMap, _ := s.repo.FindAllPlantedForPlantId(status, reqModel.Uid)
 	// Fill data
-	forPlantId := forPlantDetail.FormulaPlant.FormulaPlant.FormulaPlant.FormulaPlantId.UUID.String()
+	forPlantId := forPlantDetail.FormulaPlant.FormulaPlant.FormulaPlant.FormulaPlantId
 	// Check is favorite
 	forPlantDetail.FormulaPlant.IsFavorite = favMap[forPlantId]
 	// Check planted

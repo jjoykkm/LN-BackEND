@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 )
 
@@ -11,9 +10,9 @@ import (
 //model farm
 type Farm struct {
 	DBCommonGet
-	FarmId      	uuid.UUID	 `json:"farm_id"`
-	FarmName    	string		 `json:"farm_name"`
-	FarmDesc    	string		 `json:"farm_desc"`
+	FarmId      	string	 	 `json:"farm_id"`
+	FarmName    	string	 `json:"farm_name"`
+	FarmDesc    	string	 `json:"farm_desc"`
 }
 // New instance farm
 func (u *Farm) New() *Farm {

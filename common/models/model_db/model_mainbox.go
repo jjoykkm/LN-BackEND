@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 	"gorm.io/gorm"
 	"time"
@@ -13,14 +12,14 @@ import (
 //model mainbox
 type Mainbox struct {
 	DBCommonGet
-	MainboxId      		uuid.UUID	 `json:"mainbox_id"`
-	MainboxName     	string		 `json:"mainbox_name"`
-	MainboxModel    	string		 `json:"mainbox_model"`
-	MainboxLots     	string		 `json:"mainbox_lots"`
+	MainboxId      		string	 	 `json:"mainbox_id"`
+	MainboxName     	string	 	 `json:"mainbox_name"`
+	MainboxModel    	string	 	 `json:"mainbox_model"`
+	MainboxLots     	string	 	 `json:"mainbox_lots"`
 	StartWarranty		time.Time	 `json:"start_warranty"`
 	EndWarranty			time.Time	 `json:"end_warranty"`
-	FarmId				uuid.UUID	 `json:"farm_id"`
-	MainboxSerialNo		string		 `json:"serial_no"`
+	FarmId				string	 	 `json:"farm_id"`
+	MainboxSerialNo		string	 	 `json:"serial_no"`
 }
 // New instance mainbox
 func (u *Mainbox) New() *Mainbox {
@@ -47,8 +46,8 @@ func (Mainbox) TableName() string {
 //-------------------------------------------------------------------------------//
 type MainboxSerialUS struct {
 	DBCommonCreateUpdate
-	MainboxName     	string		 `json:"mainbox_name"`
-	MainboxSerialNo		string		 `json:"serial_no"`
+	MainboxName     	string	 `json:"mainbox_name"`
+	MainboxSerialNo		string	 `json:"serial_no"`
 }
 func (MainboxSerialUS) TableName() string {
 	return config.DB_MAINBOX

@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 )
 
@@ -11,13 +10,13 @@ import (
 //model trans_socket_area
 type TransSocketArea struct {
 	DBCommonGet
-	FarmAreaId      uuid.UUID	 `json:"farm_area_id"`
-	SocketId     	uuid.UUID	 `json:"socket_id"`
+	FarmAreaId      string	 `json:"farm_area_id"`
+	SocketId     	string	 `json:"socket_id"`
 }
 // New instance trans_socket_area
 func (u *TransSocketArea) New() *TransSocketArea {
 	return &TransSocketArea{
-		DBCommonGet:      	u.DBCommonGet ,
+		DBCommonGet:    u.DBCommonGet ,
 		FarmAreaId:		u.FarmAreaId ,
 		SocketId:		u.SocketId ,
 	}

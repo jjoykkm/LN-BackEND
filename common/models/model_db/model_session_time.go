@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 )
 
@@ -11,13 +10,13 @@ import (
 //model session_time
 type SessionTime struct {
 	DBCommonGet
-	SessionTimeId      uuid.UUID	 `json:"session_time_id"`
+	SessionTimeId      string	 	 `json:"session_time_id"`
 	PublicToken        string	 	 `json:"public_token"`
 	PrivateToken       string	 	 `json:"private_token"`
 	BarrierToken       string	 	 `json:"barrier_token"`
-	PlatformId	   	   uuid.UUID	 `json:"platform_id"`
-	Uid	   			   uuid.UUID	 `json:"uid"`
-	SessionActionId	   uuid.UUID	 `json:"session_action_id"`
+	PlatformId	   	   string	 	 `json:"platform_id"`
+	Uid	   			   string	 	 `json:"uid"`
+	SessionActionId	   string	 	 `json:"session_action_id"`
 }
 // New instance session_time
 func (u *SessionTime) New() *SessionTime {

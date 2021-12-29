@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 )
 
@@ -11,9 +10,9 @@ import (
 //model district
 type District struct {
 	DBCommonGet
-	DistrictId      uuid.UUID	 `json:"district_id"`
-	DistrictEN      string		 `json:"district_name_en"`
-	DistrictTH      string		 `json:"district_name_th"`
+	DistrictId      string	 	 `json:"district_id"`
+	DistrictEN      string	 `json:"district_name_en"`
+	DistrictTH      string	 `json:"district_name_th"`
 }
 // New instance district
 func (u *District) New() *District {

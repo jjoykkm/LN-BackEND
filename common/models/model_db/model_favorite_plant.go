@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 )
 
@@ -11,8 +10,8 @@ import (
 //model favorite_plant
 type FavForPlant struct {
 	DBCommonGet
-	Uid          	 uuid.UUID	 `json:"uid"`
-	FormulaPlantId   uuid.UUID	 `json:"formula_plant_id"`
+	Uid          	 string	 `json:"uid"`
+	FormulaPlantId   string	 `json:"formula_plant_id"`
 }
 // New instance favorite_plant
 func (u *FavForPlant) New() *FavForPlant {

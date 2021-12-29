@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 )
 
@@ -11,9 +10,9 @@ import (
 //model country
 type Country struct {
 	DBCommonGet
-	CountryId       uuid.UUID	 `json:"country_id"`
-	CountryEN       string		 `json:"country_name_en"`
-	CountryTH       string		 `json:"country_name_th"`
+	CountryId       string	 	 `json:"country_id"`
+	CountryEN       string	 `json:"country_name_en"`
+	CountryTH       string	 `json:"country_name_th"`
 }
 // New instance country
 func (u *Country) New() *Country {

@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 )
 
@@ -11,11 +10,11 @@ import (
 //model role
 type Role struct {
 	DBCommonGet
-	RoleId      	uuid.UUID	 `json:"role_id"`
-	RoleNameEN      string		 `json:"role_name_en"`
-	RoleDescEN      string		 `json:"role_desc_en"`
-	RoleNameTH      string		 `json:"role_name_th"`
-	RoleDescTH      string		 `json:"role_desc_th"`
+	RoleId      	string	 `json:"role_id"`
+	RoleNameEN      string	 `json:"role_name_en"`
+	RoleDescEN      string	 `json:"role_desc_en"`
+	RoleNameTH      string	 `json:"role_name_th"`
+	RoleDescTH      string	 `json:"role_desc_th"`
 }
 // New instance role
 func (u *Role) New() *Role {

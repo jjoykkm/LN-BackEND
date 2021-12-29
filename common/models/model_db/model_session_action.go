@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 )
 
@@ -11,7 +10,7 @@ import (
 //model session_action
 type SessionAction struct {
 	DBCommonGet
-	SessionActionId     uuid.UUID	 `json:"session_action_id"`
+	SessionActionId     string	 	 `json:"session_action_id"`
 	SessionAction     	string	 	 `json:"session_action"`
 }
 // New instance session_action

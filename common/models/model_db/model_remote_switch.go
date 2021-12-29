@@ -10,8 +10,8 @@ import (
 //model country
 type RemoteSwitch struct {
 	DBCommonGet
-	RemoteId       string	 	 `json:"remote_id" `
-	RemoteName     string		 `json:"remote_name"`
+	RemoteId       string	 	 `json:"remote_id"`
+	RemoteName     string	 	 `json:"remote_name"`
 }
 // New instance country
 func (u *RemoteSwitch) New() *RemoteSwitch {

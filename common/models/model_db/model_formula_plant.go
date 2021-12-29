@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 	"gorm.io/gorm"
 )
@@ -33,16 +32,16 @@ func (u *Recommend) New() *Recommend {
 //model formula_plant
 type FormulaPlant struct {
 	DBCommonGet
-	FormulaPlantId 	 uuid.UUID	 `json:"formula_plant_id"`
-	FormulaName		 string		 `json:"formula_plant_name"`
-	FormulaDesc		 string		 `json:"formula_plant_desc"`
+	FormulaPlantId 	 string	 	 `json:"formula_plant_id"`
+	FormulaName		 string	 	 `json:"formula_plant_name"`
+	FormulaDesc		 string	 	 `json:"formula_plant_desc"`
 	PeopleUsed 		 int		 `json:"people_used"`
 	Recommend		 Recommend	 `json:"recommend" gorm:"embedded"`
-	PlantId		 	 uuid.UUID	 `json:"plant_id"`
-	ProvinceId		 *uuid.UUID	 `json:"province_id,omitempty"`
-	CountryId		 *uuid.UUID	 `json:"country_id,omitempty"`
+	PlantId		 	 string	 	 `json:"plant_id"`
+	ProvinceId		 string	 	 `json:"province_id"`
+	CountryId		 string	 	 `json:"country_id"`
 	IsPublic		 bool	 	 `json:"is_public"`
-	Uid				 uuid.UUID	 `json:"-"`
+	Uid				 string	 	 `json:"-"`
 }
 // New instance formula_plant
 func (u *FormulaPlant) New() *FormulaPlant {
@@ -71,16 +70,16 @@ func (FormulaPlant) TableName() string {
 type FormulaPlantUS struct {
 	DBCommonCreateUpdate
 	FormulaPlantId 	 string	 	 			`json:"formula_plant_id" gorm:"default:uuid_generate_v4()"`
-	FormulaName		 string		 			`json:"formula_plant_name"`
-	FormulaDesc		 string		 			`json:"formula_plant_desc"`
+	FormulaName		 string	 			`json:"formula_plant_name"`
+	FormulaDesc		 string	 			`json:"formula_plant_desc"`
 	//PeopleUsed 		 int					 `json:"people_used"`
 	//Recommend		 Recommend	 			`json:"recommend" gorm:"embedded"`
 	PlantId		 	 string	 	 			`json:"plant_id"`
 	ProvinceId		 string	 	 			`json:"province_id"`
 	CountryId		 string	 	 			`json:"country_id"`
 	IsPublic		 bool	 	 			`json:"is_public" gorm:"default:false"`
-	Uid				 string		 			`json:"uid"`//`json:"user_id`
-	StatusId		 string		 			`json:"status_id"`
+	Uid				 string	 			`json:"uid"`//`json:"user_id`
+	StatusId		 string	 			`json:"status_id"`
 }
 func (FormulaPlantUS) TableName() string {
 	return config.DB_FORMULA_PLANT

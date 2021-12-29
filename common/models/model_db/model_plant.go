@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 )
 
@@ -11,13 +10,13 @@ import (
 //model plant
 type Plant struct {
 	DBCommonGet
-	PlantId          uuid.UUID	 `json:"plant_id"`
-	PlantNameEN      string		 `json:"plant_name_en"`
-	PlantNameTH      string		 `json:"plant_name_th"`
-	PlantDescEN      string		 `json:"plant_desc_en"`
-	PlantDescTH      string		 `json:"plant_desc_th"`
-	PlantTypeId      *uuid.UUID	 `json:"plant_type_id"`
-	TotalItem      	 int		 `json:"total_item"`
+	PlantId          string	 	`json:"plant_id"`
+	PlantNameEN      string	 	`json:"plant_name_en"`
+	PlantNameTH      string	 	`json:"plant_name_th"`
+	PlantDescEN      string	 	`json:"plant_desc_en"`
+	PlantDescTH      string	 	`json:"plant_desc_th"`
+	PlantTypeId      string	 	`json:"plant_type_id"`
+	TotalItem      	 int	 	`json:"total_item"`
 }
 // New instance plant
 func (u *Plant) New() *Plant {

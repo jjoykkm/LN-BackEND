@@ -1,7 +1,6 @@
 package cm_other
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"reflect"
 	"strings"
 )
@@ -65,10 +64,10 @@ func ConvertListToStringIn(listData []string) string {
 	result := "('" + strings.Join(listData, "','") + "')"
 	return result
 }
-func ConvertUUIDtoStringMap(uuidList []uuid.UUID) map[string]bool {
+func ConvertUUIDtoStringMap(uuidList []string) map[string]bool {
 	strMap := make(map[string]bool)
-	for _, wa := range uuidList {
-		strMap[wa.UUID.String()] = true
+	for _, uuid := range uuidList {
+		strMap[uuid] = true
 	}
 	return strMap
 }

@@ -1,7 +1,6 @@
 package model_db
 
 import (
-	uuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jjoykkm/ln-backend/common/config"
 )
 
@@ -11,9 +10,9 @@ import (
 //model fertilizer_cat
 type FertilizerCat struct {
 	DBCommonGet
-	FertCatId      uuid.UUID	 `json:"fert_cat_id" gorm:"column:fertilizer_cat_id"`
-	FertCatEN      string		 `json:"fert_cat_en" gorm:"column:fertilizer_cat_en"`
-	FertCatTH      string		 `json:"fert_cat_th" gorm:"column:fertilizer_cat_th"`
+	FertCatId      string	 `json:"fert_cat_id" gorm:"column:fertilizer_cat_id"`
+	FertCatEN      string	 `json:"fert_cat_en" gorm:"column:fertilizer_cat_en"`
+	FertCatTH      string	 `json:"fert_cat_th" gorm:"column:fertilizer_cat_th"`
 }
 // New instance fertilizer_cat
 func (u *FertilizerCat) New() *FertilizerCat {

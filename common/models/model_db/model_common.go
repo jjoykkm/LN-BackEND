@@ -35,5 +35,5 @@ type DBCommonCreateUpdate struct {
 	//CreateBy		*string	 	 `json:"create_by"`
 	ChangeDate	   	time.Time	 `json:"change_date" gorm:"autoUpdateTime"`
 	//ChangeBy	    string	 	 `json:"change_by"`
-	//StatusId		string		 `json:"status_id"`
+	//StatusId		string	 `json:"status_id"`
 }
