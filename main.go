@@ -1,11 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/common/config"
-	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_common/cm_address"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_common/cm_farm"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_common/cm_plant"
@@ -49,11 +47,6 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
-
-	var farm model_db.Farm
-	db.Debug().First(&farm)
-	fmt.Printf("%+v\n", farm)
-
 
 	me = Ln{db}
 
