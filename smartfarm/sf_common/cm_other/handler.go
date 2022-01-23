@@ -19,7 +19,7 @@ func NewHandler(service Servicer) *Handler {
 //		})
 //		return
 //	}
-//	respModel,err := h.service.GetFarmList(config.GetStatus().Active, &reqModel)
+//	respModel,err := h.service.GetFarmList(config.GetStatus().Active, reqModel)
 //	if err != nil {
 //		if errx, ok := err.(*errs.ErrContext); ok {
 //			if httpCode, ok := mapErrorCode[errx.Code]; ok {
@@ -48,7 +48,7 @@ func NewHandler(service Servicer) *Handler {
 //		})
 //		return
 //	}
-//	respModel,err := h.service.GetFarmAndFarmAreaList(config.GetStatus().Active, &reqModel)
+//	respModel,err := h.service.GetFarmAndFarmAreaList(config.GetStatus().Active, reqModel)
 //	if err != nil {
 //		if errx, ok := err.(*errs.ErrContext); ok {
 //			if httpCode, ok := mapErrorCode[errx.Code]; ok {

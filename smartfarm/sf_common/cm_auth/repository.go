@@ -1,13 +1,13 @@
 package cm_auth
 
 import (
-	"errors"
+	"github.com/jjoykkm/ln-backend/common/config"
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"gorm.io/gorm"
 )
 
 type Repositorier interface {
-	FindAllProvince(status string) ([]model_db.Province, error)
+	FindOneTransManagement(uid, farmId string) (*model_db.TransManagement, error)
 }
 
 type Repository struct {
@@ -18,12 +18,13 @@ func NewRepository(db *gorm.DB) Repositorier {
 	return &Repository{db: db}
 }
 
-func (r *Repository) FindAllProvince(status string) ([]model_db.Province, error) {
-	var result []model_db.Province
+func (r *Repository) FindOneTransManagement(uid, farmId string) (*model_db.TransManagement, error) {
+	var result model_db.TransManagement
 
-	resp := r.db.Debug().Where("status_id = ?", status).Find(&result)
-	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
+	resp := r.db.Debug().Where("status_id = ? AND uid = ? AND farm_id = ?",
+		config.GetStatus().Active, uid, farmId).First(&result)
+	if resp.Error != nil {
 		return nil, resp.Error
 	}
-	return result, nil
+	return &result, nil
 }

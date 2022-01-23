@@ -10,7 +10,6 @@ import (
 )
 
 type Servicer interface {
-	GetAuthorizeCheckForManageFarm(uid, farmId string) (bool, error)
 	// FarmId
 	GetOverviewFarm(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error)
 	// FarmId
@@ -41,18 +40,6 @@ func NewService(repo Repositorier) Servicer {
 	return &Service{
 		repo:  repo,
 	}
-}
-
-func (s *Service) GetAuthorizeCheckForManageFarm(uid, farmId string) (bool, error) {
-	authManage := false
-	trans, err := s.repo.FindOneTransManagement(uid, farmId)
-	if err != nil{
-		return false, err
-	}
-	if trans.RoleId != config.GetRole().View {
-		authManage = true
-	}
-	return authManage, err
 }
 
 func (s *Service) GetOverviewFarm(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error) {

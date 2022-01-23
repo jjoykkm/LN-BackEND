@@ -17,7 +17,6 @@ type Repositorier interface {
 	FindOneMainboxBySerialNo (serialNo string) (*model_db.Mainbox, error)
 	GetCountMainbox(status, farmId string) (int64, error)
 	GetCountFarmArea(status, farmId string) (int64, error)
-	FindOneTransManagement(uid, farmId string) (*model_db.TransManagement, error)
 	FindAllManageRole(status, farmId string) ([]ManageRole, error)
 	FindAllManageFarmArea(status, farmId string) ([]ManageFarmArea, error)
 	FindAllManageMainbox(status, farmId string) ([]ManageMainbox, error)
@@ -99,17 +98,6 @@ func (r *Repository) GetCountFarmArea(status, farmId string) (int64, error) {
 		return 0, resp.Error
 	}
 	return count, nil
-}
-
-func (r *Repository) FindOneTransManagement(uid, farmId string) (*model_db.TransManagement, error) {
-	var result model_db.TransManagement
-
-	resp := r.db.Debug().Where("status_id = ? AND uid = ? AND farm_id = ?",
-		config.GetStatus().Active, uid, farmId).First(&result)
-	if resp.Error != nil && !errors.Is(resp.Error, gorm.ErrRecordNotFound) {
-		return nil, resp.Error
-	}
-	return &result, nil
 }
 
 func (r *Repository) FindAllManageRole(status, farmId string) ([]ManageRole, error) {

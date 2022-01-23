@@ -12,7 +12,7 @@ import (
 //model users
 type Users struct {
 	DBCommonGet
-	Uid      		string	 		 `json:"uid"`
+	Uid      		string	 		`json:"uid"`
 	Username     	string	 	 	`json:"username"`
 	Password      	string	 	 	`json:"password"`
 	FullName      	string	 	 	`json:"full_name"`
@@ -29,7 +29,7 @@ type Users struct {
 // New instance users
 func (u *Users) New() *Users {
 	return &Users{
-		DBCommonGet:      	u.DBCommonGet ,
+		DBCommonGet:    u.DBCommonGet ,
 		Uid:       		u.Uid ,
 		Username:       u.Username ,
 		Password:       u.Password ,
@@ -57,14 +57,14 @@ func (Users) TableName() string {
 //-------------------------------------------------------------------------------//
 //model users
 type UsersShort struct {
-	Uid      		string	 	`json:"-"`
+	Uid      		string	 		`json:"-"`
 	Username     	string	 	 	`json:"username"`
 	NickName      	string	 	 	`json:"nick_name" gorm:"column:nickname"`
-	Image	      	string	 	`json:"image"`
+	Image	      	string	 		`json:"image"`
 	CreateDate		time.Time	 	`json:"create_date" gorm:"column:createdate"`
 	ChangeDate	    time.Time	 	`json:"change_date" gorm:"column:changedate"`
-	StatusId		string	 	`json:"status_id" gorm:"column:statusid"`
-	UserNo			string	 	`json:"user_no" gorm:"column:userno"`
+	StatusId		string	 		`json:"status_id" gorm:"column:statusid"`
+	UserNo			string	 		`json:"user_no" gorm:"column:userno"`
 }
 // New instance users
 func (u *UsersShort) New() *UsersShort {
@@ -85,3 +85,17 @@ func (UsersShort) TableName() string {
 	return config.DB_USERS
 }
 
+type UsersBank struct {
+	Uid      		string	 		`json:"uid"`
+	Username     	string	 	 	`json:"username"`
+	FullName      	string	 	 	`json:"full_name" gorm:"column:fullname"`
+	SurName      	string	 	 	`json:"sur_name" gorm:"column:surname"`
+	NickName      	string	 	 	`json:"nick_name" gorm:"column:nickname"`
+	Gender			string	 	`	 json:"gender" gorm:"column:genderid"`
+	BirthDate		time.Time	 	`json:"birth_date" gorm:"column:birthdate"`
+	MobilePhone     string	 	 	`json:"mobile_phone" gorm:"column:mobilephone"`
+	Telephone      	string	 	 	`json:"telephone" gorm:"column:telephone"`
+	Mail      		string	 	 	`json:"mail" gorm:"column:email"`
+	Image	      	image.Image	 	`json:"image" gorm:"column:image"`
+	UserNo			string	 		`json:"user_no" gorm:"column:userno"`
+}

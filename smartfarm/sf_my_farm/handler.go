@@ -6,6 +6,7 @@ import (
 	"github.com/jjoykkm/ln-backend/common/models/model_db"
 	"github.com/jjoykkm/ln-backend/common/models/model_other"
 	"github.com/jjoykkm/ln-backend/errs"
+	"github.com/jjoykkm/ln-backend/smartfarm/sf_common/cm_auth"
 	"net/http"
 )
 
@@ -18,18 +19,11 @@ func NewHandler(service Servicer) *Handler {
 }
 
 func (h *Handler) GetOverviewFarm(c *gin.Context) {
-	var reqModel model_other.ReqModel
-	reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
-
-	if err := c.Bind(&reqModel); err != nil {
-		c.JSON(http.StatusBadRequest, &errs.ErrContext{
-			Code: "20000",
-			Err:  err,
-			Msg:  err.Error(),
-		})
+	reqModel := (&cm_auth.Service{}).PrepareData(c, c.Request.Header.Get("Bearer"))
+	if reqModel == nil {
 		return
 	}
-	respModel,err := h.service.GetOverviewFarm(config.GetStatus().Active, &reqModel)
+	respModel,err := h.service.GetOverviewFarm(config.GetStatus().Active, reqModel)
 	if err != nil {
 		if errx, ok := err.(*errs.ErrContext); ok {
 			if httpCode, ok := mapErrorCode[errx.Code]; ok {
@@ -37,28 +31,18 @@ func (h *Handler) GetOverviewFarm(c *gin.Context) {
 				return
 			}
 		}
-		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
-			Code: "80000",
-			Err:  err,
-			Msg:  err.Error(),
-		})
+		(&errs.Service{}).ErrMsgInternal(c, err)
 		return
 	}
 	c.JSON(http.StatusOK, respModel)
 }
 
 func (h *Handler) GetManageRole(c *gin.Context) {
-	var reqModel model_other.ReqModel
-	reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
-	if err := c.Bind(&reqModel); err != nil {
-		c.JSON(http.StatusBadRequest, &errs.ErrContext{
-			Code: "20000",
-			Err:  err,
-			Msg:  err.Error(),
-		})
+	reqModel := (&cm_auth.Service{}).PrepareData(c, c.Request.Header.Get("Bearer"))
+	if reqModel == nil {
 		return
 	}
-	respModel,err := h.service.GetManageRole(config.GetStatus().Active, &reqModel)
+	respModel,err := h.service.GetManageRole(config.GetStatus().Active, reqModel)
 	if err != nil {
 		if errx, ok := err.(*errs.ErrContext); ok {
 			if httpCode, ok := mapErrorCode[errx.Code]; ok {
@@ -66,28 +50,18 @@ func (h *Handler) GetManageRole(c *gin.Context) {
 				return
 			}
 		}
-		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
-			Code: "80000",
-			Err:  err,
-			Msg:  err.Error(),
-		})
+		(&errs.Service{}).ErrMsgInternal(c, err)
 		return
 	}
 	c.JSON(http.StatusOK, respModel)
 }
 
 func (h *Handler) GetManageFarmArea(c *gin.Context) {
-	var reqModel model_other.ReqModel
-	reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
-	if err := c.Bind(&reqModel); err != nil {
-		c.JSON(http.StatusBadRequest, &errs.ErrContext{
-			Code: "20000",
-			Err:  err,
-			Msg:  err.Error(),
-		})
+	reqModel := (&cm_auth.Service{}).PrepareData(c, c.Request.Header.Get("Bearer"))
+	if reqModel == nil {
 		return
 	}
-	respModel,err := h.service.GetManageFarmArea(config.GetStatus().Active, &reqModel)
+	respModel,err := h.service.GetManageFarmArea(config.GetStatus().Active, reqModel)
 	if err != nil {
 		if errx, ok := err.(*errs.ErrContext); ok {
 			if httpCode, ok := mapErrorCode[errx.Code]; ok {
@@ -95,28 +69,18 @@ func (h *Handler) GetManageFarmArea(c *gin.Context) {
 				return
 			}
 		}
-		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
-			Code: "80000",
-			Err:  err,
-			Msg:  err.Error(),
-		})
+		(&errs.Service{}).ErrMsgInternal(c, err)
 		return
 	}
 	c.JSON(http.StatusOK, respModel)
 }
 
 func (h *Handler) GetManageMainbox(c *gin.Context) {
-	var reqModel model_other.ReqModel
-	reqModel.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
-	if err := c.Bind(&reqModel); err != nil {
-		c.JSON(http.StatusBadRequest, &errs.ErrContext{
-			Code: "20000",
-			Err:  err,
-			Msg:  err.Error(),
-		})
+	reqModel := (&cm_auth.Service{}).PrepareData(c, c.Request.Header.Get("Bearer"))
+	if reqModel == nil {
 		return
 	}
-	respModel,err := h.service.GetManageMainbox(config.GetStatus().Active, &reqModel)
+	respModel,err := h.service.GetManageMainbox(config.GetStatus().Active, reqModel)
 	if err != nil {
 		if errx, ok := err.(*errs.ErrContext); ok {
 			if httpCode, ok := mapErrorCode[errx.Code]; ok {
@@ -124,11 +88,7 @@ func (h *Handler) GetManageMainbox(c *gin.Context) {
 				return
 			}
 		}
-		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
-			Code: "80000",
-			Err:  err,
-			Msg:  err.Error(),
-		})
+		(&errs.Service{}).ErrMsgInternal(c, err)
 		return
 	}
 	c.JSON(http.StatusOK, respModel)
@@ -154,11 +114,7 @@ func (h *Handler) ConfigFarm(c *gin.Context) {
 				return
 			}
 		}
-		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
-			Code: "80000",
-			Err:  err,
-			Msg:  err.Error(),
-		})
+		(&errs.Service{}).ErrMsgInternal(c, err)
 		return
 	}
 	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
@@ -186,11 +142,7 @@ func (h *Handler) ActivateMainbox(c *gin.Context) {
 				return
 			}
 		}
-		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
-			Code: "80000",
-			Err:  err,
-			Msg:  err.Error(),
-		})
+		(&errs.Service{}).ErrMsgInternal(c, err)
 		return
 	}
 	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
@@ -219,11 +171,7 @@ func (h *Handler) ConfigMainbox(c *gin.Context) {
 				return
 			}
 		}
-		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
-			Code: "80000",
-			Err:  err,
-			Msg:  err.Error(),
-		})
+		(&errs.Service{}).ErrMsgInternal(c, err)
 		return
 	}
 	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
@@ -252,11 +200,7 @@ func (h *Handler) ConfigCustomSensor(c *gin.Context) {
 				return
 			}
 		}
-		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
-			Code: "80000",
-			Err:  err,
-			Msg:  err.Error(),
-		})
+		(&errs.Service{}).ErrMsgInternal(c, err)
 		return
 	}
 	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
@@ -286,11 +230,7 @@ func (h *Handler) ConfigDeleteSocket(c *gin.Context) {
 				return
 			}
 		}
-		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
-			Code: "80000",
-			Err:  err,
-			Msg:  err.Error(),
-		})
+		(&errs.Service{}).ErrMsgInternal(c, err)
 		return
 	}
 	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
@@ -319,11 +259,7 @@ func (h *Handler) ConfigDeleteMainbox(c *gin.Context) {
 				return
 			}
 		}
-		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
-			Code: "80000",
-			Err:  err,
-			Msg:  err.Error(),
-		})
+		(&errs.Service{}).ErrMsgInternal(c, err)
 		return
 	}
 	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
@@ -352,11 +288,7 @@ func (h *Handler) ConfigDeleteFarm(c *gin.Context) {
 				return
 			}
 		}
-		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
-			Code: "80000",
-			Err:  err,
-			Msg:  err.Error(),
-		})
+		(&errs.Service{}).ErrMsgInternal(c, err)
 		return
 	}
 	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
@@ -385,11 +317,7 @@ func (h *Handler) ConfigDeleteFarmArea(c *gin.Context) {
 				return
 			}
 		}
-		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
-			Code: "80000",
-			Err:  err,
-			Msg:  err.Error(),
-		})
+		(&errs.Service{}).ErrMsgInternal(c, err)
 		return
 	}
 	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
@@ -419,11 +347,7 @@ func (h *Handler) ConfigFarmArea(c *gin.Context) {
 				return
 			}
 		}
-		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
-			Code: "80000",
-			Err:  err,
-			Msg:  err.Error(),
-		})
+		(&errs.Service{}).ErrMsgInternal(c, err)
 		return
 	}
 	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
@@ -453,11 +377,7 @@ func (h *Handler) RemoveSocketLinkedFarm(c *gin.Context) {
 				return
 			}
 		}
-		c.JSON(http.StatusInternalServerError, &errs.ErrContext{
-			Code: "80000",
-			Err:  err,
-			Msg:  err.Error(),
-		})
+		(&errs.Service{}).ErrMsgInternal(c, err)
 		return
 	}
 	c.JSON(http.StatusOK, &model_other.RespSuccessModel{
