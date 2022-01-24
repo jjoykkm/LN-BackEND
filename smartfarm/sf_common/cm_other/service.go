@@ -6,6 +6,7 @@ import (
 )
 
 type Servicer interface {
+	//DefaultUserUpdate(model *model_db.DBCommonCreateUpdate, userNo string)
 	//// status, uid string
 	//GetFarmList(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error)
 	//// status, uid string
@@ -23,6 +24,9 @@ func NewService(repo Repositorier) Servicer {
 }
 
 //
+//func (s *Service) DefaultUserUpdate (model *model_db.DBCommonCreateUpdate, userNo string) {
+//	model.ChangeBy = userNo
+//}
 //func (s *Service) GetFarmList(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error) {
 //	myFarm, err := s.repo.FindAllMyFarm(status, reqModel.Uid)
 //	if err != nil{

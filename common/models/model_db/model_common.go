@@ -37,3 +37,12 @@ type DBCommonCreateUpdate struct {
 	ChangeBy	    string	 	 `json:"change_by"`
 	//StatusId		string	 `json:"status_id"`
 }
+
+func (s *DBCommonCreateUpdate) DefaultUserUpdate (userNo string) {
+	s.ChangeBy = userNo
+}
+
+func (s *DBCommonCreateUpdate) DefaultUserCreate (userNo string) {
+	s.CreateBy = &userNo
+	s.ChangeBy = userNo
+}

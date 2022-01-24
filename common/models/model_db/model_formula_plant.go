@@ -92,11 +92,11 @@ func (u *FormulaPlantUS) BeforeCreate(tx *gorm.DB) (err error) {
 	//u.Recommend.Recommend3 = 0
 	//u.Recommend.Recommend4 = 0
 	//u.Recommend.Recommend5 = 0
-	//helper_gorm.BeforeCreate(u.DBCommonCreateUpdate, "jjoy")
+	u.DBCommonCreateUpdate.DefaultUserCreate("jjoy")
 	return
 }
 func (u *FormulaPlantUS) BeforeUpdate(tx *gorm.DB) (err error) {
-	//helper_gorm.BeforeUpdate(u.DBCommonCreateUpdate, "jjoy")
+	u.DBCommonCreateUpdate.DefaultUserUpdate("test")
 	return
 }
 
