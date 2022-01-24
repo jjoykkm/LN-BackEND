@@ -88,14 +88,14 @@ func (UsersShort) TableName() string {
 type UsersBank struct {
 	Uid      		string	 		`json:"uid"`
 	Username     	string	 	 	`json:"username"`
-	FullName      	string	 	 	`json:"full_name" gorm:"column:fullname"`
-	SurName      	string	 	 	`json:"sur_name" gorm:"column:surname"`
-	NickName      	string	 	 	`json:"nick_name" gorm:"column:nickname"`
+	FullName      	string	 	 	`json:"fullname" gorm:"column:fullname"`
+	SurName      	string	 	 	`json:"surname" gorm:"column:surname"`
+	NickName      	string	 	 	`json:"nickname" gorm:"column:nickname"`
 	Gender			string	 	`	 json:"gender" gorm:"column:genderid"`
-	BirthDate		time.Time	 	`json:"birth_date" gorm:"column:birthdate"`
-	MobilePhone     string	 	 	`json:"mobile_phone" gorm:"column:mobilephone"`
+	BirthDate		time.Time	 	`json:"birthdate" gorm:"column:birthdate"`
+	MobilePhone     string	 	 	`json:"mobilephone" gorm:"column:mobilephone"`
 	Telephone      	string	 	 	`json:"telephone" gorm:"column:telephone"`
 	Mail      		string	 	 	`json:"mail" gorm:"column:email"`
 	Image	      	image.Image	 	`json:"image" gorm:"column:image"`
-	UserNo			string	 		`json:"user_no" gorm:"column:userno"`
+	UserNo			string	 		`json:"userno" gorm:"column:userno"`
 }

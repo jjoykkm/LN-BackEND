@@ -12,6 +12,7 @@ import (
 )
 
 type Servicer interface {
+	PrepareDataUser(c *gin.Context, token string) *model_other.ReqUser
 	PrepareDataGet(c *gin.Context, token string) *model_other.ReqModel
 	GetUserFromToken(token string) (interface{}, error)
 	GetAuthorizeCheckForManageFarm(uid, farmId string) (bool, error)
@@ -26,16 +27,9 @@ func NewService(repo Repositorier) Servicer {
 		repo:  repo,
 	}
 }
-func (s *Service) PrepareDataGet(c *gin.Context, token string) *model_other.ReqModel {
-	var model model_other.ReqModel
-	//Bind data to model
-	if err := c.Bind(&model); err != nil {
-		(&errs.Service{}).ErrMsgBindData(c, err)
-		return nil
-	}
-	//Get Language
-	model.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
-	//Get Uid
+func (s *Service) PrepareDataUser(c *gin.Context, token string) *model_other.ReqUser {
+	var model model_other.ReqUser
+
 	result, err := s.GetUserFromToken(token)
 	if err != nil{
 		(&errs.Service{}).ErrMsgInternal(c, err)
@@ -50,6 +44,24 @@ func (s *Service) PrepareDataGet(c *gin.Context, token string) *model_other.ReqM
 		model.Uid = v.User.Uid
 		model.UserNo = v.User.UserNo
 	}
+	return &model
+}
+
+func (s *Service) PrepareDataGet(c *gin.Context, token string) *model_other.ReqModel {
+	var model model_other.ReqModel
+	//Bind data to model
+	if err := c.Bind(&model); err != nil {
+		(&errs.Service{}).ErrMsgBindData(c, err)
+		return nil
+	}
+	//Get Language
+	model.Language = c.DefaultQuery("lang", config.GetLanguage().Th)
+	//Get User
+	result := s.PrepareDataUser(c, token)
+	if result == nil {
+		return nil
+	}
+	model.User = *result
 	return &model
 }
 

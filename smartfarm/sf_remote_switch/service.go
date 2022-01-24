@@ -24,7 +24,7 @@ func NewService(repo Repositorier) Servicer {
 }
 
 func (s *Service) GetRemoteSwitch(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error) {
-	remoteSwitch, err := s.repo.FindAllRemoteSwitch(status, reqModel.Uid)
+	remoteSwitch, err := s.repo.FindAllRemoteSwitch(status, reqModel.User.Uid)
 	if err != nil{
 		return nil, err
 	}

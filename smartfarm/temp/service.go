@@ -22,7 +22,7 @@ func NewService(repo Repositorier) Servicer {
 }
 
 func (s *Service) GetFarmList(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error) {
-	myFarm, err := s.repo.FindAllMyFarm(status, reqModel.Uid)
+	myFarm, err := s.repo.FindAllMyFarm(status, reqModel.User.Uid)
 	if err != nil{
 		return nil, err
 	}

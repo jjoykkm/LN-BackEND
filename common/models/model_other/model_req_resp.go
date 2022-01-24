@@ -3,10 +3,14 @@ package model_other
 //-------------------------------------------------------------------------------//
 //				 		    METHOD POST REQUEST
 //-------------------------------------------------------------------------------//
-//Model post body
-type ReqModel struct {
+type ReqUser struct {
 	Uid     		  string	`json:"uid"`
 	UserNo     		  string	`json:"user_no"`
+}
+
+//Model post body
+type ReqModel struct {
+	User			  ReqUser	`json:"user"`
 	PlantId    		  string	`json:"plant_id"`
 	FormulaPlantId    string	`json:"formula_plant_id"`
 	PlantTypeId    	  string	`json:"plant_type_id"`
@@ -20,7 +24,7 @@ type ReqModel struct {
 // New instance
 func (u *ReqModel) New() *ReqModel {
 	return &ReqModel{
-		Uid:      			u.Uid ,
+		User:      			u.User ,
 		PlantId:    		u.PlantId ,
 		FormulaPlantId:   	u.FormulaPlantId ,
 		PlantTypeId:   		u.PlantTypeId ,

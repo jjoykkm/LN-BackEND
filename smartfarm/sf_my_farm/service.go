@@ -65,7 +65,7 @@ func (s *Service) GetOverviewFarm(status string, reqModel *model_other.ReqModel)
 
 func (s *Service) GetManageRole(status string, reqModel *model_other.ReqModel) (*model_other.RespModel, error) {
 	// Check auth for edit
-	//isAuth, err := Servicer.GetAuthorizeCheckForManageFarm(s, reqModel.Uid, reqModel.FarmId)
+	//isAuth, err := Servicer.GetAuthorizeCheckForManageFarm(s, reqModel.User.Uid, reqModel.FarmId)
 	//if err != nil{
 	//	return nil, err
 	//}
