@@ -6,6 +6,7 @@ package model_other
 //Model post body
 type ReqModel struct {
 	Uid     		  string	`json:"uid"`
+	UserNo     		  string	`json:"user_no"`
 	PlantId    		  string	`json:"plant_id"`
 	FormulaPlantId    string	`json:"formula_plant_id"`
 	PlantTypeId    	  string	`json:"plant_type_id"`

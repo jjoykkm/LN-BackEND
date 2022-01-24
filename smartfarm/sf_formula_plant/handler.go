@@ -19,7 +19,7 @@ func NewHandler(service Servicer) *Handler {
 }
 
 func (h *Handler) GetPlantCategoryList(c *gin.Context) {
-	reqModel := (&cm_auth.Service{}).PrepareData(c, c.Request.Header.Get("Bearer"))
+	reqModel := (&cm_auth.Service{}).PrepareDataGet(c, c.Request.Header.Get("Bearer"))
 	if reqModel == nil {
 		return
 	}
@@ -38,7 +38,7 @@ func (h *Handler) GetPlantCategoryList(c *gin.Context) {
 }
 
 func (h *Handler) GetPlantCategoryItem(c *gin.Context) {
-	reqModel := (&cm_auth.Service{}).PrepareData(c, c.Request.Header.Get("Bearer"))
+	reqModel := (&cm_auth.Service{}).PrepareDataGet(c, c.Request.Header.Get("Bearer"))
 	if reqModel == nil {
 		return
 	}
@@ -57,7 +57,7 @@ func (h *Handler) GetPlantCategoryItem(c *gin.Context) {
 }
 
 func (h *Handler) GetPlantOverviewByPlant(c *gin.Context) {
-	reqModel := (&cm_auth.Service{}).PrepareData(c, c.Request.Header.Get("Bearer"))
+	reqModel := (&cm_auth.Service{}).PrepareDataGet(c, c.Request.Header.Get("Bearer"))
 	if reqModel == nil {
 		return
 	}
@@ -76,7 +76,7 @@ func (h *Handler) GetPlantOverviewByPlant(c *gin.Context) {
 }
 
 func (h *Handler) GetPlantOverviewFavorite(c *gin.Context) {
-	reqModel := (&cm_auth.Service{}).PrepareData(c, c.Request.Header.Get("Bearer"))
+	reqModel := (&cm_auth.Service{}).PrepareDataGet(c, c.Request.Header.Get("Bearer"))
 	if reqModel == nil {
 		return
 	}
@@ -95,7 +95,7 @@ func (h *Handler) GetPlantOverviewFavorite(c *gin.Context) {
 }
 
 func (h *Handler) GetPlantOfMine(c *gin.Context) {
-	reqModel := (&cm_auth.Service{}).PrepareData(c, c.Request.Header.Get("Bearer"))
+	reqModel := (&cm_auth.Service{}).PrepareDataGet(c, c.Request.Header.Get("Bearer"))
 	if reqModel == nil {
 		return
 	}
@@ -114,7 +114,7 @@ func (h *Handler) GetPlantOfMine(c *gin.Context) {
 }
 
 func (h *Handler) GetFormulaPlantDetail(c *gin.Context) {
-	reqModel := (&cm_auth.Service{}).PrepareData(c, c.Request.Header.Get("Bearer"))
+	reqModel := (&cm_auth.Service{}).PrepareDataGet(c, c.Request.Header.Get("Bearer"))
 	if reqModel == nil {
 		return
 	}

@@ -17,7 +17,7 @@ func NewHandler(service Servicer) *Handler {
 }
 
 func (h *Handler) GetFarmList(c *gin.Context) {
-	reqModel := (&cm_auth.Service{}).PrepareData(c, c.Request.Header.Get("Bearer"))
+	reqModel := (&cm_auth.Service{}).PrepareDataGet(c, c.Request.Header.Get("Bearer"))
 	if reqModel == nil {
 		return
 	}
@@ -37,7 +37,7 @@ func (h *Handler) GetFarmList(c *gin.Context) {
 
 
 func (h *Handler) GetFarmAreaDashboardList(c *gin.Context) {
-	reqModel := (&cm_auth.Service{}).PrepareData(c, c.Request.Header.Get("Bearer"))
+	reqModel := (&cm_auth.Service{}).PrepareDataGet(c, c.Request.Header.Get("Bearer"))
 	if reqModel == nil {
 		return
 	}

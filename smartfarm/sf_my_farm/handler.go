@@ -19,7 +19,7 @@ func NewHandler(service Servicer) *Handler {
 }
 
 func (h *Handler) GetOverviewFarm(c *gin.Context) {
-	reqModel := (&cm_auth.Service{}).PrepareData(c, c.Request.Header.Get("Bearer"))
+	reqModel := (&cm_auth.Service{}).PrepareDataGet(c, c.Request.Header.Get("Bearer"))
 	if reqModel == nil {
 		return
 	}
@@ -38,7 +38,7 @@ func (h *Handler) GetOverviewFarm(c *gin.Context) {
 }
 
 func (h *Handler) GetManageRole(c *gin.Context) {
-	reqModel := (&cm_auth.Service{}).PrepareData(c, c.Request.Header.Get("Bearer"))
+	reqModel := (&cm_auth.Service{}).PrepareDataGet(c, c.Request.Header.Get("Bearer"))
 	if reqModel == nil {
 		return
 	}
@@ -57,7 +57,7 @@ func (h *Handler) GetManageRole(c *gin.Context) {
 }
 
 func (h *Handler) GetManageFarmArea(c *gin.Context) {
-	reqModel := (&cm_auth.Service{}).PrepareData(c, c.Request.Header.Get("Bearer"))
+	reqModel := (&cm_auth.Service{}).PrepareDataGet(c, c.Request.Header.Get("Bearer"))
 	if reqModel == nil {
 		return
 	}
@@ -76,7 +76,7 @@ func (h *Handler) GetManageFarmArea(c *gin.Context) {
 }
 
 func (h *Handler) GetManageMainbox(c *gin.Context) {
-	reqModel := (&cm_auth.Service{}).PrepareData(c, c.Request.Header.Get("Bearer"))
+	reqModel := (&cm_auth.Service{}).PrepareDataGet(c, c.Request.Header.Get("Bearer"))
 	if reqModel == nil {
 		return
 	}

@@ -12,7 +12,7 @@ import (
 )
 
 type Servicer interface {
-	PrepareData(c *gin.Context, token string) *model_other.ReqModel
+	PrepareDataGet(c *gin.Context, token string) *model_other.ReqModel
 	GetUserFromToken(token string) (interface{}, error)
 	GetAuthorizeCheckForManageFarm(uid, farmId string) (bool, error)
 }
@@ -26,7 +26,7 @@ func NewService(repo Repositorier) Servicer {
 		repo:  repo,
 	}
 }
-func (s *Service) PrepareData(c *gin.Context, token string) *model_other.ReqModel {
+func (s *Service) PrepareDataGet(c *gin.Context, token string) *model_other.ReqModel {
 	var model model_other.ReqModel
 	//Bind data to model
 	if err := c.Bind(&model); err != nil {
@@ -46,8 +46,9 @@ func (s *Service) PrepareData(c *gin.Context, token string) *model_other.ReqMode
 		(&errs.Service{}).ErrMsgCustom(c, errors.New(v.Error.Message), v.StatusCode)
 		return nil
 	case UserAuth:
-		//Assign uid to model input
+		//Assign uid and user no to model input
 		model.Uid = v.User.Uid
+		model.UserNo = v.User.UserNo
 	}
 	return &model
 }
