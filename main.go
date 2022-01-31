@@ -62,7 +62,7 @@ func main() {
 		}
 		err := db.Create(&model).Error
 		if err != nil {
-			c.String(400, err.Error())
+			c.JSON(400, err.Error())
 		}
 		c.JSON(200, "Insert Success")
 	})
@@ -71,7 +71,7 @@ func main() {
 
 		err := db.Find(&model).Error
 		if err != nil {
-			c.String(400, err.Error())
+			c.JSON(400, err.Error())
 		}
 		c.JSON(200, model)
 	})
@@ -80,7 +80,7 @@ func main() {
 
 		err := db.Where("1 = 1").Delete(&model).Error
 		if err != nil {
-			c.String(400, err.Error())
+			c.JSON(400, err.Error())
 		}
 		c.JSON(200, "Delete Success")
 	})
