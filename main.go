@@ -4,6 +4,8 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jjoykkm/ln-backend/common/config"
+	"github.com/jjoykkm/ln-backend/common/models/model_db"
+	"github.com/jjoykkm/ln-backend/errs"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_common/cm_address"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_common/cm_farm"
 	"github.com/jjoykkm/ln-backend/smartfarm/sf_common/cm_plant"
@@ -52,6 +54,37 @@ func main() {
 
 	http := gin.Default()
 	http.Use(cors.Default())
+
+	http.POST("/sensor_value_insert", func(c *gin.Context) {
+		var model model_db.SensorValue
+		if err := c.Bind(&model); err != nil {
+			(&errs.Service{}).ErrMsgBindData(c, err)
+		}
+		err := db.Create(&model).Error
+		if err != nil {
+			c.String(400, err.Error())
+		}
+		c.JSON(200, "Insert Success")
+	})
+	http.GET("/sensor_value_get", func(c *gin.Context) {
+		var model []model_db.SensorValue
+
+		err := db.Find(&model).Error
+		if err != nil {
+			c.String(400, err.Error())
+		}
+		c.JSON(200, model)
+	})
+	http.GET("/sensor_value_delete", func(c *gin.Context) {
+		var model []model_db.SensorValue
+
+		err := db.Where("1 = 1").Delete(&model).Error
+		if err != nil {
+			c.String(400, err.Error())
+		}
+		c.JSON(200, "Delete Success")
+	})
+
 
 	//------------------------------  Common  ------------------------------------//
 	// Farm
